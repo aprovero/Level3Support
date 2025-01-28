@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoE Level 3 Tech Support Request</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin: 10px 0 5px;
+        }
+        select, input {
+            margin-top: 5px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .message {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        input, select, textarea, button {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .message.success {
+            color: green;
+        }
+        .message.error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CoE Level 3 Tech Support Request</h1>
+        <div id="form-status" class="message"></div>
+
+<form id="support-form">
+    <label for="request">TYPE OF REQUEST *</label>
+    <select id="request" name="request" required>
+        <option value="">-- Select --</option>
+        <option value="SUPPORT">SUPPORT</option>
+        <option value="RCA">RCA</option>
+        <option value="TRAINING">TRAINING</option>
+        <option value="OTHERS">OTHERS</option>
+    </select>
+
+    <div id="support-fields" style="display: none;">
+        <label for="location">LOCATION *</label>
+        <select id="location" name="location" required>
+            <option value="">-- Select Location --</option>
+            <option value="MEXICO">MEXICO</option>
+            <option value="CENTRAL AMERICA">CENTRAL AMERICA</option>
+            <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
+            <option value="COLOMBIA">COLOMBIA</option>
+            <option value="BRAZIL">BRAZIL</option>
+            <option value="PERU">PERU</option>
+            <option value="CHILE">CHILE</option>
+            <option value="OTHERS">OTHERS</option>
+        </select>
+
+        <label for="project-name">PROJECT NAME *</label>
+        <input type="text" id="project-name" name="projectName" placeholder="Enter project name" required>
+
+        <label for="unit-model">UNIT MODEL *</label>
+        <input type="text" id="unit-model" name="unitModel" placeholder="E.g., SG3125 v30" required>
+
+        <label for="issue">ISSUE *</label>
+        <input type="text" id="issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
+
+        <label for="description">COMPLETE DESCRIPTION *</label>
+        <textarea id="description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
+
+        <label for="serial-numbers">SERIAL NUMBERS</label>
+        <input type="text" id="serial-numbers" name="serialNumbers" placeholder="Inverter, Container, Skid, etc.">
+
+        <label for="troubleshooting">TROUBLESHOOTING</label>
+        <textarea id="troubleshooting" name="troubleshooting" rows="4"></textarea>
+
+        <label for="attachments">ATTACHMENTS</label>
+        <input type="file" id="attachments" name="attachments" accept="image/*,application/pdf">
+    </div>
+
+    <div id="rca-fields" style="display: none;">
+        <label for="location">LOCATION *</label>
+        <select id="location" name="location" required>
+            <option value="">-- Select Location --</option>
+            <option value="MEXICO">MEXICO</option>
+            <option value="CENTRAL AMERICA">CENTRAL AMERICA</option>
+            <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
+            <option value="COLOMBIA">COLOMBIA</option>
+            <option value="BRAZIL">BRAZIL</option>
+            <option value="PERU">PERU</option>
+            <option value="CHILE">CHILE</option>
+            <option value="OTHERS">OTHERS</option>
+        </select>
+
+        <label for="project-name">PROJECT NAME *</label>
+        <input type="text" id="project-name" name="projectName" placeholder="Enter project name" required>
+
+        <label for="unit-model">UNIT MODEL *</label>
+        <input type="text" id="unit-model" name="unitModel" placeholder="E.g., SG3125 v30" required>
+
+        <label for="issue">ISSUE *</label>
+        <input type="text" id="issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
+
+        <label for="description">COMPLETE DESCRIPTION *</label>
+        <textarea id="description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
+
+        <label for="serial-numbers">SERIAL NUMBERS</label>
+        <input type="text" id="serial-numbers" name="serialNumbers" placeholder="Inverter, Container, Skid, etc.">
+
+              <label for="attachments">ATTACHMENTS</label>
+        <input type="file" id="attachments" name="attachments" accept="image/*,application/pdf">
+    </div>
+
+    <div id="training-fields" style="display: none;">
+        <label for="location">LOCATION *</label>
+        <select id="location" name="location" required>
+            <option value="">-- Select Location --</option>
+            <option value="MEXICO">MEXICO</option>
+            <option value="CENTRAL AMERICA">CENTRAL AMERICA</option>
+            <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
+            <option value="COLOMBIA">COLOMBIA</option>
+            <option value="BRAZIL">BRAZIL</option>
+            <option value="PERU">PERU</option>
+            <option value="CHILE">CHILE</option>
+            <option value="OTHERS">OTHERS</option>
+        </select>
+
+        <label for="project-name">PROJECT NAME *</label>
+        <input type="text" id="project-name" name="projectName" placeholder="Enter project name" required>
+
+        <label for="customer">CUSTOMER *</label>
+        <input type="text" id="CUSTOMER" name="cuatomer" placeholder=" " required>
+
+        <label for="level">TYPE/LEVEL OF TRAINING *</label>
+        <input type="text" id="level" name="level" placeholder=" " maxlength="50" required>
+
+        <label for="scope">SCOPE *</label>
+        <textarea id="scope" name="scope" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
+
+        <label for="attachments">ATTACHMENTS</label>
+        <input type="file" id="attachments" name="attachments" accept="image/*,application/pdf">
+    </div>
+
+    <div id="others-fields" style="display: none;">
+        <label for="location">LOCATION *</label>
+        <select id="location" name="location" required>
+            <option value="">-- Select Location --</option>
+            <option value="MEXICO">MEXICO</option>
+            <option value="CENTRAL AMERICA">CENTRAL AMERICA</option>
+            <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
+            <option value="COLOMBIA">COLOMBIA</option>
+            <option value="BRAZIL">BRAZIL</option>
+            <option value="PERU">PERU</option>
+            <option value="CHILE">CHILE</option>
+            <option value="OTHERS">OTHERS</option>
+        </select>
+
+        <label for="project-name">PROJECT NAME *</label>
+        <input type="text" id="project-name" name="projectName" placeholder="Enter project name" required>
+
+        <label for="description">COMPLETE DESCRIPTION *</label>
+        <textarea id="description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
+
+        <label for="attachments">ATTACHMENTS</label>
+        <input type="file" id="attachments" name="attachments" accept="image/*,application/pdf">
+    </div>
+
+    <button type="submit">SUBMIT</button>
+</form>
+</div>
+
+<script>
+document.getElementById('request').addEventListener('change', function() {
+    var supportFields = document.getElementById('support-fields');
+    var rcaFields = document.getElementById('rca-fields');
+    var trainingFields = document.getElementById('training-fields');
+    var othersFields = document.getElementById('others-fields');
+
+    // Hide all fields initially
+    supportFields.style.display = 'none';
+    rcaFields.style.display = 'none';
+    trainingFields.style.display = 'none';
+    othersFields.style.display = 'none';
+
+    // Show the relevant fields based on the selected value
+    switch (this.value) {
+        case 'SUPPORT':
+            supportFields.style.display = 'block';
+            break;
+        case 'RCA':
+            rcaFields.style.display = 'block';
+            break;
+        case 'TRAINING':
+            trainingFields.style.display = 'block';
+            break;
+        case 'OTHERS':
+            othersFields.style.display = 'block';
+            break;
+    }
+});
+</script>
+
+  <script>
+        const form = document.getElementById('support-form');
+        const formStatus = document.getElementById('form-status');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                // Replace the URL with your backend's endpoint
+                const response = await fetch('http://localhost:3000/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    formStatus.textContent = 'Form submitted successfully!';
+                    formStatus.className = 'message success';
+                    form.reset(); // Clear the form
+                } else {
+                    throw new Error('Failed to submit the form. Please try again.');
+                }
+            } catch (error) {
+                console.error(error);
+                formStatus.textContent = error.message || 'An unexpected error occurred.';
+                formStatus.className = 'message error';
+            }
+        });
+    </script>
+</body>
+</html>
