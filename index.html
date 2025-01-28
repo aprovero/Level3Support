@@ -69,6 +69,14 @@
         <h1>CoE Level 3 Tech Support Request</h1>
         <div id="form-status" class="message"></div>
         <form id="support-form">
+           <label for="request">TYPE OF REQUEST *</label>
+           <select id="request" name="request" required>
+                <option value="">-- Select --</option>
+                <option value="SUPPORT">SUPPORT</option>
+                <option value="RCA">RCA</option>
+                <option value="TRAINING">TRAINING</option>
+                <option value="OTHERS">OTHERS</option>
+            </select>
             <label for="location">LOCATION *</label>
             <select id="location" name="location" required>
                 <option value="">-- Select Location --</option>
