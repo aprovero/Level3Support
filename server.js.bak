@@ -1,0 +1,35 @@
+// Import Express
+const express = require('express');
+const bodyParser = require('body-parser');
+
+// Create an Express app
+const app = express();
+const PORT = 3000;
+
+// Middleware to parse form data
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Serve static files (if needed, e.g., an HTML form)
+app.use(express.static('public'));
+
+// Route to handle root URL
+app.get('/', (req, res) => {
+  res.send('Welcome to My Node.js Server!');
+});
+
+// Route to handle form submissions
+app.post('/submit', (req, res) => {
+  const { name, email, message } = req.body;
+
+  // Log the data to console (later you can save it to Airtable or send an email)
+  console.log('Form Data:', { name, email, message });
+
+  // Send a response back to the user
+  res.send('Form submitted successfully!');
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running at http://localhost:${PORT}`);
+});
