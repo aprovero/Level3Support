@@ -39,7 +39,7 @@ app.post("/submit", upload.single("attachments"), async (req, res) => {
     description, serialNumbers, troubleshooting
   } = req.body;
 
-  const attachmentFile = req.file; // Handle file upload
+  const attachmentFile = req.file; // Uploaded file
 
   try {
     // Save to Airtable
@@ -54,7 +54,9 @@ app.post("/submit", upload.single("attachments"), async (req, res) => {
           "Description": description,
           "Serial Numbers": serialNumbers,
           "Troubleshooting": troubleshooting,
-          "Attachment": attachmentFile ? attachmentFile.originalname : "No File Uploaded" // Handle file uploads
+          "Attachment": attachmentFile
+            ? [{ url: `data:image/png;base64,${attachmentFile.buffer.toString("base64")}`, filename: attachmentFile.originalname }]
+            : []
         },
       },
     ]);
@@ -62,11 +64,10 @@ app.post("/submit", upload.single("attachments"), async (req, res) => {
     // Send Email Notification
     let mailOptions = {
       from: process.env.EMAIL_USER,
-      to: "support@sungrow.com", // Change recipient
+      to: "coe.latam@sungrowamericas.com",
       subject: "New Level 3 Support Request",
       text: `
         A new support request has been submitted:
-
         - Type of Request: ${request}
         - Location: ${location}
         - Project Name: ${projectName}
@@ -78,7 +79,7 @@ app.post("/submit", upload.single("attachments"), async (req, res) => {
       `,
     };
 
-    // If there's an attachment, add it to the email
+    // Add file as an email attachment
     if (attachmentFile) {
       mailOptions.attachments = [
         {
