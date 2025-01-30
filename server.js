@@ -21,7 +21,7 @@ const upload = multer({ storage });
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID
 );
-const tableName = "Level3Support"; // Update with your Airtable table name
+const tableName = "IssuesLATAM"; // Update with your Airtable table name
 
 // Nodemailer Configuration (Gmail Example)
 const transporter = nodemailer.createTransport({
