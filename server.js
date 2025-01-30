@@ -33,15 +33,19 @@ const transporter = nodemailer.createTransport({
 });
 
 // Route to Handle Form Submission
-app.post("/submit", upload.single("attachments"), async (req, res) => {
+app.post("/submit", upload.array("attachments", 5), async (req, res) => {
   const {
     request, location, projectName, unitModel, issue,
     description, serialNumbers, troubleshooting
   } = req.body;
 
-  const attachmentFile = req.file; // Uploaded file
-
   try {
+    // Format attachments for Airtable
+    const airtableAttachments = req.files.map(file => ({
+      url: `data:${file.mimetype};base64,${file.buffer.toString("base64")}`,
+      filename: file.originalname
+    }));
+
     // Save to Airtable
     await base(tableName).create([
       {
@@ -54,21 +58,32 @@ app.post("/submit", upload.single("attachments"), async (req, res) => {
           "Description": description,
           "Serial Numbers": serialNumbers,
           "Troubleshooting": troubleshooting,
-          "Attachment": attachmentFile
-            ? [{ url: `data:image/png;base64,${attachmentFile.buffer.toString("base64")}`, filename: attachmentFile.originalname }]
-            : []
+          "Attachments": airtableAttachments
         },
       },
     ]);
+    // Mapping names to abbreviations for email subject
+    const locationMap = {
+      "MEXICO": "MEX",
+      "CENTRAL AMERICA": "CENAM",
+      "DOMINICAN REPUBLIC": "DOR",
+      "COLOMBIA": "COL",
+      "BRAZIL": "BRA",
+      "PERU": "PER",
+      "CHILE": "CLP",
+      "OTHERS": "OTH"
+    };
 
-    // Send Email Notification
+    // Convert location to abbreviation
+    const locationAbbrev = locationMap[location] || location;
+
+    // Prepare email
     let mailOptions = {
       from: process.env.EMAIL_USER,
       to: "coe.latam@sungrowamericas.com",
-      subject: "New Level 3 Support Request",
+      subject: "[[${locationAbbrev}]_[${projectName}]_NEW REQUEST SUBMITED",
       text: `
-        A new support request has been submitted:
-        - Type of Request: ${request}
+        A new ${request} request has been submitted:
         - Location: ${location}
         - Project Name: ${projectName}
         - Unit Model: ${unitModel}
@@ -77,17 +92,11 @@ app.post("/submit", upload.single("attachments"), async (req, res) => {
         - Serial Numbers: ${serialNumbers}
         - Troubleshooting: ${troubleshooting}
       `,
+      attachments: req.files.map(file => ({
+        filename: file.originalname,
+        content: file.buffer,
+      }))
     };
-
-    // Add file as an email attachment
-    if (attachmentFile) {
-      mailOptions.attachments = [
-        {
-          filename: attachmentFile.originalname,
-          content: attachmentFile.buffer,
-        },
-      ];
-    }
 
     await transporter.sendMail(mailOptions);
 
