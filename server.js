@@ -39,7 +39,7 @@ app.post("/submit", upload.single("attachments"), async (req, res) => {
     description, serialNumbers, troubleshooting
   } = req.body;
 
-  const attachmentFile = req.file; // Uploaded file
+  const attachmentFile = req.file; // Handle file upload
 
   try {
     // Save to Airtable
@@ -47,14 +47,14 @@ app.post("/submit", upload.single("attachments"), async (req, res) => {
       {
         fields: {
           "Type of Request": request,
-          Location: location,
+          "Location": location,
           "Project Name": projectName,
           "Unit Model": unitModel,
-          Issue: issue,
-          Description: description,
+          "Issue": issue,
+          "Description": description,
           "Serial Numbers": serialNumbers,
-          Troubleshooting: troubleshooting,
-          Attachment: attachmentFile ? attachmentFile.originalname : "No File Uploaded"
+          "Troubleshooting": troubleshooting,
+          "Attachment": attachmentFile ? attachmentFile.originalname : "No File Uploaded" // Handle file uploads
         },
       },
     ]);
@@ -62,7 +62,7 @@ app.post("/submit", upload.single("attachments"), async (req, res) => {
     // Send Email Notification
     let mailOptions = {
       from: process.env.EMAIL_USER,
-      to: "coe.latam@sungrowamericas.com", // Change recipient
+      to: "support@sungrow.com", // Change recipient
       subject: "New Level 3 Support Request",
       text: `
         A new support request has been submitted:
