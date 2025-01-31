@@ -45,14 +45,14 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
   try {
     // Mapping location names to abbreviations
     const locationMap = {
-      "MEXICO": "[MEX]",
-      "CENTRAL AMERICA": "[CENAM]",
-      "DOMINICAN REPUBLIC": "[DOR]",
-      "COLOMBIA": "[COL]",
-      "BRAZIL": "[BRA]",
-      "PERU": "[PER]",
-      "CHILE": "[CLP]",
-      "OTHERS": "[OTH]"
+      "MEXICO": "MEX",
+      "CENTRAL AMERICA": "CENAM",
+      "DOMINICAN REPUBLIC": "DOR",
+      "COLOMBIA": "COL",
+      "BRAZIL": "BRA",
+      "PERU": "PER",
+      "CHILE": "CLP",
+      "OTHERS": "OTH"
     };
     const locationAbbrev = locationMap[location] || location;
 
