@@ -10,20 +10,23 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: "50mb" })); // Increase JSON size limit
+app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" })); // Increase URL-encoded data size
 
 // Configure Multer for File Uploads
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 } // 50MB file size limit
+});
 
 // Airtable Configuration
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
   process.env.AIRTABLE_BASE_ID
 );
-const tableName = "IssuesLATAM"; // Update with your Airtable table name
+const tableName = "IssuesLATAM"; // Airtable table name
 
-// Nodemailer Configuration (Gmail Example)
+// Nodemailer Configuration
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -40,13 +43,20 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
   } = req.body;
 
   try {
-    // Format attachments for Airtable
-    const airtableAttachments = req.files.map(file => ({
-      url: `data:${file.mimetype};base64,${file.buffer.toString("base64")}`,
-      filename: file.originalname
-    }));
+    // Mapping location names to abbreviations
+    const locationMap = {
+      "MEXICO": "[MEX]",
+      "CENTRAL AMERICA": "[CENAM]",
+      "DOMINICAN REPUBLIC": "[DOR]",
+      "COLOMBIA": "[COL]",
+      "BRAZIL": "[BRA]",
+      "PERU": "[PER]",
+      "CHILE": "[CLP]",
+      "OTHERS": "[OTH]"
+    };
+    const locationAbbrev = locationMap[location] || location;
 
-    // Save to Airtable
+    // Save to Airtable (attachments are left empty until we add public URLs)
     await base(tableName).create([
       {
         fields: {
@@ -58,30 +68,16 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
           "Description": description,
           "Serial Numbers": serialNumbers,
           "Troubleshooting": troubleshooting,
-          "Attachments": airtableAttachments
+          "Attachments": [] // Airtable needs public URLs; currently left empty
         },
       },
     ]);
-    // Mapping names to abbreviations for email subject
-    const locationMap = {
-      "MEXICO": "MEX",
-      "CENTRAL AMERICA": "CENAM",
-      "DOMINICAN REPUBLIC": "DOR",
-      "COLOMBIA": "COL",
-      "BRAZIL": "BRA",
-      "PERU": "PER",
-      "CHILE": "CLP",
-      "OTHERS": "OTH"
-    };
-
-    // Convert location to abbreviation
-    const locationAbbrev = locationMap[location] || location;
 
     // Prepare email
     let mailOptions = {
       from: process.env.EMAIL_USER,
       to: "coe.latam@sungrowamericas.com",
-      subject: "[[${locationAbbrev}]_[${projectName}]_NEW REQUEST SUBMITED",
+      subject: `[${locationAbbrev}]_[${projectName}]_NEW ${request} REQUEST SUBMITTED`,
       text: `
         A new ${request} request has been submitted:
         - Location: ${location}
@@ -91,12 +87,16 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
         - Description: ${description}
         - Serial Numbers: ${serialNumbers}
         - Troubleshooting: ${troubleshooting}
-      `,
-      attachments: req.files.map(file => ({
+      `
+    };
+
+    // Add attachments if any exist
+    if (req.files && req.files.length > 0) {
+      mailOptions.attachments = req.files.map(file => ({
         filename: file.originalname,
         content: file.buffer,
-      }))
-    };
+      }));
+    }
 
     await transporter.sendMail(mailOptions);
 

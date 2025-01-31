@@ -137,41 +137,54 @@
         const formStatus = document.getElementById('form-status');
 
         form.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent default form submission
+    event.preventDefault(); // Prevent default form submission
 
-            const formData = new FormData();
-            const formElements = form.elements;
-                // Add text fields
-                ["request", "location", "projectName", "unitModel", "issue", "description", "serialNumbers", "troubleshooting"].forEach(field => {
-                formData.append(field, formElements[field].value);
-                });
+    const formData = new FormData();
+    const formElements = form.elements;
 
-                // Add multiple attachments
-                const files = document.getElementById("attachments").files;
-                for (let i = 0; i < files.length; i++) {
-                    formData.append("attachments", files[i]);
-                }
-            try {
-                // Replace the URL with your backend's endpoint
-                const response = await fetch('https://level3support.onrender.com/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: formData,
-                });
+    // Add text fields
+    ["request", "location", "projectName", "unitModel", "issue", "description", "serialNumbers", "troubleshooting"].forEach(field => {
+        formData.append(field, formElements[field].value);
+    });
 
-                if (response.ok) {
-                    formStatus.textContent = 'Form submitted successfully!';
-                    formStatus.className = 'message success';
-                    form.reset(); // Clear the form
-                } else {
-                    throw new Error('Failed to submit the form. Please try again.');
-                }
-            } catch (error) {
-                console.error(error);
-                formStatus.textContent = error.message || 'An unexpected error occurred.';
-                formStatus.className = 'message error';
-            }
+    // Validate and add multiple attachments
+    const files = document.getElementById("attachments").files;
+    let totalSize = 0;
+    const maxFileSize = 10 * 1024 * 1024; // 10MB per file
+
+    for (let i = 0; i < files.length; i++) {
+        if (files[i].size > maxFileSize) {
+            formStatus.textContent = `Error: ${files[i].name} exceeds 10MB limit.`;
+            formStatus.className = 'message error';
+            return;
+        }
+        totalSize += files[i].size;
+        formData.append("attachments", files[i]);
+    }
+
+    try {
+        formStatus.textContent = 'Submitting form...';
+        formStatus.className = 'message';
+
+        const response = await fetch('https://level3support.onrender.com/submit', {
+            method: 'POST',
+            body: formData,
         });
+
+        if (response.ok) {
+            formStatus.textContent = 'Form submitted successfully!';
+            formStatus.className = 'message success';
+            form.reset(); // Clear the form
+        } else {
+            throw new Error('Failed to submit the form. Please try again.');
+        }
+    } catch (error) {
+        console.error(error);
+        formStatus.textContent = error.message || 'An unexpected error occurred.';
+        formStatus.className = 'message error';
+    }
+});
+
     </script>
 </body>
 </html>
