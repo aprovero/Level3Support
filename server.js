@@ -67,8 +67,7 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
           "Issue": issue,
           "Description": description,
           "Serial Numbers": serialNumbers,
-          "Troubleshooting": troubleshooting,
-          "Attachments": [] // Airtable needs public URLs; currently left empty
+          "Troubleshooting": troubleshooting,        
         },
       },
     ]);
