@@ -96,7 +96,7 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
         content: file.buffer,
       }));
     }
-
+    console.log('Files received:', req.files.map(file => file.originalname));
     await transporter.sendMail(mailOptions);
 
     res.status(200).json({ message: "Submission successful!" });
