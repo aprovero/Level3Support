@@ -38,7 +38,7 @@ const transporter = nodemailer.createTransport({
 // Route to Handle Form Submission
 app.post("/submit", upload.array("attachments", 5), async (req, res) => {
   const {
-    request, location, projectName, unitModel, issue,
+    name, request, location, projectName, unitModel, issue,
     description, serialNumbers, troubleshooting
   } = req.body;
 
@@ -60,6 +60,7 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
     await base(tableName).create([
       {
         fields: {
+          "Name": name,
           "Type of Request": request,
           "Location": location,
           "Project Name": projectName,
