@@ -277,7 +277,7 @@
             </ol>
             <p class="mb-6">Please make sure to provide all needed information for CoE team to do analysis.</p>
             <p class="mb-8 font-bold">Please note if GSP ticket does not have all needed info, the case will be sent back.</p>
-            <button id="understand-btn" class="modal-button">UNDERSTAND</button>
+            <button id="understand-btn" class="modal-button">I UNDERSTAND</button>
         </div>
     </div>
 
@@ -324,117 +324,119 @@
                     </select>
                 </div>
 
-                <!-- Support Form Section -->
-                <div id="support-section" class="form-section">
-                    <div class="form-group">
-                        <label for="support-project-name">Project Name *</label>
-                        <input type="text" id="support-project-name" name="projectName" placeholder="Enter project name" required>
-                        
-                        <label for="support-unit-type">Type of Unit *</label>
-                        <select id="support-unit-type" name="unitType" required>
-                            <option value="">-- Select --</option>
-                            <option value="CENTRAL">CENTRAL</option>
-                            <option value="STRING">STRING</option>
-                            <option value="BeSS">BeSS</option>
-                            <option value="DISTRIBUTION">DISTRIBUTION</option>
-                        </select>
-                    </div>
+<!-- Support Form Section -->
+<div id="support-section" class="form-section">
+    <div class="form-group">
+        <label for="support-project-name">Project Name *</label>
+        <input type="text" id="support-project-name" name="projectName" placeholder="Enter project name" required>
+        
+        <label for="support-unit-type">Type of Unit *</label>
+        <select id="support-unit-type" name="unitType" required>
+            <option value="">-- Select --</option>
+            <option value="CENTRAL">CENTRAL</option>
+            <option value="STRING">STRING</option>
+            <option value="BeSS">BeSS</option>
+            <option value="DISTRIBUTION">DISTRIBUTION</option>
+        </select>
+    </div>
 
-                    <div class="form-group">
-                        <label for="support-issue">Issue *</label>
-                        <input type="text" id="support-issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
-                        <div class="char-count"><span id="support-issue-count">0</span>/50</div>
+    <div class="form-group">
+        <label for="support-issue">Issue *</label>
+        <input type="text" id="support-issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
+        <div class="char-count"><span id="support-issue-count">0</span>/50</div>
 
-                        <label for="support-description">Description of the Issue *</label>
-                        <textarea id="support-description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
-                        <div class="char-count"><span id="support-description-count">0</span>/500</div>
-                    </div>
+        <label for="support-description">Description *</label>
+        <textarea id="support-description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
+        <div class="char-count"><span id="support-description-count">0</span>/500</div>
+    </div>
 
-                    <div class="form-group">
-                        <label for="support-serial-numbers">Serial Number of Affected Units</label>
-                        <input type="text" id="support-serial-numbers" name="serialNumbers" placeholder="Enter serial numbers">
+    <div class="form-group">
+        <label for="support-serial-numbers">Serial Numbers</label>
+        <input type="text" id="support-serial-numbers" name="serialNumbers" placeholder="Enter serial numbers">
 
-                        <label for="support-troubleshooting">Troubleshooting Steps Taken</label>
-                        <textarea id="support-troubleshooting" name="troubleshooting" rows="4"></textarea>
-                    </div>
-                </div>
+        <label for="support-troubleshooting">Troubleshooting Steps</label>
+        <textarea id="support-troubleshooting" name="troubleshooting" rows="4" placeholder="What have you tried so far?"></textarea>
+    </div>
+</div>
 
-                <!-- Training Form Section -->
-                <div id="training-section" class="form-section">
-                    <div class="form-group">
-                        <label for="training-project-name">Project/Third Party Name *</label>
-                        <input type="text" id="training-project-name" name="projectName" placeholder="Enter project or third party name" required>
-                        
-                        <label for="training-unit-type">Type of Unit *</label>
-                        <select id="training-unit-type" name="unitType" required>
-                            <option value="">-- Select --</option>
-                            <option value="CENTRAL">CENTRAL</option>
-                            <option value="STRING">STRING</option>
-                            <option value="BeSS">BeSS</option>
-                            <option value="DISTRIBUTION">DISTRIBUTION</option>
-                        </select>
-                    </div>
+<!-- Training Form Section -->
+<div id="training-section" class="form-section">
+    <div class="form-group">
+        <label for="training-project-name">Project Name / Third Party *</label>
+        <input type="text" id="training-project-name" name="projectName" placeholder="Enter project or third party name" required>
+        
+        <label for="training-unit-type">Type of Unit *</label>
+        <select id="training-unit-type" name="unitType" required>
+            <option value="">-- Select --</option>
+            <option value="CENTRAL">CENTRAL</option>
+            <option value="STRING">STRING</option>
+            <option value="BeSS">BeSS</option>
+            <option value="DISTRIBUTION">DISTRIBUTION</option>
+        </select>
+    </div>
 
-                    <div class="form-group">
-                        <label for="training-products">Products *</label>
-                        <input type="text" id="training-products" name="products" placeholder="Max 5 words" maxlength="50" required>
-                        <div class="char-count"><span id="training-products-count">0</span>/50</div>
+    <div class="form-group">
+        <label for="training-products">Products *</label>
+        <input type="text" id="training-products" name="products" placeholder="Enter products for training" maxlength="50" required>
+        <div class="char-count"><span id="training-products-count">0</span>/50</div>
 
-                        <label for="training-scope">Scope of Training *</label>
-                        <textarea id="training-scope" name="trainingScope" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
-                        <div class="char-count"><span id="training-scope-count">0</span>/500</div>
-                    </div>
-                </div>
+        <label for="training-scope">Scope of Training *</label>
+        <textarea id="training-scope" name="trainingScope" rows="5" placeholder="Describe the training scope" maxlength="500" required></textarea>
+        <div class="char-count"><span id="training-scope-count">0</span>/500</div>
+    </div>
+</div>
 
-                <!-- RCA Form Section -->
-                <div id="rca-section" class="form-section">
-                    <div class="form-group">
-                        <label for="rca-project-name">Project Name *</label>
-                        <input type="text" id="rca-project-name" name="projectName" placeholder="Enter project name" required>
-                        
-                        <label for="rca-unit-type">Type of Unit *</label>
-                        <select id="rca-unit-type" name="unitType" required>
-                            <option value="">-- Select --</option>
-                            <option value="CENTRAL">CENTRAL</option>
-                            <option value="STRING">STRING</option>
-                            <option value="BeSS">BeSS</option>
-                            <option value="DISTRIBUTION">DISTRIBUTION</option>
-                        </select>
-                    </div>
+<!-- RCA Form Section -->
+<div id="rca-section" class="form-section">
+    <div class="form-group">
+        <label for="rca-project-name">Project Name *</label>
+        <input type="text" id="rca-project-name" name="projectName" placeholder="Enter project name" required>
+        
+        <label for="rca-unit-type">Type of Unit *</label>
+        <select id="rca-unit-type" name="unitType" required>
+            <option value="">-- Select --</option>
+            <option value="CENTRAL">CENTRAL</option>
+            <option value="STRING">STRING</option>
+            <option value="BeSS">BeSS</option>
+            <option value="DISTRIBUTION">DISTRIBUTION</option>
+        </select>
+    </div>
 
-                    <div class="form-group">
-                        <label for="rca-issue">Issue *</label>
-                        <input type="text" id="rca-issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
-                        <div class="char-count"><span id="rca-issue-count">0</span>/50</div>
+    <div class="form-group">
+        <label for="rca-issue">Issue *</label>
+        <input type="text" id="rca-issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
+        <div class="char-count"><span id="rca-issue-count">0</span>/50</div>
 
-                        <label for="rca-description">Description of the Issue *</label>
-                        <textarea id="rca-description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
-                        <div class="char-count"><span id="rca-description-count">0</span>/500</div>
-                    </div>
+        <label for="rca-description">Description *</label>
+        <textarea id="rca-description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
+        <div class="char-count"><span id="rca-description-count">0</span>/500</div>
+    </div>
 
-                    <div class="form-group">
-                        <label for="rca-serial-numbers">Serial Number of Affected Units</label>
-                        <input type="text" id="rca-serial-numbers" name="serialNumbers" placeholder="Enter serial numbers">
-                    </div>
-                </div>
+    <div class="form-group">
+        <label for="rca-serial-numbers">Serial Numbers</label>
+        <input type="text" id="rca-serial-numbers" name="serialNumbers" placeholder="Enter serial numbers">
+    </div>
+</div>
 
-                <!-- Others Form Section -->
-                <div id="others-section" class="form-section">
-                    <div class="form-group">
-                        <label for="other-unit-type">Type of Unit *</label>
-                        <select id="other-unit-type" name="unitType" required>
-                            <option value="">-- Select --</option>
-                            <option value="CENTRAL">CENTRAL</option>
-                            <option value="STRING">STRING</option>
-                            <option value="BeSS">BeSS</option>
-                            <option value="DISTRIBUTION">DISTRIBUTION</option>
-                        </select>
+<!-- Others Form Section -->
+<div id="others-section" class="form-section">
+    <div class="form-group">
+        <label for="other-unit-type">Type of Unit *</label>
+        <select id="other-unit-type" name="unitType" required>
+            <option value="">-- Select --</option>
+            <option value="CENTRAL">CENTRAL</option>
+            <option value="STRING">STRING</option>
+            <option value="BeSS">BeSS</option>
+            <option value="DISTRIBUTION">DISTRIBUTION</option>
+        </select>
 
-                        <label for="other-description">Description of Support Request *</label>
-                        <textarea id="other-description" name="description" rows="5" placeholder="Describe your request" required></textarea>
-                    </div>
-                </div>
+        <label for="other-issue">Issue *</label>
+        <input type="text" id="other-issue" name="issue" placeholder="Brief issue description" required>
 
+        <label for="other-description">Description of Request *</label>
+        <textarea id="other-description" name="description" rows="5" placeholder="Describe your request" required></textarea>
+    </div>
+</div>
                 <!-- File Upload Section -->
                 <div class="form-group">
                     <label>Attachments (Max 5 files, 10MB each, 50MB total)</label>

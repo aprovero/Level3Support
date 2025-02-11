@@ -40,10 +40,10 @@ const transporter = nodemailer.createTransport({
 });
 
 // Route to Handle Form Submission
-// Route to Handle Form Submission
+// Updated Airtable field mappings in server.js
 app.post("/submit", upload.array("attachments", 5), async (req, res) => {
   try {
-    // Extract and sanitize form fields - use toString() to ensure we have strings
+    // Extract and sanitize form fields
     const name = (req.body.name || "N/A").toString().trim();
     const request = (req.body.request || "N/A").toString().trim();
     const location = (req.body.location || "N/A").toString().trim();
@@ -59,20 +59,22 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
     // Determine Airtable table based on request type
     const tableName = tableMap[request] || "OtherRequests";
 
-    // Prepare Airtable data based on request type
+    // Base fields that are common across tables
     let airtableData = {
       "Name": name,
       "Location": location,
-      "Type of Unit": unitType
+      "Type of Unit": unitType,
+      "Created date": new Date().toISOString()
     };
 
-    // Add fields based on request type
+    // Add fields based on request type with exact Airtable field names
     switch (request) {
       case "SUPPORT":
         airtableData = {
           ...airtableData,
-          "Project Name": projectName,
           "Issue": issue,
+          "Type of Request": request,
+          "Project Name": projectName,
           "Description": description,
           "Serial Numbers": serialNumbers,
           "Troubleshooting Steps": troubleshooting
@@ -81,16 +83,18 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
       case "TRAINING":
         airtableData = {
           ...airtableData,
-          "Project Name": projectName,
+          "Type of Request": request,
+          "Project Name / Third Party": projectName,
           "Products": products,
-          "Training Scope": trainingScope
+          "Scope of Training": trainingScope
         };
         break;
       case "RCA":
         airtableData = {
           ...airtableData,
-          "Project Name": projectName,
           "Issue": issue,
+          "Type of Request": request,
+          "Project Name": projectName,
           "Description": description,
           "Serial Numbers": serialNumbers
         };
@@ -98,7 +102,8 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
       case "OTHERS":
         airtableData = {
           ...airtableData,
-          "Description": description
+          "Issue": issue,
+          "Description of Request": description
         };
         break;
     }
