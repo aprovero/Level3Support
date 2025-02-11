@@ -40,21 +40,21 @@ const transporter = nodemailer.createTransport({
 });
 
 // Route to Handle Form Submission
-// Update the submission route in server.js
+// Route to Handle Form Submission
 app.post("/submit", upload.array("attachments", 5), async (req, res) => {
   try {
-    // Extract and sanitize form fields
-    const name = req.body.name?.trim() || "N/A";
-    const request = req.body.request?.trim() || "N/A";
-    const location = req.body.location?.trim() || "N/A";
-    const projectName = req.body.projectName?.trim() || "N/A";
-    const unitType = req.body.unitType?.trim() || "N/A";
-    const issue = req.body.issue?.trim() || "N/A";
-    const description = req.body.description?.trim() || "N/A";
-    const serialNumbers = req.body.serialNumbers?.trim() || "N/A";
-    const troubleshooting = req.body.troubleshooting?.trim() || "N/A";
-    const products = req.body.products?.trim() || "N/A";
-    const trainingScope = req.body.trainingScope?.trim() || "N/A";
+    // Extract and sanitize form fields - use toString() to ensure we have strings
+    const name = (req.body.name || "N/A").toString().trim();
+    const request = (req.body.request || "N/A").toString().trim();
+    const location = (req.body.location || "N/A").toString().trim();
+    const projectName = (req.body.projectName || "N/A").toString().trim();
+    const unitType = (req.body.unitType || "N/A").toString().trim();
+    const issue = (req.body.issue || "N/A").toString().trim();
+    const description = (req.body.description || "N/A").toString().trim();
+    const serialNumbers = (req.body.serialNumbers || "N/A").toString().trim();
+    const troubleshooting = (req.body.troubleshooting || "N/A").toString().trim();
+    const products = (req.body.products || "N/A").toString().trim();
+    const trainingScope = (req.body.trainingScope || "N/A").toString().trim();
 
     // Determine Airtable table based on request type
     const tableName = tableMap[request] || "OtherRequests";
