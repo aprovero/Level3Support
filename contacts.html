@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+Copy<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -40,33 +40,75 @@
             color: #333333;
             margin-bottom: 30px;
         }
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
         .contact-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            margin-bottom: 20px;
             background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            overflow: hidden;
+            border: 3px solid #007bff;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .contact-info {
-            text-align: left;
+            text-align: center;
         }
         .contact-name {
             font-weight: bold;
-            color: #444;
-            margin-bottom: 5px;
+            color: #333333;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .contact-title {
+            color: #666666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .contact-expertise {
+            color: #007bff;
+            font-size: 14px;
+            margin-bottom: 12px;
+            padding: 4px 8px;
+            background-color: #f0f7ff;
+            border-radius: 4px;
+            display: inline-block;
         }
         .contact-email {
+            display: inline-block;
             color: #007bff;
             text-decoration: none;
-            font-size: 16px;
-            transition: all 0.3s;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: #f0f7ff;
+            transition: all 0.3s ease;
+            margin-top: 8px;
         }
         .contact-email:hover {
-            color: #0056b3;
-            text-decoration: underline;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
         }
         .back-link {
             display: inline-flex;
@@ -87,43 +129,73 @@
 </head>
 <body>
     <div class="container">
-        <div class="container">
-            <div class="header">
-                <div class="logo">
-                    <img src="LOGO.png" alt="Logo">
+        <div class="header">
+            <div class="logo">
+                <img src="LOGO.png" alt="Logo">
+            </div>
+        </div>
+        <a href="index.html" class="back-link">← Back to Form</a>
+        <h1>Contact Directory</h1>
+        
+        <div class="contacts-grid">
+            <div class="contact-card">
+                <div class="profile-pic">
+                    <img src="/api/placeholder/120/120" alt="Andres Provero">
+                </div>
+                <div class="contact-info">
+                    <div class="contact-name">Andres Provero</div>
+                    <div class="contact-title">Senior Technical Support Engineer</div>
+                    <div class="contact-expertise">Central / BeSS</div>
+                    <a href="mailto:andres.provero@sungrowamericas.com?cc=coe.latam@sungrowamericas.com" class="contact-email">Send Email</a>
                 </div>
             </div>
-            <a href="index.html" class="back-link">← Back to Form</a>
-            <h1>Contact Directory</h1>
-        
-        <div class="contact-card">
-            <div class="contact-info">
-                <div class="contact-name">Andres Provero</div>
-                <a href="mailto:andres.provero@sungrowamericas.com" class="contact-email">andres.provero@sungrowamericas.com</a>
+
+            <div class="contact-card">
+                <div class="profile-pic">
+                    <img src="/api/placeholder/120/120" alt="Gabriel Trevisan">
+                </div>
+                <div class="contact-info">
+                    <div class="contact-name">Gabriel Trevisan</div>
+                    <div class="contact-title">Technical Support Engineer</div>
+                    <div class="contact-expertise">String / Distribution</div>
+                    <a href="mailto:gabriel.trevisan@sungrowamericas.com?cc=coe.latam@sungrowamericas.com" class="contact-email">Send Email</a>
+                </div>
             </div>
-        </div>
-        <div class="contact-card">
-            <div class="contact-info">
-                <div class="contact-name">Gabriel Trevisan</div>
-                <a href="mailto:gabriel.trevisan@sungrowamericas.com" class="contact-email">gabriel.trevisan@sungrowamericas.com</a>
+
+            <div class="contact-card">
+                <div class="profile-pic">
+                    <img src="/api/placeholder/120/120" alt="Cristhian Catalan">
+                </div>
+                <div class="contact-info">
+                    <div class="contact-name">Cristhian Catalan</div>
+                    <div class="contact-title">Technical Support Engineer</div>
+                    <div class="contact-expertise">String / BeSS</div>
+                    <a href="mailto:cristhian.catalan@sungrowamericas.com?cc=coe.latam@sungrowamericas.com" class="contact-email">Send Email</a>
+                </div>
             </div>
-        </div>
-        <div class="contact-card">
-            <div class="contact-info">
-                <div class="contact-name">Cristhian Catalan</div>
-                <a href="mailto:cristhian.catalan@sungrowamericas.com" class="contact-email">cristhian.catalan@sungrowamericas.com</a>
+
+            <div class="contact-card">
+                <div class="profile-pic">
+                    <img src="/api/placeholder/120/120" alt="Javier Ramirez">
+                </div>
+                <div class="contact-info">
+                    <div class="contact-name">Javier Ramirez</div>
+                    <div class="contact-title">Technical Support Engineer</div>
+                    <div class="contact-expertise">BeSS / Central</div>
+                    <a href="mailto:javier.ramirez@sungrowamericas.com?cc=coe.latam@sungrowamericas.com" class="contact-email">Send Email</a>
+                </div>
             </div>
-        </div>
-        <div class="contact-card">
-            <div class="contact-info">
-                <div class="contact-name">Javier Ramirez</div>
-                <a href="mailto:javier.ramirez@sungrowamericas.com" class="contact-email">javier.ramirez@sungrowamericas.com</a>
-            </div>
-        </div>
-        <div class="contact-card">
-            <div class="contact-info">
-                <div class="contact-name">Fabio Cortes</div>
-                <a href="mailto:fabio.cortes@sungrowamericas.com" class="contact-email">fabio.cortes@sungrowamericas.com</a>
+
+            <div class="contact-card">
+                <div class="profile-pic">
+                    <img src="/api/placeholder/120/120" alt="Fabio Cortes">
+                </div>
+                <div class="contact-info">
+                    <div class="contact-name">Fabio Cortes</div>
+                    <div class="contact-title">Technical Support Engineer</div>
+                    <div class="contact-expertise">Central / String</div>
+                    <a href="mailto:fabio.cortes@sungrowamericas.com?cc=coe.latam@sungrowamericas.com" class="contact-email">Send Email</a>
+                </div>
             </div>
         </div>
     </div>
