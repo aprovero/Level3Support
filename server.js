@@ -10,6 +10,13 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const tableMap = {
+  "SUPPORT": process.env.AIRTABLE_SUPPORT_TABLE,
+  "TRAINING": process.env.AIRTABLE_TRAINING_TABLE,
+  "RCA": process.env.AIRTABLE_RCA_TABLE,
+  "OTHERS": process.env.AIRTABLE_OTHERS_TABLE,
+};
+
 // Rate limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
