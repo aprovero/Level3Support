@@ -22,11 +22,17 @@
             padding: 20px;
             position: relative;
         }
-        .logo {
+        .header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: left;
             margin-bottom: 10px;
+        }
+
+        .logo {
+                display: flex;
+                align-items: center;
+                /* Remove justify-content and margin-bottom as they're now handled by .header */
         }
         .logo img {
             width: 150px;
@@ -36,6 +42,8 @@
             width: 30px;
             height: auto;
             cursor: pointer;
+            display: flex;
+            align-items: center;
         }
         h1 {
             text-align: center;
