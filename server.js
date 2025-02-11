@@ -40,55 +40,86 @@ const transporter = nodemailer.createTransport({
 });
 
 // Route to Handle Form Submission
+// Update the submission route in server.js
 app.post("/submit", upload.array("attachments", 5), async (req, res) => {
   try {
     // Extract and sanitize form fields
-    const name = req.body.name || "N/A";
-    const request = req.body.request || "N/A";
-    const location = req.body.location || "N/A";
-    const projectName = req.body.projectName || "";
-    const unitModel = req.body.unitModel || "";
-    const issue = req.body.issue || "";
-    const description = req.body.description || "";
-    const serialNumbers = req.body.serialNumbers || "";
-    const troubleshooting = req.body.troubleshooting || "";
-    const products = req.body.products || "";
-    const scope = req.body.scope || "";
+    const name = req.body.name?.trim() || "N/A";
+    const request = req.body.request?.trim() || "N/A";
+    const location = req.body.location?.trim() || "N/A";
+    const projectName = req.body.projectName?.trim() || "N/A";
+    const unitType = req.body.unitType?.trim() || "N/A";
+    const issue = req.body.issue?.trim() || "N/A";
+    const description = req.body.description?.trim() || "N/A";
+    const serialNumbers = req.body.serialNumbers?.trim() || "N/A";
+    const troubleshooting = req.body.troubleshooting?.trim() || "N/A";
+    const products = req.body.products?.trim() || "N/A";
+    const trainingScope = req.body.trainingScope?.trim() || "N/A";
 
     // Determine Airtable table based on request type
     const tableName = tableMap[request] || "OtherRequests";
 
-    // Prepare Airtable data
+    // Prepare Airtable data based on request type
     let airtableData = {
       "Name": name,
-      "Type of Request": request,
       "Location": location,
-      "Project Name": projectName,
-      "Type of Unit": unitModel,
-      "Issue": issue,
-      "Description": description,
-      "Serial Numbers": serialNumbers,
-      "Troubleshooting": troubleshooting,
-      "Products": products,
-      "Scope": scope,
+      "Type of Unit": unitType
     };
 
+    // Add fields based on request type
+    switch (request) {
+      case "SUPPORT":
+        airtableData = {
+          ...airtableData,
+          "Project Name": projectName,
+          "Issue": issue,
+          "Description": description,
+          "Serial Numbers": serialNumbers,
+          "Troubleshooting Steps": troubleshooting
+        };
+        break;
+      case "TRAINING":
+        airtableData = {
+          ...airtableData,
+          "Project Name": projectName,
+          "Products": products,
+          "Training Scope": trainingScope
+        };
+        break;
+      case "RCA":
+        airtableData = {
+          ...airtableData,
+          "Project Name": projectName,
+          "Issue": issue,
+          "Description": description,
+          "Serial Numbers": serialNumbers
+        };
+        break;
+      case "OTHERS":
+        airtableData = {
+          ...airtableData,
+          "Description": description
+        };
+        break;
+    }
+
     // Save to Airtable
-    await base(tableName).create([{ fields: airtableData }]);
+    const record = await base(tableName).create([{ fields: airtableData }]);
 
     // Prepare email content
     let emailBody = `
-      A new ${request} request has been submitted by ${name}.
-
-      - Location: ${location}
-      - Project Name: ${projectName || "N/A"}
-      - Type of Unit: ${unitModel || "N/A"}
-      - Issue: ${issue || "N/A"}
-      - Description: ${description || "N/A"}
-      - Serial Numbers: ${serialNumbers || "N/A"}
-      - Troubleshooting: ${troubleshooting || "N/A"}
-      - Products: ${products || "N/A"}
-      - Scope: ${scope || "N/A"}
+      New ${request} Request Details:
+      
+      Requester: ${name}
+      Location: ${location}
+      Type of Unit: ${unitType}
+      ${projectName !== "N/A" ? `Project Name: ${projectName}\n` : ""}
+      ${issue !== "N/A" ? `Issue: ${issue}\n` : ""}
+      ${description !== "N/A" ? `Description: ${description}\n` : ""}
+      ${serialNumbers !== "N/A" ? `Serial Numbers: ${serialNumbers}\n` : ""}
+      ${troubleshooting !== "N/A" ? `Troubleshooting Steps: ${troubleshooting}\n` : ""}
+      ${products !== "N/A" ? `Products: ${products}\n` : ""}
+      ${trainingScope !== "N/A" ? `Training Scope: ${trainingScope}\n` : ""}
     `;
 
     // Prepare email attachments
@@ -100,22 +131,22 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
       }));
     }
 
-    // Prepare email options
-    let mailOptions = {
+    // Send email
+    await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: "coe.latam@sungrowamericas.com",
-      subject: `[${location}] [${projectName || "N/A"}] NEW ${request} REQUEST`,
+      subject: `[${location}] [${projectName}] NEW ${request} REQUEST`,
       text: emailBody,
       attachments: emailAttachments,
-    };
+    });
 
-    // Send email
-    await transporter.sendMail(mailOptions);
-
-    res.status(200).json({ message: "Submission successful!" });
+    res.status(200).json({ message: "Request submitted successfully!" });
   } catch (error) {
     console.error("Error processing submission:", error);
-    res.status(500).json({ error: "Failed to submit form" });
+    res.status(500).json({ 
+      error: "Failed to submit form", 
+      details: error.message 
+    });
   }
 });
 

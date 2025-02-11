@@ -7,6 +7,7 @@
     <link rel="icon" type="image/x-icon" href="SIMPLE_LOGO.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
+        <link rel="stylesheet" href="shared-styles.css">
         body {
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
@@ -26,29 +27,32 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            padding: 0 0 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
         }
-
         .logo {
-                display: flex;
-                align-items: center;
-                /* Remove justify-content and margin-bottom as they're now handled by .header */
+            display: flex;
+            align-items: center;
         }
         .logo img {
             width: 150px;
             height: auto;
         }
+        .contact-icon {
+            display: flex;
+            align-items: center;
+        }
         .contact-icon img {
             width: 30px;
             height: auto;
             cursor: pointer;
-            display: flex;
-            align-items: center;
         }
         h1 {
             text-align: center;
             color: #333333;
-            margin-bottom: 30px;
+            margin: 30px 0;
+            font-size: 24px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -193,20 +197,53 @@
         .form-section.active {
             display: block;
         }
-        nav {
-            padding: 1rem 0;
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
         }
-        .nav-link {
-            color: #007bff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-button {
+            background-color: #dc3545;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
             transition: background-color 0.3s;
+            display: block;
+            margin: 0 auto;
+            width: auto;
         }
-        .nav-link:hover {
-            background-color: rgba(0, 123, 255, 0.1);
-            text-decoration: none;
+
+        .modal-button:hover {
+            background-color: #c82333;
         }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
         #loading-spinner {
             display: none;
             text-align: center;
@@ -228,6 +265,22 @@
     </style>
 </head>
 <body>
+    <!-- Welcome Modal -->
+    <div id="welcome-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="text-xl font-bold mb-4">When to use this form:</h2>
+            <ol class="list-decimal pl-6 mb-6 space-y-2">
+                <li>For technical issues that are not solved by Tech-support and FSE, those cases can be sent to CoE team for review.</li>
+                <li>For training requests, Internal, 3rd party or customer.</li>
+                <li>For RCA requests.</li>
+                <li>For other issues. (Customer requested reports, Quality issues, etc.)</li>
+            </ol>
+            <p class="mb-6">Please make sure to provide all needed information for CoE team to do analysis.</p>
+            <p class="mb-8 font-bold">Please note if GSP ticket does not have all needed info, the case will be sent back.</p>
+            <button id="understand-btn" class="modal-button">UNDERSTAND</button>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <div class="logo">
@@ -405,6 +458,25 @@
     </div>
 
     <script>
+                // Modal handling
+                document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('welcome-modal');
+            const understandBtn = document.getElementById('understand-btn');
+
+            // Check if user has seen the modal before
+            if (!localStorage.getItem('modalShown')) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+
+            understandBtn.addEventListener('click', function() {
+                modal.classList.add('hidden');
+                // Store that user has seen the modal
+                localStorage.setItem('modalShown', 'true');
+            });
+        });
+
         // Form elements
         const form = document.getElementById('support-form');
         const requestSelect = document.getElementById('request');
