@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,226 +118,310 @@
             border-color: #007bff;
             background-color: rgba(0,123,255,0.05);
         }
-        .file-list {
-            margin-top: 15px;
+        Copy.file-list {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.file-size {
+    width: 70px;
+    text-align: right;
+}
+
+.remove-file {
+    width: 24px;
+    text-align: center;
+}
+
+        /* Previous styles remain the same */
+        .initial-form {
+            margin-bottom: 20px;
         }
-        .file-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px;
-            background: #f8f9fa;
-            border-radius: 4px;
-            margin-bottom: 8px;
+        .main-form {
+            display: none;
         }
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .main-form.active {
+            display: block;
         }
-        .file-name {
-            font-size: 14px;
-            color: #333;
+        .form-section {
+            display: none;
         }
-        .file-size {
-            font-size: 12px;
-            color: #666;
+        .form-section.active {
+            display: block;
         }
-        .remove-file {
-            background: none;
-            border: none;
-            color: #dc3545;
-            cursor: pointer;
-            padding: 4px 8px;
-            font-size: 18px;
-        }
-        .remove-file:hover {
-            color: #bd2130;
-        }
+        /* Rest of the styles remain the same */
     </style>
 </head>
 <body>
     <div class="container">
+        <nav>
+            <a href="contacts.html" class="nav-link">Contact Directory</a>
+        </nav>
         <div class="logo">
             <img src="LOGO.png" alt="Logo">
         </div>
         <h1>CoE Level 3 Support Request</h1>
         <form id="support-form">
-            <div class="form-group">
-                <label for="name">Name *</label>
-                <input type="text" id="name" name="name" placeholder="Input your name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="request">TYPE OF REQUEST *</label>
+            <!-- Initial Selection -->
+            <div class="initial-form form-group">
+                <label for="request">Type of Request *</label>
                 <select id="request" name="request" required>
                     <option value="">-- Select --</option>
                     <option value="SUPPORT">SUPPORT</option>
-                    <option value="RCA">RCA</option>
                     <option value="TRAINING">TRAINING</option>
-                    <option value="OTHERS">OTHERS</option>
-                </select>
-
-                <label for="location">LOCATION *</label>
-                <select id="location" name="location" required>
-                    <option value="">-- Select Location --</option>
-                    <option value="MEXICO">MEXICO</option>
-                    <option value="CENTRAL AMERICA">CENTRAL AMERICA</option>
-                    <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
-                    <option value="COLOMBIA">COLOMBIA</option>
-                    <option value="BRAZIL">BRAZIL</option>
-                    <option value="PERU">PERU</option>
-                    <option value="CHILE">CHILE</option>
+                    <option value="RCA">RCA</option>
                     <option value="OTHERS">OTHERS</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="project-name">PROJECT NAME *</label>
-                <input type="text" id="project-name" name="projectName" placeholder="Enter project name" required>
+            <!-- Main Form (shows after request type selection) -->
+            <div class="main-form" id="main-form">
+                <div class="form-group">
+                    <label for="name">Requester Name *</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
 
-                <label for="unit-model">UNIT MODEL *</label>
-                <input type="text" id="unit-model" name="unitModel" placeholder="E.g., SG3125 v30" required>
-            </div>
-
-            <div class="form-group">
-                <label for="issue">ISSUE *</label>
-                <input type="text" id="issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
-                <div class="char-count"><span id="issue-count">0</span>/50</div>
-
-                <label for="description">COMPLETE DESCRIPTION *</label>
-                <textarea id="description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
-                <div class="char-count"><span id="description-count">0</span>/500</div>
-            </div>
-
-            <div class="form-group">
-                <label for="serial-numbers">SERIAL NUMBERS</label>
-                <input type="text" id="serial-numbers" name="serialNumbers" placeholder="Inverter, Container, Skid, etc.">
-
-                <label for="troubleshooting">TROUBLESHOOTING</label>
-                <textarea id="troubleshooting" name="troubleshooting" rows="4"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>ATTACHMENTS (Max 5 files, 10MB each, 50MB total)</label>
-                <div id="file-upload" class="file-upload">
-                    <div id="upload-text">
-                        Drop files here or click to upload
-                        <input type="file" id="file-input" multiple style="display: none;">
-                    </div>
-                    <div id="file-list" class="file-list"></div>
+                    <label for="location">Location *</label>
+                    <select id="location" name="location" required>
+                        <option value="">-- Select Location --</option>
+                        <option value="MEXICO">MEXICO</option>
+                        <option value="CENTRAL AMERICA">CENTRAL AMERICA</option>
+                        <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
+                        <option value="COLOMBIA">COLOMBIA</option>
+                        <option value="BRAZIL">BRAZIL</option>
+                        <option value="PERU">PERU</option>
+                        <option value="CHILE">CHILE</option>
+                        <option value="OTHERS">OTHERS</option>
+                    </select>
                 </div>
-            </div>
 
-            <button type="submit" id="submit-btn">SUBMIT</button>
+                <!-- Support Form Section -->
+                <div id="support-section" class="form-section">
+                    <div class="form-group">
+                        <label for="support-project-name">Project Name *</label>
+                        <input type="text" id="support-project-name" name="projectName" placeholder="Enter project name" required>
+                        
+                        <label for="support-unit-type">Type of Unit *</label>
+                        <select id="support-unit-type" name="unitType" required>
+                            <option value="">-- Select --</option>
+                            <option value="CENTRAL">CENTRAL</option>
+                            <option value="STRING">STRING</option>
+                            <option value="BeSS">BeSS</option>
+                            <option value="DISTRIBUTION">DISTRIBUTION</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="support-issue">Issue *</label>
+                        <input type="text" id="support-issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
+                        <div class="char-count"><span id="support-issue-count">0</span>/50</div>
+
+                        <label for="support-description">Description of the Issue *</label>
+                        <textarea id="support-description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
+                        <div class="char-count"><span id="support-description-count">0</span>/500</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="support-serial-numbers">Serial Number of Affected Units</label>
+                        <input type="text" id="support-serial-numbers" name="serialNumbers" placeholder="Enter serial numbers">
+
+                        <label for="support-troubleshooting">Troubleshooting Steps Taken</label>
+                        <textarea id="support-troubleshooting" name="troubleshooting" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <!-- Training Form Section -->
+                <div id="training-section" class="form-section">
+                    <div class="form-group">
+                        <label for="training-project-name">Project/Third Party Name *</label>
+                        <input type="text" id="training-project-name" name="projectName" placeholder="Enter project or third party name" required>
+                        
+                        <label for="training-unit-type">Type of Unit *</label>
+                        <select id="training-unit-type" name="unitType" required>
+                            <option value="">-- Select --</option>
+                            <option value="CENTRAL">CENTRAL</option>
+                            <option value="STRING">STRING</option>
+                            <option value="BeSS">BeSS</option>
+                            <option value="DISTRIBUTION">DISTRIBUTION</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="training-products">Products *</label>
+                        <input type="text" id="training-products" name="products" placeholder="Max 5 words" maxlength="50" required>
+                        <div class="char-count"><span id="training-products-count">0</span>/50</div>
+
+                        <label for="training-scope">Scope of Training *</label>
+                        <textarea id="training-scope" name="trainingScope" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
+                        <div class="char-count"><span id="training-scope-count">0</span>/500</div>
+                    </div>
+                </div>
+
+                <!-- RCA Form Section -->
+                <div id="rca-section" class="form-section">
+                    <div class="form-group">
+                        <label for="rca-project-name">Project Name *</label>
+                        <input type="text" id="rca-project-name" name="projectName" placeholder="Enter project name" required>
+                        
+                        <label for="rca-unit-type">Type of Unit *</label>
+                        <select id="rca-unit-type" name="unitType" required>
+                            <option value="">-- Select --</option>
+                            <option value="CENTRAL">CENTRAL</option>
+                            <option value="STRING">STRING</option>
+                            <option value="BeSS">BeSS</option>
+                            <option value="DISTRIBUTION">DISTRIBUTION</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rca-issue">Issue *</label>
+                        <input type="text" id="rca-issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
+                        <div class="char-count"><span id="rca-issue-count">0</span>/50</div>
+
+                        <label for="rca-description">Description of the Issue *</label>
+                        <textarea id="rca-description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
+                        <div class="char-count"><span id="rca-description-count">0</span>/500</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rca-serial-numbers">Serial Number of Affected Units</label>
+                        <input type="text" id="rca-serial-numbers" name="serialNumbers" placeholder="Enter serial numbers">
+                    </div>
+                </div>
+
+                <!-- Others Form Section -->
+                <div id="others-section" class="form-section">
+                    <div class="form-group">
+                        <label for="other-unit-type">Type of Unit *</label>
+                        <select id="other-unit-type" name="unitType" required>
+                            <option value="">-- Select --</option>
+                            <option value="CENTRAL">CENTRAL</option>
+                            <option value="STRING">STRING</option>
+                            <option value="BeSS">BeSS</option>
+                            <option value="DISTRIBUTION">DISTRIBUTION</option>
+                        </select>
+
+                        <label for="other-description">Description of Support Request *</label>
+                        <textarea id="other-description" name="description" rows="5" placeholder="Describe your request" required></textarea>
+                    </div>
+                </div>
+
+                <!-- File Upload Section -->
+                <div class="form-group">
+                    <label>Attachments (Max 5 files, 10MB each, 50MB total)</label>
+                    <div id="file-upload" class="file-upload">
+                        <div id="upload-text">
+                            Drop files here or click to upload
+                            <input type="file" id="file-input" multiple style="display: none;">
+                        </div>
+                        <div id="file-list" class="file-list"></div>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn">SUBMIT</button>
+            </div>
         </form>
     </div>
 
     <script>
-        const form = document.getElementById('support-form');
-        const fileUpload = document.getElementById('file-upload');
-        const fileInput = document.getElementById('file-input');
-        const fileList = document.getElementById('file-list');
-        const submitBtn = document.getElementById('submit-btn');
-        let files = [];
+        // Form type handling
+        const requestSelect = document.getElementById('request');
+        const mainForm = document.getElementById('main-form');
+        const formSections = {
+            'SUPPORT': document.getElementById('support-section'),
+            'TRAINING': document.getElementById('training-section'),
+            'RCA': document.getElementById('rca-section'),
+            'OTHERS': document.getElementById('others-section')
+        };
 
-        // Character counters
-        document.getElementById('issue').addEventListener('input', function() {
-            document.getElementById('issue-count').textContent = this.value.length;
+        // Character counters for all text fields
+        const charCounters = [
+            { input: 'support-issue', counter: 'support-issue-count' },
+            { input: 'support-description', counter: 'support-description-count' },
+            { input: 'training-products', counter: 'training-products-count' },
+            { input: 'training-scope', counter: 'training-scope-count' },
+            { input: 'rca-issue', counter: 'rca-issue-count' },
+            { input: 'rca-description', counter: 'rca-description-count' }
+        ];
+
+        charCounters.forEach(({input, counter}) => {
+            const inputElem = document.getElementById(input);
+            const counterElem = document.getElementById(counter);
+            if (inputElem && counterElem) {
+                inputElem.addEventListener('input', function() {
+                    counterElem.textContent = this.value.length;
+                });
+            }
         });
 
-        document.getElementById('description').addEventListener('input', function() {
-            document.getElementById('description-count').textContent = this.value.length;
-        });
-
-        // File upload handling
-        const MAX_FILES = 5;
-        const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-        const MAX_TOTAL_SIZE = 50 * 1024 * 1024; // 50MB
-
-        fileUpload.addEventListener('click', () => fileInput.click());
-
-        fileUpload.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            fileUpload.classList.add('dragover');
-        });
-
-        fileUpload.addEventListener('dragleave', () => {
-            fileUpload.classList.remove('dragover');
-        });
-
-        fileUpload.addEventListener('drop', (e) => {
-            e.preventDefault();
-            fileUpload.classList.remove('dragover');
-            handleFiles(e.dataTransfer.files);
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            handleFiles(e.target.files);
-            fileInput.value = ''; // Reset input
-        });
-
-        function handleFiles(newFiles) {
-            const totalSize = [...files, ...newFiles].reduce((sum, file) => sum + file.size, 0);
+        requestSelect.addEventListener('change', function() {
+            const selectedValue = this.value;
             
-            if (files.length + newFiles.length > MAX_FILES) {
-                showMessage('error', 'Maximum 5 files allowed');
-                return;
+            // Show/hide main form
+            if (selectedValue) {
+                mainForm.classList.add('active');
+            } else {
+                mainForm.classList.remove('active');
             }
 
-            if (totalSize > MAX_TOTAL_SIZE) {
-                showMessage('error', 'Total size exceeds 50MB');
-                return;
-            }
-
-            for (const file of newFiles) {
-                if (file.size > MAX_FILE_SIZE) {
-                    showMessage('error', `${file.name} exceeds 10MB limit`);
-                    return;
-                }
-                files.push(file);
-            }
-
-            updateFileList();
-        }
-
-        function updateFileList() {
-            fileList.innerHTML = '';
-            files.forEach((file, index) => {
-                const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
-                fileItem.innerHTML = `
-                    <div class="file-info">
-                        <span class="file-name">${file.name}</span>
-                        <span class="file-size">(${(file.size / (1024 * 1024)).toFixed(1)} MB)</span>
-                    </div>
-                    <button type="button" class="remove-file" data-index="${index}">×</button>
-                `;
-                fileList.appendChild(fileItem);
-            });
-
-            document.querySelectorAll('.remove-file').forEach(button => {
-                button.addEventListener('click', () => {
-                    files.splice(button.dataset.index, 1);
-                    updateFileList();
+            // Hide all sections
+            Object.values(formSections).forEach(section => {
+                section.classList.remove('active');
+                // Remove required attributes from all fields in this section
+                section.querySelectorAll('[required]').forEach(field => {
+                    field.removeAttribute('required');
                 });
             });
-        }
 
-        function showMessage(type, text) {
-            const message = document.createElement('div');
-            message.className = `message ${type}`;
-            message.textContent = text;
-            form.appendChild(message);
-            setTimeout(() => message.remove(), 5000);
-        }
+            // Show selected section
+            const selectedSection = formSections[selectedValue];
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+                // Add required attributes to necessary fields
+                selectedSection.querySelectorAll('input, select, textarea').forEach(field => {
+                    if (!field.classList.contains('optional')) {
+                        field.setAttribute('required', 'required');
+                    }
+                });
+            }
+        });
 
+        // Form submission handling
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             submitBtn.disabled = true;
             form.classList.add('loading');
 
             const formData = new FormData(form);
+            formData.append('requestType', requestSelect.value); // Add request type for backend routing
             files.forEach(file => formData.append('attachments', file));
 
             try {
@@ -353,6 +436,10 @@
                     form.reset();
                     files = [];
                     updateFileList();
+                    // Reset form sections
+                    Object.values(formSections).forEach(section => {
+                        section.classList.remove('active');
+                    });
                 } else {
                     showMessage('error', data.error || 'Submission failed. Please try again.');
                 }
@@ -366,14 +453,3 @@
     </script>
 </body>
 </html>
-
-```
-
-Key improvements made:
-1. Enhanced file upload with drag-and-drop
-2. Added file size/count validation
-3. Improved form styling and grouping
-4. Added character counters
-5. Better error handling and messages
-6. Loading states during submission
-7. Proper file list cleanup between submissions

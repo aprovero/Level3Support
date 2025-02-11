@@ -109,46 +109,27 @@ const createEmailContent = (data, recordId, filesCount) => {
     to: process.env.SUPPORT_EMAIL || "coe.latam@sungrowamericas.com",
     subject: `[${locationMap[data.location] || data.location}]_[${data.projectName}]_NEW ${data.request} REQUEST`,
     html: `
-      <h2>New ${data.request} Request (ID: ${recordId})</h2>
-      <h3>Request Details:</h3>
-      <table style="border-collapse: collapse; width: 100%;">
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Name:</strong></td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${data.name}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Location:</strong></td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${data.location}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Project:</strong></td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${data.projectName}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Unit Model:</strong></td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${data.unitModel}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Issue:</strong></td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${data.issue}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Description:</strong></td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${data.description}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Serial Numbers:</strong></td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${data.serialNumbers || 'N/A'}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Troubleshooting:</strong></td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${data.troubleshooting || 'N/A'}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Attachments:</strong></td>
-          <td style="padding: 8px; border: 1px solid #ddd;">${filesCount} files</td>
-        </tr>
-      </table>
+      <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">
+        <h2 style="color: #007bff;">New ${data.request} Request (ID: ${recordId})</h2>
+        <table style="border-collapse: collapse; width: 100%; margin: 20px 0;">
+          <tr style="background-color: #f8f9fa;">
+            <th style="width: 200px; text-align: left; padding: 12px; border: 1px solid #dee2e6;">Field</th>
+            <th style="text-align: left; padding: 12px; border: 1px solid #dee2e6;">Details</th>
+          </tr>
+          ${Object.entries(data)
+            .filter(([key]) => key !== 'attachments')
+            .map(([key, value]) => `
+              <tr>
+                <td style="padding: 12px; border: 1px solid #dee2e6; font-weight: bold;">${key.charAt(0).toUpperCase() + key.slice(1)}</td>
+                <td style="padding: 12px; border: 1px solid #dee2e6;">${value || 'N/A'}</td>
+              </tr>
+            `).join('')}
+        </table>
+        <p><strong>Attachments:</strong> ${filesCount} files</p>
+        <p>
+          <a href="mailto:coe.latam@sungrowamericas.com" style="color: #007bff;">Reply to this request</a>
+        </p>
+      </div>
     `
   };
 };
