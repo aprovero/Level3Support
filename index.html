@@ -20,6 +20,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
+            position: relative;
         }
         .logo {
             display: flex;
@@ -30,6 +31,11 @@
         .logo img {
             width: 150px;
             height: auto;
+        }
+        .contact-icon img {
+            width: 30px;
+            height: auto;
+            cursor: pointer;
         }
         h1 {
             text-align: center;
@@ -215,11 +221,15 @@
 </head>
 <body>
     <div class="container">
-        <nav>
-            <a href="contacts.html" class="nav-link">Contact Directory</a>
-        </nav>
-        <div class="logo">
-            <img src="LOGO.png" alt="Logo">
+        <div class="header">
+            <div class="logo">
+                <img src="LOGO.png" alt="Logo">
+            </div>
+            <div class="contact-icon">
+                <a href="contacts.html">
+                    <img src="contact-icon.png" alt="Contact Directory">
+                </a>
+            </div>
         </div>
         <h1>CoE Level 3 Support Request</h1>
         <form id="support-form">
