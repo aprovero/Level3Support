@@ -113,56 +113,57 @@
             padding: 20px;
             text-align: center;
             transition: all 0.3s;
+            cursor: pointer;
         }
         .file-upload.dragover {
             border-color: #007bff;
             background-color: rgba(0,123,255,0.05);
         }
-        Copy.file-list {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-top: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.file-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 12px;
-    border-bottom: 1px solid #eee;
-}
-
-.file-item:last-child {
-    border-bottom: none;
-}
-
-.file-name {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
-}
-
-.file-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex: 1;
-}
-
-.file-size {
-    width: 70px;
-    text-align: right;
-}
-
-.remove-file {
-    width: 24px;
-    text-align: center;
-}
-
-        /* Previous styles remain the same */
+        .file-list {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .file-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+        .file-size {
+            width: 70px;
+            text-align: right;
+        }
+        .remove-file {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            padding: 0 5px;
+            width: auto;
+        }
+        .remove-file:hover {
+            background: none;
+            color: #c82333;
+        }
         .initial-form {
             margin-bottom: 20px;
         }
@@ -178,7 +179,38 @@
         .form-section.active {
             display: block;
         }
-        /* Rest of the styles remain the same */
+        nav {
+            padding: 1rem 0;
+        }
+        .nav-link {
+            color: #007bff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .nav-link:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            text-decoration: none;
+        }
+        #loading-spinner {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -191,7 +223,6 @@
         </div>
         <h1>CoE Level 3 Support Request</h1>
         <form id="support-form">
-            <!-- Initial Selection -->
             <div class="initial-form form-group">
                 <label for="request">Type of Request *</label>
                 <select id="request" name="request" required>
@@ -203,7 +234,6 @@
                 </select>
             </div>
 
-            <!-- Main Form (shows after request type selection) -->
             <div class="main-form" id="main-form">
                 <div class="form-group">
                     <label for="name">Requester Name *</label>
@@ -346,15 +376,26 @@
                     </div>
                 </div>
 
+                <div id="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Submitting your request...</p>
+                </div>
+
                 <button type="submit" id="submit-btn">SUBMIT</button>
             </div>
         </form>
     </div>
 
     <script>
-        // Form type handling
+        // Form elements
+        const form = document.getElementById('support-form');
         const requestSelect = document.getElementById('request');
         const mainForm = document.getElementById('main-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        let files = [];
+
+        // Form sections
         const formSections = {
             'SUPPORT': document.getElementById('support-section'),
             'TRAINING': document.getElementById('training-section'),
@@ -362,7 +403,7 @@
             'OTHERS': document.getElementById('others-section')
         };
 
-        // Character counters for all text fields
+        // Character counters
         const charCounters = [
             { input: 'support-issue', counter: 'support-issue-count' },
             { input: 'support-description', counter: 'support-description-count' },
@@ -372,6 +413,7 @@
             { input: 'rca-description', counter: 'rca-description-count' }
         ];
 
+        // Initialize character counters
         charCounters.forEach(({input, counter}) => {
             const inputElem = document.getElementById(input);
             const counterElem = document.getElementById(counter);
@@ -382,6 +424,7 @@
             }
         });
 
+        // Request type change handler
         requestSelect.addEventListener('change', function() {
             const selectedValue = this.value;
             
@@ -392,20 +435,18 @@
                 mainForm.classList.remove('active');
             }
 
-            // Hide all sections
+            // Hide all sections and remove required attributes
             Object.values(formSections).forEach(section => {
                 section.classList.remove('active');
-                // Remove required attributes from all fields in this section
                 section.querySelectorAll('[required]').forEach(field => {
                     field.removeAttribute('required');
                 });
             });
 
-            // Show selected section
+            // Show selected section and add required attributes
             const selectedSection = formSections[selectedValue];
             if (selectedSection) {
                 selectedSection.classList.add('active');
-                // Add required attributes to necessary fields
                 selectedSection.querySelectorAll('input, select, textarea').forEach(field => {
                     if (!field.classList.contains('optional')) {
                         field.setAttribute('required', 'required');
@@ -414,14 +455,108 @@
             }
         });
 
-        // Form submission handling
+        // File upload handling
+        const fileUpload = document.getElementById('file-upload');
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+
+        fileUpload.addEventListener('click', () => fileInput.click());
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        });
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.classList.remove('dragover');
+        });
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(newFiles) {
+            const remainingSlots = 5 - files.length;
+            const filesToAdd = Array.from(newFiles).slice(0, remainingSlots);
+            
+            // Check file types and sizes
+            filesToAdd.forEach(file => {
+                const allowedTypes = [
+                    'image/jpeg',
+                    'image/png',
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/vnd.ms-excel',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                ];
+
+                if (!allowedTypes.includes(file.type)) {
+                    showMessage('error', `File type not allowed: ${file.name}`);
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                    showMessage('error', `File too large (max 10MB): ${file.name}`);
+                    return;
+                }
+
+                files.push(file);
+            });
+            
+            updateFileList();
+        }
+
+        function updateFileList() {
+            fileList.innerHTML = files.map((file, index) => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-name">${file.name}</span>
+                        <span class="file-size">${(file.size / 1024 / 1024).toFixed(1)} MB</span>
+                    </div>
+                    <button type="button" class="remove-file" onclick="removeFile(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFile(index) {
+            files.splice(index, 1);
+            updateFileList();
+        }
+
+        function showMessage(type, message) {
+            const existingMessage = form.querySelector('.message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            form.insertBefore(messageDiv, submitBtn);
+            setTimeout(() => messageDiv.remove(), 5000);
+        }
+
+        // Form submission
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
+            
+            // Check total file size
+            const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+            if (totalSize > 50 * 1024 * 1024) { // 50MB total limit
+                showMessage('error', 'Total file size exceeds 50MB limit');
+                return;
+            }
+
             submitBtn.disabled = true;
+            loadingSpinner.style.display = 'block';
             form.classList.add('loading');
 
             const formData = new FormData(form);
-            formData.append('requestType', requestSelect.value); // Add request type for backend routing
+            formData.append('requestType', requestSelect.value);
             files.forEach(file => formData.append('attachments', file));
 
             try {
@@ -436,17 +571,18 @@
                     form.reset();
                     files = [];
                     updateFileList();
-                    // Reset form sections
+                    mainForm.classList.remove('active');
                     Object.values(formSections).forEach(section => {
                         section.classList.remove('active');
                     });
                 } else {
-                    showMessage('error', data.error || 'Submission failed. Please try again.');
+                    throw new Error(data.error || 'Submission failed');
                 }
             } catch (error) {
-                showMessage('error', 'Network error. Please check your connection.');
+                showMessage('error', error.message || 'Network error. Please try again.');
             } finally {
                 submitBtn.disabled = false;
+                loadingSpinner.style.display = 'none';
                 form.classList.remove('loading');
             }
         });
