@@ -64,7 +64,6 @@ app.post("/submit", upload.array("attachments", 5), async (req, res) => {
       "Name": name,
       "Location": location,
       "Type of Unit": unitType,
-      "Created date": new Date().toISOString()
     };
 
     // Add fields based on request type with exact Airtable field names
