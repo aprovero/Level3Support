@@ -17,6 +17,8 @@ const tableMap = {
   "OTHERS": process.env.AIRTABLE_OTHERS_TABLE,
 };
 
+const projectName = req.body.projectName ? String(req.body.projectName) : "";
+
 // Rate limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -135,7 +137,7 @@ const createAirtableRecord = async (data, filesCount) => {
         "Name": data.name,
         "Type of Request": data.request,
         "Location": data.location,
-        "Project Name": data.projectName || '',
+        "Project Name": projectName || "N/A", // Ensures a valid value is sent
         "Unit Type": data.unitType,
         "Issue": data.issue || '',
         "Description": data.description,
