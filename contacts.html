@@ -1,138 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoE Level 3 - Contacts</title>
-    <link rel="icon" type="image/x-icon" href="SIMPLE_LOGO.png">
-    <style>
-        <link rel="stylesheet" href="shared-styles.css">
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            position: relative;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        .logo img {
-            width: 150px;
-            height: auto;
-        }
-        h1 {
-            text-align: center;
-            color: #333333;
-            margin-bottom: 30px;
-        }
-        .contacts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px 0;
-        }
-        .contact-card {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .contact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        .profile-pic {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            overflow: hidden;
-            border: 3px solid #007bff;
-        }
-        .profile-pic img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .contact-info {
-            text-align: center;
-        }
-        .contact-name {
-            font-weight: bold;
-            color: #333333;
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-        .contact-title {
-            color: #666666;
-            font-size: 14px;
-            margin-bottom: 8px;
-            display: block;  /* Ensure it's on its own line */
-        }
-
-        .contact-expertise {
-            color: #007bff;
-            font-size: 14px;
-            margin-bottom: 12px;
-            padding: 4px 8px;
-            background-color: #f0f7ff;
-            border-radius: 4px;
-            display: inline-block;
-            clear: both;     /* Ensure it starts on a new line */
-        }
-
-        .contact-email {
-            display: inline-block;
-            color: #007bff;
-            text-decoration: none;
-            font-size: 14px;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background-color: #f0f7ff;
-            transition: all 0.3s ease;
-            margin-top: 8px;
-            clear: both;     /* Ensure it starts on a new line */
-        }
-        .contact-email:hover {
-            background-color: #007bff;
-            color: #ffffff;
-            text-decoration: none;
-        }
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: #007bff;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 5px;
-            transition: all 0.3s;
-            margin-bottom: 20px;
-        }
-        .back-link:hover {
-            background-color: rgba(0, 123, 255, 0.1);
-            color: #0056b3;
-        }
-    </style>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CoE Level 3 - Contacts</title>
+        <link rel="icon" type="image/x-icon" href="SIMPLE_LOGO.png">
+        <!-- External CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+        <!-- Your shared styles -->
+        <link href="shared-styles.css" rel="stylesheet">
+    </head>
 <body>
     <div class="container">
         <div class="header">
