@@ -574,6 +574,21 @@
                     body: formData
                 });
 
+                    console.log('Response status:', response.status);
+                    const data = await response.json();
+                    console.log('Response data:', data);
+
+                    if (response.ok) {
+                        // ... rest of success handling
+                    } else {
+                        console.error('Server error:', data);
+                        throw new Error(data.error || 'Submission failed');
+                    }
+                } catch (error) {
+                    console.error('Full error:', error);
+                    showMessage('error', error.message || 'Network error. Please try again.');
+                }
+
                 const data = await response.json();
                 if (response.ok) {
                     showMessage('success', data.message || 'Form submitted successfully!');
