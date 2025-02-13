@@ -210,10 +210,15 @@
             align-items: center;
             z-index: 1000;
             backdrop-filter: blur(5px);
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
         .modal-overlay.hidden {
-            display: none;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .modal-content {
@@ -223,28 +228,12 @@
             max-width: 600px;
             width: 90%;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: scale(1);
+            transition: transform 0.3s ease;
         }
 
-        .modal-button {
-            background-color: #dc3545;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: block;
-            margin: 0 auto;
-            width: auto;
-        }
-
-        .modal-button:hover {
-            background-color: #c82333;
-        }
-
-        .modal-overlay.hidden {
-            display: none;
+        .modal-overlay.hidden .modal-content {
+            transform: scale(0.9);
         }
 
         #loading-spinner {
@@ -268,38 +257,73 @@
     </style>
 </head>
 <body>
-    <!-- Welcome Modal -->
-    <div id="welcome-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="text-xl font-bold mb-4">When to use this form:</h2>
-            <ol class="list-decimal pl-6 mb-6 space-y-2">
-                <li>For technical issues that are not solved by Tech-support and FSE, those cases can be sent to CoE team for review.</li>
-                <li>For training requests, Internal, 3rd party or customer.</li>
-                <li>For RCA requests.</li>
-                <li>For other issues. (Customer requested reports, Quality issues, etc.)</li>
-            </ol>
-            <p class="mb-6">Please make sure to provide all needed information for CoE team to do analysis.</p>
-            <p class="mb-8 font-bold">Please note if GSP ticket does not have all needed info, the case will be sent back.</p>
-            <button id="understand-btn" class="modal-button">I UNDERSTAND</button>
-        </div>
+<!-- Welcome Modal -->
+<div id="welcome-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <h2 class="text-xl font-bold mb-4">When to use this form:</h2>
+        <ol class="list-decimal pl-6 mb-6 space-y-2">
+            <li>For technical issues that are not solved by Tech-support and FSE, those cases can be sent to CoE team for review.</li>
+            <li>For training requests, Internal, 3rd party or customer.</li>
+            <li>For RCA requests.</li>
+            <li>For other issues. (Customer requested reports, Quality issues, etc.)</li>
+        </ol>
+        <p class="mb-6">Please make sure to provide all needed information for CoE team to do analysis.</p>
+        <p class="mb-8 font-bold">Please note if GSP ticket does not have all needed info, the case will be sent back.</p>
+        <button id="understand-btn" class="modal-button">I UNDERSTAND</button>
     </div>
+</div>
 
     <script>
     // Modal handling
     document.addEventListener('DOMContentLoaded', function() {
+    // Get modal elements
     const modal = document.getElementById('welcome-modal');
     const understandBtn = document.getElementById('understand-btn');
 
+    // Function to show modal
+    function showModal() {
+        modal.classList.remove('hidden');
+        // Prevent body scrolling when modal is open
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Function to hide modal
+    function hideModal() {
+        modal.classList.add('hidden');
+        // Restore body scrolling
+        document.body.style.overflow = '';
+        // Store that user has seen the modal
+        localStorage.setItem('modalShown', 'true');
+    }
+
     // Check if user has seen the modal before
     if (!localStorage.getItem('modalShown')) {
-        modal.classList.remove('hidden');
+        // Small delay to ensure proper animation
+        setTimeout(showModal, 100);
     } else {
         modal.classList.add('hidden');
     }
 
-    understandBtn.addEventListener('click', function() {
-        modal.classList.add('hidden');
-        localStorage.setItem('modalShown', 'true');
+    // Event listeners
+    understandBtn.addEventListener('click', hideModal);
+
+    // Close modal if clicking outside content
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            hideModal();
+        }
+    });
+
+    // Prevent clicks inside modal content from closing modal
+    modal.querySelector('.modal-content').addEventListener('click', function(event) {
+        event.stopPropagation();
+    });
+
+    // Close modal on escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+            hideModal();
+        }
     });
 });
 
