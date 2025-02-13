@@ -198,7 +198,6 @@
             display: block;
         }
 
-        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -211,6 +210,10 @@
             align-items: center;
             z-index: 1000;
             backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.hidden {
+            display: none;
         }
 
         .modal-content {
@@ -280,6 +283,28 @@
             <button id="understand-btn" class="modal-button">I UNDERSTAND</button>
         </div>
     </div>
+
+    <script>
+        // Modal handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('welcome-modal');
+            const understandBtn = document.getElementById('understand-btn');
+
+            // Show modal by default when page loads
+            modal.classList.remove('hidden');
+
+            understandBtn.addEventListener('click', function() {
+                modal.classList.add('hidden');
+                // Store that user has seen the modal
+                localStorage.setItem('modalShown', 'true');
+            });
+
+            // Check if user has seen the modal before
+            if (localStorage.getItem('modalShown')) {
+                modal.classList.add('hidden');
+            }
+        });
+    </script>
 
     <div class="container">
         <div class="header">
