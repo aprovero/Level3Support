@@ -406,11 +406,11 @@
             const understandBtn = document.getElementById('understand-btn');
 
             // Check if user has seen the modal before
-            //if (!localStorage.getItem('modalShown')) {
-            //    modal.classList.remove('hidden');
-            //} else {
-            //    modal.classList.add('hidden');
-            //}
+            if (!localStorage.getItem('modalShown')) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
 
             understandBtn.addEventListener('click', function() {
                 modal.classList.add('hidden');
