@@ -295,6 +295,14 @@
         <h1>CoE Level 3 Support Request</h1>
         <form id="support-form">
             <div class="initial-form form-group">
+
+                <label for="requester-name">Requester Name *</label>
+                <input type="text" id="requester-name" name="requesterName" placeholder="Enter your name" required>
+        
+                <label for="requester-email">Requester Email *</label>
+                <input type="email" id="requester-email" name="requesterEmail" placeholder="Enter your email" required>
+            
+        
                 <label for="request">Type of Request *</label>
                 <select id="request" name="request" required>
                     <option value="">-- Select --</option>
@@ -307,9 +315,6 @@
 
             <div class="main-form" id="main-form">
                 <div class="form-group">
-                    <label for="name">Requester Name *</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
-
                     <label for="location">Location *</label>
                     <select id="location" name="location" required>
                         <option value="">-- Select Location --</option>

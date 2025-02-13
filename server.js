@@ -17,17 +17,25 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB file size limit
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB per file
 });
 
 // Airtable Configuration
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
+const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+  process.env.AIRTABLE_BASE_ID
+);
+const tableName = process.env.AIRTABLE_TABLE_NAME;
 
-const tableMap = {
-  "SUPPORT": "IssuesLATAM",
-  "TRAINING": "TrainingRequests",
-  "RCA": "RCARequests",
-  "OTHERS": "OtherRequests",
+// Location Abbreviation Table for Email Subject
+const locationMap = {
+  "MEXICO": "MEX",
+  "CENTRAL AMERICA": "CENAM",
+  "DOMINICAN REPUBLIC": "DOR",
+  "COLOMBIA": "COL",
+  "BRAZIL": "BRA",
+  "PERU": "PER",
+  "CHILE": "CHL",
+  "OTHER": "OTH",
 };
 
 // Nodemailer Configuration
@@ -40,117 +48,107 @@ const transporter = nodemailer.createTransport({
 });
 
 // Route to Handle Form Submission
-// Updated Airtable field mappings in server.js
 app.post("/submit", upload.array("attachments", 5), async (req, res) => {
+  const {
+    requesterName,
+    requesterEmail, // Now included
+    requestType,
+    location,
+    projectName,
+    unitModel,
+    issue,
+    description,
+    serialNumbers,
+    troubleshooting,
+    priority,
+    updates,
+    scopeOfTraining,
+    expectedDate,
+    numTrainees,
+    relatedIssues,
+    rootCause,
+  } = req.body;
+
   try {
-    // Extract and sanitize form fields
-    const name = (req.body.name || "N/A").toString().trim();
-    const request = (req.body.request || "N/A").toString().trim();
-    const location = (req.body.location || "N/A").toString().trim();
-    const projectName = (req.body.projectName || "N/A").toString().trim();
-    const unitType = (req.body.unitType || "N/A").toString().trim();
-    const issue = (req.body.issue || "N/A").toString().trim();
-    const description = (req.body.description || "N/A").toString().trim();
-    const serialNumbers = (req.body.serialNumbers || "N/A").toString().trim();
-    const troubleshooting = (req.body.troubleshooting || "N/A").toString().trim();
-    const products = (req.body.products || "N/A").toString().trim();
-    const trainingScope = (req.body.trainingScope || "N/A").toString().trim();
+    // Convert location to abbreviation for email subject
+    const locationAbbrev = locationMap[location] || location;
 
-    // Determine Airtable table based on request type
-    const tableName = tableMap[request] || "OtherRequests";
-
-    // Base fields that are common across tables
+    // Prepare the data for Airtable
     let airtableData = {
-      "Name": name,
+      "Requested by": requesterName,
+      "Requester Email": requesterEmail,
+      "TYPE OF REQUEST": requestType,
       "Location": location,
-      "Type of Unit": unitType,
+      "PROJECT NAME": projectName || "",
+      "TYPE OF PRODUCT": unitModel || "",
+      "ISSUE": issue || "",
+      "DESCRIPTION": description || "",
+      "SERIAL NUMBERS": serialNumbers || "",
+      "TROUBLESHOOTING STEPS COMPLETED": troubleshooting || "",
+      "PRIORITY": priority || "",
+      "UPDATES": updates || "",
+      "SCOPE OF TRAINING - for TRAINING": scopeOfTraining || "",
+      "EXPECTED DATE - for TRAINING": expectedDate || "",
+      "NUMBER OF TRAINEES - for TRAINING": numTrainees || "",
+      "RELATED ISSUES": relatedIssues || "",
+      "Root Cause - For RCA requests": rootCause || "",
     };
 
-    // Add fields based on request type with exact Airtable field names
-    switch (request) {
-      case "SUPPORT":
-        airtableData = {
-          ...airtableData,
-          "Issue": issue,
-          "Type of Request": request,
-          "Project Name": projectName,
-          "Description": description,
-          "Serial Numbers": serialNumbers,
-          "Troubleshooting Steps": troubleshooting
-        };
-        break;
-      case "TRAINING":
-        airtableData = {
-          ...airtableData,
-          "Type of Request": request,
-          "Project Name / Third Party": projectName,
-          "Products": products,
-          "Scope of Training": trainingScope
-        };
-        break;
-      case "RCA":
-        airtableData = {
-          ...airtableData,
-          "Issue": issue,
-          "Type of Request": request,
-          "Project Name": projectName,
-          "Description": description,
-          "Serial Numbers": serialNumbers
-        };
-        break;
-      case "OTHERS":
-        airtableData = {
-          ...airtableData,
-          "Issue": issue,
-          "Description of Request": description
-        };
-        break;
-    }
-
-    // Save to Airtable
-    const record = await base(tableName).create([{ fields: airtableData }]);
-
-    // Prepare email content
-    let emailBody = `
-      New ${request} Request Details:
-      
-      Requester: ${name}
-      Location: ${location}
-      Type of Unit: ${unitType}
-      ${projectName !== "N/A" ? `Project Name: ${projectName}\n` : ""}
-      ${issue !== "N/A" ? `Issue: ${issue}\n` : ""}
-      ${description !== "N/A" ? `Description: ${description}\n` : ""}
-      ${serialNumbers !== "N/A" ? `Serial Numbers: ${serialNumbers}\n` : ""}
-      ${troubleshooting !== "N/A" ? `Troubleshooting Steps: ${troubleshooting}\n` : ""}
-      ${products !== "N/A" ? `Products: ${products}\n` : ""}
-      ${trainingScope !== "N/A" ? `Training Scope: ${trainingScope}\n` : ""}
-    `;
-
-    // Prepare email attachments
-    let emailAttachments = [];
+    // Handle file attachments for Airtable
     if (req.files && req.files.length > 0) {
-      emailAttachments = req.files.map(file => ({
-        filename: file.originalname,
-        content: file.buffer,
+      airtableData["ATTACHMENTS"] = req.files.map(file => ({
+        url: `data:${file.mimetype};base64,${file.buffer.toString("base64")}`,
+        filename: file.originalname
       }));
     }
 
-    // Send email
-    await transporter.sendMail({
+    // Create the record in Airtable
+    await base(tableName).create([{ fields: airtableData }]);
+
+    // **Dynamically Build Email Body (Removing Empty Fields)**
+    let emailBody = `A new ${requestType} request has been submitted by ${requesterName}.\n\n`;
+    const fields = {
+      "Location": location,
+      "Project Name": projectName,
+      "Type of Product": unitModel,
+      "Issue": issue,
+      "Description": description,
+      "Serial Numbers": serialNumbers,
+      "Troubleshooting Steps": troubleshooting,
+      "Priority": priority,
+      "Updates": updates,
+      "Scope of Training": scopeOfTraining,
+      "Expected Date": expectedDate,
+      "Number of Trainees": numTrainees,
+      "Related Issues": relatedIssues,
+      "Root Cause (for RCA)": rootCause,
+    };
+
+    for (const [key, value] of Object.entries(fields)) {
+      if (value && value.trim() !== "") {
+        emailBody += `- ${key}: ${value}\n`;
+      }
+    }
+
+    // Prepare email content
+    let mailOptions = {
       from: process.env.EMAIL_USER,
       to: "coe.latam@sungrowamericas.com",
-      subject: `[${location}] [${projectName}] NEW ${request} REQUEST`,
+      cc: requesterEmail, // CC the requester
+      subject: `[${locationAbbrev}] [${projectName || "N/A"}] NEW ${requestType} REQUEST`,
       text: emailBody,
-      attachments: emailAttachments,
-    });
+      attachments: req.files.map(file => ({
+        filename: file.originalname,
+        content: file.buffer,
+      })),
+    };
 
-    res.status(200).json({ message: "Request submitted successfully!" });
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: "Submission successful!" });
   } catch (error) {
     console.error("Error processing submission:", error);
-    res.status(500).json({ 
-      error: "Failed to submit form", 
-      details: error.message 
-    });
+    res.status(500).json({ error: "Failed to submit form" });
   }
 });
 
