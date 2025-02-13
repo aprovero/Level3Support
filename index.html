@@ -329,122 +329,57 @@
                     </select>
                 </div>
 
-<!-- Support Form Section -->
-<div id="support-section" class="form-section">
-    <div class="form-group">
-        <label for="support-project-name">Project Name *</label>
-        <input type="text" id="support-project-name" name="projectName" placeholder="Enter project name" required>
-        
-        <label for="support-unit-type">Type of Unit *</label>
-        <select id="support-unit-type" name="unitType" required>
-            <option value="">-- Select --</option>
-            <option value="CENTRAL">CENTRAL</option>
-            <option value="STRING">STRING</option>
-            <option value="BeSS">BeSS</option>
-            <option value="DISTRIBUTION">DISTRIBUTION</option>
-        </select>
-    </div>
+                <!-- Common Fields -->
+                <div class="form-group">
+                    <label for="project-name">PROJECT NAME *</label>
+                    <input type="text" id="project-name" name="projectName" placeholder="Enter project name" required>
 
-    <div class="form-group">
-        <label for="support-issue">Issue *</label>
-        <input type="text" id="support-issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
-        <div class="char-count"><span id="support-issue-count">0</span>/50</div>
+                    <label for="product-type">TYPE OF PRODUCT *</label>
+                    <select id="product-type" name="productType" required>
+                        <option value="">-- Select --</option>
+                        <option value="STRING">STRING</option>
+                        <option value="CENTRAL">CENTRAL</option>
+                        <option value="MVS">MVS</option>
+                        <option value="PVS">PVS</option>
+                        <option value="STORAGE">STORAGE</option>
+                        <option value="COMMUNICATION">COMMUNICATION</option>
+                    </select>
 
-        <label for="support-description">Description *</label>
-        <textarea id="support-description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
-        <div class="char-count"><span id="support-description-count">0</span>/500</div>
-    </div>
+                    <label for="model">MODEL</label>
+                    <input type="text" id="model" name="model" placeholder="Enter model">
 
-    <div class="form-group">
-        <label for="support-serial-numbers">Serial Numbers</label>
-        <input type="text" id="support-serial-numbers" name="serialNumbers" placeholder="Enter serial numbers">
+                    <label for="gsp-ticket">GSP TICKET</label>
+                    <input type="text" id="gsp-ticket" name="gspTicket" placeholder="Enter GSP ticket number">
+                </div>
 
-        <label for="support-troubleshooting">Troubleshooting Steps</label>
-        <textarea id="support-troubleshooting" name="troubleshooting" rows="4" placeholder="What have you tried so far?"></textarea>
-    </div>
-</div>
+                <!-- Support and RCA Section -->
+                <div id="support-rca-section" class="form-section">
+                    <div class="form-group">
+                        <label for="serial-numbers">SERIAL NUMBERS</label>
+                        <textarea id="serial-numbers" name="serialNumbers" rows="3" placeholder="Enter serial numbers"></textarea>
 
-<!-- Training Form Section -->
-<div id="training-section" class="form-section">
-    <div class="form-group">
-        <label for="training-project-name">Project Name / Third Party *</label>
-        <input type="text" id="training-project-name" name="projectName" placeholder="Enter project or third party name" required>
-        
-        <label for="training-unit-type">Type of Unit *</label>
-        <select id="training-unit-type" name="unitType" required>
-            <option value="">-- Select --</option>
-            <option value="CENTRAL">CENTRAL</option>
-            <option value="STRING">STRING</option>
-            <option value="BeSS">BeSS</option>
-            <option value="DISTRIBUTION">DISTRIBUTION</option>
-        </select>
-    </div>
+                        <label for="troubleshooting">TROUBLESHOOTING STEPS COMPLETED</label>
+                        <textarea id="troubleshooting" name="troubleshooting" rows="4" placeholder="What steps have been completed?"></textarea>
+                    </div>
+                </div>
 
-    <div class="form-group">
-        <label for="training-products">Products *</label>
-        <input type="text" id="training-products" name="products" placeholder="Enter products for training" maxlength="50" required>
-        <div class="char-count"><span id="training-products-count">0</span>/50</div>
+                <!-- Training Section -->
+                <div id="training-section" class="form-section">
+                    <div class="form-group">
+                        <label for="training-scope">SCOPE OF TRAINING *</label>
+                        <textarea id="training-scope" name="trainingScope" rows="5" placeholder="Describe the training scope" required></textarea>
 
-        <label for="training-scope">Scope of Training *</label>
-        <textarea id="training-scope" name="trainingScope" rows="5" placeholder="Describe the training scope" maxlength="500" required></textarea>
-        <div class="char-count"><span id="training-scope-count">0</span>/500</div>
-    </div>
-</div>
+                        <label for="expected-date">EXPECTED DATE</label>
+                        <input type="date" id="expected-date" name="expectedDate">
 
-<!-- RCA Form Section -->
-<div id="rca-section" class="form-section">
-    <div class="form-group">
-        <label for="rca-project-name">Project Name *</label>
-        <input type="text" id="rca-project-name" name="projectName" placeholder="Enter project name" required>
-        
-        <label for="rca-unit-type">Type of Unit *</label>
-        <select id="rca-unit-type" name="unitType" required>
-            <option value="">-- Select --</option>
-            <option value="CENTRAL">CENTRAL</option>
-            <option value="STRING">STRING</option>
-            <option value="BeSS">BeSS</option>
-            <option value="DISTRIBUTION">DISTRIBUTION</option>
-        </select>
-    </div>
+                        <label for="trainees-number">NUMBER OF TRAINEES</label>
+                        <input type="number" id="trainees-number" name="traineesNumber" min="1" step="1">
+                    </div>
+                </div>
 
-    <div class="form-group">
-        <label for="rca-issue">Issue *</label>
-        <input type="text" id="rca-issue" name="issue" placeholder="Max 5 words" maxlength="50" required>
-        <div class="char-count"><span id="rca-issue-count">0</span>/50</div>
-
-        <label for="rca-description">Description *</label>
-        <textarea id="rca-description" name="description" rows="5" placeholder="Max 100 words" maxlength="500" required></textarea>
-        <div class="char-count"><span id="rca-description-count">0</span>/500</div>
-    </div>
-
-    <div class="form-group">
-        <label for="rca-serial-numbers">Serial Numbers</label>
-        <input type="text" id="rca-serial-numbers" name="serialNumbers" placeholder="Enter serial numbers">
-    </div>
-</div>
-
-<!-- Others Form Section -->
-<div id="others-section" class="form-section">
-    <div class="form-group">
-        <label for="other-unit-type">Type of Unit *</label>
-        <select id="other-unit-type" name="unitType" required>
-            <option value="">-- Select --</option>
-            <option value="CENTRAL">CENTRAL</option>
-            <option value="STRING">STRING</option>
-            <option value="BeSS">BeSS</option>
-            <option value="DISTRIBUTION">DISTRIBUTION</option>
-        </select>
-
-        <label for="other-issue">Issue *</label>
-        <input type="text" id="other-issue" name="issue" placeholder="Brief issue description" required>
-
-        <label for="other-description">Description of Request *</label>
-        <textarea id="other-description" name="description" rows="5" placeholder="Describe your request" required></textarea>
-    </div>
-</div>
                 <!-- File Upload Section -->
                 <div class="form-group">
-                    <label>Attachments (Max 5 files, 10MB each, 50MB total)</label>
+                    <label>ATTACHMENTS</label>
                     <div id="file-upload" class="file-upload">
                         <div id="upload-text">
                             Drop files here or click to upload
@@ -471,11 +406,11 @@
             const understandBtn = document.getElementById('understand-btn');
 
             // Check if user has seen the modal before
-            if (!localStorage.getItem('modalShown')) {
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.add('hidden');
-            }
+            //if (!localStorage.getItem('modalShown')) {
+            //    modal.classList.remove('hidden');
+            //} else {
+            //    modal.classList.add('hidden');
+            //}
 
             understandBtn.addEventListener('click', function() {
                 modal.classList.add('hidden');
@@ -493,33 +428,8 @@
         let files = [];
 
         // Form sections
-        const formSections = {
-            'SUPPORT': document.getElementById('support-section'),
-            'TRAINING': document.getElementById('training-section'),
-            'RCA': document.getElementById('rca-section'),
-            'OTHERS': document.getElementById('others-section')
-        };
-
-        // Character counters
-        const charCounters = [
-            { input: 'support-issue', counter: 'support-issue-count' },
-            { input: 'support-description', counter: 'support-description-count' },
-            { input: 'training-products', counter: 'training-products-count' },
-            { input: 'training-scope', counter: 'training-scope-count' },
-            { input: 'rca-issue', counter: 'rca-issue-count' },
-            { input: 'rca-description', counter: 'rca-description-count' }
-        ];
-
-        // Initialize character counters
-        charCounters.forEach(({input, counter}) => {
-            const inputElem = document.getElementById(input);
-            const counterElem = document.getElementById(counter);
-            if (inputElem && counterElem) {
-                inputElem.addEventListener('input', function() {
-                    counterElem.textContent = this.value.length;
-                });
-            }
-        });
+        const supportRcaSection = document.getElementById('support-rca-section');
+        const trainingSection = document.getElementById('training-section');
 
         // Request type change handler
         requestSelect.addEventListener('change', function() {
@@ -532,27 +442,31 @@
                 mainForm.classList.remove('active');
             }
 
-            // Hide all sections and remove required attributes
-            Object.values(formSections).forEach(section => {
-                section.classList.remove('active');
-                section.querySelectorAll('[required]').forEach(field => {
+            // Hide all sections first
+            supportRcaSection.style.display = 'none';
+            trainingSection.style.display = 'none';
+
+            // Remove required attributes from all fields
+            document.querySelectorAll('[required]').forEach(field => {
+                if (!field.classList.contains('always-required')) {
                     field.removeAttribute('required');
-                });
+                }
             });
 
-            // Show selected section and add required attributes
-            const selectedSection = formSections[selectedValue];
-            if (selectedSection) {
-                selectedSection.classList.add('active');
-                selectedSection.querySelectorAll('input, select, textarea').forEach(field => {
+            // Show appropriate section based on selection
+            if (selectedValue === 'TRAINING') {
+                trainingSection.style.display = 'block';
+                trainingSection.querySelectorAll('input, select, textarea').forEach(field => {
                     if (!field.classList.contains('optional')) {
                         field.setAttribute('required', 'required');
                     }
                 });
+            } else if (['SUPPORT', 'RCA', 'OTHER'].includes(selectedValue)) {
+                supportRcaSection.style.display = 'block';
             }
         });
 
-        // File upload handling
+        // File upload handling (remains the same)
         const fileUpload = document.getElementById('file-upload');
         const fileInput = document.getElementById('file-input');
         const fileList = document.getElementById('file-list');
@@ -579,7 +493,6 @@
             const remainingSlots = 5 - files.length;
             const filesToAdd = Array.from(newFiles).slice(0, remainingSlots);
             
-            // Check file types and sizes
             filesToAdd.forEach(file => {
                 const allowedTypes = [
                     'image/jpeg',
@@ -596,7 +509,7 @@
                     return;
                 }
 
-                if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                if (file.size > 10 * 1024 * 1024) {
                     showMessage('error', `File too large (max 10MB): ${file.name}`);
                     return;
                 }
@@ -641,9 +554,8 @@
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             
-            // Check total file size
             const totalSize = files.reduce((sum, file) => sum + file.size, 0);
-            if (totalSize > 50 * 1024 * 1024) { // 50MB total limit
+            if (totalSize > 50 * 1024 * 1024) {
                 showMessage('error', 'Total file size exceeds 50MB limit');
                 return;
             }
@@ -669,9 +581,8 @@
                     files = [];
                     updateFileList();
                     mainForm.classList.remove('active');
-                    Object.values(formSections).forEach(section => {
-                        section.classList.remove('active');
-                    });
+                    supportRcaSection.style.display = 'none';
+                    trainingSection.style.display = 'none';
                 } else {
                     throw new Error(data.error || 'Submission failed');
                 }
