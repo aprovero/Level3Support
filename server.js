@@ -1,3 +1,4 @@
+// Import required dependencies
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -6,7 +7,7 @@ const nodemailer = require('nodemailer');
 const Airtable = require('airtable');
 const multer = require('multer');
 
-// Validate required environment variables
+// Define and validate required environment variables
 const requiredEnvVars = [
     'AIRTABLE_API_KEY',
     'AIRTABLE_BASE_ID',
@@ -14,27 +15,30 @@ const requiredEnvVars = [
     'EMAIL_PASS'
 ];
 
+// Check for missing environment variables
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 if (missingVars.length > 0) {
     console.error('Missing required environment variables:', missingVars);
     process.exit(1);
 }
 
+// Initialize Express application
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Enhanced CORS configuration
+// Configure CORS for cross-origin requests
 app.use(cors({
-    origin: true,
+    origin: '*', // In production, specify your actual domain
     methods: ['POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true
 }));
 
+// Configure body parser for handling request data
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
-// Multer configuration for file uploads
+// Configure multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({
     storage,
@@ -57,11 +61,11 @@ const upload = multer({
     }
 });
 
-// Airtable configuration
+// Initialize Airtable connection
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
 const TABLE_NAME = 'CoE LATAM';
 
-// Email configuration
+// Configure email transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -70,7 +74,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Updated validation functions to match Airtable schema
+// Validation functions for form fields
 const validateRequestType = (type) => {
     const validTypes = ['SUPPORT', 'RCA', 'TRAINING', 'OTHER'];
     const isValid = validTypes.includes(type);
@@ -92,7 +96,7 @@ const validateProductType = (type) => {
     return isValid;
 };
 
-// Location abbreviation mapping
+// Location abbreviation mapping for email subjects
 const locationMap = {
     'MEXICO': 'MEX',
     'CENTRAL AMERICA': 'CENAM',
@@ -103,7 +107,7 @@ const locationMap = {
     'OTHER': 'OTH'
 };
 
-// File processing helper
+// Helper function to process file attachments
 const processFile = async (file) => {
     const base64Content = file.buffer.toString('base64');
     return {
@@ -113,18 +117,60 @@ const processFile = async (file) => {
     };
 };
 
-// Main submission route
+// Email body generator function
+function generateEmailBody(data, issueId) {
+    let emailBody = `
+A new ${data.request} request has been submitted:
+
+Issue ID: ${issueId}
+Requester: ${data.requesterName}
+Email: ${data.requesterEmail}
+Location: ${data.location}
+Project Name: ${data.projectName}
+Product Type: ${data.productType}
+Model: ${data.model || 'N/A'}
+GSP Ticket: ${data.gspTicket || 'N/A'}`;
+
+    // Add support and RCA specific information
+    if (['SUPPORT', 'RCA'].includes(data.request)) {
+        emailBody += `
+Serial Numbers: ${data.serialNumbers || 'N/A'}
+Troubleshooting Steps: ${data.troubleshooting || 'N/A'}`;
+    }
+
+    // Add training-specific information
+    if (data.request === 'TRAINING') {
+        emailBody += `
+Scope of Training: ${data.trainingScope}
+Expected Date: ${data.expectedDate}
+Number of Trainees: ${data.traineesNumber}`;
+    }
+
+    // Add description and attachments information
+    emailBody += `
+Description: ${data.description || 'N/A'}
+Attachments: ${data.files?.length ? `${data.files.length} file(s) attached` : 'No attachments'}
+
+This is an automated message. Please do not reply to this email.
+For any questions or updates, please contact the CoE team directly.`;
+
+    return emailBody;
+}
+
+// Main form submission endpoint
 app.post('/submit', upload.array('attachments', 5), async (req, res) => {
+    console.log('Received submission request');
+    
     try {
-        console.log('Received form data:', req.body);
-        
+        // Log received data for debugging
+        console.log('Form data:', req.body);
+        console.log('Files received:', req.files?.length || 0);
+
         // Validate required fields
-        const requiredFields = ['requesterName', 'requesterEmail', 'request', 'location', 'projectName', 'productType'];
-        const missingFields = requiredFields.filter(field => !req.body[field]);
-        
-        if (missingFields.length > 0) {
+        if (!req.body.requesterName || !req.body.requesterEmail || !req.body.request) {
+            console.log('Missing required fields');
             return res.status(400).json({
-                error: `Missing required fields: ${missingFields.join(', ')}`
+                error: 'Missing required fields'
             });
         }
 
@@ -141,18 +187,12 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
 
         // Training-specific validations
         if (req.body.request === 'TRAINING') {
-            if (!req.body.trainingScope) {
-                return res.status(400).json({ error: 'Training scope is required for training requests' });
-            }
-            if (!req.body.expectedDate) {
-                return res.status(400).json({ error: 'Expected date is required for training requests' });
-            }
-            if (!req.body.traineesNumber || isNaN(parseFloat(req.body.traineesNumber))) {
-                return res.status(400).json({ error: 'Valid number of trainees is required for training requests' });
+            if (!req.body.trainingScope || !req.body.expectedDate || !req.body.traineesNumber) {
+                return res.status(400).json({ error: 'Missing required training fields' });
             }
         }
 
-        // Prepare Airtable record
+        // Prepare Airtable record fields
         const fields = {
             'Requested by': req.body.requesterName,
             'Requester email': req.body.requesterEmail,
@@ -178,13 +218,16 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
 
         // Process attachments
         if (req.files?.length > 0) {
+            console.log('Processing attachments...');
             const attachments = await Promise.all(req.files.map(processFile));
             fields['ATTACHMENTS'] = attachments;
         }
 
         // Create record in Airtable
+        console.log('Creating Airtable record...');
         const record = await base(TABLE_NAME).create([{ fields }]);
         const issueId = record[0].fields['ISSUE ID'];
+        console.log('Airtable record created:', issueId);
 
         // Prepare and send email
         const locationAbbrev = locationMap[req.body.location] || 'OTH';
@@ -200,91 +243,48 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             })) : []
         };
 
+        console.log('Sending email...');
         await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully');
 
+        // Send success response
         res.status(200).json({
             message: 'Request submitted successfully',
             issueId: issueId
         });
 
     } catch (error) {
-        console.error('Error processing submission:', error);
+        console.error('Server error:', error);
         res.status(500).json({
-            error: 'Failed to submit request',
+            error: 'Server error',
             details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
         });
     }
 });
 
-// Email body generator
-function generateEmailBody(data, issueId) {
-  // Common information included in all emails
-  let emailBody = `
-A new ${data.request} request has been submitted:
-
-Issue ID: ${issueId}
-Requester: ${data.requesterName}
-Email: ${data.requesterEmail}
-Location: ${data.location}
-Project Name: ${data.projectName}
-Product Type: ${data.productType}
-Model: ${data.model || 'N/A'}
-GSP Ticket: ${data.gspTicket || 'N/A'}`;
-
-  // Add support and RCA specific information if relevant
-  if (['SUPPORT', 'RCA'].includes(data.request)) {
-      emailBody += `
-Serial Numbers: ${data.serialNumbers || 'N/A'}
-Troubleshooting Steps: ${data.troubleshooting || 'N/A'}`;
-  }
-
-  // Add training-specific information if it's a training request
-  if (data.request === 'TRAINING') {
-      emailBody += `
-Scope of Training: ${data.trainingScope}
-Expected Date: ${data.expectedDate}
-Number of Trainees: ${data.traineesNumber}`;
-  }
-
-  // Add description and attachments information
-  emailBody += `
-Description: ${data.description || 'N/A'}
-Attachments: ${data.files?.length ? `${data.files.length} file(s) attached` : 'No attachments'}
-
-This is an automated message. Please do not reply to this email.
-For any questions or updates, please contact the CoE team directly.`;
-
-  return emailBody;
-}
-
-// Export the function if using modules
-module.exports = { generateEmailBody };
-
 // Error handling middleware
 app.use((error, req, res, next) => {
-  console.error('Unhandled error:', error);
-  
-  // Handle specific errors
-  if (error.name === 'MulterError') {
-      return res.status(400).json({
-          error: 'File upload error',
-          details: error.message
-      });
-  }
-  
-  // Handle general errors
-  res.status(500).json({
-      error: 'An unexpected error occurred',
-      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-  });
+    console.error('Unhandled error:', error);
+    
+    if (error.name === 'MulterError') {
+        return res.status(400).json({
+            error: 'File upload error',
+            details: error.message
+        });
+    }
+    
+    res.status(500).json({
+        error: 'An unexpected error occurred',
+        details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    });
 });
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log('Environment check:');
-  console.log('- AIRTABLE_API_KEY:', process.env.AIRTABLE_API_KEY ? 'Set' : 'Missing');
-  console.log('- AIRTABLE_BASE_ID:', process.env.AIRTABLE_BASE_ID ? 'Set' : 'Missing');
-  console.log('- EMAIL_USER:', process.env.EMAIL_USER ? 'Set' : 'Missing');
-  console.log('- EMAIL_PASS:', process.env.EMAIL_PASS ? 'Set' : 'Missing');
+    console.log(`Server running on port ${PORT}`);
+    console.log('Environment check:');
+    console.log('- AIRTABLE_API_KEY:', process.env.AIRTABLE_API_KEY ? 'Set' : 'Missing');
+    console.log('- AIRTABLE_BASE_ID:', process.env.AIRTABLE_BASE_ID ? 'Set' : 'Missing');
+    console.log('- EMAIL_USER:', process.env.EMAIL_USER ? 'Set' : 'Missing');
+    console.log('- EMAIL_PASS:', process.env.EMAIL_PASS ? 'Set' : 'Missing');
 });
