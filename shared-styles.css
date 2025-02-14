@@ -141,6 +141,24 @@ button:disabled {
     cursor: not-allowed;
 }
 
+.remove-file {
+    background: none !important;
+    border: none !important;
+    color: #dc3545 !important;
+    cursor: pointer;
+    padding: 0 5px;
+    width: auto;
+    font-size: 20px;
+    line-height: 1;
+    margin: 0;
+    font-weight: bold;
+}
+
+.remove-file:hover {
+    background: none !important;
+    color: #c82333 !important;
+}
+
 /* Modal Styles
    Consistent modal styling across the application */
 .modal-overlay {
