@@ -159,6 +159,36 @@
         const fileInput = document.getElementById('file-input');
         let files = [];
 
+        // Enhanced message handling function
+        function showMessage(type, message, details = '') {
+            const existingMessage = form.querySelector('.message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            // Create main message
+            const mainMessage = document.createElement('div');
+            mainMessage.textContent = message;
+            messageDiv.appendChild(mainMessage);
+            
+            // Add details if provided
+            if (details) {
+                const detailsElement = document.createElement('div');
+                detailsElement.className = 'message-details';
+                detailsElement.style.fontSize = '0.9em';
+                detailsElement.style.marginTop = '5px';
+                detailsElement.textContent = details;
+                messageDiv.appendChild(detailsElement);
+            }
+            form.insertBefore(messageDiv, submitBtn);
+            
+            if (type === 'success') {
+                setTimeout(() => messageDiv.remove(), 5000);
+            }
+        }
+
         // Modal handling
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('welcome-modal');
@@ -232,7 +262,7 @@
             });
         }
 
-        // Process uploaded files
+        // Enhance file validation to match server-side restrictions
         function handleFiles(newFiles) {
             const remainingSlots = 5 - files.length;
             const filesToAdd = Array.from(newFiles).slice(0, remainingSlots);
@@ -249,12 +279,12 @@
                 ];
 
                 if (!allowedTypes.includes(file.type)) {
-                    showMessage('error', `File type not allowed: ${file.name}`);
+                    showMessage('error', 'Invalid file type', `File type not allowed: ${file.name}`);
                     return;
                 }
 
-                if (file.size > 10 * 1024 * 1024) {
-                    showMessage('error', `File too large (max 10MB): ${file.name}`);
+                if (file.size > 50 * 1024 * 1024) {
+                    showMessage('error', 'File size exceeded', `File too large (max 50MB): ${file.name}`);
                     return;
                 }
 
@@ -293,23 +323,6 @@
             updateFileList();
         }
 
-        // Show message function
-        function showMessage(type, message) {
-            const existingMessage = form.querySelector('.message');
-            if (existingMessage) {
-                existingMessage.remove();
-            }
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            messageDiv.textContent = message;
-            form.insertBefore(messageDiv, submitBtn);
-            
-            if (type === 'success') {
-                setTimeout(() => messageDiv.remove(), 5000);
-            }
-        }
-
         // Reset form to initial state
         function resetFormToInitial() {
             form.reset();
@@ -326,7 +339,7 @@
             messages.forEach(message => message.remove());
         }
 
-        // Form submission handler
+        // Form submission handler with enhanced error handling
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             
@@ -342,7 +355,7 @@
 
             try {
                 const formData = new FormData(form);
-                formData.append('requestType', requestSelect.value);
+                formData.append('request', requestSelect.value);
                 
                 // Use 'attachments' as the field name for all files
                 files.forEach(file => {
@@ -357,11 +370,18 @@
                 const data = await response.json();
                 
                 if (response.ok) {
-                    showMessage('success', data.message || 'Form submitted successfully!');
+                    // Use improved success message with details
+                    showMessage('success', 'Form submitted successfully!', 
+                        data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.');
                     resetFormToInitial();
                 } else {
-                    throw new Error(data.error || 'Submission failed');
+                    // Construct detailed error message
+                    const errorMessage = data.error || 'Submission failed';
+                    const errorDetails = data.details || 'No additional details available';
+                    
+                    showMessage('error', errorMessage, errorDetails);
                 }
+
             } catch (error) {
                 console.error('Submission error:', error);
                 showMessage('error', error.message || 'Network error. Please try again.');

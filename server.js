@@ -1,18 +1,17 @@
-// Import required dependencies, new added
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const multer = require('multer');
 const nodemailer = require('nodemailer');
 const Airtable = require('airtable');
-const multer = require('multer');
 
 // Define and validate required environment variables
 const requiredEnvVars = [
     'AIRTABLE_API_KEY',
     'AIRTABLE_BASE_ID',
     'EMAIL_USER',
-    'EMAIL_PASS'
+    'EMAIL_PASS',
+    'DESTINATION_EMAIL'
 ];
 
 // Check for missing environment variables
@@ -22,27 +21,25 @@ if (missingVars.length > 0) {
     process.exit(1);
 }
 
-// Initialize Express application
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
-// Configure CORS for cross-origin requests
+// Configure CORS
 app.use(cors({
-    origin: '*', // In production, specify your actual domain
+    origin: '*', // Specify actual domain in production
     methods: ['POST'],
-    allowedHeaders: ['Content-Type'],
-    credentials: true
+    allowedHeaders: ['Content-Type']
 }));
-
-// Configure body parser for handling request data
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.json());
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({
     storage,
-    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB total limit
+    limits: {
+        fileSize: 50 * 1024 * 1024, // 50MB total limit
+        files: 5 // Maximum 5 files
+    },
     fileFilter: (req, file, cb) => {
         const allowedTypes = [
             'image/jpeg',
@@ -65,7 +62,7 @@ const upload = multer({
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
 const TABLE_NAME = 'CoE LATAM';
 
-// Configure email transporter
+// Create email transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -74,29 +71,15 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Validation functions for form fields
-const validateRequestType = (type) => {
-    const validTypes = ['SUPPORT', 'RCA', 'TRAINING', 'OTHER'];
-    const isValid = validTypes.includes(type);
-    console.log('Request type validation:', type, isValid);
-    return isValid;
+// Validation functions
+const validations = {
+    requestType: (type) => ['SUPPORT', 'TRAINING', 'RCA', 'OTHERS'].includes(type),
+    email: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+    location: (location) => ['MEXICO', 'CENTRAL AMERICA', 'COLOMBIA', 'DOMINICAN REPUBLIC', 'BRAZIL', 'CHILE', 'OTHER'].includes(location),
+    productType: (type) => ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION'].includes(type)
 };
 
-const validateLocation = (location) => {
-    const validLocations = ['MEXICO', 'CENTRAL AMERICA', 'COLOMBIA', 'DOMINICAN REPUBLIC', 'BRAZIL', 'CHILE', 'OTHER'];
-    const isValid = validLocations.includes(location);
-    console.log('Location validation:', location, isValid);
-    return isValid;
-};
-
-const validateProductType = (type) => {
-    const validTypes = ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION'];
-    const isValid = validTypes.includes(type);
-    console.log('Product type validation:', type, isValid);
-    return isValid;
-};
-
-// Location abbreviation mapping for email subjects
+// Location abbreviation mapping
 const locationMap = {
     'MEXICO': 'MEX',
     'CENTRAL AMERICA': 'CENAM',
@@ -107,7 +90,7 @@ const locationMap = {
     'OTHER': 'OTH'
 };
 
-// Helper function to process file attachments
+// Process file attachments
 const processFile = async (file) => {
     const base64Content = file.buffer.toString('base64');
     return {
@@ -117,78 +100,76 @@ const processFile = async (file) => {
     };
 };
 
-// Email body generator function
-function generateEmailBody(data, issueId) {
-    let emailBody = `
-A new ${data.request} request has been submitted:
+// Generate email content
+function generateEmailContent(data, issueId) {
+    let emailContent = `
+        <h2>New Support Request</h2>
+        <p><strong>Issue ID:</strong> ${issueId}</p>
+        <p><strong>Requester Name:</strong> ${data.requesterName}</p>
+        <p><strong>Requester Email:</strong> ${data.requesterEmail}</p>
+        <p><strong>Request Type:</strong> ${data.request}</p>
+        <p><strong>Location:</strong> ${data.location}</p>
+        <p><strong>Project Name:</strong> ${data.projectName || 'Not specified'}</p>
+        <p><strong>Product Type:</strong> ${data.productType}</p>
+        <p><strong>Model:</strong> ${data.model || 'Not specified'}</p>
+        <p><strong>GSP Ticket:</strong> ${data.gspTicket || 'Not specified'}</p>
+    `;
 
-Issue ID: ${issueId}
-Requester: ${data.requesterName}
-Email: ${data.requesterEmail}
-Location: ${data.location}
-Project Name: ${data.projectName}
-Product Type: ${data.productType}
-Model: ${data.model || 'N/A'}
-GSP Ticket: ${data.gspTicket || 'N/A'}`;
-
-    // Add support and RCA specific information
-    if (['SUPPORT', 'RCA'].includes(data.request)) {
-        emailBody += `
-Serial Numbers: ${data.serialNumbers || 'N/A'}
-Troubleshooting Steps: ${data.troubleshooting || 'N/A'}`;
+    // Add request-specific information
+    if (['SUPPORT', 'RCA', 'OTHERS'].includes(data.request)) {
+        emailContent += `
+            <p><strong>Serial Numbers:</strong> ${data.serialNumbers || 'Not provided'}</p>
+            <p><strong>Troubleshooting Steps:</strong> ${data.troubleshooting || 'Not provided'}</p>
+        `;
+    } else if (data.request === 'TRAINING') {
+        emailContent += `
+            <p><strong>Training Scope:</strong> ${data.trainingScope || 'Not provided'}</p>
+            <p><strong>Expected Date:</strong> ${data.expectedDate || 'Not specified'}</p>
+            <p><strong>Number of Trainees:</strong> ${data.traineesNumber || 'Not specified'}</p>
+        `;
     }
 
-    // Add training-specific information
-    if (data.request === 'TRAINING') {
-        emailBody += `
-Scope of Training: ${data.trainingScope}
-Expected Date: ${data.expectedDate}
-Number of Trainees: ${data.traineesNumber}`;
-    }
-
-    // Add description and attachments information
-    emailBody += `
-Description: ${data.description || 'N/A'}
-Attachments: ${data.files?.length ? `${data.files.length} file(s) attached` : 'No attachments'}
-
-This is an automated message. Please do not reply to this email.
-For any questions or updates, please contact the CoE team directly.`;
-
-    return emailBody;
+    return emailContent;
 }
 
-// Main form submission endpoint
+// Handle form submission
 app.post('/submit', upload.array('attachments', 5), async (req, res) => {
-    console.log('Received submission request');
-    
     try {
-        // Log received data for debugging
-        console.log('Form data:', req.body);
-        console.log('Files received:', req.files?.length || 0);
-
         // Validate required fields
-        if (!req.body.requesterName || !req.body.requesterEmail || !req.body.request) {
-            console.log('Missing required fields');
+        const requiredFields = ['requesterName', 'requesterEmail', 'request', 'location', 'productType'];
+        const missingFields = requiredFields.filter(field => !req.body[field]);
+        
+        if (missingFields.length > 0) {
             return res.status(400).json({
-                error: 'Missing required fields'
+                error: 'Missing required fields',
+                details: `Missing: ${missingFields.join(', ')}`
             });
         }
 
         // Validate field values
-        if (!validateRequestType(req.body.request)) {
+        if (!validations.email(req.body.requesterEmail)) {
+            return res.status(400).json({ error: 'Invalid email format' });
+        }
+        if (!validations.requestType(req.body.request)) {
             return res.status(400).json({ error: `Invalid request type: ${req.body.request}` });
         }
-        if (!validateLocation(req.body.location)) {
+        if (!validations.location(req.body.location)) {
             return res.status(400).json({ error: `Invalid location: ${req.body.location}` });
         }
-        if (!validateProductType(req.body.productType)) {
+        if (!validations.productType(req.body.productType)) {
             return res.status(400).json({ error: `Invalid product type: ${req.body.productType}` });
         }
 
         // Training-specific validations
         if (req.body.request === 'TRAINING') {
-            if (!req.body.trainingScope || !req.body.expectedDate || !req.body.traineesNumber) {
-                return res.status(400).json({ error: 'Missing required training fields' });
+            const trainingFields = ['trainingScope', 'expectedDate', 'traineesNumber'];
+            const missingTrainingFields = trainingFields.filter(field => !req.body[field]);
+            
+            if (missingTrainingFields.length > 0) {
+                return res.status(400).json({ 
+                    error: 'Missing required training fields',
+                    details: missingTrainingFields.join(', ')
+                });
             }
         }
 
@@ -198,7 +179,7 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             'Requester email': req.body.requesterEmail,
             'TYPE OF REQUEST': req.body.request,
             'Location': req.body.location,
-            'PROJECT NAME': req.body.projectName,
+            'PROJECT NAME': req.body.projectName || '',
             'TYPE OF PRODUCT': req.body.productType,
             'MODEL': req.body.model || '',
             'SERIAL NUMBERS': req.body.serialNumbers || '',
@@ -217,35 +198,32 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
         }
 
         // Process attachments
+        let attachments = [];
         if (req.files?.length > 0) {
-            console.log('Processing attachments...');
-            const attachments = await Promise.all(req.files.map(processFile));
+            attachments = await Promise.all(req.files.map(processFile));
             fields['ATTACHMENTS'] = attachments;
         }
 
         // Create record in Airtable
-        console.log('Creating Airtable record...');
         const record = await base(TABLE_NAME).create([{ fields }]);
         const issueId = record[0].fields['ISSUE ID'];
-        console.log('Airtable record created:', issueId);
 
-        // Prepare and send email
+        // Prepare email options
         const locationAbbrev = locationMap[req.body.location] || 'OTH';
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: 'coe.latam@sungrowamericas.com',
+            to: process.env.DESTINATION_EMAIL,
             cc: req.body.requesterEmail,
-            subject: `[${issueId}]_${locationAbbrev}]_NEW ${req.body.request} REQUEST`,
-            text: generateEmailBody(req.body, issueId),
+            subject: `[${issueId}]_[${locationAbbrev}]_NEW ${req.body.request} REQUEST`,
+            html: generateEmailContent(req.body, issueId),
             attachments: req.files ? req.files.map(file => ({
                 filename: file.originalname,
                 content: file.buffer
             })) : []
         };
 
-        console.log('Sending email...');
+        // Send email
         await transporter.sendMail(mailOptions);
-        console.log('Email sent successfully');
 
         // Send success response
         res.status(200).json({
@@ -256,35 +234,43 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({
-            error: 'Server error',
-            details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+            error: 'Internal server error',
+            details: process.env.NODE_ENV === 'development' ? error.message : 'Please try again later'
         });
     }
 });
 
 // Error handling middleware
-app.use((error, req, res, next) => {
-    console.error('Unhandled error:', error);
-    
-    if (error.name === 'MulterError') {
-        return res.status(400).json({
-            error: 'File upload error',
-            details: error.message
-        });
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        // Handle multer errors
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({
+                error: 'File too large',
+                details: 'Maximum file size is 50MB'
+            });
+        }
+        if (err.code === 'LIMIT_FILE_COUNT') {
+            return res.status(400).json({
+                error: 'Too many files',
+                details: 'Maximum 5 files allowed'
+            });
+        }
     }
     
+    // Handle other errors
+    console.error(err);
     res.status(500).json({
-        error: 'An unexpected error occurred',
-        details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+        error: 'Internal server error',
+        details: process.env.NODE_ENV === 'development' ? err.message : 'Please try again later'
     });
 });
 
 // Start the server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
     console.log('Environment check:');
-    console.log('- AIRTABLE_API_KEY:', process.env.AIRTABLE_API_KEY ? 'Set' : 'Missing');
-    console.log('- AIRTABLE_BASE_ID:', process.env.AIRTABLE_BASE_ID ? 'Set' : 'Missing');
-    console.log('- EMAIL_USER:', process.env.EMAIL_USER ? 'Set' : 'Missing');
-    console.log('- EMAIL_PASS:', process.env.EMAIL_PASS ? 'Set' : 'Missing');
+    requiredEnvVars.forEach(varName => {
+        console.log(`- ${varName}:`, process.env[varName] ? 'Set' : 'Missing');
+    });
 });
