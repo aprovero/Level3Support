@@ -256,3 +256,4 @@ app.listen(PORT, () => {
     console.log('- AIRTABLE_BASE_ID:', process.env.AIRTABLE_BASE_ID ? 'Set' : 'Missing');
     console.log('- EMAIL_USER:', process.env.EMAIL_USER ? 'Set' : 'Missing');
     console.log('- EMAIL_PASS:', process.env.EMAIL_PASS ? 'Set' : 'Missing');
+  });
