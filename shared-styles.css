@@ -77,6 +77,23 @@ h2 {
     border: 1px solid #eee;
     border-radius: 8px;
 }
+.main-form {
+    display: none;
+    transition: all 0.3s ease;
+}
+
+.main-form.active {
+    display: block;
+}
+
+.form-section {
+    display: none;
+    transition: all 0.3s ease;
+}
+
+.form-section.active {
+    display: block;
+}
 
 label {
     display: block;

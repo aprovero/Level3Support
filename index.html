@@ -9,7 +9,7 @@
     <link href="shared-styles.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Welcome Modal - This introduces users to the form's purpose -->
+    <!-- Welcome Modal - Shows every time the page loads -->
     <div id="welcome-modal" class="modal-overlay">
         <div class="modal-content">
             <h2 class="text-xl font-bold mb-4">When to use this form:</h2>
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <!-- Main Container - Houses the form and its components -->
+    <!-- Main Container -->
     <div class="container">
         <div class="header">
             <div class="logo">
@@ -42,7 +42,7 @@
 
         <!-- Main Form -->
         <form id="support-form">
-            <!-- Initial form section with basic information -->
+            <!-- Initial Fields - Always visible -->
             <div class="initial-form form-group">
                 <label for="requester-name">Requester Name *</label>
                 <input type="text" id="requester-name" name="requesterName" placeholder="Enter your name" class="always-required" required>
@@ -60,8 +60,9 @@
                 </select>
             </div>
 
-            <!-- Main form content - shown after initial selection -->
-            <div class="main-form" id="main-form">
+            <!-- Additional Fields - Initially hidden -->
+            <div class="main-form" id="main-form" style="display: none;">
+                <!-- Location Selection -->
                 <div class="form-group">
                     <label for="location">Location *</label>
                     <select id="location" name="location" required>
@@ -149,37 +150,44 @@
         </form>
     </div>
 
-    <!-- JavaScript - Placed at the end for better performance -->
+    <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize all our components after the DOM is fully loaded
-            
-            // Modal handling
+            // Modal Initialization
             function initializeModal() {
                 const modal = document.getElementById('welcome-modal');
                 const understandBtn = document.getElementById('understand-btn');
 
-                // Check if user has seen the modal before
-                if (!localStorage.getItem('modalShown')) {
-                    // Small delay to ensure proper animation
-                    setTimeout(() => modal.classList.remove('hidden'), 100);
-                } else {
-                    modal.classList.add('hidden');
-                }
+                // Show modal with slight delay for smooth animation
+                setTimeout(() => {
+                    modal.classList.remove('hidden');
+                }, 100);
 
-                understandBtn.addEventListener('click', function() {
+                // Close modal handlers
+                understandBtn.addEventListener('click', () => {
                     modal.classList.add('hidden');
-                    localStorage.setItem('modalShown', 'true');
+                });
+
+                // Close on outside click
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+
+                // Close on escape key
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') {
+                        modal.classList.add('hidden');
+                    }
                 });
             }
 
-            // Form handling
+            // Form Initialization
             function initializeForm() {
                 const form = document.getElementById('support-form');
                 const requestSelect = document.getElementById('request');
                 const mainForm = document.getElementById('main-form');
-                const submitBtn = document.getElementById('submit-btn');
-                const loadingSpinner = document.getElementById('loading-spinner');
                 const supportRcaSection = document.getElementById('support-rca-section');
                 const trainingSection = document.getElementById('training-section');
 
@@ -187,13 +195,10 @@
                 requestSelect.addEventListener('change', function() {
                     const selectedValue = this.value;
                     
-                    if (selectedValue) {
-                        mainForm.classList.add('active');
-                    } else {
-                        mainForm.classList.remove('active');
-                    }
+                    // Show/hide main form based on selection
+                    mainForm.style.display = selectedValue ? 'block' : 'none';
 
-                    // Reset sections visibility
+                    // Reset sections
                     supportRcaSection.style.display = 'none';
                     trainingSection.style.display = 'none';
 
@@ -204,7 +209,7 @@
                         }
                     });
 
-                    // Show appropriate section based on selection
+                    // Show appropriate section
                     if (selectedValue === 'TRAINING') {
                         trainingSection.style.display = 'block';
                         document.getElementById('training-scope').setAttribute('required', 'required');
@@ -215,17 +220,18 @@
                     }
                 });
 
-                // Form submission handling
+                // Handle form submission
                 form.addEventListener('submit', handleFormSubmit);
             }
 
-            // File upload handling
+            // File Upload Initialization
             function initializeFileUpload() {
                 const fileUpload = document.getElementById('file-upload');
                 const fileInput = document.getElementById('file-input');
                 const fileList = document.getElementById('file-list');
                 let files = [];
 
+                // File upload event listeners
                 fileUpload.addEventListener('click', () => fileInput.click());
                 fileUpload.addEventListener('dragover', (e) => {
                     e.preventDefault();
@@ -301,7 +307,7 @@
                 return { files, updateFileList };
             }
 
-            // Form submission handler
+            // Form Submission Handler
             async function handleFormSubmit(event) {
                 event.preventDefault();
                 
@@ -344,7 +350,7 @@
                         event.target.reset();
                         files = [];
                         updateFileList();
-                        mainForm.classList.remove('active');
+                        mainForm.style.display = 'none';
                         supportRcaSection.style.display = 'none';
                         trainingSection.style.display = 'none';
                     } else {
@@ -360,8 +366,7 @@
                     form.classList.remove('loading');
                 }
             }
-
-// Utility function to show messages
+// Message Display Utility
 function showMessage(type, message) {
                 const existingMessage = document.querySelector('.message');
                 if (existingMessage) {
@@ -383,18 +388,18 @@ function showMessage(type, message) {
                 }, 5000);
             }
 
+            // Initialize global variables for file handling
+            let files = []; // Store uploaded files
+            let updateFileList; // Will store the function to update file display
+
             // Initialize all components
-            let files = []; // Declare files array in global scope for form access
-            let updateFileList; // Will store the function returned by initializeFileUpload
+            initializeModal(); // Show welcome modal on page load
+            initializeForm(); // Set up form behavior
+            const fileUploadFunctions = initializeFileUpload(); // Initialize file upload handling
+            files = fileUploadFunctions.files; // Get reference to files array
+            updateFileList = fileUploadFunctions.updateFileList; // Get reference to update function
 
-            // Start initialization
-            initializeModal();
-            initializeForm();
-            const fileUploadFunctions = initializeFileUpload();
-            files = fileUploadFunctions.files;
-            updateFileList = fileUploadFunctions.updateFileList;
-
-            // Expose removeFile function globally for the file list buttons
+            // Make file removal function available globally for the file list buttons
             window.removeFile = function(index) {
                 files.splice(index, 1);
                 updateFileList();
