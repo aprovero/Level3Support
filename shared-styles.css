@@ -1,4 +1,4 @@
-/* Base styles for consistent appearance across all pages */
+/* Base styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
@@ -6,7 +6,7 @@ body {
     padding: 0;
 }
 
-/* Main container layout - used in both form and contacts pages */
+/* Container styles */
 .container {
     max-width: 800px;
     margin: 50px auto;
@@ -17,7 +17,7 @@ body {
     position: relative;
 }
 
-/* Header section styling - includes logo and contact icon */
+/* Header styles */
 .header {
     display: flex;
     justify-content: space-between;
@@ -48,7 +48,7 @@ body {
     cursor: pointer;
 }
 
-/* Common text styles */
+/* Form styles */
 h1 {
     text-align: center;
     color: #333333;
@@ -56,7 +56,6 @@ h1 {
     font-size: 24px;
 }
 
-/* Form element styles */
 .form-group {
     margin-bottom: 20px;
     padding: 15px;
@@ -87,7 +86,7 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
 }
 
-/* Button styles - applies to all buttons except specific overrides */
+/* Button styles */
 button {
     width: 100%;
     padding: 12px;
@@ -109,13 +108,13 @@ button:disabled {
     cursor: not-allowed;
 }
 
-/* Loading state styling */
+/* Loading states */
 .loading {
     opacity: 0.7;
     pointer-events: none;
 }
 
-/* Message styling for feedback */
+/* Message styles */
 .message {
     margin: 15px 0;
     padding: 10px;
@@ -135,7 +134,7 @@ button:disabled {
     border: 1px solid #f5c6cb;
 }
 
-/* File upload area styling */
+/* File upload styles */
 .file-upload {
     border: 2px dashed #ddd;
     border-radius: 8px;
@@ -150,7 +149,6 @@ button:disabled {
     background-color: rgba(0,123,255,0.05);
 }
 
-/* File list styling */
 .file-list {
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -190,7 +188,7 @@ button:disabled {
     text-align: right;
 }
 
-/* Remove file button styling */
+/* File remove button specific styles */
 .remove-file {
     background: none !important;
     border: none !important;
@@ -209,7 +207,7 @@ button:disabled {
     color: #c82333 !important;
 }
 
-/* Form section visibility control */
+/* Form section visibility */
 .main-form {
     display: none;
 }
@@ -218,7 +216,7 @@ button:disabled {
     display: none;
 }
 
-/* Modal styling */
+/* Modal styles */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -260,7 +258,7 @@ button:disabled {
     background-color: #c82333;
 }
 
-/* Loading spinner styling */
+/* Loading spinner */
 #loading-spinner {
     display: none;
     text-align: center;
@@ -282,92 +280,34 @@ button:disabled {
     100% { transform: rotate(360deg); }
 }
 
-/* Contact Page Specific Styles */
-.contacts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
+/* Utility Classes
+   Helper classes for common needs */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
 }
 
-.contact-card {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
-.contact-card:hover {
-    transform: translateY(-5px);
-}
-
-.profile-pic {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    margin: 0 auto 15px;
-    object-fit: cover;
-    border: 3px solid #007bff;
-    display: block; /* This ensures proper centering */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adds subtle depth */
-}
-
-.contact-name {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #333;
-}
-
-.contact-role {
-    color: #666;
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-.contact-info {
-    margin-top: 15px;
-}
-
-.contact-info p {
-    margin: 5px 0;
-    color: #555;
-}
-
-.contact-info a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.contact-info a:hover {
-    text-decoration: underline;
-}
-
-/* Back button styling */
-.back-button {
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 15px;
-    background-color: #007bff;
-    color: white !important; /* Force color override */
-    text-decoration: none;
+.message {
+    margin: 15px 0;
+    padding: 10px;
     border-radius: 5px;
-    margin: 20px;
-    transition: background-color 0.3s;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
+    text-align: center;
 }
 
-.back-button:hover {
-    background-color: #0056b3;
-    text-decoration: none !important; /* Prevent underline on hover */
-    color: white !important;
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
 }
 
-/* Responsive Design */
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Responsive Design
+   Media queries for different screen sizes */
 @media (max-width: 768px) {
     .container {
         margin: 20px;
@@ -390,28 +330,9 @@ button:disabled {
     }
 
     .contact-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: 1px solid #eee;
-    }
-    
-    .contact-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        padding: 15px;
     }
 
-    .contacts-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 25px;
-        padding: 20px;
-        margin-top: 20px;
-    }
-    
     .profile-pic {
         width: 100px;
         height: 100px;
