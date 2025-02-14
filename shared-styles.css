@@ -176,6 +176,10 @@ button:disabled {
     background-color: #c82333;
 }
 
+.modal-overlay.hidden {
+    display: none;
+}
+
 /* File Upload Styles
    Styles for file upload components */
 .file-upload {

@@ -159,16 +159,17 @@
         const fileInput = document.getElementById('file-input');
         let files = [];
 
-        // Modal handling - shows modal every time page loads
+        // Modal handling
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('welcome-modal');
             const understandBtn = document.getElementById('understand-btn');
 
-            // Make sure modal is visible when page loads
+            // Ensure modal is visible when page loads
             modal.style.display = 'flex';
 
             // Hide modal when understand button is clicked
             understandBtn.addEventListener('click', function() {
+                modal.classList.add('hidden');
                 modal.style.display = 'none';
             });
 
