@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoE Level 3</title>
     <link rel="icon" type="image/x-icon" href="SIMPLE_LOGO.png">
+    <!-- Include Tailwind CSS for utility classes -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <!-- Your shared styles -->
     <link href="shared-styles.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Welcome Modal - Shows every time the page loads -->
+    <!-- Welcome Modal -->
     <div id="welcome-modal" class="modal-overlay">
         <div class="modal-content">
             <h2 class="text-xl font-bold mb-4">When to use this form:</h2>
@@ -27,6 +29,7 @@
 
     <!-- Main Container -->
     <div class="container">
+        <!-- Header -->
         <div class="header">
             <div class="logo">
                 <img src="LOGO.png" alt="Logo">
@@ -37,32 +40,31 @@
                 </a>
             </div>
         </div>
-        
+
         <h1>CoE Level 3 Support Request</h1>
 
         <!-- Main Form -->
         <form id="support-form">
-            <!-- Initial Fields - Always visible -->
+            <!-- Initial Form Section -->
             <div class="initial-form form-group">
                 <label for="requester-name">Requester Name *</label>
-                <input type="text" id="requester-name" name="requesterName" placeholder="Enter your name" class="always-required" required>
-        
+                <input type="text" id="requester-name" name="requesterName" placeholder="Enter your name" required>
+
                 <label for="requester-email">Requester Email *</label>
-                <input type="email" id="requester-email" name="requesterEmail" placeholder="Enter your email" class="always-required" required>
-            
+                <input type="email" id="requester-email" name="requesterEmail" placeholder="Enter your email" required>
+
                 <label for="request">Type of Request *</label>
-                <select id="request" name="request" class="always-required" required>
+                <select id="request" name="request" required>
                     <option value="">-- Select --</option>
                     <option value="SUPPORT">SUPPORT</option>
                     <option value="TRAINING">TRAINING</option>
                     <option value="RCA">RCA</option>
-                    <option value="OTHER">OTHER</option>
+                    <option value="OTHERS">OTHERS</option>
                 </select>
             </div>
 
-            <!-- Additional Fields - Initially hidden -->
-            <div class="main-form" id="main-form" style="display: none;">
-                <!-- Location Selection -->
+            <!-- Main Form Section -->
+            <div class="main-form" id="main-form">
                 <div class="form-group">
                     <label for="location">Location *</label>
                     <select id="location" name="location" required>
@@ -72,8 +74,9 @@
                         <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
                         <option value="COLOMBIA">COLOMBIA</option>
                         <option value="BRAZIL">BRAZIL</option>
+                        <option value="PERU">PERU</option>
                         <option value="CHILE">CHILE</option>
-                        <option value="OTHER">OTHER</option>
+                        <option value="OTHERS">OTHERS</option>
                     </select>
                 </div>
 
@@ -96,9 +99,6 @@
                     <label for="model">MODEL</label>
                     <input type="text" id="model" name="model" placeholder="Enter model">
 
-                    <label for="description">DESCRIPTION *</label>
-                    <textarea id="description" name="description" rows="4" placeholder="Enter detailed description" required></textarea>
-
                     <label for="gsp-ticket">GSP TICKET</label>
                     <input type="text" id="gsp-ticket" name="gspTicket" placeholder="Enter GSP ticket number">
                 </div>
@@ -118,13 +118,13 @@
                 <div id="training-section" class="form-section">
                     <div class="form-group">
                         <label for="training-scope">SCOPE OF TRAINING *</label>
-                        <textarea id="training-scope" name="trainingScope" rows="5" placeholder="Describe the training scope"></textarea>
+                        <textarea id="training-scope" name="trainingScope" rows="5" placeholder="Describe the training scope" required></textarea>
 
-                        <label for="expected-date">EXPECTED DATE *</label>
+                        <label for="expected-date">EXPECTED DATE</label>
                         <input type="date" id="expected-date" name="expectedDate">
 
-                        <label for="trainees-number">NUMBER OF TRAINEES *</label>
-                        <input type="number" id="trainees-number" name="traineesNumber" min="1" step="0.1">
+                        <label for="trainees-number">NUMBER OF TRAINEES</label>
+                        <input type="number" id="trainees-number" name="traineesNumber" min="1" step="1">
                     </div>
                 </div>
 
@@ -149,271 +149,228 @@
             </div>
         </form>
     </div>
-
-    <!-- JavaScript -->
     <script>
+        // Initialize form elements
+        const form = document.getElementById('support-form');
+        const requestSelect = document.getElementById('request');
+        const mainForm = document.getElementById('main-form');
+        const supportRcaSection = document.getElementById('support-rca-section');
+        const trainingSection = document.getElementById('training-section');
+        const submitBtn = document.getElementById('submit-btn');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        let files = [];
+
+        // Modal handling
         document.addEventListener('DOMContentLoaded', function() {
-            // Modal Initialization
-            function initializeModal() {
-                const modal = document.getElementById('welcome-modal');
-                const understandBtn = document.getElementById('understand-btn');
+            const modal = document.getElementById('welcome-modal');
+            const understandBtn = document.getElementById('understand-btn');
 
-                // Show modal with slight delay for smooth animation
-                setTimeout(() => {
-                    modal.classList.remove('hidden');
-                }, 100);
-
-                // Close modal handlers
-                understandBtn.addEventListener('click', () => {
-                    modal.classList.add('hidden');
-                });
-
-                // Close on outside click
-                modal.addEventListener('click', (event) => {
-                    if (event.target === modal) {
-                        modal.classList.add('hidden');
-                    }
-                });
-
-                // Close on escape key
-                document.addEventListener('keydown', (event) => {
-                    if (event.key === 'Escape') {
-                        modal.classList.add('hidden');
-                    }
-                });
+            // Show modal only if user hasn't seen it before
+            if (localStorage.getItem('modalShown')) {
+                modal.style.display = 'none';
             }
 
-            // Form Initialization
-            function initializeForm() {
-                const form = document.getElementById('support-form');
-                const requestSelect = document.getElementById('request');
-                const mainForm = document.getElementById('main-form');
-                const supportRcaSection = document.getElementById('support-rca-section');
-                const trainingSection = document.getElementById('training-section');
-
-                // Handle request type changes
-                requestSelect.addEventListener('change', function() {
-                    const selectedValue = this.value;
-                    
-                    // Show/hide main form based on selection
-                    mainForm.style.display = selectedValue ? 'block' : 'none';
-
-                    // Reset sections
-                    supportRcaSection.style.display = 'none';
-                    trainingSection.style.display = 'none';
-
-                    // Reset required fields
-                    document.querySelectorAll('[required]').forEach(field => {
-                        if (!field.classList.contains('always-required')) {
-                            field.removeAttribute('required');
-                        }
-                    });
-
-                    // Show appropriate section
-                    if (selectedValue === 'TRAINING') {
-                        trainingSection.style.display = 'block';
-                        document.getElementById('training-scope').setAttribute('required', 'required');
-                        document.getElementById('expected-date').setAttribute('required', 'required');
-                        document.getElementById('trainees-number').setAttribute('required', 'required');
-                    } else if (['SUPPORT', 'RCA', 'OTHER'].includes(selectedValue)) {
-                        supportRcaSection.style.display = 'block';
-                    }
-                });
-
-                // Handle form submission
-                form.addEventListener('submit', handleFormSubmit);
-            }
-
-            // File Upload Initialization
-            function initializeFileUpload() {
-                const fileUpload = document.getElementById('file-upload');
-                const fileInput = document.getElementById('file-input');
-                const fileList = document.getElementById('file-list');
-                let files = [];
-
-                // File upload event listeners
-                fileUpload.addEventListener('click', () => fileInput.click());
-                fileUpload.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    fileUpload.classList.add('dragover');
-                });
-                fileUpload.addEventListener('dragleave', () => {
-                    fileUpload.classList.remove('dragover');
-                });
-                fileUpload.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    fileUpload.classList.remove('dragover');
-                    handleFiles(e.dataTransfer.files);
-                });
-
-                fileInput.addEventListener('change', (e) => {
-                    handleFiles(e.target.files);
-                });
-
-                function handleFiles(newFiles) {
-                    const remainingSlots = 5 - files.length;
-                    const filesToAdd = Array.from(newFiles).slice(0, remainingSlots);
-                    
-                    filesToAdd.forEach(file => {
-                        if (validateFile(file)) {
-                            files.push(file);
-                        }
-                    });
-                    
-                    updateFileList();
-                }
-
-                function validateFile(file) {
-                    const allowedTypes = [
-                        'image/jpeg',
-                        'image/png',
-                        'application/pdf',
-                        'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                        'application/vnd.ms-excel',
-                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                    ];
-
-                    if (!allowedTypes.includes(file.type)) {
-                        showMessage('error', `File type not allowed: ${file.name}`);
-                        return false;
-                    }
-
-                    if (file.size > 10 * 1024 * 1024) {
-                        showMessage('error', `File too large (max 10MB): ${file.name}`);
-                        return false;
-                    }
-
-                    return true;
-                }
-
-                function updateFileList() {
-                    fileList.innerHTML = files.map((file, index) => `
-                        <div class="file-item">
-                            <div class="file-info">
-                                <span class="file-name">${file.name}</span>
-                                <span class="file-size">${(file.size / 1024 / 1024).toFixed(1)} MB</span>
-                            </div>
-                            <button type="button" class="remove-file" onclick="removeFile(${index})">×</button>
-                        </div>
-                    `).join('');
-                }
-
-                window.removeFile = function(index) {
-                    files.splice(index, 1);
-                    updateFileList();
-                };
-
-                return { files, updateFileList };
-            }
-
-            // Form Submission Handler
-            async function handleFormSubmit(event) {
-    event.preventDefault();
-    console.log('Form submission started');
-    
-    const submitBtn = document.getElementById('submit-btn');
-    const loadingSpinner = document.getElementById('loading-spinner');
-    const form = event.target;
-    
-    // Log the form data being prepared
-    const formData = new FormData(form);
-    console.log('Form data contents:');
-    for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-    }
-
-    // Validate total file size
-    const totalSize = files.reduce((sum, file) => sum + file.size, 0);
-    console.log('Total file size:', totalSize);
-    if (totalSize > 50 * 1024 * 1024) {
-        showMessage('error', 'Total file size exceeds 50MB limit');
-        return;
-    }
-
-    // Show loading state
-    submitBtn.disabled = true;
-    loadingSpinner.style.display = 'block';
-    form.classList.add('loading');
-
-    try {
-        console.log('Preparing to send request to server');
-        
-        // Add files to form data
-        files.forEach((file, index) => {
-            console.log(`Adding file ${index + 1}:`, file.name);
-            formData.append('attachments', file);
+            understandBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                localStorage.setItem('modalShown', 'true');
+            });
         });
 
-        console.log('Sending request to server...');
-        const response = await fetch('https://level3support.onrender.com/submit', {
-            method: 'POST',
-            body: formData
-        });
-
-        console.log('Response received:', response.status);
-        const data = await response.json();
-        console.log('Response data:', data);
-        
-        if (response.ok) {
-            console.log('Submission successful');
-            showMessage('success', `Request submitted successfully! Issue ID: ${data.issueId}`);
+        // Handle request type selection
+        requestSelect.addEventListener('change', function() {
+            const selectedValue = this.value;
             
-            // Reset form
-            form.reset();
-            files = [];
-            updateFileList();
-            mainForm.style.display = 'none';
-        } else {
-            throw new Error(data.error || 'Submission failed. Please try again.');
-        }
-    } catch (error) {
-        console.error('Detailed submission error:', error);
-        showMessage('error', error.message || 'Network error. Please try again.');
-    } finally {
-        // Reset form state
-        submitBtn.disabled = false;
-        loadingSpinner.style.display = 'none';
-        form.classList.remove('loading');
-    }
-}// Message Display Utility
-function showMessage(type, message) {
-                const existingMessage = document.querySelector('.message');
-                if (existingMessage) {
-                    existingMessage.remove();
-                }
-
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${type}`;
-                messageDiv.textContent = message;
-                
-                const submitBtn = document.getElementById('submit-btn');
-                submitBtn.parentNode.insertBefore(messageDiv, submitBtn);
-                
-                // Remove message after 5 seconds
-                setTimeout(() => {
-                    if (messageDiv.parentNode) {
-                        messageDiv.remove();
-                    }
-                }, 5000);
+            // Show/hide main form based on selection
+            if (selectedValue) {
+                mainForm.style.display = 'block';
+            } else {
+                mainForm.style.display = 'none';
             }
 
-            // Initialize global variables for file handling
-            let files = []; // Store uploaded files
-            let updateFileList; // Will store the function to update file display
+            // Reset sections display
+            supportRcaSection.style.display = 'none';
+            trainingSection.style.display = 'none';
 
-            // Initialize all components
-            initializeModal(); // Show welcome modal on page load
-            initializeForm(); // Set up form behavior
-            const fileUploadFunctions = initializeFileUpload(); // Initialize file upload handling
-            files = fileUploadFunctions.files; // Get reference to files array
-            updateFileList = fileUploadFunctions.updateFileList; // Get reference to update function
+            // Show appropriate section based on selection
+            switch(selectedValue) {
+                case 'TRAINING':
+                    trainingSection.style.display = 'block';
+                    break;
+                case 'SUPPORT':
+                case 'RCA':
+                case 'OTHERS':
+                    supportRcaSection.style.display = 'block';
+                    break;
+            }
+        });
 
-            // Make file removal function available globally for the file list buttons
-            window.removeFile = function(index) {
-                files.splice(index, 1);
-                updateFileList();
-            };
+        // Function to reset form to initial state
+        function resetFormToInitial() {
+            // Reset all form fields
+            form.reset();
+            
+            // Clear file list
+            files = [];
+            const fileList = document.getElementById('file-list');
+            if (fileList) {
+                fileList.innerHTML = '';
+            }
+            
+            // Hide main form and all sections
+            mainForm.style.display = 'none';
+            supportRcaSection.style.display = 'none';
+            trainingSection.style.display = 'none';
+            
+            // Reset request type dropdown
+            requestSelect.value = '';
+            
+            // Remove any existing messages
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(message => message.remove());
+        }
+
+        // Message display function
+        function showMessage(type, message) {
+            const existingMessage = form.querySelector('.message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            form.insertBefore(messageDiv, submitBtn);
+            
+            // Auto-remove success messages after 5 seconds
+            if (type === 'success') {
+                setTimeout(() => messageDiv.remove(), 5000);
+            }
+        }
+
+        // File handling functions
+        const fileUpload = document.getElementById('file-upload');
+        const fileInput = document.getElementById('file-input');
+
+        fileUpload.addEventListener('click', () => fileInput.click());
+
+        // Drag and drop handlers
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        });
+
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.classList.remove('dragover');
+        });
+
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // Process uploaded files
+        function handleFiles(newFiles) {
+            const remainingSlots = 5 - files.length;
+            const filesToAdd = Array.from(newFiles).slice(0, remainingSlots);
+            
+            filesToAdd.forEach(file => {
+                const allowedTypes = [
+                    'image/jpeg',
+                    'image/png',
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/vnd.ms-excel',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                ];
+
+                if (!allowedTypes.includes(file.type)) {
+                    showMessage('error', `File type not allowed: ${file.name}`);
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) {
+                    showMessage('error', `File too large (max 10MB): ${file.name}`);
+                    return;
+                }
+
+                files.push(file);
+            });
+            
+            updateFileList();
+        }
+
+        // Update the display of uploaded files
+        function updateFileList() {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = files.map((file, index) => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-name">${file.name}</span>
+                        <span class="file-size">${(file.size / 1024 / 1024).toFixed(1)} MB</span>
+                    </div>
+                    <button type="button" class="remove-file" onclick="removeFile(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        // Remove file from the list
+        function removeFile(index) {
+            files.splice(index, 1);
+            updateFileList();
+        }
+
+        // Form submission handler
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            // Check total file size
+            const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+            if (totalSize > 50 * 1024 * 1024) {
+                showMessage('error', 'Total file size exceeds 50MB limit');
+                return;
+            }
+
+            // Prepare form for submission
+            submitBtn.disabled = true;
+            loadingSpinner.style.display = 'block';
+            form.classList.add('loading');
+
+            // Create form data
+            const formData = new FormData(form);
+            formData.append('requestType', requestSelect.value);
+            files.forEach(file => formData.append('attachments', file));
+
+            try {
+                // Submit form to server
+                const response = await fetch('https://level3support.onrender.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showMessage('success', data.message || 'Form submitted successfully!');
+                    // Reset form to initial state after successful submission
+                    resetFormToInitial();
+                } else {
+                    throw new Error(data.error || 'Submission failed');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                showMessage('error', error.message || 'Network error. Please try again.');
+            } finally {
+                // Reset form state
+                submitBtn.disabled = false;
+                loadingSpinner.style.display = 'none';
+                form.classList.remove('loading');
+            }
         });
     </script>
 </body>
