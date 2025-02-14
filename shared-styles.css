@@ -310,6 +310,8 @@ button:disabled {
     margin: 0 auto 15px;
     object-fit: cover;
     border: 3px solid #007bff;
+    display: block; /* This ensures proper centering */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adds subtle depth */
 }
 
 .contact-name {
@@ -349,15 +351,20 @@ button:disabled {
     align-items: center;
     padding: 8px 15px;
     background-color: #007bff;
-    color: white;
+    color: white !important; /* Force color override */
     text-decoration: none;
     border-radius: 5px;
     margin: 20px;
     transition: background-color 0.3s;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
 }
 
 .back-button:hover {
     background-color: #0056b3;
+    text-decoration: none !important; /* Prevent underline on hover */
+    color: white !important;
 }
 
 /* Responsive Design */
@@ -383,9 +390,28 @@ button:disabled {
     }
 
     .contact-card {
-        padding: 15px;
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #eee;
+    }
+    
+    .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
 
+    .contacts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    
     .profile-pic {
         width: 100px;
         height: 100px;
