@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoE Level 3</title>
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="SIMPLE_LOGO.png">
-    <!-- Tailwind CSS for utility classes -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <!-- Application styles -->
     <link href="shared-styles.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Welcome Modal - Shows first time instructions -->
+    <!-- Welcome Modal - Shows instructions every time -->
     <div id="welcome-modal" class="modal-overlay">
         <div class="modal-content">
             <h2 class="text-xl font-bold mb-4">When to use this form:</h2>
@@ -30,7 +27,6 @@
 
     <!-- Main Container -->
     <div class="container">
-        <!-- Header Section with Logo and Contact Icon -->
         <div class="header">
             <div class="logo">
                 <img src="LOGO.png" alt="Logo">
@@ -46,7 +42,7 @@
 
         <!-- Main Form -->
         <form id="support-form">
-            <!-- Initial Form Section - Basic Information -->
+            <!-- Initial Form Section -->
             <div class="initial-form form-group">
                 <label for="requester-name">Requester Name *</label>
                 <input type="text" id="requester-name" name="requesterName" placeholder="Enter your name" required>
@@ -64,9 +60,8 @@
                 </select>
             </div>
 
-            <!-- Dynamic Form Section - Shows based on request type -->
+            <!-- Dynamic Form Section -->
             <div class="main-form" id="main-form">
-                <!-- Location Selection -->
                 <div class="form-group">
                     <label for="location">Location *</label>
                     <select id="location" name="location" required>
@@ -81,7 +76,7 @@
                     </select>
                 </div>
 
-                <!-- Common Fields - Project Details -->
+                <!-- Common Fields -->
                 <div class="form-group">
                     <label for="project-name">PROJECT NAME *</label>
                     <input type="text" id="project-name" name="projectName" placeholder="Enter project name" required>
@@ -141,19 +136,16 @@
                     </div>
                 </div>
 
-                <!-- Loading Spinner -->
                 <div id="loading-spinner">
                     <div class="spinner"></div>
                     <p>Submitting your request...</p>
                 </div>
 
-                <!-- Submit Button -->
                 <button type="submit" id="submit-btn">SUBMIT</button>
             </div>
         </form>
     </div>
 
-    <!-- JavaScript code to handle form functionality -->
     <script>
         // Initialize form elements
         const form = document.getElementById('support-form');
@@ -167,20 +159,17 @@
         const fileInput = document.getElementById('file-input');
         let files = [];
 
-        // Modal handling on page load
+        // Modal handling - shows modal every time page loads
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('welcome-modal');
             const understandBtn = document.getElementById('understand-btn');
 
-            // Check if modal has been shown before
-            if (localStorage.getItem('modalShown')) {
-                modal.style.display = 'none';
-            }
+            // Make sure modal is visible when page loads
+            modal.style.display = 'flex';
 
-            // Add click handler for understand button
+            // Hide modal when understand button is clicked
             understandBtn.addEventListener('click', function() {
                 modal.style.display = 'none';
-                localStorage.setItem('modalShown', 'true');
             });
 
             // Initialize file upload handlers
@@ -242,7 +231,7 @@
             });
         }
 
-        // Handle file uploads
+        // Process uploaded files
         function handleFiles(newFiles) {
             const remainingSlots = 5 - files.length;
             const filesToAdd = Array.from(newFiles).slice(0, remainingSlots);
@@ -354,8 +343,9 @@
                 const formData = new FormData(form);
                 formData.append('requestType', requestSelect.value);
                 
-                files.forEach((file, index) => {
-                    formData.append(`attachment${index}`, file);
+                // Use 'attachments' as the field name for all files
+                files.forEach(file => {
+                    formData.append('attachments', file);
                 });
 
                 const response = await fetch('https://level3support.onrender.com/submit', {

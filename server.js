@@ -235,7 +235,7 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             from: process.env.EMAIL_USER,
             to: 'coe.latam@sungrowamericas.com',
             cc: req.body.requesterEmail,
-            subject: `[${locationAbbrev}]_${issueId}]_NEW ${req.body.request} REQUEST`,
+            subject: `[${issueId}]_${locationAbbrev}]_NEW ${req.body.request} REQUEST`,
             text: generateEmailBody(req.body, issueId),
             attachments: req.files ? req.files.map(file => ({
                 filename: file.originalname,
