@@ -10,8 +10,7 @@ const requiredEnvVars = [
     'AIRTABLE_API_KEY',
     'AIRTABLE_BASE_ID',
     'EMAIL_USER',
-    'EMAIL_PASS',
-    'DESTINATION_EMAIL'
+    'EMAIL_PASS'
 ];
 
 // Check for missing environment variables
@@ -22,24 +21,25 @@ if (missingVars.length > 0) {
 }
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-// Configure CORS
+// Configure CORS for cross-origin requests
 app.use(cors({
-    origin: '*', // Specify actual domain in production
+    origin: '*', // In production, specify your actual domain
     methods: ['POST'],
-    allowedHeaders: ['Content-Type']
+    allowedHeaders: ['Content-Type'],
+    credentials: true
 }));
-app.use(express.json());
+
+// Configure body parser for handling request data
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({
     storage,
-    limits: {
-        fileSize: 50 * 1024 * 1024, // 50MB total limit
-        files: 5 // Maximum 5 files
-    },
+    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB total limit
     fileFilter: (req, file, cb) => {
         const allowedTypes = [
             'image/jpeg',
@@ -62,7 +62,7 @@ const upload = multer({
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
 const TABLE_NAME = 'CoE LATAM';
 
-// Create email transporter
+// Configure email transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -71,15 +71,29 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Validation functions
-const validations = {
-    requestType: (type) => ['SUPPORT', 'TRAINING', 'RCA', 'OTHERS'].includes(type),
-    email: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-    location: (location) => ['MEXICO', 'CENTRAL AMERICA', 'COLOMBIA', 'DOMINICAN REPUBLIC', 'BRAZIL', 'CHILE', 'OTHER'].includes(location),
-    productType: (type) => ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION'].includes(type)
+// Validation functions for form fields
+const validateRequestType = (type) => {
+    const validTypes = ['SUPPORT', 'RCA', 'TRAINING', 'OTHER'];
+    const isValid = validTypes.includes(type);
+    console.log('Request type validation:', type, isValid);
+    return isValid;
 };
 
-// Location abbreviation mapping
+const validateLocation = (location) => {
+    const validLocations = ['MEXICO', 'CENTRAL AMERICA', 'COLOMBIA', 'DOMINICAN REPUBLIC', 'BRAZIL', 'CHILE', 'OTHER'];
+    const isValid = validLocations.includes(location);
+    console.log('Location validation:', location, isValid);
+    return isValid;
+};
+
+const validateProductType = (type) => {
+    const validTypes = ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION'];
+    const isValid = validTypes.includes(type);
+    console.log('Product type validation:', type, isValid);
+    return isValid;
+};
+
+// Location abbreviation mapping for email subjects
 const locationMap = {
     'MEXICO': 'MEX',
     'CENTRAL AMERICA': 'CENAM',
@@ -90,7 +104,7 @@ const locationMap = {
     'OTHER': 'OTH'
 };
 
-// Process file attachments
+// Helper function to process file attachments
 const processFile = async (file) => {
     const base64Content = file.buffer.toString('base64');
     return {
@@ -100,76 +114,38 @@ const processFile = async (file) => {
     };
 };
 
-// Generate email content
-function generateEmailContent(data, issueId) {
-    let emailContent = `
-        <h2>New Support Request</h2>
-        <p><strong>Issue ID:</strong> ${issueId}</p>
-        <p><strong>Requester Name:</strong> ${data.requesterName}</p>
-        <p><strong>Requester Email:</strong> ${data.requesterEmail}</p>
-        <p><strong>Request Type:</strong> ${data.request}</p>
-        <p><strong>Location:</strong> ${data.location}</p>
-        <p><strong>Project Name:</strong> ${data.projectName || 'Not specified'}</p>
-        <p><strong>Product Type:</strong> ${data.productType}</p>
-        <p><strong>Model:</strong> ${data.model || 'Not specified'}</p>
-        <p><strong>GSP Ticket:</strong> ${data.gspTicket || 'Not specified'}</p>
-    `;
-
-    // Add request-specific information
-    if (['SUPPORT', 'RCA', 'OTHERS'].includes(data.request)) {
-        emailContent += `
-            <p><strong>Serial Numbers:</strong> ${data.serialNumbers || 'Not provided'}</p>
-            <p><strong>Troubleshooting Steps:</strong> ${data.troubleshooting || 'Not provided'}</p>
-        `;
-    } else if (data.request === 'TRAINING') {
-        emailContent += `
-            <p><strong>Training Scope:</strong> ${data.trainingScope || 'Not provided'}</p>
-            <p><strong>Expected Date:</strong> ${data.expectedDate || 'Not specified'}</p>
-            <p><strong>Number of Trainees:</strong> ${data.traineesNumber || 'Not specified'}</p>
-        `;
-    }
-
-    return emailContent;
-}
-
-// Handle form submission
+// Main form submission endpoint
 app.post('/submit', upload.array('attachments', 5), async (req, res) => {
+    console.log('Received submission request');
+    
     try {
+        // Log received data for debugging
+        console.log('Form data:', req.body);
+        console.log('Files received:', req.files?.length || 0);
+
         // Validate required fields
-        const requiredFields = ['requesterName', 'requesterEmail', 'request', 'location', 'productType'];
-        const missingFields = requiredFields.filter(field => !req.body[field]);
-        
-        if (missingFields.length > 0) {
+        if (!req.body.requesterName || !req.body.requesterEmail || !req.body.request) {
+            console.log('Missing required fields');
             return res.status(400).json({
-                error: 'Missing required fields',
-                details: `Missing: ${missingFields.join(', ')}`
+                error: 'Missing required fields'
             });
         }
 
         // Validate field values
-        if (!validations.email(req.body.requesterEmail)) {
-            return res.status(400).json({ error: 'Invalid email format' });
-        }
-        if (!validations.requestType(req.body.request)) {
+        if (!validateRequestType(req.body.request)) {
             return res.status(400).json({ error: `Invalid request type: ${req.body.request}` });
         }
-        if (!validations.location(req.body.location)) {
+        if (!validateLocation(req.body.location)) {
             return res.status(400).json({ error: `Invalid location: ${req.body.location}` });
         }
-        if (!validations.productType(req.body.productType)) {
+        if (!validateProductType(req.body.productType)) {
             return res.status(400).json({ error: `Invalid product type: ${req.body.productType}` });
         }
 
         // Training-specific validations
         if (req.body.request === 'TRAINING') {
-            const trainingFields = ['trainingScope', 'expectedDate', 'traineesNumber'];
-            const missingTrainingFields = trainingFields.filter(field => !req.body[field]);
-            
-            if (missingTrainingFields.length > 0) {
-                return res.status(400).json({ 
-                    error: 'Missing required training fields',
-                    details: missingTrainingFields.join(', ')
-                });
+            if (!req.body.trainingScope || !req.body.expectedDate || !req.body.traineesNumber) {
+                return res.status(400).json({ error: 'Missing required training fields' });
             }
         }
 
@@ -179,7 +155,7 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             'Requester email': req.body.requesterEmail,
             'TYPE OF REQUEST': req.body.request,
             'Location': req.body.location,
-            'PROJECT NAME': req.body.projectName || '',
+            'PROJECT NAME': req.body.projectName,
             'TYPE OF PRODUCT': req.body.productType,
             'MODEL': req.body.model || '',
             'SERIAL NUMBERS': req.body.serialNumbers || '',
@@ -198,32 +174,47 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
         }
 
         // Process attachments
-        let attachments = [];
         if (req.files?.length > 0) {
-            attachments = await Promise.all(req.files.map(processFile));
+            console.log('Processing attachments...');
+            const attachments = await Promise.all(req.files.map(processFile));
             fields['ATTACHMENTS'] = attachments;
         }
 
         // Create record in Airtable
+        console.log('Creating Airtable record...');
         const record = await base(TABLE_NAME).create([{ fields }]);
         const issueId = record[0].fields['ISSUE ID'];
+        console.log('Airtable record created:', issueId);
 
-        // Prepare email options
+        // Prepare and send email
         const locationAbbrev = locationMap[req.body.location] || 'OTH';
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: process.env.DESTINATION_EMAIL,
+            to: 'coe.latam@sungrowamericas.com', // Hardcoded destination email
             cc: req.body.requesterEmail,
             subject: `[${issueId}]_[${locationAbbrev}]_NEW ${req.body.request} REQUEST`,
-            html: generateEmailContent(req.body, issueId),
+            text: `A new ${req.body.request} request has been submitted:
+
+Issue ID: ${issueId}
+Requester: ${req.body.requesterName}
+Email: ${req.body.requesterEmail}
+Location: ${req.body.location}
+Project Name: ${req.body.projectName}
+Product Type: ${req.body.productType}
+Model: ${req.body.model || 'N/A'}
+GSP Ticket: ${req.body.gspTicket || 'N/A'}
+
+This is an automated message. Please do not reply to this email. For any questions or updates, please contact the CoE team directly.`,
+
             attachments: req.files ? req.files.map(file => ({
                 filename: file.originalname,
                 content: file.buffer
             })) : []
         };
 
-        // Send email
+        console.log('Sending email...');
         await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully');
 
         // Send success response
         res.status(200).json({
@@ -234,43 +225,34 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({
-            error: 'Internal server error',
-            details: process.env.NODE_ENV === 'development' ? error.message : 'Please try again later'
+            error: 'Server error',
+            details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
         });
     }
 });
 
 // Error handling middleware
-app.use((err, req, res, next) => {
-    if (err instanceof multer.MulterError) {
-        // Handle multer errors
-        if (err.code === 'LIMIT_FILE_SIZE') {
-            return res.status(400).json({
-                error: 'File too large',
-                details: 'Maximum file size is 50MB'
-            });
-        }
-        if (err.code === 'LIMIT_FILE_COUNT') {
-            return res.status(400).json({
-                error: 'Too many files',
-                details: 'Maximum 5 files allowed'
-            });
-        }
+app.use((error, req, res, next) => {
+    console.error('Unhandled error:', error);
+    
+    if (error.name === 'MulterError') {
+        return res.status(400).json({
+            error: 'File upload error',
+            details: error.message
+        });
     }
     
-    // Handle other errors
-    console.error(err);
     res.status(500).json({
-        error: 'Internal server error',
-        details: process.env.NODE_ENV === 'development' ? err.message : 'Please try again later'
+        error: 'An unexpected error occurred',
+        details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
 });
 
 // Start the server
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
     console.log('Environment check:');
-    requiredEnvVars.forEach(varName => {
-        console.log(`- ${varName}:`, process.env[varName] ? 'Set' : 'Missing');
-    });
-});
+    console.log('- AIRTABLE_API_KEY:', process.env.AIRTABLE_API_KEY ? 'Set' : 'Missing');
+    console.log('- AIRTABLE_BASE_ID:', process.env.AIRTABLE_BASE_ID ? 'Set' : 'Missing');
+    console.log('- EMAIL_USER:', process.env.EMAIL_USER ? 'Set' : 'Missing');
+    console.log('- EMAIL_PASS:', process.env.EMAIL_PASS ? 'Set' : 'Missing');
