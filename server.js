@@ -1,4 +1,4 @@
-// Import required dependencies
+// Import required dependencies, new added
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
