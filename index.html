@@ -339,58 +339,57 @@
             messages.forEach(message => message.remove());
         }
 
-        // Form submission handler with enhanced error handling
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            
-            const totalSize = files.reduce((sum, file) => sum + file.size, 0);
-            if (totalSize > 50 * 1024 * 1024) {
-                showMessage('error', 'Total file size exceeds 50MB limit');
-                return;
-            }
+// Form submission handler with enhanced error handling
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+    const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+    if (totalSize > 50 * 1024 * 1024) {
+        showMessage('error', 'Total file size exceeds 50MB limit');
+        return;
+    }
 
-            submitBtn.disabled = true;
-            loadingSpinner.style.display = 'block';
-            form.classList.add('loading');
+    submitBtn.disabled = true;
+    loadingSpinner.style.display = 'block';
+    form.classList.add('loading');
 
-            try {
-                const formData = new FormData(form);
-                formData.append('request', requestSelect.value);
-                
-                // Use 'attachments' as the field name for all files
-                files.forEach(file => {
-                    formData.append('attachments', file);
-                });
-
-                const response = await fetch('https://level3support.onrender.com/submit', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-                
-                if (response.ok) {
-                    // Use improved success message with details
-                    showMessage('success', 'Form submitted successfully!', 
-                        data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.');
-                    resetFormToInitial();
-                } else {
-                    // Construct detailed error message
-                    const errorMessage = data.error || 'Submission failed';
-                    const errorDetails = data.details || 'No additional details available';
-                    
-                    showMessage('error', errorMessage, errorDetails);
-                }
-
-            } catch (error) {
-                console.error('Submission error:', error);
-                showMessage('error', error.message || 'Network error. Please try again.');
-            } finally {
-                submitBtn.disabled = false;
-                loadingSpinner.style.display = 'none';
-                form.classList.remove('loading');
-            }
+    try {
+        const formData = new FormData(form);
+        // Change this line to match server-side expectation
+        formData.append('request', requestSelect.value);
+        
+        // Use 'attachments' as the field name for all files
+        files.forEach(file => {
+            formData.append('attachments', file);
         });
-    </script>
-</body>
-</html>
+
+        // Add this line to log form data
+        console.log('Submitting form data:', Object.fromEntries(formData));
+
+        const response = await fetch('https://level3support.onrender.com/submit', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+            showMessage('success', 'Form submitted successfully!', 
+                data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.');
+            resetFormToInitial();
+        } else {
+            const errorMessage = data.error || 'Submission failed';
+            const errorDetails = data.details || 'No additional details available';
+            
+            showMessage('error', errorMessage, errorDetails);
+        }
+
+    } catch (error) {
+        console.error('Submission error:', error);
+        showMessage('error', 'Network error', 'Please check your connection and try again.');
+    } finally {
+        submitBtn.disabled = false;
+        loadingSpinner.style.display = 'none';
+        form.classList.remove('loading');
+    }
+});
