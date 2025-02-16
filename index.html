@@ -1,10 +1,10 @@
-change 1<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoE Level 3</title>
-    <link rel="icon" type="image/x-icon" href="SIMPLE_LOGO.png">
+    <link rel="icon" type="image/png" href="./SIMPLE_LOGO.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="shared-styles.css" rel="stylesheet">
 </head>
@@ -12,7 +12,7 @@ change 1<!DOCTYPE html>
     <!-- Welcome Modal - Shows instructions every time -->
     <div id="welcome-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2 class="text-xl font-bold mb-4">When to use this form:</h2>
+            <h2 class="text-xl font-bold mb-4">1When to use this form:</h2>
             <ol class="list-decimal pl-6 mb-6 space-y-2">
                 <li>For technical issues that are not solved by Tech-support and FSE, those cases can be sent to CoE team for review.</li>
                 <li>For training requests, Internal, 3rd party or customer.</li>
@@ -342,81 +342,89 @@ change 1<!DOCTYPE html>
 
         // Form submission handler with enhanced error handling
         form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    
-    console.log('Submit button clicked');
-    console.log('Form:', form);
-    console.log('Request type:', requestSelect.value);
-    
-    // Validate required fields before submission
-    const requiredFields = form.querySelectorAll('[required]');
-    for (let field of requiredFields) {
-        console.log(`Checking field ${field.name}:`, field.value);
-        if (!field.value) {
-            console.error(`Required field ${field.name} is empty`);
-            showMessage('error', 'Missing Required Fields', `Please fill out ${field.name}`);
-            return;
-        }
-    }
-    
-    const totalSize = files.reduce((sum, file) => sum + file.size, 0);
-    if (totalSize > 50 * 1024 * 1024) {
-        showMessage('error', 'Total file size exceeds 50MB limit');
-        return;
-    }
-
-    submitBtn.disabled = true;
-    loadingSpinner.style.display = 'block';
-    form.classList.add('loading');
-
-    try {
-        const formData = new FormData(form);
-        formData.append('request', requestSelect.value);
-        
-        // Use 'attachments' as the field name for all files
-        files.forEach(file => {
-            formData.append('attachments', file);
-        });
-
-        // Log all form data entries
-        console.log('Form Data Entries:');
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-
-        const response = await fetch('https://level3support.onrender.com/submit', {
-            method: 'POST',
-            body: formData
-        });
-
-        console.log('Fetch Response:', response);
-        console.log('Response status:', response.status);
-        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-        
-        const data = await response.json();
-
-        console.log('Response data:', data);
-        
-        if (response.ok) {
-            showMessage('success', 'Form submitted successfully!', 
-                data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.');
-            resetFormToInitial();
-        } else {
-            const errorMessage = data.error || 'Submission failed';
-            const errorDetails = data.details || 'No additional details available';
+            event.preventDefault();
             
-            showMessage('error', errorMessage, errorDetails);
-        }
+            console.error('SUBMIT TRIGGERED');
+            
+            // Validate required fields with more aggressive checking
+            const requiredFields = [
+                'request', 
+                'location', 
+                'projectName', 
+                'productType', 
+                'requesterName', 
+                'requesterEmail'
+            ];
+            
+            for (let fieldName of requiredFields) {
+                const field = document.querySelector(`[name="${fieldName}"]`);
+                console.error(`Checking ${fieldName}:`, field ? field.value : 'FIELD NOT FOUND');
+                
+                if (!field || !field.value) {
+                    console.error(`REQUIRED FIELD ${fieldName} IS MISSING`);
+                    showMessage('error', 'Missing Required Fields', `Please fill out ${fieldName}`);
+                    return;
+                }
+            }
+            
+            const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+            if (totalSize > 50 * 1024 * 1024) {
+                showMessage('error', 'Total file size exceeds 50MB limit');
+                return;
+            }
 
-    } catch (error) {
-        console.error('Submission error:', error);
-        showMessage('error', 'Network error', error.message || 'Please check your connection and try again.');
-    } finally {
-        submitBtn.disabled = false;
-        loadingSpinner.style.display = 'none';
-        form.classList.remove('loading');
-    }
-});
-</script>
+            submitBtn.disabled = true;
+            loadingSpinner.style.display = 'block';
+            form.classList.add('loading');
+
+            try {
+                const formData = new FormData(form);
+                formData.append('request', requestSelect.value);
+                
+                // Use 'attachments' as the field name for all files
+                files.forEach(file => {
+                    formData.append('attachments', file);
+                });
+
+                // Log all form data entries
+                console.log('Form Data Entries:');
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}: ${value}`);
+                }
+
+                const response = await fetch('https://level3support.onrender.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                console.log('Fetch Response:', response);
+                console.log('Response status:', response.status);
+                console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+                
+                const data = await response.json();
+
+                console.log('Response data:', data);
+                
+                if (response.ok) {
+                    showMessage('success', 'Form submitted successfully!', 
+                        data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.');
+                    resetFormToInitial();
+                } else {
+                    const errorMessage = data.error || 'Submission failed';
+                    const errorDetails = data.details || 'No additional details available';
+                    
+                    showMessage('error', errorMessage, errorDetails);
+                }
+
+            } catch (error) {
+                console.error('Submission error:', error);
+                showMessage('error', 'Network error', error.message || 'Please check your connection and try again.');
+            } finally {
+                submitBtn.disabled = false;
+                loadingSpinner.style.display = 'none';
+                form.classList.remove('loading');
+            }
+        });
+    </script>
 </body>
 </html>
