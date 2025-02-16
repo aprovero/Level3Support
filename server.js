@@ -65,7 +65,7 @@ const transporter = nodemailer.createTransport({
 
 // Validation utilities
 const Validators = {
-    requestType: (type) => ['SUPPORT', 'RCA', 'TRAINING', 'OTHER'].includes(type),
+    requestType: (type) => ['SUPPORT', 'RCA', 'TRAINING', 'OTHERS'].includes(type),
     location: (location) => ['MEXICO', 'CENTRAL AMERICA', 'COLOMBIA', 'DOMINICAN REPUBLIC', 'BRAZIL', 'CHILE', 'OTHER'].includes(location),
     productType: (type) => ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION'].includes(type)
 };
