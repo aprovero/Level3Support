@@ -173,7 +173,69 @@
             modal.style.display = 'none';
             modal.classList.add('hidden');
         }
-    
+        function initializeFileHandlers() {
+    const dropArea = document.getElementById('file-upload');
+    const fileInput = document.getElementById('file-input');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+        dropArea.classList.add('dragover');
+    }
+
+    function unhighlight(e) {
+        dropArea.classList.remove('dragover');
+    }
+
+    dropArea.addEventListener('drop', handleDrop, false);
+    fileInput.addEventListener('change', handleFiles, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const newFiles = dt.files;
+        handleFiles({ target: { files: newFiles } });
+    }
+
+    function handleFiles(e) {
+        const newFiles = [...e.target.files];
+        files = [...files, ...newFiles];
+        updateFileList();
+    }
+
+    function updateFileList() {
+        const fileList = document.getElementById('file-list');
+        fileList.innerHTML = '';
+        files.forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                ${file.name}
+                <button type="button" onclick="removeFile(${index})">Remove</button>
+            `;
+            fileList.appendChild(fileItem);
+        });
+    }
+
+    window.removeFile = function(index) {
+        files.splice(index, 1);
+        updateFileList();
+    };
+}
         document.addEventListener('DOMContentLoaded', function() {
             initializeModal();
             initializeFileHandlers();
