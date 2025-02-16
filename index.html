@@ -7,6 +7,22 @@
     <link rel="icon" type="image/png" href="./SIMPLE_LOGO.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="shared-styles.css" rel="stylesheet">
+    <style>
+        #success-modal .modal-content {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        #success-modal .modal-button {
+            background-color: #28a745;
+            color: white;
+        }
+
+        #success-modal .modal-button:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
     <!-- Welcome Modal - Shows instructions every time -->
@@ -146,6 +162,15 @@
         </form>
     </div>
 
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 id="success-title" class="text-xl font-bold mb-4"></h2>
+            <p id="success-message"></p>
+            <button id="success-ok-btn" class="modal-button mt-4">OK</button>
+        </div>
+    </div>
+
     <script>
         // Initialize form elements
         const form = document.getElementById('support-form');
@@ -162,14 +187,31 @@
         let files = [];
 
         function showMessage(type, message, details = '') {
-            const messageElement = document.createElement('div');
-            messageElement.className = `message ${type}`;
-            messageElement.innerHTML = `
-                <strong>${message}</strong>
-                ${details ? `<div class="message-details">${details}</div>` : ''}
-            `;
-            form.insertAdjacentElement('beforebegin', messageElement);
-            setTimeout(() => messageElement.remove(), 5000); // Remove after 5 seconds
+            if (type === 'success') {
+                const modal = document.getElementById('success-modal');
+                const title = document.getElementById('success-title');
+                const messageEl = document.getElementById('success-message');
+                const okBtn = document.getElementById('success-ok-btn');
+
+                title.textContent = message;
+                messageEl.textContent = details;
+
+                modal.classList.remove('hidden');
+
+                okBtn.onclick = () => {
+                    modal.classList.add('hidden');
+                    resetFormToInitial();
+                };
+            } else {
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${type}`;
+                messageElement.innerHTML = `
+                    <strong>${message}</strong>
+                    ${details ? `<div class="message-details">${details}</div>` : ''}
+                `;
+                form.insertAdjacentElement('beforebegin', messageElement);
+                setTimeout(() => messageElement.remove(), 5000); // Remove after 5 seconds
+            }
         }
 
         function updateFileList() {
@@ -358,7 +400,7 @@
                 if (response.ok) {
                     showMessage('success', 'Form submitted successfully!', 
                         data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.');
-                    resetFormToInitial();
+                    // Note: resetFormToInitial() is now called when the user clicks OK in the success modal
                 } else {
                     const errorMessage = data.error || 'Submission failed';
                     const errorDetails = data.details || 'No additional details available';
