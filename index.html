@@ -12,7 +12,7 @@
     <!-- Welcome Modal - Shows instructions every time -->
     <div id="welcome-modal" class="modal-overlay" style="display: flex;">
         <div class="modal-content">
-            <h2 class="text-xl font-bold mb-4">2When to use this form:</h2>
+            <h2 class="text-xl font-bold mb-4">3When to use this form:</h2>
             <ol class="list-decimal pl-6 mb-6 space-y-2">
                 <li>For technical issues that are not solved by Tech-support and FSE, those cases can be sent to CoE team for review.</li>
                 <li>For training requests, Internal, 3rd party or customer.</li>
@@ -161,6 +161,30 @@
         const fileInput = document.getElementById('file-input');
         let files = [];
     
+        // Modal handling functions
+        function initializeModal() {
+            // Ensure modal is visible
+            modal.style.display = 'flex';
+            modal.classList.remove('hidden');
+    
+            // Remove any existing event listeners first
+            understandBtn.removeEventListener('click', handleUnderstand);
+            
+            // Add new event listener
+            understandBtn.addEventListener('click', handleUnderstand);
+        }
+    
+        function handleUnderstand() {
+            modal.style.display = 'none';
+            modal.classList.add('hidden');
+        }
+    
+        // Ensure modal is initialized when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeModal();
+            initializeFileHandlers();
+        });
+    
         // Enhanced message handling function
         function showMessage(type, message, details = '') {
             console.log('Showing message:', { type, message, details });
@@ -203,9 +227,134 @@
             }
         }
     
-        // Rest of the existing script functions remain the same...
+        // File handling functions remain the same as in previous implementation
+        function initializeFileHandlers() {
+            fileUpload.addEventListener('click', (e) => {
+                if (e.target === fileUpload || e.target.id === 'upload-text') {
+                    fileInput.click();
+                }
+            });
     
-        // Updated form submission handler
+            fileUpload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUpload.classList.add('dragover');
+            });
+    
+            fileUpload.addEventListener('dragleave', () => {
+                fileUpload.classList.remove('dragover');
+            });
+    
+            fileUpload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUpload.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+    
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+        }
+    
+        // Existing file handling functions (handleFiles, updateFileList, removeFile)
+        function handleFiles(newFiles) {
+            const remainingSlots = 5 - files.length;
+            const filesToAdd = Array.from(newFiles).slice(0, remainingSlots);
+            
+            filesToAdd.forEach(file => {
+                const allowedTypes = [
+                    'image/jpeg',
+                    'image/png',
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/vnd.ms-excel',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                ];
+    
+                if (!allowedTypes.includes(file.type)) {
+                    showMessage('error', 'Invalid file type', `File type not allowed: ${file.name}`);
+                    return;
+                }
+    
+                if (file.size > 50 * 1024 * 1024) {
+                    showMessage('error', 'File size exceeded', `File too large (max 50MB): ${file.name}`);
+                    return;
+                }
+    
+                files.push(file);
+            });
+            
+            updateFileList();
+        }
+    
+        function updateFileList() {
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = files.map((file, index) => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-name">${file.name}</span>
+                        <span class="file-size">${(file.size / 1024 / 1024).toFixed(1)} MB</span>
+                    </div>
+                    <span class="remove-file" data-index="${index}">×</span>
+                </div>
+            `).join('');
+    
+            document.querySelectorAll('.remove-file').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const index = parseInt(button.getAttribute('data-index'));
+                    removeFile(index);
+                });
+            });
+        }
+    
+        function removeFile(index) {
+            files.splice(index, 1);
+            updateFileList();
+        }
+    
+        // Reset form to initial state
+        function resetFormToInitial() {
+            form.reset();
+            files = [];
+            const fileList = document.getElementById('file-list');
+            if (fileList) {
+                fileList.innerHTML = '';
+            }
+            mainForm.style.display = 'none';
+            supportRcaSection.style.display = 'none';
+            trainingSection.style.display = 'none';
+            requestSelect.value = '';
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(message => message.remove());
+        }
+    
+        // Handle request type selection
+        requestSelect.addEventListener('change', function() {
+            const selectedValue = this.value;
+            
+            mainForm.style.display = 'none';
+            supportRcaSection.style.display = 'none';
+            trainingSection.style.display = 'none';
+    
+            if (selectedValue) {
+                mainForm.style.display = 'block';
+    
+                switch(selectedValue) {
+                    case 'TRAINING':
+                        trainingSection.style.display = 'block';
+                        document.getElementById('training-scope').required = true;
+                        break;
+                    case 'SUPPORT':
+                    case 'RCA':
+                    case 'OTHERS':
+                        supportRcaSection.style.display = 'block';
+                        break;
+                }
+            }
+        });
+    
+        // Form submission handler
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             
