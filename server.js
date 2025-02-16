@@ -22,13 +22,15 @@ if (missingVars.length > 0) {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS and body parsing configuration
+// CORS configuration
 app.use(cors({
-    origin: '*',
+    origin: 'https://aprovero.github.io', // Replace with your GitHub Pages URL
     methods: ['POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true
 }));
+
+// Body parsing configuration
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
@@ -141,7 +143,7 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             'SERIAL NUMBERS': serialNumbers || '',
             'TROUBLESHOOTING STEPS COMPLETED': troubleshooting || '',
             'STATUS': 'NEW',
-            'PRIORITY': '3- MEDIUM',
+            'PRIORITY': '',
             'GSP TICKET': gspTicket || ''
         };
 
