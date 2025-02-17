@@ -66,10 +66,10 @@ const transporter = nodemailer.createTransport({
 });
 
 // Validation utilities
-const Validators = {
-    requestType: (type) => ['SUPPORT', 'RCA', 'TRAINING', 'OTHERS'].includes(type),
-    location: (location) => ['MEXICO', 'CENTRAL AMERICA', 'COLOMBIA', 'DOMINICAN REPUBLIC', 'BRAZIL', 'CHILE', 'OTHER'].includes(location),
-    productType: (type) => ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION'].includes(type)
+const validOptions = {
+    'TYPE OF REQUEST': ['SUPPORT', 'RCA', 'TRAINING', 'OTHERS'],
+    'Location': ['MEXICO', 'CENTRAL AMERICA', 'COLOMBIA', 'DOMINICAN REPUBLIC', 'BRAZIL', 'CHILE', 'OTHER'],
+    'TYPE OF PRODUCT': ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION']
 };
 
 // Location abbreviation mapping
@@ -114,23 +114,6 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        if (!Validators.requestType(request)) {
-            return res.status(400).json({ error: `Invalid request type: ${request}` });
-        }
-
-        if (!Validators.location(location)) {
-            return res.status(400).json({ error: `Invalid location: ${location}` });
-        }
-
-        if (!Validators.productType(productType)) {
-            return res.status(400).json({ error: `Invalid product type: ${productType}` });
-        }
-
-        // Training-specific validation
-        if (request === 'TRAINING' && (!trainingScope || !expectedDate || !traineesNumber)) {
-            return res.status(400).json({ error: 'Missing required training fields' });
-        }
-
         // Prepare Airtable record
         const fields = {
             'Requested by': requesterName,
@@ -143,15 +126,28 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             'SERIAL NUMBERS': serialNumbers || '',
             'TROUBLESHOOTING STEPS COMPLETED': troubleshooting || '',
             'STATUS': 'NEW',
-            'PRIORITY': '',
+            'PRIORITY': '3- MEDIUM',
             'GSP TICKET': gspTicket || ''
         };
+
+        // Validate and clean up multiple-choice fields
+        Object.keys(fields).forEach(key => {
+            if (validOptions[key]) {
+                if (!validOptions[key].includes(fields[key])) {
+                    fields[key] = null; // or set to a default value
+                }
+            }
+            // Remove empty string values
+            if (fields[key] === "") {
+                fields[key] = null;
+            }
+        });
 
         // Add training-specific fields
         if (request === 'TRAINING') {
             fields['SCOPE OF TRAINING - for TRAINING'] = trainingScope;
             fields['EXPECTED DATE - for TRAINING'] = expectedDate;
-            fields['NUMBER OF TRAINEES - for TRAINING'] = parseFloat(traineesNumber).toFixed(1);
+            fields['NUMBER OF TRAINEES - for TRAINING'] = traineesNumber ? parseFloat(traineesNumber).toFixed(1) : null;
         }
 
         // Process attachments
@@ -199,7 +195,7 @@ This is an automated message. Please do not reply to this email.`,
         });
 
     } catch (error) {
-        console.error('Server error:', error);
+        console.error('Detailed server error:', error);
         res.status(500).json({
             error: 'Server error',
             details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
