@@ -405,3 +405,29 @@ button:disabled {
 #success-modal .modal-button:hover {
     background-color: #218838;
 }
+
+/* Add these new styles at the end of your shared-styles.css file */
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.remove-file {
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.remove-file:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+    border-radius: 50%;
+}

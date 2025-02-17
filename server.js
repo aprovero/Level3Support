@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 
 // CORS configuration
 app.use(cors({
-    origin: 'https://aprovero.github.io', // Replace with your GitHub Pages URL
+    origin: 'https://aprovero.github.io',
     methods: ['POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true
@@ -49,7 +49,11 @@ const upload = multer({
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ];
-        cb(null, allowedTypes.includes(file.mimetype));
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type'), false);
+        }
     }
 });
 
@@ -151,7 +155,7 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
         }
 
         // Process attachments
-        if (req.files?.length > 0) {
+        if (req.files && req.files.length > 0) {
             const attachments = await Promise.all(req.files.map(processFile));
             fields['ATTACHMENTS'] = attachments;
         }
@@ -181,7 +185,8 @@ GSP Ticket: ${gspTicket || 'N/A'}
 This is an automated message. Please do not reply to this email.`,
             attachments: req.files ? req.files.map(file => ({
                 filename: file.originalname,
-                content: file.buffer
+                content: file.buffer,
+                contentType: file.mimetype
             })) : []
         };
 
@@ -196,6 +201,7 @@ This is an automated message. Please do not reply to this email.`,
 
     } catch (error) {
         console.error('Detailed server error:', error);
+        console.error('Error stack:', error.stack);
         res.status(500).json({
             error: 'Server error',
             details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
