@@ -41,17 +41,19 @@ const upload = multer({
     limits: { fileSize: 50 * 1024 * 1024 }, // 50MB total limit
     fileFilter: (req, file, cb) => {
         const allowedTypes = [
-            'image/jpeg',
-            'image/png',
+            'image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp',
             'application/pdf',
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'application/vnd.ms-excel',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'text/plain',
+            'application/zip', 'application/x-rar-compressed'
         ];
+        console.log('Uploaded file type:', file.mimetype);
         if (allowedTypes.includes(file.mimetype)) {
             cb(null, true);
         } else {
+            console.log('Rejected file type:', file.mimetype);
             cb(new Error('Invalid file type'), false);
         }
     }
@@ -97,6 +99,7 @@ const processFile = async (file) => ({
 // Main form submission endpoint
 app.post('/submit', upload.array('attachments', 5), async (req, res) => {
     try {
+        console.log('Received files:', req.files);
         const { 
             requesterName, 
             requesterEmail, 
@@ -213,10 +216,12 @@ This is an automated message. Please do not reply to this email.`,
 app.use((error, req, res, next) => {
     console.error('Unhandled error:', error);
     
-    if (error.name === 'MulterError') {
+    if (error instanceof multer.MulterError) {
+        console.error('Multer error details:', error);
         return res.status(400).json({
             error: 'File upload error',
-            details: error.message
+            details: error.message,
+            code: error.code
         });
     }
     
