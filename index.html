@@ -136,6 +136,8 @@
                     </div>
                 </div>
 
+                <div id="message-container"></div>
+
                 <div id="loading-spinner">
                     <div class="spinner"></div>
                     <p>Submitting your request...</p>
@@ -168,6 +170,7 @@
         const loadingSpinner = document.getElementById('loading-spinner');
         const fileUpload = document.getElementById('file-upload');
         const fileInput = document.getElementById('file-input');
+        const messageContainer = document.getElementById('message-container');
         let files = [];
 
         function showMessage(type, message, details = '') {
@@ -177,7 +180,8 @@
                 <strong>${message}</strong>
                 ${details ? `<div class="message-details">${details}</div>` : ''}
             `;
-            form.insertAdjacentElement('beforebegin', messageElement);
+            messageContainer.innerHTML = '';
+            messageContainer.appendChild(messageElement);
             setTimeout(() => messageElement.remove(), 5000); // Remove after 5 seconds
         }
 
@@ -216,6 +220,7 @@
             mainForm.style.display = 'none';
             supportRcaSection.style.display = 'none';
             trainingSection.style.display = 'none';
+            messageContainer.innerHTML = '';
         }
 
         function initializeModal() {
@@ -320,6 +325,8 @@
             event.preventDefault();
             
             console.log('Form submission started');
+            
+            messageContainer.innerHTML = '';
             
             const requestType = requestSelect.value;
             

@@ -89,13 +89,6 @@ const LOCATION_MAP = {
     'OTHER': 'OTH'
 };
 
-// Process file attachments
-const processFile = async (file) => ({
-    filename: file.originalname,
-    type: file.mimetype,
-    url: `data:${file.mimetype};base64,${file.buffer.toString('base64')}`
-});
-
 // Main form submission endpoint
 app.post('/submit', upload.array('attachments', 5), async (req, res) => {
     try {
@@ -133,8 +126,9 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             'SERIAL NUMBERS': serialNumbers || '',
             'TROUBLESHOOTING STEPS COMPLETED': troubleshooting || '',
             'STATUS': 'NEW',
-            'PRIORITY': '3- MEDIUM',
-            'GSP TICKET': gspTicket || ''
+            'PRIORITY': '4- LOW',
+            'GSP TICKET': gspTicket || '',
+            'ATTACHMENTS': req.files && req.files.length > 0 ? 'Attachments in email' : ''
         };
 
         // Validate and clean up multiple-choice fields
@@ -155,12 +149,6 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             fields['SCOPE OF TRAINING - for TRAINING'] = trainingScope;
             fields['EXPECTED DATE - for TRAINING'] = expectedDate;
             fields['NUMBER OF TRAINEES - for TRAINING'] = traineesNumber ? parseFloat(traineesNumber).toFixed(1) : null;
-        }
-
-        // Process attachments
-        if (req.files && req.files.length > 0) {
-            const attachments = await Promise.all(req.files.map(processFile));
-            fields['ATTACHMENTS'] = attachments;
         }
 
         // Create Airtable record
@@ -185,7 +173,7 @@ Product Type: ${productType}
 Model: ${model || 'N/A'}
 GSP Ticket: ${gspTicket || 'N/A'}
 
-This is an automated message. Please do not reply to this email.`,
+This is an automated message. Please do not reply to this email. For any questions or updates, please contact the CoE team directly.`,
             attachments: req.files ? req.files.map(file => ({
                 filename: file.originalname,
                 content: file.buffer,
