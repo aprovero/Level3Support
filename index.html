@@ -148,15 +148,6 @@
         </form>
     </div>
 
-    <!-- Success Modal -->
-    <div id="success-modal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <h2 id="success-title" class="text-xl font-bold mb-4"></h2>
-            <p id="success-message"></p>
-            <button id="success-ok-btn" class="modal-button mt-4">OK</button>
-        </div>
-    </div>
-
     <script>
         // Initialize form elements
         const form = document.getElementById('support-form');
@@ -180,9 +171,9 @@
                 <strong>${message}</strong>
                 ${details ? `<div class="message-details">${details}</div>` : ''}
             `;
-            messageContainer.innerHTML = '';
+            messageContainer.innerHTML = ''; // Clear previous messages
             messageContainer.appendChild(messageElement);
-            setTimeout(() => messageElement.remove(), 5000); // Remove after 5 seconds
+            console.log('Showing message:', type, message, details); // Add this line for debugging
         }
 
         function validateFileType(file) {
@@ -380,8 +371,10 @@
             console.log('Response data:', data);
             
             if (response.ok) {
-                showMessage('success', 'Form submitted successfully!', 
-                    data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.');
+                const successMessage = 'Form submitted successfully!';
+                const successDetails = data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.';
+                showMessage('success', successMessage, successDetails);
+                console.log(successMessage, successDetails); // Add this line for debugging
                 resetFormToInitial();
             } else {
                 const errorMessage = data.error || 'Submission failed';
