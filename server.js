@@ -74,7 +74,7 @@ const transporter = nodemailer.createTransport({
 // Validation utilities
 const validOptions = {
     'TYPE OF REQUEST': ['SUPPORT', 'RCA', 'TRAINING', 'OTHERS'],
-    'Location': ['MEXICO', 'CENTRAL AMERICA', 'COLOMBIA', 'DOMINICAN REPUBLIC', 'BRAZIL', 'CHILE', 'OTHER'],
+    'Location': ['MEXICO', 'CENTRAL AMERICA', 'DOMINICAN REPUBLIC', 'COLOMBIA', 'BRAZIL', 'CHILE', 'OTHERS'],
     'TYPE OF PRODUCT': ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION']
 };
 
@@ -86,13 +86,21 @@ const LOCATION_MAP = {
     'COLOMBIA': 'COL',
     'BRAZIL': 'BRA',
     'CHILE': 'CHL',
-    'OTHER': 'OTH'
+    'OTHERS': 'OTH'
 };
+
+// Utility function to validate email format
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 
 // Main form submission endpoint
 app.post('/submit', upload.array('attachments', 5), async (req, res) => {
     try {
+        console.log('Received form submission with data:', req.body);
         console.log('Received files:', req.files);
+
         const { 
             requesterName, 
             requesterEmail, 
@@ -100,18 +108,51 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             location, 
             projectName, 
             productType,
+            description,
             model,
             gspTicket,
             serialNumbers,
-            troubleshooting,
-            trainingScope,
-            expectedDate,
-            traineesNumber
+            esrCompleted
         } = req.body;
 
-        // Comprehensive validation
-        if (!requesterName || !requesterEmail || !request) {
-            return res.status(400).json({ error: 'Missing required fields' });
+        // Basic field validation
+        if (!requesterName || !requesterEmail || !request || !location || !productType || !description || !projectName) {
+            return res.status(400).json({ 
+                error: 'Missing required fields',
+                details: 'Please fill out all required fields.'
+            });
+        }
+
+        // Email format validation
+        if (!isValidEmail(requesterEmail)) {
+            return res.status(400).json({
+                error: 'Invalid email format',
+                details: 'Please provide a valid email address.'
+            });
+        }
+
+        // Validate request type
+        if (!validOptions['TYPE OF REQUEST'].includes(request)) {
+            return res.status(400).json({
+                error: 'Invalid request type',
+                details: 'Please select a valid request type.'
+            });
+        }
+
+        // Validate location
+        if (!validOptions['Location'].includes(location)) {
+            return res.status(400).json({
+                error: 'Invalid location',
+                details: 'Please select a valid location.'
+            });
+        }
+
+        // Validate product type
+        if (!validOptions['TYPE OF PRODUCT'].includes(productType)) {
+            return res.status(400).json({
+                error: 'Invalid product type',
+                details: 'Please select a valid product type.'
+            });
         }
 
         // Prepare Airtable record
@@ -122,33 +163,22 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             'Location': location,
             'PROJECT NAME': projectName,
             'TYPE OF PRODUCT': productType,
-            'MODEL': model || '',
-            'SERIAL NUMBERS': serialNumbers || '',
-            'TROUBLESHOOTING STEPS COMPLETED': troubleshooting || '',
+            'Description': description,
             'STATUS': 'NEW',
-            'PRIORITY': '4- LOW',
-            'GSP TICKET': gspTicket || '',
-            'ATTACHMENTS': req.files && req.files.length > 0 ? 'Attachments in email' : ''
+            'PRIORITY': '4- LOW'
         };
 
-        // Validate and clean up multiple-choice fields
-        Object.keys(fields).forEach(key => {
-            if (validOptions[key]) {
-                if (!validOptions[key].includes(fields[key])) {
-                    fields[key] = null; // or set to a default value
-                }
-            }
-            // Remove empty string values
-            if (fields[key] === "") {
-                fields[key] = null;
-            }
-        });
+        // Add Support/RCA specific fields if applicable
+        if (['SUPPORT', 'RCA'].includes(request)) {
+            if (model) fields['MODEL'] = model;
+            if (gspTicket) fields['GSP TICKET'] = gspTicket;
+            if (serialNumbers) fields['SERIAL NUMBERS'] = serialNumbers;
+            fields['ESR COMPLETED'] = esrCompleted === 'true';
+        }
 
-        // Add training-specific fields
-        if (request === 'TRAINING') {
-            fields['SCOPE OF TRAINING - for TRAINING'] = trainingScope;
-            fields['EXPECTED DATE - for TRAINING'] = expectedDate;
-            fields['NUMBER OF TRAINEES - for TRAINING'] = traineesNumber ? parseFloat(traineesNumber).toFixed(1) : null;
+        // Add attachments field if files are present
+        if (req.files && req.files.length > 0) {
+            fields['ATTACHMENTS'] = 'Attachments in email';
         }
 
         // Create Airtable record
@@ -170,8 +200,11 @@ Email: ${requesterEmail}
 Location: ${location}
 Project Name: ${projectName}
 Product Type: ${productType}
-Model: ${model || 'N/A'}
-GSP Ticket: ${gspTicket || 'N/A'}
+Description: ${description}
+${model ? `Model: ${model}` : ''}
+${gspTicket ? `GSP Ticket: ${gspTicket}` : ''}
+${serialNumbers ? `Serial Numbers: ${serialNumbers}` : ''}
+${esrCompleted === 'true' ? 'ESR Completed: Yes' : ''}
 
 This is an automated message. Please do not reply to this email. For any questions or updates, please contact the CoE team directly.`,
             attachments: req.files ? req.files.map(file => ({
@@ -184,6 +217,13 @@ This is an automated message. Please do not reply to this email. For any questio
         // Send email
         await transporter.sendMail(mailOptions);
 
+        // Log successful submission
+        console.log('Request submitted successfully:', {
+            issueId,
+            requestType: request,
+            location: locationAbbrev
+        });
+
         // Success response
         res.status(200).json({
             message: 'Request submitted successfully',
@@ -193,6 +233,8 @@ This is an automated message. Please do not reply to this email. For any questio
     } catch (error) {
         console.error('Detailed server error:', error);
         console.error('Error stack:', error.stack);
+        
+        // Send appropriate error response
         res.status(500).json({
             error: 'Server error',
             details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
@@ -217,6 +259,11 @@ app.use((error, req, res, next) => {
         error: 'An unexpected error occurred',
         details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
 // Start server
