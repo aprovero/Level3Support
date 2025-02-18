@@ -72,7 +72,7 @@
             <!-- Common Fields for All Forms -->
             <div id="common-fields" class="form-group" style="display: none;">
                 <label for="location">Location *</label>
-                <select id="location" name="location" required>
+                <select id="location" name="location">
                     <option value="">-- Select Location --</option>
                     <option value="MEXICO">MEXICO</option>
                     <option value="CENTRAL AMERICA">CENTRAL AMERICA</option>
@@ -83,8 +83,11 @@
                     <option value="OTHERS">OTHERS</option>
                 </select>
 
+                <label for="project-name">Project Name *</label>
+                <input type="text" id="project-name" name="projectName" placeholder="Enter project name">
+
                 <label for="product-type">TYPE OF PRODUCT *</label>
-                <select id="product-type" name="productType" required>
+                <select id="product-type" name="productType">
                     <option value="">-- Select --</option>
                     <option value="STRING">STRING</option>
                     <option value="CENTRAL">CENTRAL</option>
@@ -93,33 +96,27 @@
                     <option value="STORAGE">STORAGE</option>
                     <option value="COMMUNICATION">COMMUNICATION</option>
                 </select>
+
+                <label for="model">Model</label>
+                <input type="text" id="model" name="model" placeholder="Enter model">
             </div>
 
             <!-- Training Form Fields -->
             <div id="training-fields" class="form-group" style="display: none;">
                 <label for="training-description">Description *</label>
-                <textarea id="training-description" name="description" rows="4" placeholder="Enter detailed description" required></textarea>
+                <textarea id="training-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
 
                 <label for="expected-date">Expected Date *</label>
-                <input type="date" id="expected-date" name="expectedDate" required>
+                <input type="date" id="expected-date" name="expectedDate">
 
                 <label for="trainees-number">Number of Trainees *</label>
-                <input type="number" id="trainees-number" name="traineesNumber" min="1" step="1" required>
-
-                <label for="project-name-training">Project Name *</label>
-                <input type="text" id="project-name-training" name="projectName" placeholder="Enter project name" required>
+                <input type="number" id="trainees-number" name="traineesNumber" min="1" step="1">
             </div>
 
             <!-- Support and RCA Fields -->
             <div id="support-rca-fields" class="form-group" style="display: none;">
                 <label for="description">Description *</label>
-                <textarea id="description" name="description" rows="4" placeholder="Enter detailed description" required></textarea>
-
-                <label for="project-name">Project Name *</label>
-                <input type="text" id="project-name" name="projectName" placeholder="Enter project name" required>
-
-                <label for="model">Model</label>
-                <input type="text" id="model" name="model" placeholder="Enter model">
+                <textarea id="description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
 
                 <label for="gsp-ticket">GSP Ticket</label>
                 <input type="text" id="gsp-ticket" name="gspTicket" placeholder="Enter GSP ticket number">
@@ -136,10 +133,7 @@
             <!-- OTHERS Fields -->
             <div id="others-fields" class="form-group" style="display: none;">
                 <label for="others-description">Description *</label>
-                <textarea id="others-description" name="description" rows="4" placeholder="Enter detailed description" required></textarea>
-
-                <label for="project-name-others">Project Name *</label>
-                <input type="text" id="project-name-others" name="projectName" placeholder="Enter project name" required>
+                <textarea id="others-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
             </div>
 
             <!-- File Upload Section -->
@@ -265,6 +259,7 @@
 
         successCloseBtn.addEventListener('click', () => {
             successModal.style.display = 'none';
+            resetFormToInitial();
         });
 
         // Initialize file upload handlers
@@ -348,17 +343,34 @@
             fileUploadSection.style.display = 'none';
             submitBtn.style.display = 'none';
 
+            // Reset required attributes
+            document.querySelectorAll('input, select, textarea').forEach(element => {
+                if (element.hasAttribute('required')) {
+                    element.removeAttribute('required');
+                }
+            });
+
             if (selectedValue) {
                 commonFields.style.display = 'block';
                 fileUploadSection.style.display = 'block';
                 submitBtn.style.display = 'block';
 
+                // Add required attributes to common fields
+                document.getElementById('location').setAttribute('required', '');
+                document.getElementById('product-type').setAttribute('required', '');
+                document.getElementById('project-name').setAttribute('required', '');
+
                 if (selectedValue === 'TRAINING') {
                     trainingFields.style.display = 'block';
+                    document.getElementById('training-description').setAttribute('required', '');
+                    document.getElementById('expected-date').setAttribute('required', '');
+                    document.getElementById('trainees-number').setAttribute('required', '');
                 } else if (['SUPPORT', 'RCA'].includes(selectedValue)) {
                     supportRcaFields.style.display = 'block';
+                    document.getElementById('description').setAttribute('required', '');
                 } else if (selectedValue === 'OTHERS') {
                     othersFields.style.display = 'block';
+                    document.getElementById('others-description').setAttribute('required', '');
                 }
             }
         });
@@ -366,10 +378,8 @@
         // Handle ESR checkbox
         esrCheckbox.addEventListener('change', function() {
             if (this.checked) {
-                fileInput.required = true;
                 attachmentRequired.classList.remove('hidden');
             } else {
-                fileInput.required = false;
                 attachmentRequired.classList.add('hidden');
             }
         });
@@ -394,11 +404,8 @@
                 // Combine training fields into description
                 const combinedDescription = `Description:\n${description}\n\nNumber of Trainees: ${traineesNumber}\nExpected Date: ${expectedDate}`;
                 formData.append('description', combinedDescription);
-                formData.append('projectName', document.getElementById('project-name-training').value);
             } else if (['SUPPORT', 'RCA'].includes(requestType)) {
-                // For Support and RCA, add fields directly
                 formData.append('description', document.getElementById('description').value);
-                formData.append('projectName', document.getElementById('project-name').value);
                 if (document.getElementById('model').value) {
                     formData.append('model', document.getElementById('model').value);
                 }
@@ -410,9 +417,7 @@
                 }
                 formData.append('esrCompleted', esrCheckbox.checked);
             } else if (requestType === 'OTHERS') {
-                // For Others, add description and project name
                 formData.append('description', document.getElementById('others-description').value);
-                formData.append('projectName', document.getElementById('project-name-others').value);
             }
 
             // Add common fields
@@ -421,22 +426,7 @@
             formData.append('request', requestType);
             formData.append('location', document.getElementById('location').value);
             formData.append('productType', document.getElementById('product-type').value);
-
-            // Validate required fields
-            const requiredFields = form.querySelectorAll('[required]');
-            const missingFields = [];
-            
-            requiredFields.forEach(field => {
-                if (!field.value) {
-                    const fieldLabel = field.previousElementSibling.textContent.replace(' *', '');
-                    missingFields.push(fieldLabel);
-                }
-            });
-            
-            if (missingFields.length > 0) {
-                showMessage('error', 'Missing Required Fields', `Please fill out: ${missingFields.join(', ')}`);
-                return;
-            }
+            formData.append('projectName', document.getElementById('project-name').value);
 
             // Validate ESR attachment requirement
             if (esrCheckbox.checked && files.length === 0) {
@@ -474,7 +464,6 @@
                     const successMessage = 'Form submitted successfully!';
                     const successDetails = data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.';
                     showMessage('success', successMessage, successDetails);
-                    resetFormToInitial();
                 } else {
                     const errorMessage = data.error || 'Submission failed';
                     const errorDetails = data.details || 'No additional details available';
