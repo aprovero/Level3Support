@@ -7,6 +7,13 @@
     <link rel="icon" type="image/png" href="./SIMPLE_LOGO.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="shared-styles.css" rel="stylesheet">
+    <style>
+        .required-asterisk {
+            color: #dc3545;
+            margin-left: 2px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <!-- Welcome Modal -->
@@ -80,7 +87,7 @@
                     <option value="COLOMBIA">COLOMBIA</option>
                     <option value="BRAZIL">BRAZIL</option>
                     <option value="CHILE">CHILE</option>
-                    <option value="OTHERS">OTHERS</option>
+                    <option value="OTHER">OTHER</option>
                 </select>
 
                 <label for="project-name">Project Name <span class="required-asterisk">*</span></label>
@@ -415,7 +422,6 @@
                 if (document.getElementById('serial-numbers').value) {
                     formData.append('serialNumbers', document.getElementById('serial-numbers').value);
                 }
-                // ESR checkbox value not sent to Airtable
             } else if (requestType === 'OTHERS') {
                 formData.append('description', document.getElementById('others-description').value);
             }

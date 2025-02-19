@@ -474,4 +474,5 @@ button:disabled {
 .required-asterisk {
     color: #dc3545;  /* Bootstrap's danger red */
     margin-left: 2px;
+    font-weight: bold;
 }

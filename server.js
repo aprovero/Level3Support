@@ -74,7 +74,7 @@ const transporter = nodemailer.createTransport({
 // Validation utilities
 const validOptions = {
     'TYPE OF REQUEST': ['SUPPORT', 'RCA', 'TRAINING', 'OTHERS'],
-    'Location': ['MEXICO', 'CENTRAL AMERICA', 'DOMINICAN REPUBLIC', 'COLOMBIA', 'BRAZIL', 'CHILE', 'OTHERS'],
+    'Location': ['MEXICO', 'CENTRAL AMERICA', 'DOMINICAN REPUBLIC', 'COLOMBIA', 'BRAZIL', 'CHILE', 'OTHER'],
     'TYPE OF PRODUCT': ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION']
 };
 
@@ -86,8 +86,14 @@ const LOCATION_MAP = {
     'COLOMBIA': 'COL',
     'BRAZIL': 'BRA',
     'CHILE': 'CHL',
-    'OTHERS': 'OTH'
+    'OTHER': 'OTH'
 };
+
+// Email validation utility
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 
 // Main form submission endpoint
 app.post('/submit', upload.array('attachments', 5), async (req, res) => {
@@ -256,12 +262,6 @@ app.use((error, req, res, next) => {
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
-
-// Email validation utility
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
 
 // Start server
 app.listen(PORT, () => {
