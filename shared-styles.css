@@ -470,3 +470,8 @@ button:disabled {
     display: inline;
     font-weight: normal;
 }
+
+.required-asterisk {
+    color: #dc3545;  /* Bootstrap's danger red */
+    margin-left: 2px;
+}

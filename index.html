@@ -53,13 +53,13 @@
         <form id="support-form">
             <!-- Common Initial Fields -->
             <div class="form-group">
-                <label for="requester-name">Requester Name *</label>
+                <label for="requester-name">Requester Name <span class="required-asterisk">*</span></label>
                 <input type="text" id="requester-name" name="requesterName" placeholder="Enter your name" required>
 
-                <label for="requester-email">Requester Email *</label>
+                <label for="requester-email">Requester Email <span class="required-asterisk">*</span></label>
                 <input type="email" id="requester-email" name="requesterEmail" placeholder="Enter your email" required>
 
-                <label for="request">Type of Request *</label>
+                <label for="request">Type of Request <span class="required-asterisk">*</span></label>
                 <select id="request" name="request" required>
                     <option value="">-- Select --</option>
                     <option value="SUPPORT">SUPPORT</option>
@@ -71,7 +71,7 @@
 
             <!-- Common Fields for All Forms -->
             <div id="common-fields" class="form-group" style="display: none;">
-                <label for="location">Location *</label>
+                <label for="location">Location <span class="required-asterisk">*</span></label>
                 <select id="location" name="location">
                     <option value="">-- Select Location --</option>
                     <option value="MEXICO">MEXICO</option>
@@ -83,10 +83,10 @@
                     <option value="OTHERS">OTHERS</option>
                 </select>
 
-                <label for="project-name">Project Name *</label>
+                <label for="project-name">Project Name <span class="required-asterisk">*</span></label>
                 <input type="text" id="project-name" name="projectName" placeholder="Enter project name">
 
-                <label for="product-type">TYPE OF PRODUCT *</label>
+                <label for="product-type">TYPE OF PRODUCT <span class="required-asterisk">*</span></label>
                 <select id="product-type" name="productType">
                     <option value="">-- Select --</option>
                     <option value="STRING">STRING</option>
@@ -103,19 +103,19 @@
 
             <!-- Training Form Fields -->
             <div id="training-fields" class="form-group" style="display: none;">
-                <label for="training-description">Description *</label>
+                <label for="training-description">Description <span class="required-asterisk">*</span></label>
                 <textarea id="training-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
 
-                <label for="expected-date">Expected Date *</label>
+                <label for="expected-date">Expected Date <span class="required-asterisk">*</span></label>
                 <input type="date" id="expected-date" name="expectedDate">
 
-                <label for="trainees-number">Number of Trainees *</label>
+                <label for="trainees-number">Number of Trainees <span class="required-asterisk">*</span></label>
                 <input type="number" id="trainees-number" name="traineesNumber" min="1" step="1">
             </div>
 
             <!-- Support and RCA Fields -->
             <div id="support-rca-fields" class="form-group" style="display: none;">
-                <label for="description">Description *</label>
+                <label for="description">Description <span class="required-asterisk">*</span></label>
                 <textarea id="description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
 
                 <label for="gsp-ticket">GSP Ticket</label>
@@ -132,7 +132,7 @@
 
             <!-- OTHERS Fields -->
             <div id="others-fields" class="form-group" style="display: none;">
-                <label for="others-description">Description *</label>
+                <label for="others-description">Description <span class="required-asterisk">*</span></label>
                 <textarea id="others-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
             </div>
 
@@ -415,7 +415,7 @@
                 if (document.getElementById('serial-numbers').value) {
                     formData.append('serialNumbers', document.getElementById('serial-numbers').value);
                 }
-                formData.append('esrCompleted', esrCheckbox.checked);
+                // ESR checkbox value not sent to Airtable
             } else if (requestType === 'OTHERS') {
                 formData.append('description', document.getElementById('others-description').value);
             }
