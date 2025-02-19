@@ -89,12 +89,6 @@ const LOCATION_MAP = {
     'OTHERS': 'OTH'
 };
 
-// Utility function to validate email format
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
 // Main form submission endpoint
 app.post('/submit', upload.array('attachments', 5), async (req, res) => {
     try {
@@ -111,8 +105,7 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             description,
             model,
             gspTicket,
-            serialNumbers,
-            esrCompleted
+            serialNumbers
         } = req.body;
 
         // Basic field validation
@@ -173,7 +166,6 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             if (model) fields['MODEL'] = model;
             if (gspTicket) fields['GSP TICKET'] = gspTicket;
             if (serialNumbers) fields['SERIAL NUMBERS'] = serialNumbers;
-            fields['ESR COMPLETED'] = esrCompleted === 'true';
         }
 
         // Add attachments field if files are present
@@ -204,7 +196,6 @@ Description: ${description}
 ${model ? `Model: ${model}` : ''}
 ${gspTicket ? `GSP Ticket: ${gspTicket}` : ''}
 ${serialNumbers ? `Serial Numbers: ${serialNumbers}` : ''}
-${esrCompleted === 'true' ? 'ESR Completed: Yes' : ''}
 
 This is an automated message. Please do not reply to this email. For any questions or updates, please contact the CoE team directly.`,
             attachments: req.files ? req.files.map(file => ({
@@ -265,6 +256,12 @@ app.use((error, req, res, next) => {
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
+
+// Email validation utility
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 
 // Start server
 app.listen(PORT, () => {
