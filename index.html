@@ -138,9 +138,9 @@
             </div>
 
             <!-- OTHER Fields -->
-            <div id="others-fields" class="form-group" style="display: none;">
-                <label for="others-description">Description <span class="required-asterisk">*</span></label>
-                <textarea id="others-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
+            <div id="other-fields" class="form-group" style="display: none;">
+                <label for="other-description">Description <span class="required-asterisk">*</span></label>
+                <textarea id="other-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
             </div>
 
             <!-- File Upload Section -->
@@ -177,7 +177,7 @@
         const commonFields = document.getElementById('common-fields');
         const trainingFields = document.getElementById('training-fields');
         const supportRcaFields = document.getElementById('support-rca-fields');
-        const othersFields = document.getElementById('others-fields');
+        const otherFields = document.getElementById('other-fields');
         const fileUploadSection = document.getElementById('file-upload-section');
         const submitBtn = document.getElementById('submit-btn');
         const loadingSpinner = document.getElementById('loading-spinner');
@@ -245,7 +245,7 @@
             commonFields.style.display = 'none';
             trainingFields.style.display = 'none';
             supportRcaFields.style.display = 'none';
-            othersFields.style.display = 'none';
+            otherFields.style.display = 'none';
             fileUploadSection.style.display = 'none';
             submitBtn.style.display = 'none';
             messageContainer.innerHTML = '';
@@ -346,7 +346,7 @@
             commonFields.style.display = 'none';
             trainingFields.style.display = 'none';
             supportRcaFields.style.display = 'none';
-            othersFields.style.display = 'none';
+            otherFields.style.display = 'none';
             fileUploadSection.style.display = 'none';
             submitBtn.style.display = 'none';
 
@@ -376,8 +376,8 @@
                     supportRcaFields.style.display = 'block';
                     document.getElementById('description').setAttribute('required', '');
                 } else if (selectedValue === 'OTHER') {
-                    othersFields.style.display = 'block';
-                    document.getElementById('others-description').setAttribute('required', '');
+                    otherFields.style.display = 'block';
+                    document.getElementById('other-description').setAttribute('required', '');
                 }
             }
         });
@@ -423,7 +423,7 @@
                     formData.append('serialNumbers', document.getElementById('serial-numbers').value);
                 }
             } else if (requestType === 'OTHER') {
-                formData.append('description', document.getElementById('others-description').value);
+                formData.append('description', document.getElementById('other-description').value);
             }
 
             // Add common fields
