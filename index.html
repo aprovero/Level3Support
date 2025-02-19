@@ -72,7 +72,7 @@
                     <option value="SUPPORT">SUPPORT</option>
                     <option value="TRAINING">TRAINING</option>
                     <option value="RCA">RCA</option>
-                    <option value="OTHERS">OTHERS</option>
+                    <option value="OTHER">OTHER</option>
                 </select>
             </div>
 
@@ -137,7 +137,7 @@
                 </div>
             </div>
 
-            <!-- OTHERS Fields -->
+            <!-- OTHER Fields -->
             <div id="others-fields" class="form-group" style="display: none;">
                 <label for="others-description">Description <span class="required-asterisk">*</span></label>
                 <textarea id="others-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
@@ -375,7 +375,7 @@
                 } else if (['SUPPORT', 'RCA'].includes(selectedValue)) {
                     supportRcaFields.style.display = 'block';
                     document.getElementById('description').setAttribute('required', '');
-                } else if (selectedValue === 'OTHERS') {
+                } else if (selectedValue === 'OTHER') {
                     othersFields.style.display = 'block';
                     document.getElementById('others-description').setAttribute('required', '');
                 }
@@ -422,7 +422,7 @@
                 if (document.getElementById('serial-numbers').value) {
                     formData.append('serialNumbers', document.getElementById('serial-numbers').value);
                 }
-            } else if (requestType === 'OTHERS') {
+            } else if (requestType === 'OTHER') {
                 formData.append('description', document.getElementById('others-description').value);
             }
 

@@ -73,7 +73,7 @@ const transporter = nodemailer.createTransport({
 
 // Validation utilities
 const validOptions = {
-    'TYPE OF REQUEST': ['SUPPORT', 'RCA', 'TRAINING', 'OTHERS'],
+    'TYPE OF REQUEST': ['SUPPORT', 'RCA', 'TRAINING', 'OTHER'],
     'Location': ['MEXICO', 'CENTRAL AMERICA', 'DOMINICAN REPUBLIC', 'COLOMBIA', 'BRAZIL', 'CHILE', 'OTHER'],
     'TYPE OF PRODUCT': ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION']
 };
