@@ -10,7 +10,8 @@ const requiredEnvVars = [
     'AIRTABLE_API_KEY',
     'AIRTABLE_BASE_ID',
     'EMAIL_USER',
-    'EMAIL_PASS'
+    'EMAIL_PASS',
+    'AIRTABLE_TABLE_NAME' 
 ];
 
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
@@ -61,7 +62,7 @@ const upload = multer({
 
 // Airtable and email configuration
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
-const TABLE_NAME = 'tblse3GrHFJVbbpym';
+const TABLE_NAME = process.env.AIRTABLE_TABLE_NAME
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
