@@ -456,10 +456,18 @@
                     formData.append('attachments', file);
                 });
 
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+
+                showMessage('info', 'Submitting form...', 'This may take a few moments. Please don\'t close the page.');
+
                 const response = await fetch('https://level3support.onrender.com/submit', {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    signal: controller.signal
                 });
+
+                clearTimeout(timeoutId);
                 
                 console.log('Response status:', response.status);
                 
@@ -470,6 +478,7 @@
                     const successMessage = 'Form submitted successfully!';
                     const successDetails = data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.';
                     showMessage('success', successMessage, successDetails);
+                    resetFormToInitial();
                 } else {
                     const errorMessage = data.error || 'Submission failed';
                     const errorDetails = data.details || 'No additional details available';
@@ -478,7 +487,11 @@
 
             } catch (error) {
                 console.error('Complete Submission Error:', error);
-                showMessage('error', 'Network error', 'Failed to submit the form. Please check your connection and try again.');
+                if (error.name === 'AbortError') {
+                    showMessage('info', 'Form Submitted', 'Your form was submitted but is taking longer than expected to process. You\'ll receive an email confirmation shortly.');
+                } else {
+                    showMessage('error', 'Network error', 'Failed to submit the form. Please check your connection and try again.');
+                }
             } finally {
                 submitBtn.disabled = false;
                 loadingSpinner.style.display = 'none';
