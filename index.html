@@ -13,6 +13,13 @@
             margin-left: 2px;
             font-weight: bold;
         }
+        .field-note {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: -5px;
+            margin-bottom: 5px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -114,6 +121,7 @@
                 <textarea id="training-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
 
                 <label for="expected-date">Expected Date <span class="required-asterisk">*</span></label>
+                <div class="field-note">No minimum than 15 days after requested date</div>
                 <input type="date" id="expected-date" name="expectedDate">
 
                 <label for="trainees-number">Number of Trainees <span class="required-asterisk">*</span></label>
@@ -187,6 +195,33 @@
         const fileInput = document.getElementById('file-input');
         const messageContainer = document.getElementById('message-container');
         let files = [];
+
+        // Function to set minimum training date
+        function setMinimumTrainingDate() {
+            const expectedDateInput = document.getElementById('expected-date');
+            
+            // Get today's date
+            const today = new Date();
+            
+            // Add 15 days
+            const minDate = new Date(today);
+            minDate.setDate(today.getDate() + 15);
+            
+            // Format the date as YYYY-MM-DD for the input
+            const formattedDate = minDate.toISOString().split('T')[0];
+            
+            // Set the minimum date
+            expectedDateInput.min = formattedDate;
+            
+            // Add an event listener to validate on change
+            expectedDateInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                if (selectedDate < minDate) {
+                    showMessage('error', 'Invalid Date', 'Please select a date at least 15 days from today.');
+                    this.value = ''; // Clear invalid date
+                }
+            });
+        }
 
         // Message display function
         function showMessage(type, message, details = '') {
@@ -372,6 +407,7 @@
                     document.getElementById('training-description').setAttribute('required', '');
                     document.getElementById('expected-date').setAttribute('required', '');
                     document.getElementById('trainees-number').setAttribute('required', '');
+                    setMinimumTrainingDate();
                 } else if (['SUPPORT', 'RCA'].includes(selectedValue)) {
                     supportRcaFields.style.display = 'block';
                     document.getElementById('description').setAttribute('required', '');
@@ -409,7 +445,7 @@
                 const traineesNumber = document.getElementById('trainees-number').value;
                 
                 // Combine training fields into description
-                const combinedDescription = `Description:\n${description}\n\nNumber of Trainees: ${traineesNumber}\nExpected Date: ${expectedDate}`;
+                const combinedDescription = `${description}\nNumber of Trainees: ${traineesNumber}\nExpected Date: ${expectedDate}`;
                 formData.append('description', combinedDescription);
             } else if (['SUPPORT', 'RCA'].includes(requestType)) {
                 formData.append('description', document.getElementById('description').value);
@@ -478,7 +514,6 @@
                     const successMessage = 'Form submitted successfully!';
                     const successDetails = data.issueId ? `Issue ID: ${data.issueId}` : 'Your request has been processed.';
                     showMessage('success', successMessage, successDetails);
-                    resetFormToInitial();
                 } else {
                     const errorMessage = data.error || 'Submission failed';
                     const errorDetails = data.details || 'No additional details available';
