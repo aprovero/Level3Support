@@ -50,8 +50,12 @@
 
 .contact-icon img {
     width: 30px;
-    height: auto;
+    height: 30px;
     cursor: pointer;
+    background-color: white;
+    padding: 3px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Typography
