@@ -545,3 +545,21 @@ button:disabled {
     color: #014361;
     border: 1px solid #b3e5fc;
 }
+
+/* Footer Styles */
+.footer {
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    color: #666;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        margin-top: 20px;
+        padding: 10px 0;
+        font-size: 12px;
+    }
+}

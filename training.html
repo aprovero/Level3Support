@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoE Level 3 - Training</title>
+    <link rel="icon" type="image/x-icon" href="SIMPLE_LOGO.png">
+    <!-- External CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <!-- Your shared styles -->
+    <link href="shared-styles.css" rel="stylesheet">
+    <style>
+        .training-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        
+        .training-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .training-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .card-title {
+            font-weight: bold;
+            color: #333333;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .card-category {
+            color: #007bff;
+            font-size: 14px;
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: #e6f2ff;
+            border-radius: 4px;
+        }
+        
+        .card-content {
+            padding: 15px;
+        }
+        
+        .topic-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .topic-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+        
+        .view-button {
+            display: block;
+            text-align: center;
+            background-color: #ff9500;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .view-button:hover {
+            background-color: #b36b00;
+            text-decoration: none;
+            color: white;
+        }
+
+        /* Filter controls */
+        .filter-controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .filter-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .filter-item {
+            background-color: #f0f7ff;
+            color: #333;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        
+        .filter-item:hover {
+            background-color: #e1f0ff;
+        }
+        
+        .filter-item.active {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #0062cc;
+        }
+
+        /* Responsive design for filters */
+        @media (max-width: 768px) {
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-item {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="LOGO.png" alt="Logo">
+            </div>
+            <div class="contact-icon">
+                <a href="contacts.html">
+                    <img src="contact-icon.png" alt="Contact Directory">
+                </a>
+            </div>
+        </div>
+        <a href="index.html" class="back-link">← Back to the Request Form</a>
+        <h1>Training Materials</h1>
+        <p>Browse our comprehensive training resources for PV and BESS systems. Filter by category, knowledge level, or product type to find the most relevant content for your needs.</p>
+        
+        <!-- Filter Section -->
+        <div class="filter-controls">
+            <div class="filter-title">Filter by:</div>
+            <div class="filter-section">
+                <div class="filter-label">System Type:</div>
+                <div class="filter-row">
+                    <div class="filter-item active" data-filter="system" data-value="all">All Systems</div>
+                    <div class="filter-item" data-filter="system" data-value="pv">PV Systems</div>
+                    <div class="filter-item" data-filter="system" data-value="bess">BESS Systems</div>
+                </div>
+            </div>
+            <div class="filter-section">
+                <div class="filter-label">Category:</div>
+                <div class="filter-row">
+                    <div class="filter-item active" data-filter="category" data-value="all">All Categories</div>
+                    <div class="filter-item" data-filter="category" data-value="safety">Safety</div>
+                    <div class="filter-item" data-filter="category" data-value="product">Product Knowledge</div>
+                    <div class="filter-item" data-filter="category" data-value="installation">Installation</div>
+                    <div class="filter-item" data-filter="category" data-value="commissioning">Commissioning</div>
+                    <div class="filter-item" data-filter="category" data-value="maintenance">Maintenance</div>
+                    <div class="filter-item" data-filter="category" data-value="tools">Tools & Instruments</div>
+                </div>
+            </div>
+            <div class="filter-section">
+                <div class="filter-label">Knowledge Level:</div>
+                <div class="filter-row">
+                    <div class="filter-item active" data-filter="level" data-value="all">All Levels</div>
+                    <div class="filter-item" data-filter="level" data-value="l1">Level 1</div>
+                    <div class="filter-item" data-filter="level" data-value="l2">Level 2</div>
+                    <div class="filter-item" data-filter="level" data-value="l3">Level 3</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Training Materials Grid -->
+        <div class="training-grid">
+            <!-- PV Safety Card -->
+            <div class="training-card" data-system="pv" data-category="safety" data-level="l1 l2">
+                <div class="card-header">
+                    <div class="card-title">PV System Safety</div>
+                    <div class="card-category">Safe Work Practices</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Safety Principles</li>
+                        <li class="topic-item">Personal Protective Equipment</li>
+                        <li class="topic-item">De-energization Procedures</li>
+                        <li class="topic-item">Voltage Measurement Safety</li>
+                        <li class="topic-item">Emergency Response</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- PV Product Knowledge Card -->
+            <div class="training-card" data-system="pv" data-category="product" data-level="l1 l2 l3">
+                <div class="card-header">
+                    <div class="card-title">PV Product Knowledge</div>
+                    <div class="card-category">Product Specifications</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">System Specifications</li>
+                        <li class="topic-item">Component Architecture</li>
+                        <li class="topic-item">Protection Systems</li>
+                        <li class="topic-item">Performance Analysis</li>
+                        <li class="topic-item">Product Structure</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- PV Installation Card -->
+            <div class="training-card" data-system="pv" data-category="installation" data-level="l2 l3">
+                <div class="card-header">
+                    <div class="card-title">PV Installation</div>
+                    <div class="card-category">Installation Procedures</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Installation Requirements</li>
+                        <li class="topic-item">Unpacking and Storage</li>
+                        <li class="topic-item">Transportation and Hoisting</li>
+                        <li class="topic-item">Mechanical Installation</li>
+                        <li class="topic-item">Electrical Connections</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- PV Commissioning Card -->
+            <div class="training-card" data-system="pv" data-category="commissioning" data-level="l2 l3">
+                <div class="card-header">
+                    <div class="card-title">PV Commissioning</div>
+                    <div class="card-category">System Verification</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Pre-Energization Commissioning</li>
+                        <li class="topic-item">Post-Energization Commissioning</li>
+                        <li class="topic-item">Firmware/Software Updates</li>
+                        <li class="topic-item">System Testing</li>
+                        <li class="topic-item">Documentation</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- PV Maintenance Card -->
+            <div class="training-card" data-system="pv" data-category="maintenance" data-level="l2 l3">
+                <div class="card-header">
+                    <div class="card-title">PV Maintenance</div>
+                    <div class="card-category">System Upkeep</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Routine Maintenance</li>
+                        <li class="topic-item">Component Replacement</li>
+                        <li class="topic-item">Troubleshooting</li>
+                        <li class="topic-item">Performance Monitoring</li>
+                        <li class="topic-item">Preventive Maintenance</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- PV Tools Card -->
+            <div class="training-card" data-system="pv" data-category="tools" data-level="l1 l2">
+                <div class="card-header">
+                    <div class="card-title">PV Tools & Instruments</div>
+                    <div class="card-category">Measurement & Diagnostics</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Multimeter Usage</li>
+                        <li class="topic-item">Megger Testing</li>
+                        <li class="topic-item">Oscilloscope Operation</li>
+                        <li class="topic-item">Power Quality Analysis</li>
+                        <li class="topic-item">Thermal Imaging</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- BESS Safety Card -->
+            <div class="training-card" data-system="bess" data-category="safety" data-level="l1 l2">
+                <div class="card-header">
+                    <div class="card-title">BESS Safety Operation</div>
+                    <div class="card-category">Safe Work Practices</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Safety Dressing</li>
+                        <li class="topic-item">Safety Power Off</li>
+                        <li class="topic-item">Safety Electricity Checking</li>
+                        <li class="topic-item">Chemical Hazard Awareness</li>
+                        <li class="topic-item">Emergency Response</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- BESS Product Knowledge Card -->
+            <div class="training-card" data-system="bess" data-category="product" data-level="l1 l2 l3">
+                <div class="card-header">
+                    <div class="card-title">BESS Product Knowledge</div>
+                    <div class="card-category">System Architecture</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Technical Parameters</li>
+                        <li class="topic-item">Component Composition</li>
+                        <li class="topic-item">Product Common Functions</li>
+                        <li class="topic-item">Temperature Control Systems</li>
+                        <li class="topic-item">Key Components</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- BESS Installation Card -->
+            <div class="training-card" data-system="bess" data-category="installation" data-level="l2 l3">
+                <div class="card-header">
+                    <div class="card-title">BESS Installation</div>
+                    <div class="card-category">Setup Procedures</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Site Selection</li>
+                        <li class="topic-item">Unpacking and Storage</li>
+                        <li class="topic-item">Handling Process</li>
+                        <li class="topic-item">Install Inverter, Battery Box</li>
+                        <li class="topic-item">Electrical Connection</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- BESS Commissioning Card -->
+            <div class="training-card" data-system="bess" data-category="commissioning" data-level="l2 l3">
+                <div class="card-header">
+                    <div class="card-title">BESS Commissioning</div>
+                    <div class="card-category">System Activation</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Cold Commissioning</li>
+                        <li class="topic-item">Hot Commissioning</li>
+                        <li class="topic-item">Software Configuration</li>
+                        <li class="topic-item">Black Start</li>
+                        <li class="topic-item">System Verification</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- BESS Maintenance Card -->
+            <div class="training-card" data-system="bess" data-category="maintenance" data-level="l2 l3">
+                <div class="card-header">
+                    <div class="card-title">BESS Maintenance</div>
+                    <div class="card-category">System Upkeep</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Daily Maintenance</li>
+                        <li class="topic-item">DCDC Replacement</li>
+                        <li class="topic-item">Power Replenishment</li>
+                        <li class="topic-item">Fluid Injection</li>
+                        <li class="topic-item">Troubleshooting</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+            
+            <!-- BESS Tools Card -->
+            <div class="training-card" data-system="bess" data-category="tools" data-level="l1 l2">
+                <div class="card-header">
+                    <div class="card-title">BESS Tools & Instruments</div>
+                    <div class="card-category">Testing Equipment</div>
+                </div>
+                <div class="card-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">Multimeter</li>
+                        <li class="topic-item">Oscilloscope</li>
+                        <li class="topic-item">Power Quality Analyzer</li>
+                        <li class="topic-item">Thermal Imager</li>
+                        <li class="topic-item">Liquid Cooling Maintenance Tool</li>
+                    </ul>
+                    <a href="#" class="view-button">View Materials</a>
+                </div>
+            </div>
+        </div>
+            <!-- Add footer here -->
+        <div class="footer">
+            © 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.<br>
+            Created by Andres Provero
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize filter system
+            const filterItems = document.querySelectorAll('.filter-item');
+            const trainingCards = document.querySelectorAll('.training-card');
+            
+            // Track active filters
+            const activeFilters = {
+                system: 'all',
+                category: 'all',
+                level: 'all'
+            };
+            
+            // Filter click handler
+            filterItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const filterType = this.getAttribute('data-filter');
+                    const filterValue = this.getAttribute('data-value');
+                    
+                    // Update active filter for this type
+                    activeFilters[filterType] = filterValue;
+                    
+                    // Toggle active class in this filter group
+                    document.querySelectorAll(`.filter-item[data-filter="${filterType}"]`).forEach(el => {
+                        el.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Apply all filters
+                    applyFilters();
+                });
+            });
+            
+            // Filter application function
+            function applyFilters() {
+                trainingCards.forEach(card => {
+                    const cardSystem = card.getAttribute('data-system');
+                    const cardCategory = card.getAttribute('data-category');
+                    const cardLevel = card.getAttribute('data-level');
+                    
+                    // Check if card passes all filters
+                    const passesSystemFilter = activeFilters.system === 'all' || cardSystem === activeFilters.system;
+                    const passesCategoryFilter = activeFilters.category === 'all' || cardCategory === activeFilters.category;
+                    const passesLevelFilter = activeFilters.level === 'all' || cardLevel.includes(activeFilters.level);
+                    
+                    // Show/hide based on combined filter result
+                    if (passesSystemFilter && passesCategoryFilter && passesLevelFilter) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
