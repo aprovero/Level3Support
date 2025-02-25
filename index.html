@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoE Level 3</title>
-    <link rel="icon" type="image/png" href="./SIMPLE_LOGO.png">
+    <link rel="icon" type="image/png" href="images/SIMPLE_LOGO.png">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link href="shared-styles.css" rel="stylesheet">
     <style>
@@ -52,12 +52,19 @@
     <div class="container">
         <div class="header">
             <div class="logo">
-                <img src="LOGO.png" alt="Logo">
+                <img src="images/LOGO.png" alt="Logo">
             </div>
-            <div class="contact-icon">
-                <a href="contacts.html">
-                    <img src="contact-icon.png" alt="Contact Directory">
-                </a>
+            <div class="header-icons">
+                <div class="training-icon">
+                    <a href="training.html">
+                        <img src="images/training-icon.png" alt="Training Materials">
+                    </a>
+                </div>
+                <div class="contact-icon">
+                    <a href="contacts.html">
+                        <img src="images/contact-icon.png" alt="Contact Directory">
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -114,14 +121,13 @@
                 <label for="model">Model</label>
                 <input type="text" id="model" name="model" placeholder="Enter model">
             </div>
-
             <!-- Training Form Fields -->
             <div id="training-fields" class="form-group" style="display: none;">
                 <label for="training-description">Description <span class="required-asterisk">*</span></label>
                 <textarea id="training-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
 
                 <label for="expected-date">Expected Date <span class="required-asterisk">*</span></label>
-                <div class="field-note">No minimum than 15 days after requested date</div>
+                <div class="field-note">Minimum 15 days after requested date</div>
                 <input type="date" id="expected-date" name="expectedDate">
 
                 <label for="trainees-number">Number of Trainees <span class="required-asterisk">*</span></label>
@@ -173,14 +179,15 @@
 
             <button type="submit" id="submit-btn" style="display: none;">SUBMIT</button>
         </form>
-        <!-- Add footer here -->
+        
+        <!-- Footer with Left-Aligned Text and Right-Aligned Logo -->
         <div class="footer">
             <div class="footer-text">
                 <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
                 <div class="footer-creator">Created by Andres Provero</div>
             </div>
             <div class="footer-logo">
-                <img src="COE_LOGO.png" alt="CoE LATAM Logo">
+                <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
             </div>
         </div>
     </div>
@@ -544,6 +551,5 @@
             }
         });
     </script>
-
 </body>
 </html>

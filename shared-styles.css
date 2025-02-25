@@ -43,12 +43,19 @@
     height: auto;
 }
 
-.contact-icon {
+/* Header icons styling */
+.header-icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.contact-icon, .training-icon {
     display: flex;
     align-items: center;
 }
 
-.contact-icon img {
+.contact-icon img, .training-icon img {
     width: 30px;
     height: 30px;
     cursor: pointer;
@@ -56,6 +63,11 @@
     padding: 3px;
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.contact-icon img:hover, .training-icon img:hover {
+    transform: scale(1.1);
 }
 
 /* Typography
@@ -608,4 +620,19 @@ button:disabled {
     .footer-creator {
         font-size: 12px;
     }
+}
+
+/* Back link styles */
+.back-link {
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 20px;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
 }
