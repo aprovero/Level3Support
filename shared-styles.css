@@ -550,7 +550,7 @@ button:disabled {
     border: 1px solid #b3e5fc;
 }
 
-/* Footer Styles */
+/* Footer Styles with Logo */
 .footer {
     text-align: center;
     padding: 20px 0;
@@ -559,6 +559,15 @@ button:disabled {
     color: #666;
     font-size: 14px;
     font-family: Arial, sans-serif;
+}
+
+.footer-logo {
+    margin-bottom: 15px;
+}
+
+.footer-logo img {
+    height: 50px;
+    width: auto;
 }
 
 .footer-copyright {
@@ -577,8 +586,12 @@ button:disabled {
         padding: 15px 0;
     }
     
+    .footer-logo img {
+        height: 40px;
+    }
+    
     .footer-copyright,
     .footer-creator {
-        font-size: 10px;
+        font-size: 12px;
     }
 }
