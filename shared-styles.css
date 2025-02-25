@@ -562,11 +562,13 @@ button:disabled {
 }
 
 .footer-logo {
-    margin-bottom: 15px;
+    margin-bottom: 10px; /* Reduced spacing between logo and text */
+    display: flex;
+    justify-content: center; /* Ensures horizontal centering */
 }
 
 .footer-logo img {
-    height: 50px;
+    height: 45px; /* Slightly smaller logo */
     width: auto;
 }
 
@@ -587,7 +589,7 @@ button:disabled {
     }
     
     .footer-logo img {
-        height: 40px;
+        height: 35px;
     }
     
     .footer-copyright,
