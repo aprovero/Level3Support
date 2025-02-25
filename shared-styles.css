@@ -550,42 +550,54 @@ button:disabled {
     border: 1px solid #b3e5fc;
 }
 
-/* Footer Styles with Logo */
+/* Footer Styles with Left-Aligned Text and Right-Aligned Logo */
 .footer {
-    text-align: center;
-    padding: 20px 0;
+    padding: 20px 30px;
     margin-top: 40px;
     border-top: 1px solid #e9e9e9;
-    color: #666;
+    color: #999; /* Lighter gray text */
     font-size: 14px;
     font-family: Arial, sans-serif;
-}
-
-.footer-logo {
-    margin-bottom: 10px; /* Reduced spacing between logo and text */
     display: flex;
-    justify-content: center; /* Ensures horizontal centering */
+    align-items: center;
+    justify-content: space-between; /* Spreads items to edges */
 }
 
-.footer-logo img {
-    height: 45px; /* Slightly smaller logo */
-    width: auto;
+.footer-text {
+    text-align: left;
 }
 
 .footer-copyright {
-    color: #555;
+    color: #999; /* Lighter gray text */
     margin-bottom: 5px;
 }
 
 .footer-creator {
-    color: #666;
+    color: #999; /* Lighter gray text */
     font-size: 13px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+}
+
+.footer-logo img {
+    height: 40px;
+    width: auto;
 }
 
 @media (max-width: 768px) {
     .footer {
         margin-top: 25px;
-        padding: 15px 0;
+        padding: 15px;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-text {
+        text-align: center;
+        margin-bottom: 10px;
     }
     
     .footer-logo img {
