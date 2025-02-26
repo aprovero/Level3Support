@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoE Level 3 - Training</title>
+    <title>CoE Level 3 - PV Training</title>
     <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
     <!-- External CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
@@ -131,6 +131,111 @@
             border: 1px solid #0062cc;
         }
 
+        /* Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #555;
+            cursor: pointer;
+        }
+        
+        .close-modal:hover {
+            color: #000;
+        }
+        
+        .detail-header {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .detail-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .detail-category {
+            font-size: 16px;
+            color: #007bff;
+        }
+        
+        .detail-content {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .detail-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-topic {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #444;
+        }
+        
+        .detail-requirements {
+            margin-bottom: 10px;
+            color: #666;
+        }
+        
+        .detail-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 14px;
+        }
+        
+        .detail-level, .detail-course {
+            background-color: #f0f7ff;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        
+        .detail-level {
+            color: #007bff;
+        }
+        
+        .detail-course {
+            color: #28a745;
+        }
+
         /* Responsive design for filters */
         @media (max-width: 768px) {
             .filter-row {
@@ -140,6 +245,11 @@
             
             .filter-item {
                 text-align: center;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20px auto;
             }
         }
     </style>
@@ -159,30 +269,22 @@
             </div>
         </div>
         <a href="index.html" class="back-link">← Back to the Request Form</a>
-        <h1>Training Materials</h1>
-        <p>Browse our comprehensive training resources for PV and BESS systems. Filter by category, knowledge level, or product type to find the most relevant content for your needs.</p>
-        
+        <h1>PV Training Materials</h1>
+        <p>Browse our comprehensive training resources for PV systems. Filter by category, knowledge level, or subject to find the most relevant content for your needs.</p>
+
         <!-- Filter Section -->
         <div class="filter-controls">
             <div class="filter-title">Filter by:</div>
             <div class="filter-section">
-                <div class="filter-label">System Type:</div>
-                <div class="filter-row">
-                    <div class="filter-item active" data-filter="system" data-value="all">All Systems</div>
-                    <div class="filter-item" data-filter="system" data-value="pv">PV Systems</div>
-                    <div class="filter-item" data-filter="system" data-value="bess">BESS Systems</div>
-                </div>
-            </div>
-            <div class="filter-section">
                 <div class="filter-label">Category:</div>
                 <div class="filter-row">
                     <div class="filter-item active" data-filter="category" data-value="all">All Categories</div>
-                    <div class="filter-item" data-filter="category" data-value="safety">Safety</div>
-                    <div class="filter-item" data-filter="category" data-value="product">Product Knowledge</div>
+                    <div class="filter-item" data-filter="category" data-value="safe-work-practices">Safe Work Practices</div>
+                    <div class="filter-item" data-filter="category" data-value="product-knowledge">Product Knowledge</div>
                     <div class="filter-item" data-filter="category" data-value="installation">Installation</div>
                     <div class="filter-item" data-filter="category" data-value="commissioning">Commissioning</div>
                     <div class="filter-item" data-filter="category" data-value="maintenance">Maintenance</div>
-                    <div class="filter-item" data-filter="category" data-value="tools">Tools & Instruments</div>
+                    <div class="filter-item" data-filter="category" data-value="instruments-and-tools">Tools & Instruments</div>
                 </div>
             </div>
             <div class="filter-section">
@@ -192,224 +294,125 @@
                     <div class="filter-item" data-filter="level" data-value="l1">Level 1</div>
                     <div class="filter-item" data-filter="level" data-value="l2">Level 2</div>
                     <div class="filter-item" data-filter="level" data-value="l3">Level 3</div>
+                    <div class="filter-item" data-filter="level" data-value="l4">Level 4</div>
+                    <div class="filter-item" data-filter="level" data-value="l5">Level 5</div>
                 </div>
             </div>
         </div>
+
         <!-- Training Materials Grid -->
         <div class="training-grid">
-            <!-- PV Safety Card -->
-            <div class="training-card" data-system="pv" data-category="safety" data-level="l1 l2">
+            <!-- Safety Principles Card -->
+            <div class="training-card" data-system="pv" data-category="safe-work-practices" data-level="l1">
                 <div class="card-header">
-                    <div class="card-title">PV System Safety</div>
+                    <div class="card-title">Safety Principles</div>
                     <div class="card-category">Safe Work Practices</div>
                 </div>
                 <div class="card-content">
                     <ul class="topic-list">
-                        <li class="topic-item">Safety Principles</li>
-                        <li class="topic-item">Personal Protective Equipment</li>
-                        <li class="topic-item">De-energization Procedures</li>
-                        <li class="topic-item">Voltage Measurement Safety</li>
-                        <li class="topic-item">Emergency Response</li>
+                        <li class="topic-item">Safety operating principles</li>
                     </ul>
-                    <a href="#" class="view-button">View Materials</a>
+                    <a href="#" class="view-button" data-details='[{"topic":"Safety operating principles","detailRequirements":"Complete \"Product Safety Operation Training\" course on Sunshine E-learning platform, including learning and assessment.","knowledgeLevel":"L1","courseName":"Using Tools"}]'>View Details</a>
                 </div>
             </div>
-            
-            <!-- PV Product Knowledge Card -->
-            <div class="training-card" data-system="pv" data-category="product" data-level="l1 l2 l3">
+
+            <!-- Dress Safely Card -->
+            <div class="training-card" data-system="pv" data-category="safe-work-practices" data-level="l1">
                 <div class="card-header">
-                    <div class="card-title">PV Product Knowledge</div>
-                    <div class="card-category">Product Specifications</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">System Specifications</li>
-                        <li class="topic-item">Component Architecture</li>
-                        <li class="topic-item">Protection Systems</li>
-                        <li class="topic-item">Performance Analysis</li>
-                        <li class="topic-item">Product Structure</li>
-                    </ul>
-                    <a href="#" class="view-button">View Materials</a>
-                </div>
-            </div>
-            
-            <!-- PV Installation Card -->
-            <div class="training-card" data-system="pv" data-category="installation" data-level="l2 l3">
-                <div class="card-header">
-                    <div class="card-title">PV Installation</div>
-                    <div class="card-category">Installation Procedures</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">Installation Requirements</li>
-                        <li class="topic-item">Unpacking and Storage</li>
-                        <li class="topic-item">Transportation and Hoisting</li>
-                        <li class="topic-item">Mechanical Installation</li>
-                        <li class="topic-item">Electrical Connections</li>
-                    </ul>
-                    <a href="#" class="view-button">View Materials</a>
-                </div>
-            </div>
-            
-            <!-- PV Commissioning Card -->
-            <div class="training-card" data-system="pv" data-category="commissioning" data-level="l2 l3">
-                <div class="card-header">
-                    <div class="card-title">PV Commissioning</div>
-                    <div class="card-category">System Verification</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">Pre-Energization Commissioning</li>
-                        <li class="topic-item">Post-Energization Commissioning</li>
-                        <li class="topic-item">Firmware/Software Updates</li>
-                        <li class="topic-item">System Testing</li>
-                        <li class="topic-item">Documentation</li>
-                    </ul>
-                    <a href="#" class="view-button">View Materials</a>
-                </div>
-            </div>
-            
-            <!-- PV Maintenance Card -->
-            <div class="training-card" data-system="pv" data-category="maintenance" data-level="l2 l3">
-                <div class="card-header">
-                    <div class="card-title">PV Maintenance</div>
-                    <div class="card-category">System Upkeep</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">Routine Maintenance</li>
-                        <li class="topic-item">Component Replacement</li>
-                        <li class="topic-item">Troubleshooting</li>
-                        <li class="topic-item">Performance Monitoring</li>
-                        <li class="topic-item">Preventive Maintenance</li>
-                    </ul>
-                    <a href="#" class="view-button">View Materials</a>
-                </div>
-            </div>
-            
-            <!-- PV Tools Card -->
-            <div class="training-card" data-system="pv" data-category="tools" data-level="l1 l2">
-                <div class="card-header">
-                    <div class="card-title">PV Tools & Instruments</div>
-                    <div class="card-category">Measurement & Diagnostics</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">Multimeter Usage</li>
-                        <li class="topic-item">Megger Testing</li>
-                        <li class="topic-item">Oscilloscope Operation</li>
-                        <li class="topic-item">Power Quality Analysis</li>
-                        <li class="topic-item">Thermal Imaging</li>
-                    </ul>
-                    <a href="#" class="view-button">View Materials</a>
-                </div>
-            </div>
-            
-            <!-- BESS Safety Card -->
-            <div class="training-card" data-system="bess" data-category="safety" data-level="l1 l2">
-                <div class="card-header">
-                    <div class="card-title">BESS Safety Operation</div>
+                    <div class="card-title">Dress Safely</div>
                     <div class="card-category">Safe Work Practices</div>
                 </div>
                 <div class="card-content">
                     <ul class="topic-list">
-                        <li class="topic-item">Safety Dressing</li>
-                        <li class="topic-item">Safety Power Off</li>
-                        <li class="topic-item">Safety Electricity Checking</li>
-                        <li class="topic-item">Chemical Hazard Awareness</li>
-                        <li class="topic-item">Emergency Response</li>
+                        <li class="topic-item">Personal protective equipment (PPE)</li>
+                        <li class="topic-item">Hard hat</li>
+                        <li class="topic-item">Safety glasses/goggles</li>
+                        <li class="topic-item">Safety vest/belt</li>
+                        <li class="topic-item">Insulating gloves</li>
                     </ul>
-                    <a href="#" class="view-button">View Materials</a>
+                    <a href="#" class="view-button" data-details='[{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear hard hat.","knowledgeLevel":"L1","courseName":"Using Tools"},{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear safety glasses/safety goggles.","knowledgeLevel":"L1","courseName":"Using Tools"},{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear high visibility safety vest/belt.","knowledgeLevel":"L1","courseName":"Using Tools"},{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear insulating gloves.","knowledgeLevel":"L1","courseName":"Using Tools"},{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear Arc/FR safety apparel.","knowledgeLevel":"L1","courseName":"Using Tools"},{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear safety shoes (insulating and toe-protective)","knowledgeLevel":"L1","courseName":"Using Tools"}]'>View Details</a>
                 </div>
             </div>
-            
-            <!-- BESS Product Knowledge Card -->
-            <div class="training-card" data-system="bess" data-category="product" data-level="l1 l2 l3">
+            <!-- Safely De-energize Inverter Card -->
+            <div class="training-card" data-system="pv" data-category="safe-work-practices" data-level="l1">
                 <div class="card-header">
-                    <div class="card-title">BESS Product Knowledge</div>
-                    <div class="card-category">System Architecture</div>
+                    <div class="card-title">Safely De-energize Inverter</div>
+                    <div class="card-category">Safe Work Practices</div>
                 </div>
                 <div class="card-content">
                     <ul class="topic-list">
-                        <li class="topic-item">Technical Parameters</li>
-                        <li class="topic-item">Component Composition</li>
-                        <li class="topic-item">Product Common Functions</li>
-                        <li class="topic-item">Temperature Control Systems</li>
-                        <li class="topic-item">Key Components</li>
+                        <li class="topic-item">DC switch/breaker operation</li>
+                        <li class="topic-item">Maintenance switches</li>
+                        <li class="topic-item">AC switch/breaker operation</li>
+                        <li class="topic-item">Discharge duration</li>
+                        <li class="topic-item">Power-off sequence</li>
                     </ul>
-                    <a href="#" class="view-button">View Materials</a>
+                    <a href="#" class="view-button" data-details='[{"topic":"Safe de-energization (power off) procedures","detailRequirements":"Understand function and operation of DC switch/breaker.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe de-energization (power off) procedures","detailRequirements":"Understand function and operation of maintenance switches (power supply).","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe de-energization (power off) procedures","detailRequirements":"Understand function and operation of AC switch/breaker.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe de-energization (power off) procedures","detailRequirements":"Understand inverter discharge duration of residual voltage.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe de-energization (power off) procedures","detailRequirements":"Understand power-off sequence and perform power-off operations correctly.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"}]'>View Details</a>
                 </div>
             </div>
-            
-            <!-- BESS Installation Card -->
-            <div class="training-card" data-system="bess" data-category="installation" data-level="l2 l3">
+            <!-- Safely Measure Inverter Voltage Card -->
+            <div class="training-card" data-system="pv" data-category="safe-work-practices" data-level="l1">
                 <div class="card-header">
-                    <div class="card-title">BESS Installation</div>
-                    <div class="card-category">Setup Procedures</div>
+                    <div class="card-title">Safely Measure Inverter Voltage</div>
+                    <div class="card-category">Safe Work Practices</div>
                 </div>
                 <div class="card-content">
                     <ul class="topic-list">
-                        <li class="topic-item">Site Selection</li>
-                        <li class="topic-item">Unpacking and Storage</li>
-                        <li class="topic-item">Handling Process</li>
-                        <li class="topic-item">Install Inverter, Battery Box</li>
-                        <li class="topic-item">Electrical Connection</li>
+                        <li class="topic-item">AC-side voltage verification</li>
+                        <li class="topic-item">DC input-side voltage verification</li>
+                        <li class="topic-item">DC busbar voltage verification</li>
+                        <li class="topic-item">External power supply metering</li>
+                        <li class="topic-item">Voltage verification sequence</li>
                     </ul>
-                    <a href="#" class="view-button">View Materials</a>
+                    <a href="#" class="view-button" data-details='[{"topic":"Safe voltage measurement procedures","detailRequirements":"Understand AC-side voltage verification location and method.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe voltage measurement procedures","detailRequirements":"Understand DC input-side voltage verification location and method.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe voltage measurement procedures","detailRequirements":"Understand DC busbar voltage verification location and method.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe voltage measurement procedures","detailRequirements":"Understand external power supply metering locations and metering methods","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe voltage measurement procedures","detailRequirements":"Understand voltage verification sequence and perform voltage verification correctly.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"}]'>View Details</a>
                 </div>
             </div>
-            
-            <!-- BESS Commissioning Card -->
-            <div class="training-card" data-system="bess" data-category="commissioning" data-level="l2 l3">
+            <!-- Product Specifications Card -->
+            <div class="training-card" data-system="pv" data-category="product-knowledge" data-level="l1 l2 l3 l4 l5">
                 <div class="card-header">
-                    <div class="card-title">BESS Commissioning</div>
-                    <div class="card-category">System Activation</div>
+                    <div class="card-title">Product Specifications</div>
+                    <div class="card-category">Product Knowledge</div>
                 </div>
                 <div class="card-content">
                     <ul class="topic-list">
-                        <li class="topic-item">Cold Commissioning</li>
-                        <li class="topic-item">Hot Commissioning</li>
-                        <li class="topic-item">Software Configuration</li>
-                        <li class="topic-item">Black Start</li>
-                        <li class="topic-item">System Verification</li>
+                        <li class="topic-item">Technical parameters</li>
+                        <li class="topic-item">Efficiency parameters</li>
+                        <li class="topic-item">Operating environment</li>
+                        <li class="topic-item">Protection rating</li>
+                        <li class="topic-item">+15 more topics</li>
                     </ul>
-                    <a href="#" class="view-button">View Materials</a>
+                    <a href="#" class="view-button" data-details='[{"topic":"Inverter technical parameters","detailRequirements":"Understand DC input voltage range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter technical parameters","detailRequirements":"Understand AC output voltage range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter technical parameters","detailRequirements":"Understand inverter capacity.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter technical parameters","detailRequirements":"Understand AC frequency range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter efficiency parameters","detailRequirements":"Understand the product\'s maximum efficiency.","knowledgeLevel":"L2","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter efficiency parameters","detailRequirements":"Understand the product\'s efficiency in Europe.","knowledgeLevel":"L2","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter operating environment requirements","detailRequirements":"Understand the product\'s operating temperature range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter operating environment requirements","detailRequirements":"Understand the product\'s operating relative humidity range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter operating environment requirements","detailRequirements":"Understand product\'s operating altitude range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter protection ratings","detailRequirements":"Understand product\'s protection rating (IP).","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter protection ratings","detailRequirements":"Understand product\'s environmental type rating (NEMA).","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter certification compliance","detailRequirements":"Understand the product\'s safety compliance.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter certification compliance","detailRequirements":"Understand the product\'s grid code compliance.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter certification compliance","detailRequirements":"Understand the product\'s EMC compliance.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"}]'>View Details</a>
                 </div>
             </div>
-            
-            <!-- BESS Maintenance Card -->
-            <div class="training-card" data-system="bess" data-category="maintenance" data-level="l2 l3">
+            <!-- Product Structure Card -->
+            <div class="training-card" data-system="pv" data-category="product-knowledge" data-level="l1 l2 l3 l4 l5">
                 <div class="card-header">
-                    <div class="card-title">BESS Maintenance</div>
-                    <div class="card-category">System Upkeep</div>
+                    <div class="card-title">Product Structure</div>
+                    <div class="card-category">Product Knowledge</div>
                 </div>
                 <div class="card-content">
                     <ul class="topic-list">
-                        <li class="topic-item">Daily Maintenance</li>
-                        <li class="topic-item">DCDC Replacement</li>
-                        <li class="topic-item">Power Replenishment</li>
-                        <li class="topic-item">Fluid Injection</li>
-                        <li class="topic-item">Troubleshooting</li>
+                        <li class="topic-item">Inverter cabinet structure</li>
+                        <li class="topic-item">Power module</li>
+                        <li class="topic-item">Heat dissipation design</li>
+                        <li class="topic-item">Communication interfaces</li>
+                        <li class="topic-item">+12 more topics</li>
                     </ul>
-                    <a href="#" class="view-button">View Materials</a>
+                    <a href="#" class="view-button" data-details='[{"topic":"Inverter cabinet structure","detailRequirements":"Understand overall appearance/structure of product.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter cabinet structure","detailRequirements":"Understand inverter transportation/lifting structure.","knowledgeLevel":"L2","courseName":"2.1 SG Central Inverter Installation"},{"topic":"Inverter cabinet structure","detailRequirements":"Understand structural design of internal panels.","knowledgeLevel":"L2","courseName":"2.1 SG Central Inverter Installation"},{"topic":"Inverter cabinet structure","detailRequirements":"Understand structural design of doors and their locks.","knowledgeLevel":"L2","courseName":"2.1 SG Central Inverter Installation"},{"topic":"Inverter power module","detailRequirements":"Understand AC side wiring terminal locations.","knowledgeLevel":"L3","courseName":"TBD"},{"topic":"Inverter power module","detailRequirements":"Understand DC side wiring terminal locations.","knowledgeLevel":"L3","courseName":"TBD"},{"topic":"Inverter heat dissipation design","detailRequirements":"Understand internal fan installation locations.","knowledgeLevel":"L3","courseName":"TBD"},{"topic":"Inverter heat dissipation design","detailRequirements":"Understand thermal design of inverter.","knowledgeLevel":"L3","courseName":"TBD"},{"topic":"Inverter communication interfaces","detailRequirements":"Understand locations of communication interface terminals.","knowledgeLevel":"L3","courseName":"TBD"},{"topic":"Inverter communication interfaces","detailRequirements":"Understand the system\'s network communication topology.","knowledgeLevel":"L3","courseName":"TBD"}]'>View Details</a>
                 </div>
             </div>
-            
-            <!-- BESS Tools Card -->
-            <div class="training-card" data-system="bess" data-category="tools" data-level="l1 l2">
-                <div class="card-header">
-                    <div class="card-title">BESS Tools & Instruments</div>
-                    <div class="card-category">Testing Equipment</div>
+        </div>
+        
+        <!-- Detail Modal -->
+        <div id="detail-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div class="detail-header">
+                    <div class="detail-title">Topic Details</div>
+                    <div class="detail-category"></div>
                 </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">Multimeter</li>
-                        <li class="topic-item">Oscilloscope</li>
-                        <li class="topic-item">Power Quality Analyzer</li>
-                        <li class="topic-item">Thermal Imager</li>
-                        <li class="topic-item">Liquid Cooling Maintenance Tool</li>
-                    </ul>
-                    <a href="#" class="view-button">View Materials</a>
+                <div class="detail-content">
+                    <!-- Content will be dynamically inserted here -->
                 </div>
             </div>
         </div>
@@ -434,7 +437,6 @@
             
             // Track active filters
             const activeFilters = {
-                system: 'all',
                 category: 'all',
                 level: 'all'
             };
@@ -462,23 +464,78 @@
             // Filter application function
             function applyFilters() {
                 trainingCards.forEach(card => {
-                    const cardSystem = card.getAttribute('data-system');
                     const cardCategory = card.getAttribute('data-category');
                     const cardLevel = card.getAttribute('data-level');
                     
                     // Check if card passes all filters
-                    const passesSystemFilter = activeFilters.system === 'all' || cardSystem === activeFilters.system;
                     const passesCategoryFilter = activeFilters.category === 'all' || cardCategory === activeFilters.category;
                     const passesLevelFilter = activeFilters.level === 'all' || cardLevel.includes(activeFilters.level);
                     
                     // Show/hide based on combined filter result
-                    if (passesSystemFilter && passesCategoryFilter && passesLevelFilter) {
+                    if (passesCategoryFilter && passesLevelFilter) {
                         card.style.display = '';
                     } else {
                         card.style.display = 'none';
                     }
                 });
             }
+            
+            // Detail modal functionality
+            const modal = document.getElementById('detail-modal');
+            const closeModal = document.querySelector('.close-modal');
+            const viewButtons = document.querySelectorAll('.view-button');
+            
+            // Show modal when View Details is clicked
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const detailsData = JSON.parse(decodeURIComponent(this.getAttribute('data-details')));
+                    const cardTitle = this.closest('.training-card').querySelector('.card-title').textContent;
+                    const cardCategory = this.closest('.training-card').querySelector('.card-category').textContent;
+                    
+                    // Set modal header
+                    document.querySelector('.detail-title').textContent = cardTitle;
+                    document.querySelector('.detail-category').textContent = cardCategory;
+                    
+                    // Clear previous content
+                    const detailContent = document.querySelector('.detail-content');
+                    detailContent.innerHTML = '';
+                    
+                    // Add detail items
+                    detailsData.forEach(item => {
+                        const detailItem = document.createElement('div');
+                        detailItem.className = 'detail-item';
+                        
+                        const detailHTML = `
+                            <div class="detail-topic">${item.topic || 'N/A'}</div>
+                            <div class="detail-requirements">${item.detailRequirements || 'N/A'}</div>
+                            <div class="detail-meta">
+                                <div class="detail-level">Knowledge Level: ${item.knowledgeLevel || 'N/A'}</div>
+                                <div class="detail-course">Course: ${item.courseName || 'N/A'}</div>
+                            </div>
+                        `;
+                        
+                        detailItem.innerHTML = detailHTML;
+                        detailContent.appendChild(detailItem);
+                    });
+                    
+                    // Show modal
+                    modal.style.display = 'block';
+                });
+            });
+            
+            // Close modal when X is clicked
+            closeModal.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
