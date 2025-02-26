@@ -110,9 +110,9 @@
                 
                 <div class="mb-6">
                     <label for="trainingId" class="block mb-2">Training ID <span class="required">*</span></label>
-                    <div class="flex items-center">
-                        <input type="text" id="trainingId" name="trainingId" required class="w-full p-2 border border-gray-300 rounded-l" placeholder="Enter Training ID (e.g., TR-2025-001)">
-                        <button type="button" id="fetchTrainingBtn" class="bg-gray-800 text-white px-4 py-2 h-10 rounded-r hover:bg-gray-700 flex-shrink-0">Lookup</button>
+                    <div class="flex">
+                        <input type="text" id="trainingId" name="trainingId" required class="flex-grow p-2 border border-gray-300 rounded-l" placeholder="Enter Training ID (e.g., TR25020003)">
+                        <button type="button" id="fetchTrainingBtn" class="bg-gray-800 text-white px-4 py-2 rounded-r hover:bg-gray-700 w-auto">Lookup</button>
                     </div>
                     <p id="fetchStatus" class="text-sm mt-2 hidden"></p>
                 </div>
@@ -157,30 +157,30 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Knowledge and expertise</div>
-                    <div class="rating-options">
-                        <div class="rating-option">
+                    <div class="rating-options flex justify-between">
+                        <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="trainer-knowledge-1" name="trainerKnowledge" value="1" required>
-                            <label for="trainer-knowledge-1">Poor</label>
+                            <label for="trainer-knowledge-1" class="text-xs mt-1">Poor</label>
                         </div>
-                        <div class="rating-option">
+                        <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="trainer-knowledge-2" name="trainerKnowledge" value="2">
-                            <label for="trainer-knowledge-2">Fair</label>
+                            <label for="trainer-knowledge-2" class="text-xs mt-1">Fair</label>
                         </div>
-                        <div class="rating-option">
+                        <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="trainer-knowledge-3" name="trainerKnowledge" value="3">
-                            <label for="trainer-knowledge-3">Good</label>
+                            <label for="trainer-knowledge-3" class="text-xs mt-1">Good</label>
                         </div>
-                        <div class="rating-option">
+                        <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="trainer-knowledge-4" name="trainerKnowledge" value="4">
-                            <label for="trainer-knowledge-4">Very Good</label>
+                            <label for="trainer-knowledge-4" class="text-xs mt-1">Very Good</label>
                         </div>
-                        <div class="rating-option">
+                        <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="trainer-knowledge-5" name="trainerKnowledge" value="5">
-                            <label for="trainer-knowledge-5">Excellent</label>
+                            <label for="trainer-knowledge-5" class="text-xs mt-1">Excellent</label>
                         </div>
                     </div>
                 </div>
-                
+                                
                 <div class="rating-group">
                     <div class="rating-title">Clarity of communication</div>
                     <div class="rating-options">
