@@ -554,23 +554,64 @@
                     const detailContent = document.querySelector('.detail-content');
                     detailContent.innerHTML = '';
                     
-                    // Add detail items for each topic
+                    // Group topics by knowledge level
+                    const topicsByLevel = {};
+                    
+                    // Sort levels to ensure consistent order (L1, L2, L3, etc.)
+                    const sortedLevels = [...item.levels].sort();
+                    
+                    // Initialize groups for each level
+                    sortedLevels.forEach(level => {
+                        topicsByLevel[level] = [];
+                    });
+                    
+                    // Group topics by their level
                     item.topics.forEach(topic => {
-                        const detailItem = document.createElement('div');
-                        detailItem.className = 'detail-item';
+                        if (topic.level && topicsByLevel[topic.level]) {
+                            topicsByLevel[topic.level].push(topic);
+                        } else {
+                            // If level doesn't match our groups, create "Other" category
+                            if (!topicsByLevel['Other']) {
+                                topicsByLevel['Other'] = [];
+                            }
+                            topicsByLevel['Other'].push(topic);
+                        }
+                    });
+                    
+                    // Create a section for each level
+                    Object.keys(topicsByLevel).forEach(level => {
+                        if (topicsByLevel[level].length === 0) return;
                         
-                        const detailHTML = `
-                            <div class="detail-topic">${topic.title || 'N/A'}</div>
-                            <div class="detail-requirements">${topic.details || 'N/A'}</div>
-                            <div class="detail-meta">
-                                <div class="detail-level">Knowledge Level: ${topic.level || 'N/A'}</div>
-                                ${topic.courseName ? `<div class="detail-course">Course: ${topic.courseName}</div>` : ''}
-                                ${topic.courseModule ? `<div class="detail-module">Module: ${topic.courseModule}</div>` : ''}
-                            </div>
-                        `;
+                        // Create level section
+                        const levelSection = document.createElement('div');
+                        levelSection.className = 'detail-level-section';
                         
-                        detailItem.innerHTML = detailHTML;
-                        detailContent.appendChild(detailItem);
+                        // Level header
+                        const levelHeader = document.createElement('h3');
+                        levelHeader.className = 'detail-level-header';
+                        levelHeader.textContent = `Knowledge Level: ${level}`;
+                        levelSection.appendChild(levelHeader);
+                        
+                        // Add topics for this level
+                        topicsByLevel[level].forEach(topic => {
+                            const detailItem = document.createElement('div');
+                            detailItem.className = 'detail-item';
+                            
+                            const detailHTML = `
+                                <div class="detail-topic">${topic.title || 'N/A'}</div>
+                                <div class="detail-requirements">${topic.details || 'N/A'}</div>
+                                <div class="detail-meta">
+                                    ${topic.courseName ? `<div class="detail-course">Course: ${topic.courseName}</div>` : ''}
+                                    ${topic.courseModule ? `<div class="detail-module">Module: ${topic.courseModule}</div>` : ''}
+                                </div>
+                            `;
+                            
+                            detailItem.innerHTML = detailHTML;
+                            levelSection.appendChild(detailItem);
+                        });
+                        
+                        // Add the level section to detail content
+                        detailContent.appendChild(levelSection);
                     });
                     
                     // Show modal
