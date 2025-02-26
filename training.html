@@ -3,255 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoE Level 3 - PV Training</title>
+    <title>CoE Level 3 - PV & BESS Training</title>
     <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
     <!-- External CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <!-- Your shared styles -->
     <link href="shared-styles.css" rel="stylesheet">
+    <!-- Include your CSS styles here -->
     <style>
-        .training-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px 0;
-        }
-        
-        .training-card {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .training-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .card-header {
-            background-color: #f0f7ff;
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .card-title {
-            font-weight: bold;
-            color: #333333;
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-        
-        .card-category {
-            color: #007bff;
-            font-size: 14px;
-            display: inline-block;
-            padding: 3px 8px;
-            background-color: #e6f2ff;
-            border-radius: 4px;
-        }
-        
-        .card-content {
-            padding: 15px;
-        }
-        
-        .topic-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .topic-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .topic-item:last-child {
-            border-bottom: none;
-        }
-        
-        .view-button {
-            display: block;
-            text-align: center;
-            background-color: #ff9500;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 5px;
-            margin-top: 15px;
-            font-weight: bold;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-        
-        .view-button:hover {
-            background-color: #b36b00;
-            text-decoration: none;
-            color: white;
-        }
-
-        /* Filter controls */
-        .filter-controls {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        
-        .filter-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .filter-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .filter-item {
-            background-color: #f0f7ff;
-            color: #333;
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-        
-        .filter-item:hover {
-            background-color: #e1f0ff;
-        }
-        
-        .filter-item.active {
-            background-color: #007bff;
-            color: white;
-            border: 1px solid #0062cc;
-        }
-
-        /* Detail Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        
-        .modal-content {
-            background-color: white;
-            margin: 50px auto;
-            padding: 20px;
-            width: 80%;
-            max-width: 800px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #555;
-            cursor: pointer;
-        }
-        
-        .close-modal:hover {
-            color: #000;
-        }
-        
-        .detail-header {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .detail-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        
-        .detail-category {
-            font-size: 16px;
-            color: #007bff;
-        }
-        
-        .detail-content {
-            max-height: 60vh;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-        
-        .detail-item {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .detail-item:last-child {
-            border-bottom: none;
-        }
-        
-        .detail-topic {
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 5px;
-            color: #444;
-        }
-        
-        .detail-requirements {
-            margin-bottom: 10px;
-            color: #666;
-        }
-        
-        .detail-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            font-size: 14px;
-        }
-        
-        .detail-level, .detail-course {
-            background-color: #f0f7ff;
-            padding: 3px 8px;
-            border-radius: 4px;
-        }
-        
-        .detail-level {
-            color: #007bff;
-        }
-        
-        .detail-course {
-            color: #28a745;
-        }
-
-        /* Responsive design for filters */
-        @media (max-width: 768px) {
-            .filter-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .filter-item {
-                text-align: center;
-            }
-            
-            .modal-content {
-                width: 95%;
-                margin: 20px auto;
-            }
-        }
+        /* Your CSS styles from training-page-part1 */
+        /* ... */
     </style>
 </head>
 <body>
@@ -269,22 +30,46 @@
             </div>
         </div>
         <a href="index.html" class="back-link">← Back to the Request Form</a>
-        <h1>PV Training Materials</h1>
-        <p>Browse our comprehensive training resources for PV systems. Filter by category, knowledge level, or subject to find the most relevant content for your needs.</p>
-
+        <h1>PV & BESS Training Materials</h1>
+        <p>Browse our comprehensive training resources for PV and BESS systems. Filter by category, knowledge level, or subject to find the most relevant content for your needs.</p>
+        
+        <!-- Resource Links -->
+        <div class="resource-links">
+            <a href="https://sungrowdobrasil.com/" target="_blank" class="resource-link">
+                <img src="images/brazil-flag.png" alt="Brazil Flag" class="link-icon">
+                <span>SUNGROW Academy Brazil (Portuguese)</span>
+            </a>
+            <a href="https://support.sungrowpower.com/home" target="_blank" class="resource-link">
+                <img src="images/resource-icon.png" alt="Resource Center" class="link-icon">
+                <span>SUNGROW Resource Center</span>
+            </a>
+        </div>
+        
+        <!-- Under Construction Banner -->
+        <div class="under-construction-banner">
+            <div class="construction-icon">🚧</div>
+            <div class="construction-message">
+                <h2>Page Under Construction</h2>
+                <p>We're currently updating our training materials database. Some content may be incomplete or subject to change.</p>
+            </div>
+        </div>
+        
         <!-- Filter Section -->
         <div class="filter-controls">
             <div class="filter-title">Filter by:</div>
             <div class="filter-section">
-                <div class="filter-label">Category:</div>
+                <div class="filter-label">System:</div>
                 <div class="filter-row">
+                    <div class="filter-item active" data-filter="system" data-value="all">All Systems</div>
+                    <div class="filter-item" data-filter="system" data-value="pv">PV Systems</div>
+                    <div class="filter-item" data-filter="system" data-value="bess">BESS Systems</div>
+                </div>
+            </div>
+            <div class="filter-section">
+                <div class="filter-label">Category:</div>
+                <div class="filter-row" id="category-filters">
+                    <!-- Categories will be dynamically populated -->
                     <div class="filter-item active" data-filter="category" data-value="all">All Categories</div>
-                    <div class="filter-item" data-filter="category" data-value="safe-work-practices">Safe Work Practices</div>
-                    <div class="filter-item" data-filter="category" data-value="product-knowledge">Product Knowledge</div>
-                    <div class="filter-item" data-filter="category" data-value="installation">Installation</div>
-                    <div class="filter-item" data-filter="category" data-value="commissioning">Commissioning</div>
-                    <div class="filter-item" data-filter="category" data-value="maintenance">Maintenance</div>
-                    <div class="filter-item" data-filter="category" data-value="instruments-and-tools">Tools & Instruments</div>
                 </div>
             </div>
             <div class="filter-section">
@@ -302,105 +87,7 @@
 
         <!-- Training Materials Grid -->
         <div class="training-grid">
-            <!-- Safety Principles Card -->
-            <div class="training-card" data-system="pv" data-category="safe-work-practices" data-level="l1">
-                <div class="card-header">
-                    <div class="card-title">Safety Principles</div>
-                    <div class="card-category">Safe Work Practices</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">Safety operating principles</li>
-                    </ul>
-                    <a href="#" class="view-button" data-details='[{"topic":"Safety operating principles","detailRequirements":"Complete \"Product Safety Operation Training\" course on Sunshine E-learning platform, including learning and assessment.","knowledgeLevel":"L1","courseName":"Using Tools"}]'>View Details</a>
-                </div>
-            </div>
-
-            <!-- Dress Safely Card -->
-            <div class="training-card" data-system="pv" data-category="safe-work-practices" data-level="l1">
-                <div class="card-header">
-                    <div class="card-title">Dress Safely</div>
-                    <div class="card-category">Safe Work Practices</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">Personal protective equipment (PPE)</li>
-                        <li class="topic-item">Hard hat</li>
-                        <li class="topic-item">Safety glasses/goggles</li>
-                        <li class="topic-item">Safety vest/belt</li>
-                        <li class="topic-item">Insulating gloves</li>
-                    </ul>
-                    <a href="#" class="view-button" data-details='[{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear hard hat.","knowledgeLevel":"L1","courseName":"Using Tools"},{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear safety glasses/safety goggles.","knowledgeLevel":"L1","courseName":"Using Tools"},{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear high visibility safety vest/belt.","knowledgeLevel":"L1","courseName":"Using Tools"},{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear insulating gloves.","knowledgeLevel":"L1","courseName":"Using Tools"},{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear Arc/FR safety apparel.","knowledgeLevel":"L1","courseName":"Using Tools"},{"topic":"Proper use of personal protective pquipment (PPE)","detailRequirements":"Correctly wear safety shoes (insulating and toe-protective)","knowledgeLevel":"L1","courseName":"Using Tools"}]'>View Details</a>
-                </div>
-            </div>
-            <!-- Safely De-energize Inverter Card -->
-            <div class="training-card" data-system="pv" data-category="safe-work-practices" data-level="l1">
-                <div class="card-header">
-                    <div class="card-title">Safely De-energize Inverter</div>
-                    <div class="card-category">Safe Work Practices</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">DC switch/breaker operation</li>
-                        <li class="topic-item">Maintenance switches</li>
-                        <li class="topic-item">AC switch/breaker operation</li>
-                        <li class="topic-item">Discharge duration</li>
-                        <li class="topic-item">Power-off sequence</li>
-                    </ul>
-                    <a href="#" class="view-button" data-details='[{"topic":"Safe de-energization (power off) procedures","detailRequirements":"Understand function and operation of DC switch/breaker.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe de-energization (power off) procedures","detailRequirements":"Understand function and operation of maintenance switches (power supply).","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe de-energization (power off) procedures","detailRequirements":"Understand function and operation of AC switch/breaker.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe de-energization (power off) procedures","detailRequirements":"Understand inverter discharge duration of residual voltage.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe de-energization (power off) procedures","detailRequirements":"Understand power-off sequence and perform power-off operations correctly.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"}]'>View Details</a>
-                </div>
-            </div>
-            <!-- Safely Measure Inverter Voltage Card -->
-            <div class="training-card" data-system="pv" data-category="safe-work-practices" data-level="l1">
-                <div class="card-header">
-                    <div class="card-title">Safely Measure Inverter Voltage</div>
-                    <div class="card-category">Safe Work Practices</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">AC-side voltage verification</li>
-                        <li class="topic-item">DC input-side voltage verification</li>
-                        <li class="topic-item">DC busbar voltage verification</li>
-                        <li class="topic-item">External power supply metering</li>
-                        <li class="topic-item">Voltage verification sequence</li>
-                    </ul>
-                    <a href="#" class="view-button" data-details='[{"topic":"Safe voltage measurement procedures","detailRequirements":"Understand AC-side voltage verification location and method.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe voltage measurement procedures","detailRequirements":"Understand DC input-side voltage verification location and method.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe voltage measurement procedures","detailRequirements":"Understand DC busbar voltage verification location and method.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe voltage measurement procedures","detailRequirements":"Understand external power supply metering locations and metering methods","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"},{"topic":"Safe voltage measurement procedures","detailRequirements":"Understand voltage verification sequence and perform voltage verification correctly.","knowledgeLevel":"L1","courseName":"1.2 Operating SG Central Inverters"}]'>View Details</a>
-                </div>
-            </div>
-            <!-- Product Specifications Card -->
-            <div class="training-card" data-system="pv" data-category="product-knowledge" data-level="l1 l2 l3 l4 l5">
-                <div class="card-header">
-                    <div class="card-title">Product Specifications</div>
-                    <div class="card-category">Product Knowledge</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">Technical parameters</li>
-                        <li class="topic-item">Efficiency parameters</li>
-                        <li class="topic-item">Operating environment</li>
-                        <li class="topic-item">Protection rating</li>
-                        <li class="topic-item">+15 more topics</li>
-                    </ul>
-                    <a href="#" class="view-button" data-details='[{"topic":"Inverter technical parameters","detailRequirements":"Understand DC input voltage range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter technical parameters","detailRequirements":"Understand AC output voltage range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter technical parameters","detailRequirements":"Understand inverter capacity.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter technical parameters","detailRequirements":"Understand AC frequency range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter efficiency parameters","detailRequirements":"Understand the product\'s maximum efficiency.","knowledgeLevel":"L2","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter efficiency parameters","detailRequirements":"Understand the product\'s efficiency in Europe.","knowledgeLevel":"L2","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter operating environment requirements","detailRequirements":"Understand the product\'s operating temperature range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter operating environment requirements","detailRequirements":"Understand the product\'s operating relative humidity range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter operating environment requirements","detailRequirements":"Understand product\'s operating altitude range.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter protection ratings","detailRequirements":"Understand product\'s protection rating (IP).","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter protection ratings","detailRequirements":"Understand product\'s environmental type rating (NEMA).","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter certification compliance","detailRequirements":"Understand the product\'s safety compliance.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter certification compliance","detailRequirements":"Understand the product\'s grid code compliance.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter certification compliance","detailRequirements":"Understand the product\'s EMC compliance.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"}]'>View Details</a>
-                </div>
-            </div>
-            <!-- Product Structure Card -->
-            <div class="training-card" data-system="pv" data-category="product-knowledge" data-level="l1 l2 l3 l4 l5">
-                <div class="card-header">
-                    <div class="card-title">Product Structure</div>
-                    <div class="card-category">Product Knowledge</div>
-                </div>
-                <div class="card-content">
-                    <ul class="topic-list">
-                        <li class="topic-item">Inverter cabinet structure</li>
-                        <li class="topic-item">Power module</li>
-                        <li class="topic-item">Heat dissipation design</li>
-                        <li class="topic-item">Communication interfaces</li>
-                        <li class="topic-item">+12 more topics</li>
-                    </ul>
-                    <a href="#" class="view-button" data-details='[{"topic":"Inverter cabinet structure","detailRequirements":"Understand overall appearance/structure of product.","knowledgeLevel":"L1","courseName":"1.1 Introduction to SG Central Inverters in North America"},{"topic":"Inverter cabinet structure","detailRequirements":"Understand inverter transportation/lifting structure.","knowledgeLevel":"L2","courseName":"2.1 SG Central Inverter Installation"},{"topic":"Inverter cabinet structure","detailRequirements":"Understand structural design of internal panels.","knowledgeLevel":"L2","courseName":"2.1 SG Central Inverter Installation"},{"topic":"Inverter cabinet structure","detailRequirements":"Understand structural design of doors and their locks.","knowledgeLevel":"L2","courseName":"2.1 SG Central Inverter Installation"},{"topic":"Inverter power module","detailRequirements":"Understand AC side wiring terminal locations.","knowledgeLevel":"L3","courseName":"TBD"},{"topic":"Inverter power module","detailRequirements":"Understand DC side wiring terminal locations.","knowledgeLevel":"L3","courseName":"TBD"},{"topic":"Inverter heat dissipation design","detailRequirements":"Understand internal fan installation locations.","knowledgeLevel":"L3","courseName":"TBD"},{"topic":"Inverter heat dissipation design","detailRequirements":"Understand thermal design of inverter.","knowledgeLevel":"L3","courseName":"TBD"},{"topic":"Inverter communication interfaces","detailRequirements":"Understand locations of communication interface terminals.","knowledgeLevel":"L3","courseName":"TBD"},{"topic":"Inverter communication interfaces","detailRequirements":"Understand the system\'s network communication topology.","knowledgeLevel":"L3","courseName":"TBD"}]'>View Details</a>
-                </div>
-            </div>
+            <!-- Cards will be dynamically inserted here -->
         </div>
         
         <!-- Detail Modal -->
@@ -417,7 +104,7 @@
             </div>
         </div>
         
-        <!-- Footer with Left-Aligned Text and Right-Aligned Logo -->
+        <!-- Footer -->
         <div class="footer">
             <div class="footer-text">
                 <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
@@ -429,14 +116,83 @@
         </div>
     </div>
 
+    <!-- Include the training data script -->
+    <script src="unified-training-data.js"></script>
+    
+    <!-- Main JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Dynamically populate categories from data
+            const categoryFilters = document.getElementById('category-filters');
+            const allCategories = new Set();
+            
+            // Collect all unique categories
+            Object.values(trainingData).forEach(item => {
+                allCategories.add(item.category);
+            });
+            
+            // Add category filters
+            allCategories.forEach(category => {
+                const slug = category.toLowerCase().replace(/\s+/g, '-');
+                const filterItem = document.createElement('div');
+                filterItem.className = 'filter-item';
+                filterItem.setAttribute('data-filter', 'category');
+                filterItem.setAttribute('data-value', slug);
+                filterItem.textContent = category;
+                categoryFilters.appendChild(filterItem);
+            });
+            
+            // Generate cards for each training item
+            const trainingGrid = document.querySelector('.training-grid');
+            
+            Object.keys(trainingData).forEach(key => {
+                const item = trainingData[key];
+                
+                // Create category slug for data-category attribute
+                const categorySlug = item.category.toLowerCase().replace(/\s+/g, '-');
+                
+                // Create level classes string (e.g., "l1 l2 l3")
+                const levelClasses = item.levels.map(level => level.toLowerCase()).join(' ');
+                
+                // Get unique topic titles (excluding duplicates)
+                const uniqueTopics = [];
+                const topicTitles = new Set();
+                
+                item.topics.forEach(topic => {
+                    if (!topicTitles.has(topic.title)) {
+                        topicTitles.add(topic.title);
+                        uniqueTopics.push(topic.title);
+                    }
+                });
+                
+                // Create the card HTML
+                const cardTemplate = `
+                    <div class="training-card" data-system="${item.system}" data-category="${categorySlug}" data-level="${levelClasses}" data-id="${item.id}">
+                        <div class="card-header">
+                            <div class="card-title">${item.subject}</div>
+                            <div class="card-category">${item.category}</div>
+                        </div>
+                        <div class="card-content">
+                            <ul class="topic-list">
+                                ${uniqueTopics.slice(0, 5).map(topic => `<li class="topic-item">${topic}</li>`).join('')}
+                                ${uniqueTopics.length > 5 ? `<li class="topic-item">+${uniqueTopics.length - 5} more topics</li>` : ''}
+                            </ul>
+                            <a href="#" class="view-button">View Details</a>
+                        </div>
+                    </div>
+                `;
+                
+                // Add the card to the grid
+                trainingGrid.insertAdjacentHTML('beforeend', cardTemplate);
+            });
+            
             // Initialize filter system
             const filterItems = document.querySelectorAll('.filter-item');
             const trainingCards = document.querySelectorAll('.training-card');
             
             // Track active filters
             const activeFilters = {
+                system: 'all',
                 category: 'all',
                 level: 'all'
             };
@@ -464,15 +220,17 @@
             // Filter application function
             function applyFilters() {
                 trainingCards.forEach(card => {
+                    const cardSystem = card.getAttribute('data-system');
                     const cardCategory = card.getAttribute('data-category');
                     const cardLevel = card.getAttribute('data-level');
                     
                     // Check if card passes all filters
+                    const passesSystemFilter = activeFilters.system === 'all' || cardSystem === activeFilters.system;
                     const passesCategoryFilter = activeFilters.category === 'all' || cardCategory === activeFilters.category;
                     const passesLevelFilter = activeFilters.level === 'all' || cardLevel.includes(activeFilters.level);
                     
                     // Show/hide based on combined filter result
-                    if (passesCategoryFilter && passesLevelFilter) {
+                    if (passesSystemFilter && passesCategoryFilter && passesLevelFilter) {
                         card.style.display = '';
                     } else {
                         card.style.display = 'none';
@@ -483,36 +241,38 @@
             // Detail modal functionality
             const modal = document.getElementById('detail-modal');
             const closeModal = document.querySelector('.close-modal');
-            const viewButtons = document.querySelectorAll('.view-button');
             
-            // Show modal when View Details is clicked
-            viewButtons.forEach(button => {
+            // Attach event listeners to View Details buttons
+            document.querySelectorAll('.view-button').forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    const detailsData = JSON.parse(decodeURIComponent(this.getAttribute('data-details')));
-                    const cardTitle = this.closest('.training-card').querySelector('.card-title').textContent;
-                    const cardCategory = this.closest('.training-card').querySelector('.card-category').textContent;
+                    const card = this.closest('.training-card');
+                    const dataId = card.getAttribute('data-id');
+                    const item = trainingData[dataId];
+                    
+                    if (!item) return;
                     
                     // Set modal header
-                    document.querySelector('.detail-title').textContent = cardTitle;
-                    document.querySelector('.detail-category').textContent = cardCategory;
+                    document.querySelector('.detail-title').textContent = item.subject;
+                    document.querySelector('.detail-category').textContent = item.category;
                     
                     // Clear previous content
                     const detailContent = document.querySelector('.detail-content');
                     detailContent.innerHTML = '';
                     
-                    // Add detail items
-                    detailsData.forEach(item => {
+                    // Add detail items for each topic
+                    item.topics.forEach(topic => {
                         const detailItem = document.createElement('div');
                         detailItem.className = 'detail-item';
                         
                         const detailHTML = `
-                            <div class="detail-topic">${item.topic || 'N/A'}</div>
-                            <div class="detail-requirements">${item.detailRequirements || 'N/A'}</div>
+                            <div class="detail-topic">${topic.title || 'N/A'}</div>
+                            <div class="detail-requirements">${topic.details || 'N/A'}</div>
                             <div class="detail-meta">
-                                <div class="detail-level">Knowledge Level: ${item.knowledgeLevel || 'N/A'}</div>
-                                <div class="detail-course">Course: ${item.courseName || 'N/A'}</div>
+                                <div class="detail-level">Knowledge Level: ${topic.level || 'N/A'}</div>
+                                ${topic.courseName ? `<div class="detail-course">Course: ${topic.courseName}</div>` : ''}
+                                ${topic.courseModule ? `<div class="detail-module">Module: ${topic.courseModule}</div>` : ''}
                             </div>
                         `;
                         

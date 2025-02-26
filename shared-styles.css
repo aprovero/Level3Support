@@ -636,3 +636,79 @@ button:disabled {
     color: #0056b3;
     text-decoration: underline;
 }
+
+/* Resource Links Styles */
+.resource-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.resource-link {
+    display: flex;
+    align-items: center;
+    background-color: #f0f7ff;
+    border: 1px solid #cce5ff;
+    border-radius: 8px;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #0066cc;
+    transition: all 0.2s ease;
+}
+
+.resource-link:hover {
+    background-color: #e6f0ff;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.link-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+/* Under Construction Banner */
+.under-construction-banner {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-left: 5px solid #ffc107;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.construction-icon {
+    font-size: 32px;
+    margin-right: 20px;
+}
+
+.construction-message h2 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    color: #856404;
+}
+
+.construction-message p {
+    margin: 0;
+    color: #856404;
+}
+
+@media (max-width: 768px) {
+    .resource-links {
+        flex-direction: column;
+    }
+    
+    .under-construction-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .construction-icon {
+        margin: 0 0 10px 0;
+    }
+}

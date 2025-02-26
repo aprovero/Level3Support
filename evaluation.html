@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoE Level 3 - Training Evaluation</title>
+    <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
+    <!-- External CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <!-- Your shared styles -->
+    <link href="shared-styles.css" rel="stylesheet">
+    <style>
+        /* Training evaluation specific styles */
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .form-section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+        
+        .rating-group {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .rating-title {
+            font-weight: 500;
+        }
+        
+        .rating-options {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .rating-option {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .rating-option input {
+            margin-right: 5px;
+        }
+        
+        .submit-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff9500;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .submit-button:hover {
+            background-color: #b36b00;
+        }
+        
+        .required {
+            color: #dc3545;
+        }
+        
+        @media (max-width: 768px) {
+            .rating-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="images/LOGO.png" alt="Logo">
+            </div>
+        </div>
+        
+        <h1>Training Evaluation Form</h1>
+        <p class="mb-6">Thank you for participating in our training session. Please take a moment to provide your feedback to help us improve future training experiences.</p>
+        
+        <form id="evaluationForm" class="form-container">
+            <!-- Hidden field to store Training ID reference -->
+            <input type="hidden" id="trainingRecordId" name="trainingRecordId">
+            
+            <!-- Training ID Entry -->
+            <div class="form-section">
+                <div class="form-section-title">Training Evaluation</div>
+                <p class="mb-4">Please enter the Training ID provided at the end of your session to begin the anonymous evaluation.</p>
+                
+                <div class="mb-6">
+                    <label for="trainingId" class="block mb-2">Training ID <span class="required">*</span></label>
+                    <div class="flex">
+                        <input type="text" id="trainingId" name="trainingId" required class="w-full p-2 border border-gray-300 rounded-l" placeholder="Enter Training ID (e.g., TR-2025-001)">
+                        <button type="button" id="fetchTrainingBtn" class="bg-gray-800 text-white px-4 py-2 rounded-r hover:bg-gray-700">Lookup</button>
+                    </div>
+                    <p id="fetchStatus" class="text-sm mt-2 hidden"></p>
+                </div>
+                
+                <!-- Training Information (Read-only, populated from Airtable) -->
+                <div id="trainingInfoSection" class="hidden">
+                    <div class="bg-gray-100 p-4 rounded mb-4">
+                        <h3 class="font-bold mb-2">Training Information:</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-600">Training Title:</p>
+                                <p id="displayTrainingTitle" class="font-medium">-</p>
+                                <input type="hidden" id="trainingTitle" name="trainingTitle">
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Training Date:</p>
+                                <p id="displayTrainingDate" class="font-medium">-</p>
+                                <input type="hidden" id="trainingDate" name="trainingDate">
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Trainer:</p>
+                                <p id="displayTrainer" class="font-medium">-</p>
+                                <input type="hidden" id="trainer" name="trainer">
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Training Type:</p>
+                                <select id="location" name="location" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                                    <option value="">-- Select Training Type --</option>
+                                    <option value="Online">Online</option>
+                                    <option value="In Person">In Person</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trainer Evaluation -->
+            <div class="form-section">
+                <div class="form-section-title">Trainer Evaluation</div>
+                <p class="mb-3">Please rate the following aspects of the trainer's performance:</p>
+                
+                <div class="rating-group">
+                    <div class="rating-title">Knowledge and expertise</div>
+                    <div class="rating-options">
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-knowledge-1" name="trainerKnowledge" value="1" required>
+                            <label for="trainer-knowledge-1">Poor</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-knowledge-2" name="trainerKnowledge" value="2">
+                            <label for="trainer-knowledge-2">Fair</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-knowledge-3" name="trainerKnowledge" value="3">
+                            <label for="trainer-knowledge-3">Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-knowledge-4" name="trainerKnowledge" value="4">
+                            <label for="trainer-knowledge-4">Very Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-knowledge-5" name="trainerKnowledge" value="5">
+                            <label for="trainer-knowledge-5">Excellent</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="rating-group">
+                    <div class="rating-title">Clarity of communication</div>
+                    <div class="rating-options">
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-clarity-1" name="trainerClarity" value="1" required>
+                            <label for="trainer-clarity-1">Poor</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-clarity-2" name="trainerClarity" value="2">
+                            <label for="trainer-clarity-2">Fair</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-clarity-3" name="trainerClarity" value="3">
+                            <label for="trainer-clarity-3">Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-clarity-4" name="trainerClarity" value="4">
+                            <label for="trainer-clarity-4">Very Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-clarity-5" name="trainerClarity" value="5">
+                            <label for="trainer-clarity-5">Excellent</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="rating-group">
+                    <div class="rating-title">Responsiveness to questions</div>
+                    <div class="rating-options">
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-responsiveness-1" name="trainerResponsiveness" value="1" required>
+                            <label for="trainer-responsiveness-1">Poor</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-responsiveness-2" name="trainerResponsiveness" value="2">
+                            <label for="trainer-responsiveness-2">Fair</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-responsiveness-3" name="trainerResponsiveness" value="3">
+                            <label for="trainer-responsiveness-3">Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-responsiveness-4" name="trainerResponsiveness" value="4">
+                            <label for="trainer-responsiveness-4">Very Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-responsiveness-5" name="trainerResponsiveness" value="5">
+                            <label for="trainer-responsiveness-5">Excellent</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="rating-group">
+                    <div class="rating-title">Engagement and training style</div>
+                    <div class="rating-options">
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-engagement-1" name="trainerEngagement" value="1" required>
+                            <label for="trainer-engagement-1">Poor</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-engagement-2" name="trainerEngagement" value="2">
+                            <label for="trainer-engagement-2">Fair</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-engagement-3" name="trainerEngagement" value="3">
+                            <label for="trainer-engagement-3">Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-engagement-4" name="trainerEngagement" value="4">
+                            <label for="trainer-engagement-4">Very Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="trainer-engagement-5" name="trainerEngagement" value="5">
+                            <label for="trainer-engagement-5">Excellent</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Evaluation -->
+            <div class="form-section">
+                <div class="form-section-title">Training Content Evaluation</div>
+                <p class="mb-3">Please rate the following aspects of the training content:</p>
+                
+                <div class="rating-group">
+                    <div class="rating-title">Relevance to your needs</div>
+                    <div class="rating-options">
+                        <div class="rating-option">
+                            <input type="radio" id="content-relevance-1" name="contentRelevance" value="1" required>
+                            <label for="content-relevance-1">Poor</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-relevance-2" name="contentRelevance" value="2">
+                            <label for="content-relevance-2">Fair</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-relevance-3" name="contentRelevance" value="3">
+                            <label for="content-relevance-3">Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-relevance-4" name="contentRelevance" value="4">
+                            <label for="content-relevance-4">Very Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-relevance-5" name="contentRelevance" value="5">
+                            <label for="content-relevance-5">Excellent</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="rating-group">
+                    <div class="rating-title">Depth of material</div>
+                    <div class="rating-options">
+                        <div class="rating-option">
+                            <input type="radio" id="content-depth-1" name="contentDepth" value="1" required>
+                            <label for="content-depth-1">Poor</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-depth-2" name="contentDepth" value="2">
+                            <label for="content-depth-2">Fair</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-depth-3" name="contentDepth" value="3">
+                            <label for="content-depth-3">Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-depth-4" name="contentDepth" value="4">
+                            <label for="content-depth-4">Very Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-depth-5" name="contentDepth" value="5">
+                            <label for="content-depth-5">Excellent</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="rating-group">
+                    <div class="rating-title">Quality of materials (slides, handouts)</div>
+                    <div class="rating-options">
+                        <div class="rating-option">
+                            <input type="radio" id="content-materials-1" name="contentMaterials" value="1" required>
+                            <label for="content-materials-1">Poor</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-materials-2" name="contentMaterials" value="2">
+                            <label for="content-materials-2">Fair</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-materials-3" name="contentMaterials" value="3">
+                            <label for="content-materials-3">Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-materials-4" name="contentMaterials" value="4">
+                            <label for="content-materials-4">Very Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-materials-5" name="contentMaterials" value="5">
+                            <label for="content-materials-5">Excellent</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="rating-group">
+                    <div class="rating-title">Balance of theory and practical examples</div>
+                    <div class="rating-options">
+                        <div class="rating-option">
+                            <input type="radio" id="content-balance-1" name="contentBalance" value="1" required>
+                            <label for="content-balance-1">Poor</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-balance-2" name="contentBalance" value="2">
+                            <label for="content-balance-2">Fair</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-balance-3" name="contentBalance" value="3">
+                            <label for="content-balance-3">Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-balance-4" name="contentBalance" value="4">
+                            <label for="content-balance-4">Very Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="content-balance-5" name="contentBalance" value="5">
+                            <label for="content-balance-5">Excellent</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Overall Experience -->
+            <div class="form-section">
+                <div class="form-section-title">Overall Experience</div>
+                
+                <div class="rating-group">
+                    <div class="rating-title">Overall satisfaction with the training</div>
+                    <div class="rating-options">
+                        <div class="rating-option">
+                            <input type="radio" id="overall-satisfaction-1" name="overallSatisfaction" value="1" required>
+                            <label for="overall-satisfaction-1">Poor</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="overall-satisfaction-2" name="overallSatisfaction" value="2">
+                            <label for="overall-satisfaction-2">Fair</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="overall-satisfaction-3" name="overallSatisfaction" value="3">
+                            <label for="overall-satisfaction-3">Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="overall-satisfaction-4" name="overallSatisfaction" value="4">
+                            <label for="overall-satisfaction-4">Very Good</label>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" id="overall-satisfaction-5" name="overallSatisfaction" value="5">
+                            <label for="overall-satisfaction-5">Excellent</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4 mt-6">
+                    <label for="comments" class="block mb-2">Comments:</label>
+                    <textarea id="comments" name="comments" rows="5" class="w-full p-2 border border-gray-300 rounded" placeholder="Please share your thoughts about the training, including what you found valuable, what could be improved, and any additional suggestions."></textarea>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block mb-2">Would you recommend this training to others?</label>
+                    <div class="flex gap-4">
+                        <div class="flex items-center">
+                            <input type="radio" id="recommend-yes" name="recommend" value="Yes" required>
+                            <label for="recommend-yes" class="ml-2">Yes</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="recommend-no" name="recommend" value="No">
+                            <label for="recommend-no" class="ml-2">No</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button type="submit" class="submit-button">SUBMIT EVALUATION</button>
+            </div>
+        </form>
+        
+        <!-- Submission Confirmation (Hidden by default) -->
+        <div id="submissionConfirmation" class="form-container text-center hidden">
+            <h2 class="text-xl font-bold mb-4 text-green-600">Thank You for Your Feedback!</h2>
+            <p class="mb-4">Your evaluation has been submitted successfully.</p>
+        </div>
+        
+        <!-- Footer with Left-Aligned Text and Right-Aligned Logo -->
+        <div class="footer">
+            <div class="footer-text">
+                <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
+                <div class="footer-creator">Created by Andres Provero</div>
+            </div>
+            <div class="footer-logo">
+                <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Function to connect with your Node.js backend
+        async function submitToAirtable(formData) {
+            try {
+                // Convert form data to the format expected by your server.js
+                const submissionData = {
+                    trainingId: formData.trainingId,
+                    trainingTitle: formData.trainingTitle,
+                    trainingDate: formData.trainingDate,
+                    trainer: formData.trainer,
+                    location: formData.location,
+                    trainerKnowledge: parseInt(formData.trainerKnowledge),
+                    trainerClarity: parseInt(formData.trainerClarity),
+                    trainerResponsiveness: parseInt(formData.trainerResponsiveness),
+                    trainerEngagement: parseInt(formData.trainerEngagement),
+                    contentRelevance: parseInt(formData.contentRelevance),
+                    contentDepth: parseInt(formData.contentDepth),
+                    contentMaterials: parseInt(formData.contentMaterials),
+                    contentBalance: parseInt(formData.contentBalance),
+                    overallSatisfaction: parseInt(formData.overallSatisfaction),
+                    comments: formData.comments,
+                    recommend: formData.recommend === 'Yes',
+                    averageScore: (
+                        parseInt(formData.trainerKnowledge) +
+                        parseInt(formData.trainerClarity) +
+                        parseInt(formData.trainerResponsiveness) +
+                        parseInt(formData.trainerEngagement) +
+                        parseInt(formData.contentRelevance) +
+                        parseInt(formData.contentDepth) +
+                        parseInt(formData.contentMaterials) +
+                        parseInt(formData.contentBalance) +
+                        parseInt(formData.overallSatisfaction)
+                    ) / 9
+                };
+                
+                // Make an actual POST request to your backend
+                const response = await fetch('https://level3support.onrender.com/evaluation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(submissionData)
+                });
+                
+                // Parse the response from your server
+                const result = await response.json();
+                
+                if (response.ok) {
+                    return { success: true };
+                } else {
+                    return { 
+                        success: false, 
+                        error: result.error || result.details || 'Submission failed' 
+                    };
+                }
+                
+            } catch (error) {
+                console.error('Error submitting to Airtable:', error);
+                return { success: false, error: error.message };
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the form
+            const form = document.getElementById('evaluationForm');
+            const trainingIdInput = document.getElementById('trainingId');
+            const fetchButton = document.getElementById('fetchTrainingBtn');
+            const fetchStatus = document.getElementById('fetchStatus');
+            const trainingInfoSection = document.getElementById('trainingInfoSection');
+            
+            // Show a message to the user
+            function showStatus(message, type) {
+                fetchStatus.textContent = message;
+                fetchStatus.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-blue-600');
+                
+                switch (type) {
+                    case 'success':
+                        fetchStatus.classList.add('text-green-600');
+                        break;
+                    case 'error':
+                        fetchStatus.classList.add('text-red-600');
+                        break;
+                    case 'info':
+                        fetchStatus.classList.add('text-blue-600');
+                        break;
+                }
+                
+                fetchStatus.classList.remove('hidden');
+            }
+            
+            // Format date for display
+            function formatDate(dateString) {
+                if (!dateString) return '-';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            }
+            
+            // Handle click on the lookup button
+            fetchButton.addEventListener('click', function() {
+                const trainingId = trainingIdInput.value.trim();
+                
+                if (!trainingId) {
+                    showStatus('Please enter a Training ID', 'error');
+                    return;
+                }
+                
+                showStatus('Looking up training information...', 'info');
+                
+                // Simulate an API call for demo purposes
+                // In production, this would be a real API call to your Airtable
+                setTimeout(() => {
+                    // This is demo data - in the real implementation, this would come from Airtable
+                    const mockTrainingData = {
+                        'TR-2025-001': {
+                            title: 'String Inverter Basics',
+                            date: '2025-03-15',
+                            trainer: 'Andres Provero'
+                        },
+                        'TR-2025-002': {
+                            title: 'BeSS System Integration',
+                            date: '2025-03-22',
+                            trainer: 'Javier Ramirez'
+                        },
+                        'TR-2025-003': {
+                            title: 'Advanced Troubleshooting',
+                            date: '2025-04-05',
+                            trainer: 'Gabriel Trevisan'
+                        }
+                    };
+                    
+                    if (mockTrainingData[trainingId]) {
+                        const data = mockTrainingData[trainingId];
+                        
+                        // Display the training information
+                        document.getElementById('displayTrainingTitle').textContent = data.title;
+                        document.getElementById('displayTrainingDate').textContent = formatDate(data.date);
+                        document.getElementById('displayTrainer').textContent = data.trainer;
+                        
+                        // Set hidden form fields
+                        document.getElementById('trainingTitle').value = data.title;
+                        document.getElementById('trainingDate').value = data.date;
+                        document.getElementById('trainer').value = data.trainer;
+                        
+                        // Show the training section
+                        trainingInfoSection.classList.remove('hidden');
+                        showStatus('Training information found', 'success');
+                    } else {
+                        showStatus('Training ID not found. Please check and try again.', 'error');
+                    }
+                }, 1000);
+            });
+            
+            // Form submission handling
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Validate that training info was retrieved
+                if (trainingInfoSection.classList.contains('hidden')) {
+                    showStatus('Please lookup a valid Training ID first', 'error');
+                    return;
+                }
+                
+                // Get form data
+                const formData = new FormData(form);
+                const formValues = Object.fromEntries(formData.entries());
+                
+                // Show loading state
+                document.querySelector('.submit-button').disabled = true;
+                document.querySelector('.submit-button').textContent = 'Submitting...';
+                
+                // Submit to Airtable via your backend
+                const result = await submitToAirtable(formValues);
+                
+                if (result.success) {
+                    // Hide form and show confirmation
+                    document.getElementById('evaluationForm').classList.add('hidden');
+                    document.getElementById('submissionConfirmation').classList.remove('hidden');
+                } else {
+                    showStatus('Error submitting evaluation: ' + (result.error || 'Unknown error'), 'error');
+                    // Reset button state
+                    document.querySelector('.submit-button').disabled = false;
+                    document.querySelector('.submit-button').textContent = 'SUBMIT EVALUATION';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

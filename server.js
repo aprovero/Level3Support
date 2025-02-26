@@ -11,7 +11,9 @@ const requiredEnvVars = [
     'AIRTABLE_BASE_ID',
     'EMAIL_USER',
     'EMAIL_PASS',
-    'AIRTABLE_TABLE_NAME' 
+    'AIRTABLE_TABLE_NAME',
+    'AIRTABLE_EVALUATIONS_BASE_ID',
+    'AIRTABLE_EVALUATIONS_TABLE' 
 ];
 
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
@@ -60,10 +62,15 @@ const upload = multer({
     }
 });
 
-// Airtable and email configuration
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
-const TABLE_NAME = process.env.AIRTABLE_TABLE_NAME
+// Airtable configuration - main base
+const mainBase = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
+const TABLE_NAME = process.env.AIRTABLE_TABLE_NAME;
 
+// Airtable configuration - evaluations base (separate base)
+const evaluationsBase = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_EVALUATIONS_BASE_ID);
+const EVALUATIONS_TABLE_NAME = process.env.AIRTABLE_EVALUATIONS_TABLE;
+
+// Email configuration
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -180,8 +187,8 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             fields['ATTACHMENTS'] = 'Attachments in email';
         }
 
-        // Create Airtable record
-        const record = await base(TABLE_NAME).create([{ fields }]);
+        // Create Airtable record in main base
+        const record = await mainBase(TABLE_NAME).create([{ fields }]);
         const issueId = record[0].fields['ISSUE ID'];
 
         // Prepare email
@@ -230,6 +237,93 @@ This is an automated message. Please do not reply to this email. For any questio
 
     } catch (error) {
         console.error('Detailed server error:', error);
+        console.error('Error stack:', error.stack);
+        
+        // Send appropriate error response
+        res.status(500).json({
+            error: 'Server error',
+            details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+        });
+    }
+});
+
+// Training Evaluation Route
+app.post('/evaluation', async (req, res) => {
+    try {
+        console.log('Received evaluation submission:', req.body);
+        
+        // Extract evaluation data from request
+        const { 
+            trainingId,
+            trainingTitle, 
+            trainingDate, 
+            trainer, 
+            location,
+            trainerKnowledge,
+            trainerClarity,
+            trainerResponsiveness,
+            trainerEngagement,
+            contentRelevance,
+            contentDepth,
+            contentMaterials,
+            contentBalance,
+            overallSatisfaction,
+            comments,
+            recommend,
+            averageScore
+        } = req.body;
+
+        // Basic validation
+        if (!trainingId || !trainingTitle || !trainingDate || !trainer || !location) {
+            return res.status(400).json({ 
+                error: 'Missing required fields',
+                details: 'Training information is required.'
+            });
+        }
+
+        // Format data for Airtable
+        const fields = {
+            'Training ID': trainingId,
+            'Training Title': trainingTitle,
+            'Training Date': trainingDate,
+            'Trainer': trainer,
+            'Training Type': location,
+            
+            // Ratings - storing as numbers for analytics
+            'Trainer Knowledge': parseInt(trainerKnowledge),
+            'Trainer Clarity': parseInt(trainerClarity),
+            'Trainer Responsiveness': parseInt(trainerResponsiveness),
+            'Trainer Engagement': parseInt(trainerEngagement),
+            'Content Relevance': parseInt(contentRelevance),
+            'Content Depth': parseInt(contentDepth),
+            'Content Materials': parseInt(contentMaterials), 
+            'Content Balance': parseInt(contentBalance),
+            'Overall Satisfaction': parseInt(overallSatisfaction),
+            
+            // Comments and recommendation
+            'Comments': comments || '',
+            'Would Recommend': recommend === 'Yes' || recommend === true,
+            
+            // Average score for quick analytics
+            'Average Score': parseFloat(averageScore) || 0,
+            
+            // Submission timestamp
+            'Submission Date': new Date().toISOString()
+        };
+
+        // Create record in Airtable evaluations base
+        const record = await evaluationsBase(EVALUATIONS_TABLE_NAME).create([{ fields }]);
+        
+        console.log('Evaluation recorded successfully with ID:', record[0].id);
+
+        // Success response
+        res.status(200).json({
+            message: 'Evaluation submitted successfully',
+            recordId: record[0].id
+        });
+
+    } catch (error) {
+        console.error('Error processing evaluation submission:', error);
         console.error('Error stack:', error.stack);
         
         // Send appropriate error response

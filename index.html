@@ -147,7 +147,7 @@
 
                 <div class="checkbox-group">
                     <input type="checkbox" id="esr-completed" name="esrCompleted">
-                    <label for="esr-completed">ESR completed?</label>
+                    <label for="esr-completed">FIELD REPORT completed?</label>
                 </div>
             </div>
 
@@ -489,7 +489,7 @@
 
             // Validate ESR attachment requirement
             if (esrCheckbox.checked && files.length === 0) {
-                showMessage('error', 'Attachment Required', 'Please attach files as ESR is completed.');
+                showMessage('error', 'Attachment Required', 'Please attach files as FIELD REPORT has been completed.');
                 return;
             }
             
