@@ -9,10 +9,273 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <!-- Your shared styles -->
     <link href="shared-styles.css" rel="stylesheet">
-    <!-- Include your CSS styles here -->
     <style>
-        /* Your CSS styles from training-page-part1 */
-        /* ... */
+        .training-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+        
+        .training-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .training-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .card-title {
+            font-weight: bold;
+            color: #333333;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .card-category {
+            color: #007bff;
+            font-size: 14px;
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: #e6f2ff;
+            border-radius: 4px;
+        }
+        
+        .card-content {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .topic-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+        }
+        
+        .topic-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+        
+        .view-button {
+            display: block;
+            text-align: center;
+            background-color: #ff9500;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            margin-top: auto;
+        }
+        
+        .view-button:hover {
+            background-color: #b36b00;
+            text-decoration: none;
+            color: white;
+        }
+
+        /* Filter controls */
+        .filter-controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .filter-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .filter-item {
+            background-color: #f0f7ff;
+            color: #333;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .filter-item:hover {
+            background-color: #e1f0ff;
+        }
+        
+        .filter-item.active {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #0062cc;
+        }
+
+        /* Enhanced Resource Links Styles */
+        .resource-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f7ff;
+            border: 1px solid #cce5ff;
+            border-radius: 8px;
+            padding: 15px;
+            text-decoration: none;
+            color: #0066cc;
+            transition: all 0.2s ease;
+            height: 100%;
+            text-align: center;
+        }
+
+        .resource-link:hover {
+            background-color: #e6f0ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .link-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        /* Enhanced Under Construction Banner */
+        .under-construction-banner {
+            background-color: #ffe066;
+            border: 2px solid #ffcc00;
+            border-left: 8px solid #ff9900;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
+            50% { box-shadow: 0 4px 12px rgba(255, 153, 0, 0.4); }
+            100% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
+        }
+        .construction-icon {
+            font-size: 36px;
+            margin-right: 20px;
+        }
+
+        .construction-message h2 {
+            margin: 0 0 8px 0;
+            font-size: 22px;
+            color: #664d00;
+            font-weight: bold;
+        }
+
+        .construction-message p {
+            margin: 0;
+            color: #664d00;
+            font-size: 16px;
+        }
+
+        /* Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #555;
+            cursor: pointer;
+        }
+        
+        .close-modal:hover {
+            color: #000;
+        }
+        
+        /* Responsive design for filters and resource links */
+        @media (max-width: 768px) {
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-item {
+                text-align: center;
+            }
+            
+            .resource-links {
+                grid-template-columns: 1fr;
+            }
+            
+            .under-construction-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .construction-icon {
+                margin: 0 0 10px 0;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20px auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -29,7 +292,18 @@
                 </div>
             </div>
         </div>
+        
         <a href="index.html" class="back-link">← Back to the Request Form</a>
+        
+        <!-- Under Construction Banner - MOVED ABOVE THE TITLE -->
+        <div class="under-construction-banner">
+            <div class="construction-icon">🚧</div>
+            <div class="construction-message">
+                <h2>Page Under Construction</h2>
+                <p>We're currently updating our training materials database. Some content may be incomplete or subject to change.</p>
+            </div>
+        </div>
+        
         <h1>PV & BESS Training Materials</h1>
         <p>Browse our comprehensive training resources for PV and BESS systems. Filter by category, knowledge level, or subject to find the most relevant content for your needs.</p>
         
@@ -44,16 +318,6 @@
                 <span>SUNGROW Resource Center</span>
             </a>
         </div>
-        
-        <!-- Under Construction Banner -->
-        <div class="under-construction-banner">
-            <div class="construction-icon">🚧</div>
-            <div class="construction-message">
-                <h2>Page Under Construction</h2>
-                <p>We're currently updating our training materials database. Some content may be incomplete or subject to change.</p>
-            </div>
-        </div>
-        
         <!-- Filter Section -->
         <div class="filter-controls">
             <div class="filter-title">Filter by:</div>
@@ -103,7 +367,6 @@
                 </div>
             </div>
         </div>
-        
         <!-- Footer -->
         <div class="footer">
             <div class="footer-text">
@@ -119,73 +382,103 @@
     <!-- Include the training data script -->
     <script src="unified-training-data.js"></script>
     
-    <!-- Main JavaScript -->
+    <!-- Main JavaScript - First Part -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            console.log("Script started");
+            console.log("Training data available:", typeof trainingData !== 'undefined');
+            
+            // Debug the training data if it exists
+            if (typeof trainingData !== 'undefined') {
+                console.log("Total training items:", Object.keys(trainingData).length);
+                if (Object.keys(trainingData).length > 0) {
+                    console.log("First item sample:", Object.values(trainingData)[0]);
+                }
+            } else {
+                console.error("Training data not loaded! Check if unified-training-data.js is properly included.");
+            }
+            
             // Dynamically populate categories from data
             const categoryFilters = document.getElementById('category-filters');
             const allCategories = new Set();
             
-            // Collect all unique categories
-            Object.values(trainingData).forEach(item => {
-                allCategories.add(item.category);
-            });
-            
-            // Add category filters
-            allCategories.forEach(category => {
-                const slug = category.toLowerCase().replace(/\s+/g, '-');
-                const filterItem = document.createElement('div');
-                filterItem.className = 'filter-item';
-                filterItem.setAttribute('data-filter', 'category');
-                filterItem.setAttribute('data-value', slug);
-                filterItem.textContent = category;
-                categoryFilters.appendChild(filterItem);
-            });
-            
-            // Generate cards for each training item
-            const trainingGrid = document.querySelector('.training-grid');
-            
-            Object.keys(trainingData).forEach(key => {
-                const item = trainingData[key];
-                
-                // Create category slug for data-category attribute
-                const categorySlug = item.category.toLowerCase().replace(/\s+/g, '-');
-                
-                // Create level classes string (e.g., "l1 l2 l3")
-                const levelClasses = item.levels.map(level => level.toLowerCase()).join(' ');
-                
-                // Get unique topic titles (excluding duplicates)
-                const uniqueTopics = [];
-                const topicTitles = new Set();
-                
-                item.topics.forEach(topic => {
-                    if (!topicTitles.has(topic.title)) {
-                        topicTitles.add(topic.title);
-                        uniqueTopics.push(topic.title);
+            try {
+                // Collect all unique categories
+                Object.values(trainingData).forEach(item => {
+                    if (item && item.category) {
+                        allCategories.add(item.category);
                     }
                 });
                 
-                // Create the card HTML
-                const cardTemplate = `
-                    <div class="training-card" data-system="${item.system}" data-category="${categorySlug}" data-level="${levelClasses}" data-id="${item.id}">
-                        <div class="card-header">
-                            <div class="card-title">${item.subject}</div>
-                            <div class="card-category">${item.category}</div>
-                        </div>
-                        <div class="card-content">
-                            <ul class="topic-list">
-                                ${uniqueTopics.slice(0, 5).map(topic => `<li class="topic-item">${topic}</li>`).join('')}
-                                ${uniqueTopics.length > 5 ? `<li class="topic-item">+${uniqueTopics.length - 5} more topics</li>` : ''}
-                            </ul>
-                            <a href="#" class="view-button">View Details</a>
-                        </div>
-                    </div>
-                `;
+                console.log("Found categories:", Array.from(allCategories));
                 
-                // Add the card to the grid
-                trainingGrid.insertAdjacentHTML('beforeend', cardTemplate);
-            });
+                // Add category filters
+                allCategories.forEach(category => {
+                    const slug = category.toLowerCase().replace(/\s+/g, '-');
+                    const filterItem = document.createElement('div');
+                    filterItem.className = 'filter-item';
+                    filterItem.setAttribute('data-filter', 'category');
+                    filterItem.setAttribute('data-value', slug);
+                    filterItem.textContent = category;
+                    categoryFilters.appendChild(filterItem);
+                });
+            } catch (e) {
+                console.error("Error setting up categories:", e);
+            }
+            // Generate cards for each training item
+            const trainingGrid = document.querySelector('.training-grid');
             
+            try {
+                console.log("Generating cards");
+                let cardCount = 0;
+                
+                Object.keys(trainingData).forEach(key => {
+                    const item = trainingData[key];
+                    
+                    // Create category slug for data-category attribute
+                    const categorySlug = item.category.toLowerCase().replace(/\s+/g, '-');
+                    
+                    // Create level classes string (e.g., "l1 l2 l3")
+                    const levelClasses = item.levels.map(level => level.toLowerCase()).join(' ');
+                    
+                    // Get unique topic titles (excluding duplicates)
+                    const uniqueTopics = [];
+                    const topicTitles = new Set();
+                    
+                    item.topics.forEach(topic => {
+                        if (!topicTitles.has(topic.title)) {
+                            topicTitles.add(topic.title);
+                            uniqueTopics.push(topic.title);
+                        }
+                    });
+                    
+                    // Create the card HTML
+                    const cardTemplate = `
+                        <div class="training-card" data-system="${item.system}" data-category="${categorySlug}" data-level="${levelClasses}" data-id="${item.id}">
+                            <div class="card-header">
+                                <div class="card-title">${item.subject}</div>
+                                <div class="card-category">${item.category}</div>
+                            </div>
+                            <div class="card-content">
+                                <ul class="topic-list">
+                                    ${uniqueTopics.slice(0, 5).map(topic => `<li class="topic-item">${topic}</li>`).join('')}
+                                    ${uniqueTopics.length > 5 ? `<li class="topic-item">+${uniqueTopics.length - 5} more topics</li>` : ''}
+                                </ul>
+                                <a href="#" class="view-button">View Details</a>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add the card to the grid
+                    trainingGrid.insertAdjacentHTML('beforeend', cardTemplate);
+                    cardCount++;
+                });
+                
+                console.log(`Generated ${cardCount} cards`);
+            } catch (e) {
+                console.error("Error generating cards:", e);
+                console.error(e.stack);
+            }
             // Initialize filter system
             const filterItems = document.querySelectorAll('.filter-item');
             const trainingCards = document.querySelectorAll('.training-card');
