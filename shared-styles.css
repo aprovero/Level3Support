@@ -928,3 +928,19 @@ button:disabled, .submit-button:disabled {
     background-color: #0066cc;
     color: white;
 }
+
+/* Missing Styles */
+#success-modal .modal-content {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+#success-modal .modal-button {
+    background-color: #28a745;
+    color: white;
+}
+
+#success-modal .modal-button:hover {
+    background-color: #218838;
+}

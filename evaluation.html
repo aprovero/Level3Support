@@ -38,14 +38,14 @@
             margin-bottom: 15px;
             align-items: center;
         }
-
+    
         .rating-title {
             font-weight: 500;
             min-width: 200px;
             padding-right: 15px;
             text-align: left;
         }
-
+    
         .rating-options {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -53,16 +53,23 @@
             flex-grow: 1;
             width: 100%;
         }
-
+    
         .rating-option {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            gap: 2px; /* Added to reduce vertical spacing */
         }
         
         .rating-option input {
             margin-right: 5px;
+            margin-bottom: 0; /* Ensure no bottom margin */
+        }
+        
+        .rating-option label {
+            margin-top: 2px; /* Reduced spacing between radio and label */
+            line-height: 1; /* Tighter line height */
         }
         
         .submit-button {
@@ -94,10 +101,15 @@
         .recommend-option {
             display: flex;
             align-items: center;
+            gap: 5px; /* Smaller gap between input and label */
         }
         
         .recommend-option input {
-            margin-right: 5px;
+            margin-right: 2px; /* Reduced from 5px */
+        }
+        
+        .recommend-option label {
+            margin-top: 0; /* Remove any top margin */
         }
         
         .message {
