@@ -94,121 +94,11 @@
         // Training Data
         const trainingData = [
             // PV Courses
-            {
-                id: "pt1-l1",
-                name: "Power Titan I (PT1)",
-                level: "L1",
-                levelText: "Level 1",
-                system: "pv",
-                duration: "1 full day",
-                content: [
-                    "Safety training",
-                    "PV system introduction",
-                    "Component location",
-                    "Operations procedures"
-                ],
-                requirements: [
-                    "Electric standards knowledge",
-                    "Experience in PV inverters"
-                ]
-            },
-            {
-                id: "pt1-l2",
-                name: "Power Titan I (PT1)",
-                level: "L2",
-                levelText: "Level 2",
-                system: "pv",
-                duration: "1 full day",
-                content: [
-                    "Maintenance procedures",
-                    "IGBT module fault identification",
-                    "HMI interface operations",
-                    "Remote access"
-                ],
-                requirements: [
-                    "Part 1 Training",
-                    "Electric standards knowledge",
-                    "Inverter maintenance experience"
-                ]
-            },
-            {
-                id: "pt1-l3",
-                name: "Power Titan I (PT1)",
-                level: "L3",
-                levelText: "Level 3 (CSP)",
-                system: "pv",
-                duration: "1 full day",
-                content: [
-                    "Commissioning procedures",
-                    "Advanced inverter knowledge",
-                    "Transformer operations",
-                    "Preventive maintenance plan"
-                ],
-                requirements: [
-                    "Part 1 & 2 Training",
-                    "Maintenance operation experience"
-                ]
-            },
-            // Power Titan II
-            {
-                id: "pt2-l1",
-                name: "Power Titan II (PT2)",
-                level: "L1",
-                levelText: "Level 1",
-                system: "pv",
-                duration: "1 full day",
-                content: [
-                    "Safety training",
-                    "PV system introduction",
-                    "Component location",
-                    "Operations procedures"
-                ],
-                requirements: [
-                    "Electric standards knowledge",
-                    "Experience in PV inverters"
-                ]
-            },
-            {
-                id: "pt2-l2",
-                name: "Power Titan II (PT2)",
-                level: "L2",
-                levelText: "Level 2",
-                system: "pv",
-                duration: "1 full day",
-                content: [
-                    "Maintenance procedures",
-                    "IGBT module fault identification",
-                    "HMI interface operations",
-                    "Remote access"
-                ],
-                requirements: [
-                    "Part 1 Training",
-                    "Electric standards knowledge",
-                    "Inverter maintenance experience"
-                ]
-            },
-            {
-                id: "pt2-l3",
-                name: "Power Titan II (PT2)",
-                level: "L3",
-                levelText: "Level 3 (CSP)",
-                system: "pv",
-                duration: "1 full day",
-                content: [
-                    "Commissioning procedures",
-                    "Advanced inverter knowledge",
-                    "Transformer operations",
-                    "Preventive maintenance plan"
-                ],
-                requirements: [
-                    "Part 1 & 2 Training",
-                    "Maintenance operation experience"
-                ]
-            },
-            // 1+X Inverter (SG4400)
+
+            // 1+X Inverter (SG3300-SG8800)
             {
                 id: "sg4400-l1",
-                name: "1+X Inverter (SG4400)",
+                name: "1+X Inverter (SG3300-SG8800)",
                 level: "L1",
                 levelText: "Level 1",
                 system: "pv",
@@ -226,7 +116,7 @@
             },
             {
                 id: "sg4400-l2",
-                name: "1+X Inverter (SG4400)",
+                name: "1+X Inverter (SG3300-SG8800)",
                 level: "L2",
                 levelText: "Level 2",
                 system: "pv",
@@ -245,11 +135,11 @@
             },
             {
                 id: "sg4400-l3",
-                name: "1+X Inverter (SG4400)",
+                name: "1+X Inverter (SG3300-SG8800)",
                 level: "L3",
                 levelText: "Level 3 (CSP)",
                 system: "pv",
-                duration: "1 full day",
+                duration: "3 full days",
                 content: [
                     "Commissioning procedures",
                     "Advanced inverter knowledge",
@@ -261,10 +151,10 @@
                     "Maintenance operation experience"
                 ]
             },
-            // SG3125 v20 (SG3150)
+            // SG3125 v20
             {
                 id: "sg3150-l1",
-                name: "SG3125 v20 (SG3150)",
+                name: "SG3125 v20",
                 level: "L1",
                 levelText: "Level 1",
                 system: "pv",
@@ -282,7 +172,7 @@
             },
             {
                 id: "sg3150-l2",
-                name: "SG3125 v20 (SG3150)",
+                name: "SG3125 v20",
                 level: "L2",
                 levelText: "Level 2",
                 system: "pv",
@@ -301,11 +191,11 @@
             },
             {
                 id: "sg3150-l3",
-                name: "SG3125 v20 (SG3150)",
+                name: "SG3125 v20",
                 level: "L3",
                 levelText: "Level 3 (CSP)",
                 system: "pv",
-                duration: "1 full day",
+                duration: "3 full days",
                 content: [
                     "Commissioning procedures",
                     "Advanced inverter knowledge",
@@ -317,10 +207,10 @@
                     "Maintenance operation experience"
                 ]
             },
-            // SG3125 v30 (SG3600)
+            // SG3125 v30
             {
                 id: "sg3600-l1",
-                name: "SG3125 v30 (SG3600)",
+                name: "SG3125 v30 (SG6250)",
                 level: "L1",
                 levelText: "Level 1",
                 system: "pv",
@@ -338,7 +228,7 @@
             },
             {
                 id: "sg3600-l2",
-                name: "SG3125 v30 (SG3600)",
+                name: "SG3125 v30 (SG6250)",
                 level: "L2",
                 levelText: "Level 2",
                 system: "pv",
@@ -357,11 +247,11 @@
             },
             {
                 id: "sg3600-l3",
-                name: "SG3125 v30 (SG3600)",
+                name: "SG3125 v30 (SG6250)",
                 level: "L3",
                 levelText: "Level 3 (CSP)",
                 system: "pv",
-                duration: "1 full day",
+                duration: "3 full days",
                 content: [
                     "Commissioning procedures",
                     "Advanced inverter knowledge",
@@ -379,7 +269,7 @@
                 name: "Pad-mounted Transformer",
                 level: "L1",
                 levelText: "Level 1",
-                system: "pv",
+                system: "other",
                 duration: "1 full day",
                 content: [
                     "Electrical hazards",
@@ -397,7 +287,7 @@
                 name: "Pad-mounted Transformer",
                 level: "L2",
                 levelText: "Level 2",
-                system: "pv",
+                system: "other",
                 duration: "1 full day",
                 content: [
                     "HV/LV bushing replacement",
@@ -410,6 +300,117 @@
                 ]
             },
             // BESS Courses
+            {
+                id: "pt1-l1",
+                name: "Power Titan I (PT1)",
+                level: "L1",
+                levelText: "Level 1",
+                system: "bess",
+                duration: "1 full day",
+                content: [
+                    "Safety training",
+                    "PV system introduction",
+                    "Component location",
+                    "Operations procedures"
+                ],
+                requirements: [
+                    "Electric standards knowledge",
+                    "Experience in PV inverters"
+                ]
+            },
+            {
+                id: "pt1-l2",
+                name: "Power Titan I (PT1)",
+                level: "L2",
+                levelText: "Level 2",
+                system: "bess",
+                duration: "1 full day",
+                content: [
+                    "Maintenance procedures",
+                    "IGBT module fault identification",
+                    "HMI interface operations",
+                    "Remote access"
+                ],
+                requirements: [
+                    "Part 1 Training",
+                    "Electric standards knowledge",
+                    "Inverter maintenance experience"
+                ]
+            },
+            {
+                id: "pt1-l3",
+                name: "Power Titan I (PT1)",
+                level: "L3",
+                levelText: "Level 3 (CSP)",
+                system: "bess",
+                duration: "3 full days",
+                content: [
+                    "Commissioning procedures",
+                    "Advanced inverter knowledge",
+                    "Transformer operations",
+                    "Preventive maintenance plan"
+                ],
+                requirements: [
+                    "Part 1 & 2 Training",
+                    "Maintenance operation experience"
+                ]
+            },
+            // Power Titan II
+            {
+                id: "pt2-l1",
+                name: "Power Titan II (PT2)",
+                level: "L1",
+                levelText: "Level 1",
+                system: "bess",
+                duration: "1 full day",
+                content: [
+                    "Safety training",
+                    "PV system introduction",
+                    "Component location",
+                    "Operations procedures"
+                ],
+                requirements: [
+                    "Electric standards knowledge",
+                    "Experience in PV inverters"
+                ]
+            },
+            {
+                id: "pt2-l2",
+                name: "Power Titan II (PT2)",
+                level: "L2",
+                levelText: "Level 2",
+                system: "bess",
+                duration: "1 full day",
+                content: [
+                    "Maintenance procedures",
+                    "IGBT module fault identification",
+                    "HMI interface operations",
+                    "Remote access"
+                ],
+                requirements: [
+                    "Part 1 Training",
+                    "Electric standards knowledge",
+                    "Inverter maintenance experience"
+                ]
+            },
+            {
+                id: "pt2-l3",
+                name: "Power Titan II (PT2)",
+                level: "L3",
+                levelText: "Level 3 (CSP)",
+                system: "bess",
+                duration: "3 full days",
+                content: [
+                    "Commissioning procedures",
+                    "Advanced inverter knowledge",
+                    "Transformer operations",
+                    "Preventive maintenance plan"
+                ],
+                requirements: [
+                    "Part 1 & 2 Training",
+                    "Maintenance operation experience"
+                ]
+            },
             {
                 id: "liquidcooling-l1",
                 name: "Liquid Cooling BESS",
@@ -451,7 +452,7 @@
                 level: "L3",
                 levelText: "Level 3 (CSP)",
                 system: "bess",
-                duration: "1 full day",
+                duration: "3 full days",
                 content: [
                     "Component replacements",
                     "Cell temperature inspection",
