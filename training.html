@@ -3,96 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoE Level 3 - raining</title>
+    <title>CoE Level 3 - PV & BESS Training</title>
     <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
     <!-- External CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <!-- Your shared styles -->
+    <!-- Shared styles -->
     <link href="shared-styles.css" rel="stylesheet">
-    <style>
-        .training-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px 0;
-        }
-        
-        .training-card {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .training-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .card-header {
-            background-color: #f0f7ff;
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .card-title {
-            font-weight: bold;
-            color: #333333;
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-        
-        .card-category {
-            color: #007bff;
-            font-size: 14px;
-            display: inline-block;
-            padding: 3px 8px;
-            background-color: #e6f2ff;
-            border-radius: 4px;
-        }
-
-        .level-info-section {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-
-        .level-info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .level-info-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .level-info-card h4 {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #007bff;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 5px;
-        }
-
-        .level-info-card ul {
-            padding-left: 20px;
-        }
-
-        .level-info-card li {
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-    </style>
+    <!-- Training page specific styles -->
+    <link href="training-styles.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -111,7 +29,7 @@
 
         <a href="index.html" class="back-link">← Back to the Request Form</a>
         
-        <!-- Under Construction Banner - MOVED ABOVE THE TITLE -->
+        <!-- Under Construction Banner -->
         <div class="under-construction-banner">
             <div class="construction-icon">🚧</div>
             <div class="construction-message">
@@ -119,9 +37,8 @@
                 <p>We're currently updating our training materials database. Some content may be incomplete or subject to change.</p>
             </div>
         </div>
-        
-        <h1>PV & BESS Training Materials</h1>
-        <p>Browse our comprehensive training resources for PV and BESS systems. Filter by category, knowledge level, or subject to find the most relevant content for your needs.</p>
+        <h1>PV & BESS Training Programs</h1>
+        <p>Browse our comprehensive training programs for PV and BESS systems. Filter by system type or knowledge level to find the right course for your needs.</p>
         
         <!-- Resource Links -->
         <div class="resource-links">
@@ -134,23 +51,16 @@
                 <span>SUNGROW Resource Center</span>
             </a>
         </div>
-
+        
         <!-- Filter Section -->
         <div class="filter-controls">
             <div class="filter-title">Filter by:</div>
             <div class="filter-section">
-                <div class="filter-label">System:</div>
+                <div class="filter-label">System Type:</div>
                 <div class="filter-row">
                     <div class="filter-item active" data-filter="system" data-value="all">All Systems</div>
                     <div class="filter-item" data-filter="system" data-value="pv">PV Systems</div>
                     <div class="filter-item" data-filter="system" data-value="bess">BESS Systems</div>
-                </div>
-            </div>
-            <div class="filter-section">
-                <div class="filter-label">Category:</div>
-                <div class="filter-row" id="category-filters">
-                    <!-- Categories will be dynamically populated -->
-                    <div class="filter-item active" data-filter="category" data-value="all">All Categories</div>
                 </div>
             </div>
             <div class="filter-section">
@@ -163,59 +73,9 @@
                 </div>
             </div>
         </div>
-
-        <!-- Level Information Section -->
-        <div class="level-info-section">
-            <h3>Knowledge Level Information</h3>
-            <div class="level-info-grid">
-                <div class="level-info-card">
-                    <h4>Level 1</h4>
-                    <ul>
-                        <li>Perform general inspections</li>
-                        <li>Execute basic operations procedures</li>
-                        <li>Follow safety protocols</li>
-                        <li>Understand system components and architecture</li>
-                    </ul>
-                </div>
-                <div class="level-info-card">
-                    <h4>Level 2</h4>
-                    <ul>
-                        <li>Perform component replacements (with power safely dissipated)</li>
-                        <li>Work with HMI/UMCG interfaces</li>
-                        <li>Download data and event logs</li>
-                        <li>Set parameters and conduct testing</li>
-                        <li>Perform power cycling operations</li>
-                    </ul>
-                </div>
-                <div class="level-info-card">
-                    <h4>Level 3 (CSP)</h4>
-                    <ul>
-                        <li>Train other team members (train-the-trainer model)</li>
-                        <li>Perform commissioning procedures</li>
-                        <li>Conduct advanced troubleshooting</li>
-                        <li>Execute specialized maintenance tasks</li>
-                        <li>Bid on Sungrow service jobs for specific trained products</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
         <!-- Training Materials Grid -->
-        <div class="training-grid">
+        <div id="training-grid" class="training-grid">
             <!-- Cards will be dynamically inserted here -->
-        </div>
-        
-        <!-- Detail Modal -->
-        <div id="detail-modal" class="modal">
-            <div class="modal-content">
-                <span class="close-modal">&times;</span>
-                <div class="detail-header">
-                    <div class="detail-title">Topic Details</div>
-                    <div class="detail-category"></div>
-                </div>
-                <div class="detail-content">
-                    <!-- Content will be dynamically inserted here -->
-                </div>
-            </div>
         </div>
         
         <!-- Footer -->
@@ -229,520 +89,593 @@
             </div>
         </div>
     </div>
-
-    <!-- Include the training data script -->
-    <script src="unified-training-data.js"></script>
-    <!-- Main JavaScript -->
+    <!-- Training Data -->
     <script>
-        // This is the training data structure
-        // You would normally place this in unified-training-data.js
-        const trainingData = {
-            "pt1": {
-                "system": "pv",
-                "category": "Power Titan I (PT1)",
-                "subject": "Central Inverter Training",
-                "levels": ["L1", "L2", "L3"],
-                "topics": [
-                    {
-                        "title": "General Inspections and Basic Operations",
-                        "details": "Safety training, PV system introduction, component location, operations procedures",
-                        "level": "L1",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Component Replacements and System Operations",
-                        "details": "Maintenance procedures, IGBT module fault identification, HMI interface operations, remote access",
-                        "level": "L2",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Commissioning and Advanced Operations",
-                        "details": "Pre-commissioning checklist, commissioning procedures, advanced inverter knowledge, transformer operations",
-                        "level": "L3",
-                        "duration": "1 full day"
-                    }
+        // Training Data
+        const trainingData = [
+            // PV Courses
+            {
+                id: "pt1-l1",
+                name: "Power Titan I (PT1)",
+                level: "L1",
+                levelText: "Level 1",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Safety training",
+                    "PV system introduction",
+                    "Component location",
+                    "Operations procedures"
+                ],
+                requirements: [
+                    "Electric standards knowledge",
+                    "Experience in PV inverters"
                 ]
             },
-            "pt2": {
-                "system": "pv",
-                "category": "Power Titan II (PT2)",
-                "subject": "Central Inverter Training",
-                "levels": ["L1", "L2", "L3"],
-                "topics": [
-                    {
-                        "title": "General Inspections and Basic Operations",
-                        "details": "Safety training, PV system introduction, component location, operations procedures",
-                        "level": "L1",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Component Replacements and System Operations",
-                        "details": "Maintenance procedures, IGBT module fault identification, HMI interface operations, remote access",
-                        "level": "L2",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Commissioning and Advanced Operations",
-                        "details": "Pre-commissioning checklist, commissioning procedures, advanced inverter knowledge, transformer operations",
-                        "level": "L3",
-                        "duration": "1 full day"
-                    }
+            {
+                id: "pt1-l2",
+                name: "Power Titan I (PT1)",
+                level: "L2",
+                levelText: "Level 2",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Maintenance procedures",
+                    "IGBT module fault identification",
+                    "HMI interface operations",
+                    "Remote access"
+                ],
+                requirements: [
+                    "Part 1 Training",
+                    "Electric standards knowledge",
+                    "Inverter maintenance experience"
                 ]
             },
-            "sg4400": {
-                "system": "pv",
-                "category": "1+X Inverter (SG4400)",
-                "subject": "Central Inverter Training",
-                "levels": ["L1", "L2", "L3"],
-                "topics": [
-                    {
-                        "title": "General Inspections and Basic Operations",
-                        "details": "Safety training, PV system introduction, component location, operations procedures",
-                        "level": "L1",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Component Replacements and System Operations",
-                        "details": "Maintenance procedures, IGBT module fault identification, HMI interface operations, remote access",
-                        "level": "L2",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Commissioning and Advanced Operations",
-                        "details": "Pre-commissioning checklist, commissioning procedures, advanced inverter knowledge, transformer operations",
-                        "level": "L3",
-                        "duration": "1 full day"
-                    }
+            {
+                id: "pt1-l3",
+                name: "Power Titan I (PT1)",
+                level: "L3",
+                levelText: "Level 3 (CSP)",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Commissioning procedures",
+                    "Advanced inverter knowledge",
+                    "Transformer operations",
+                    "Preventive maintenance plan"
+                ],
+                requirements: [
+                    "Part 1 & 2 Training",
+                    "Maintenance operation experience"
                 ]
             },
-            "sg3150": {
-                "system": "pv",
-                "category": "SG3125 v20 (SG3150)",
-                "subject": "Central Inverter Training",
-                "levels": ["L1", "L2", "L3"],
-                "topics": [
-                    {
-                        "title": "General Inspections and Basic Operations",
-                        "details": "Safety training, PV system introduction, component location, operations procedures",
-                        "level": "L1",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Component Replacements and System Operations",
-                        "details": "Maintenance procedures, IGBT module fault identification, HMI interface operations, remote access",
-                        "level": "L2",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Commissioning and Advanced Operations",
-                        "details": "Pre-commissioning checklist, commissioning procedures, advanced inverter knowledge, transformer operations",
-                        "level": "L3",
-                        "duration": "1 full day"
-                    }
+            // Power Titan II
+            {
+                id: "pt2-l1",
+                name: "Power Titan II (PT2)",
+                level: "L1",
+                levelText: "Level 1",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Safety training",
+                    "PV system introduction",
+                    "Component location",
+                    "Operations procedures"
+                ],
+                requirements: [
+                    "Electric standards knowledge",
+                    "Experience in PV inverters"
                 ]
             },
-            "sg3600": {
-                "system": "pv",
-                "category": "SG3125 v30 (SG3600)",
-                "subject": "Central Inverter Training",
-                "levels": ["L1", "L2", "L3"],
-                "topics": [
-                    {
-                        "title": "General Inspections and Basic Operations",
-                        "details": "Safety training, PV system introduction, component location, operations procedures",
-                        "level": "L1",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Component Replacements and System Operations",
-                        "details": "Maintenance procedures, IGBT module fault identification, HMI interface operations, remote access",
-                        "level": "L2",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Commissioning and Advanced Operations",
-                        "details": "Pre-commissioning checklist, commissioning procedures, advanced inverter knowledge, transformer operations",
-                        "level": "L3",
-                        "duration": "1 full day"
-                    }
+            {
+                id: "pt2-l2",
+                name: "Power Titan II (PT2)",
+                level: "L2",
+                levelText: "Level 2",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Maintenance procedures",
+                    "IGBT module fault identification",
+                    "HMI interface operations",
+                    "Remote access"
+                ],
+                requirements: [
+                    "Part 1 Training",
+                    "Electric standards knowledge",
+                    "Inverter maintenance experience"
                 ]
             },
-            "padmount": {
-                "system": "pv",
-                "category": "Pad-mounted Transformer",
-                "subject": "Transformer Training",
-                "levels": ["L1", "L2"],
-                "topics": [
-                    {
-                        "title": "Theoretical and Safety Training",
-                        "details": "Electrical hazards, PPE, LOTO, transformer basic knowledge, troubleshooting common faults",
-                        "level": "L1",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Manual Operation Procedures",
-                        "details": "HV/LV bushing replacement, fuse replacement, oil gauge adjustment, load switch replacement",
-                        "level": "L2",
-                        "duration": "1 full day"
-                    }
+            {
+                id: "pt2-l3",
+                name: "Power Titan II (PT2)",
+                level: "L3",
+                levelText: "Level 3 (CSP)",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Commissioning procedures",
+                    "Advanced inverter knowledge",
+                    "Transformer operations",
+                    "Preventive maintenance plan"
+                ],
+                requirements: [
+                    "Part 1 & 2 Training",
+                    "Maintenance operation experience"
                 ]
             },
-            "liquidcooling": {
-                "system": "bess",
-                "category": "Liquid Cooling BESS",
-                "subject": "Battery Energy Storage System",
-                "levels": ["L1", "L2", "L3"],
-                "topics": [
-                    {
-                        "title": "System Introduction and Operations",
-                        "details": "System composition, transportation, installation, safety training",
-                        "level": "L1",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Software and Common Operations",
-                        "details": "Software operation, LOTO procedures, cleaning and checking procedures",
-                        "level": "L2",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Advanced O&M Procedures",
-                        "details": "Component replacements, cell temperature inspection, troubleshooting, PCS operations",
-                        "level": "L3",
-                        "duration": "1 full day"
-                    }
+            // 1+X Inverter (SG4400)
+            {
+                id: "sg4400-l1",
+                name: "1+X Inverter (SG4400)",
+                level: "L1",
+                levelText: "Level 1",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Safety training",
+                    "PV system introduction",
+                    "Component location",
+                    "Operations procedures"
+                ],
+                requirements: [
+                    "Electric standards knowledge",
+                    "Experience in PV inverters"
                 ]
             },
-            "aircooling": {
-                "system": "bess",
-                "category": "Air Cooling BESS",
-                "subject": "Battery Energy Storage System",
-                "levels": ["L1", "L2"],
-                "topics": [
-                    {
-                        "title": "System Introduction and Operations",
-                        "details": "System composition, software operation, LCD touchscreen operations",
-                        "level": "L1",
-                        "duration": "~2 hours"
-                    },
-                    {
-                        "title": "Software and Common Operations",
-                        "details": "Interface parameters, operations, cleaning and checking procedures",
-                        "level": "L2",
-                        "duration": "1 full day"
-                    }
+            {
+                id: "sg4400-l2",
+                name: "1+X Inverter (SG4400)",
+                level: "L2",
+                levelText: "Level 2",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Maintenance procedures",
+                    "IGBT module fault identification",
+                    "HMI interface operations",
+                    "Remote access"
+                ],
+                requirements: [
+                    "Part 1 Training",
+                    "Electric standards knowledge",
+                    "Inverter maintenance experience"
                 ]
             },
-            "airforced": {
-                "system": "bess",
-                "category": "Air Forced Cooling BESS",
-                "subject": "Battery Energy Storage System",
-                "levels": ["L1", "L2"],
-                "topics": [
-                    {
-                        "title": "System Introduction and Operations",
-                        "details": "System composition, transportation, installation, safety training",
-                        "level": "L1",
-                        "duration": "1 full day"
-                    },
-                    {
-                        "title": "Software and Common Operations",
-                        "details": "Interface parameters, operations, cleaning and checking procedures",
-                        "level": "L2",
-                        "duration": "1 full day"
-                    }
+            {
+                id: "sg4400-l3",
+                name: "1+X Inverter (SG4400)",
+                level: "L3",
+                levelText: "Level 3 (CSP)",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Commissioning procedures",
+                    "Advanced inverter knowledge",
+                    "Transformer operations",
+                    "Preventive maintenance plan"
+                ],
+                requirements: [
+                    "Part 1 & 2 Training",
+                    "Maintenance operation experience"
+                ]
+            },
+            // SG3125 v20 (SG3150)
+            {
+                id: "sg3150-l1",
+                name: "SG3125 v20 (SG3150)",
+                level: "L1",
+                levelText: "Level 1",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Safety training",
+                    "PV system introduction",
+                    "Component location",
+                    "Operations procedures"
+                ],
+                requirements: [
+                    "Electric standards knowledge",
+                    "Experience in PV inverters"
+                ]
+            },
+            {
+                id: "sg3150-l2",
+                name: "SG3125 v20 (SG3150)",
+                level: "L2",
+                levelText: "Level 2",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Maintenance procedures",
+                    "IGBT module fault identification",
+                    "HMI interface operations",
+                    "Remote access"
+                ],
+                requirements: [
+                    "Part 1 Training",
+                    "Electric standards knowledge",
+                    "Inverter maintenance experience"
+                ]
+            },
+            {
+                id: "sg3150-l3",
+                name: "SG3125 v20 (SG3150)",
+                level: "L3",
+                levelText: "Level 3 (CSP)",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Commissioning procedures",
+                    "Advanced inverter knowledge",
+                    "Transformer operations",
+                    "Preventive maintenance plan"
+                ],
+                requirements: [
+                    "Part 1 & 2 Training",
+                    "Maintenance operation experience"
+                ]
+            },
+            // SG3125 v30 (SG3600)
+            {
+                id: "sg3600-l1",
+                name: "SG3125 v30 (SG3600)",
+                level: "L1",
+                levelText: "Level 1",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Safety training",
+                    "PV system introduction",
+                    "Component location",
+                    "Operations procedures"
+                ],
+                requirements: [
+                    "Electric standards knowledge",
+                    "Experience in PV inverters"
+                ]
+            },
+            {
+                id: "sg3600-l2",
+                name: "SG3125 v30 (SG3600)",
+                level: "L2",
+                levelText: "Level 2",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Maintenance procedures",
+                    "IGBT module fault identification",
+                    "HMI interface operations",
+                    "Remote access"
+                ],
+                requirements: [
+                    "Part 1 Training",
+                    "Electric standards knowledge",
+                    "Inverter maintenance experience"
+                ]
+            },
+            {
+                id: "sg3600-l3",
+                name: "SG3125 v30 (SG3600)",
+                level: "L3",
+                levelText: "Level 3 (CSP)",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Commissioning procedures",
+                    "Advanced inverter knowledge",
+                    "Transformer operations",
+                    "Preventive maintenance plan"
+                ],
+                requirements: [
+                    "Part 1 & 2 Training",
+                    "Maintenance operation experience"
+                ]
+            },
+            // Pad-mounted Transformer
+            {
+                id: "padmount-l1",
+                name: "Pad-mounted Transformer",
+                level: "L1",
+                levelText: "Level 1",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "Electrical hazards",
+                    "PPE overview",
+                    "Transformer basic knowledge",
+                    "Troubleshooting common faults"
+                ],
+                requirements: [
+                    "Basic electrical knowledge",
+                    "Basic maintenance operation experience"
+                ]
+            },
+            {
+                id: "padmount-l2",
+                name: "Pad-mounted Transformer",
+                level: "L2",
+                levelText: "Level 2",
+                system: "pv",
+                duration: "1 full day",
+                content: [
+                    "HV/LV bushing replacement",
+                    "Fuse replacement",
+                    "Oil gauge adjustment",
+                    "Load switch replacement"
+                ],
+                requirements: [
+                    "Level 1 Training"
+                ]
+            },
+            // BESS Courses
+            {
+                id: "liquidcooling-l1",
+                name: "Liquid Cooling BESS",
+                level: "L1",
+                levelText: "Level 1",
+                system: "bess",
+                duration: "1 full day",
+                content: [
+                    "System composition",
+                    "Transportation and installation",
+                    "Safety training"
+                ],
+                requirements: [
+                    "Electrical knowledge",
+                    "Safety training"
+                ]
+            },
+            {
+                id: "liquidcooling-l2",
+                name: "Liquid Cooling BESS",
+                level: "L2",
+                levelText: "Level 2",
+                system: "bess",
+                duration: "1 full day",
+                content: [
+                    "Software operation",
+                    "LOTO procedures",
+                    "Cleaning and checking procedures"
+                ],
+                requirements: [
+                    "Level 1 Training",
+                    "Safety Training",
+                    "Software and PC Operation"
+                ]
+            },
+            {
+                id: "liquidcooling-l3",
+                name: "Liquid Cooling BESS",
+                level: "L3",
+                levelText: "Level 3 (CSP)",
+                system: "bess",
+                duration: "1 full day",
+                content: [
+                    "Component replacements",
+                    "Cell temperature inspection",
+                    "Troubleshooting",
+                    "PCS operations"
+                ],
+                requirements: [
+                    "Level 1 & 2 Training",
+                    "Maintenance operation experience"
+                ]
+            },
+            {
+                id: "aircooling-l1",
+                name: "Air Cooling BESS",
+                level: "L1",
+                levelText: "Level 1",
+                system: "bess",
+                duration: "~2 hours",
+                content: [
+                    "System composition",
+                    "Software operation",
+                    "LCD touchscreen operations"
+                ],
+                requirements: [
+                    "Electrical knowledge",
+                    "Safety training"
+                ]
+            },
+            {
+                id: "aircooling-l2",
+                name: "Air Cooling BESS",
+                level: "L2",
+                levelText: "Level 2",
+                system: "bess",
+                duration: "1 full day",
+                content: [
+                    "Interface parameters",
+                    "Operations",
+                    "Cleaning and checking procedures"
+                ],
+                requirements: [
+                    "Level 1 Training",
+                    "Safety Training",
+                    "Software and PC Operation"
+                ]
+            },
+            {
+                id: "airforced-l1",
+                name: "Air Forced Cooling BESS",
+                level: "L1",
+                levelText: "Level 1",
+                system: "bess",
+                duration: "1 full day",
+                content: [
+                    "System composition",
+                    "Transportation and installation",
+                    "Safety training"
+                ],
+                requirements: [
+                    "Electrical knowledge",
+                    "Safety training"
+                ]
+            },
+            {
+                id: "airforced-l2",
+                name: "Air Forced Cooling BESS",
+                level: "L2",
+                levelText: "Level 2",
+                system: "bess",
+                duration: "1 full day",
+                content: [
+                    "Interface parameters",
+                    "Operations",
+                    "Cleaning and checking procedures"
+                ],
+                requirements: [
+                    "Level 1 Training",
+                    "Safety Training",
+                    "Software and PC Operation"
                 ]
             }
-        };
-        // Generate cards grouped by category
-        try {
-                console.log("Generating category-based cards");
-                const trainingGrid = document.querySelector('.training-grid');
-                
-                // Group items by category
-                const categorizedItems = {};
-                
-                // First, group by category
-                Object.values(trainingData).forEach(item => {
-                    const category = item.category;
-                    if (!categorizedItems[category]) {
-                        categorizedItems[category] = {
-                            system: item.system,
-                            category: category,
-                            subjects: {},
-                            levels: new Set()
-                        };
-                    }
-                    
-                    // Add subject to this category
-                    categorizedItems[category].subjects[item.subject] = item;
-                    
-                    // Collect all levels for this category
-                    item.levels.forEach(level => {
-                        categorizedItems[category].levels.add(level);
-                    });
-                });
-                
-                console.log(`Found ${Object.keys(categorizedItems).length} categories`);
-                
-                // Create a card for each category
-                Object.keys(categorizedItems).forEach(categoryName => {
-                    const categoryData = categorizedItems[categoryName];
-                    const categorySlug = categoryName.toLowerCase().replace(/\s+/g, '-');
-                    
-                    // Get all subjects in this category
-                    const subjects = Object.keys(categoryData.subjects);
-                    
-                    // Create level classes for the category card
-                    const levelClasses = Array.from(categoryData.levels)
-                        .map(level => level.toLowerCase())
-                        .join(' ');
-                    
-                    // Create the category card
-                    const cardTemplate = `
-                        <div class="training-card" data-system="${categoryData.system}" data-category="${categorySlug}" data-level="${levelClasses}">
-                            <div class="card-header">
-                                <div class="card-title">${categoryName}</div>
-                                <div class="card-category">${categoryData.system.toUpperCase()} System</div>
-                            </div>
-                            <div class="card-content">
-                                <ul class="topic-list">
-                                    ${subjects.slice(0, 5).map(subject => 
-                                        `<li class="topic-item subject-item" data-subject="${subject}" data-category="${categoryName}">
-                                            ${subject}
-                                        </li>`).join('')}
-                                    ${subjects.length > 5 ? `<li class="topic-item">+${subjects.length - 5} more subjects</li>` : ''}
-                                </ul>
-                                <div class="subject-details-wrapper" style="display:none;">
-                                    <h4 class="selected-subject-title"></h4>
-                                    <p class="selected-subject-description"></p>
-                                    <a href="#" class="view-button">View All Details</a>
-                                    <a href="#" class="back-to-subjects">← Back to Subjects</a>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    // Add the card to the grid
-                    trainingGrid.insertAdjacentHTML('beforeend', cardTemplate);
-                });
-                
-                // Add click handlers for subject items
-                document.querySelectorAll('.subject-item').forEach(subjectItem => {
-                    subjectItem.addEventListener('click', function() {
-                        const subject = this.getAttribute('data-subject');
-                        const category = this.getAttribute('data-category');
-                        const card = this.closest('.training-card');
-                        
-                        // Hide all subjects
-                        card.querySelectorAll('.topic-list').forEach(list => {
-                            list.style.display = 'none';
-                        });
-                        
-                        // Show subject details wrapper
-                        const detailsWrapper = card.querySelector('.subject-details-wrapper');
-                        detailsWrapper.style.display = 'block';
-                        
-                        // Set subject title
-                        const subjectTitle = detailsWrapper.querySelector('.selected-subject-title');
-                        subjectTitle.textContent = subject;
-                        
-                        // Set the current category and subject for the view button
-                        const viewButton = detailsWrapper.querySelector('.view-button');
-                        viewButton.setAttribute('data-category', category);
-                        viewButton.setAttribute('data-subject', subject);
-                        
-                        // Add sample description
-                        const subjectDesc = detailsWrapper.querySelector('.selected-subject-description');
-                        const item = categorizedItems[category].subjects[subject];
-                        if (item) {
-                            const topicCount = item.topics.length;
-                            const levelText = item.levels.join(', ');
-                            subjectDesc.textContent = `${topicCount} topics - Knowledge Levels: ${levelText}`;
-                        }
-                    });
-                });
-                
-                // Add back to subjects button handler
-                document.querySelectorAll('.back-to-subjects').forEach(button => {
-                    button.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const card = this.closest('.training-card');
-                        
-                        // Show subject list
-                        card.querySelectorAll('.topic-list').forEach(list => {
-                            list.style.display = '';
-                        });
-                        
-                        // Hide details wrapper
-                        card.querySelector('.subject-details-wrapper').style.display = 'none';
-                    });
-                });
-                
-            } catch (e) {
-                console.error("Error generating category cards:", e);
-                console.error(e.stack);
-            }
-            // Initialize filter system
-            const filterItems = document.querySelectorAll('.filter-item');
-            const trainingCards = document.querySelectorAll('.training-card');
+        ];
+        // Main functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate cards
+            generateCards();
             
-            // Track active filters
+            // Set up filter functionality
+            setupFilters();
+        });
+        
+        // Generate cards for each training item
+        function generateCards() {
+            const trainingGrid = document.getElementById('training-grid');
+            
+            // Clear the grid
+            trainingGrid.innerHTML = '';
+            
+            // Create a card for each training item
+            trainingData.forEach(item => {
+                // Create card element
+                const card = document.createElement('div');
+                card.className = 'training-card';
+                card.setAttribute('data-id', item.id);
+                card.setAttribute('data-system', item.system);
+                card.setAttribute('data-level', item.level.toLowerCase());
+                
+                // Create card HTML
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-system-tag system-${item.system}">[${item.system.toUpperCase()}]</div>
+                        <div class="card-title">${item.name}</div>
+                        <div class="card-level">${item.levelText}</div>
+                        <div class="card-duration">Duration: ${item.duration}</div>
+                    </div>
+                    <div class="card-content">
+                        <button class="view-details-btn" data-id="${item.id}">VIEW DETAILS</button>
+                        <div class="card-details" id="details-${item.id}">
+                            <h4>Covers:</h4>
+                            <ul class="content-list">
+                                ${item.content.map(point => `<li>${point}</li>`).join('')}
+                            </ul>
+                            <h4>Requirements:</h4>
+                            <ul class="requirements-list">
+                                ${item.requirements.map(req => `<li>${req}</li>`).join('')}
+                            </ul>
+                            <button class="hide-details-btn" data-id="${item.id}">HIDE DETAILS</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add card to the grid
+                trainingGrid.appendChild(card);
+            });
+            
+            // Add click handlers for view/hide details buttons
+            document.querySelectorAll('.view-details-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    
+                    // Show details
+                    const detailsSection = document.getElementById(`details-${id}`);
+                    detailsSection.style.display = 'block';
+                    
+                    // Hide the view button
+                    this.style.display = 'none';
+                    
+                    // Show the hide button
+                    const hideButton = document.querySelector(`.hide-details-btn[data-id="${id}"]`);
+                    hideButton.style.display = 'block';
+                });
+            });
+            
+            document.querySelectorAll('.hide-details-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    
+                    // Hide details
+                    const detailsSection = document.getElementById(`details-${id}`);
+                    detailsSection.style.display = 'none';
+                    
+                    // Show the view button
+                    const viewButton = document.querySelector(`.view-details-btn[data-id="${id}"]`);
+                    viewButton.style.display = 'block';
+                    
+                    // Hide the hide button
+                    this.style.display = 'none';
+                });
+            });
+        }
+        
+        // Set up filter functionality
+        function setupFilters() {
+            const filterItems = document.querySelectorAll('.filter-item');
+            
+            // Active filters
             const activeFilters = {
                 system: 'all',
-                category: 'all',
                 level: 'all'
             };
             
-            // Filter click handler
+            // Add click handlers to filter items
             filterItems.forEach(item => {
                 item.addEventListener('click', function() {
                     const filterType = this.getAttribute('data-filter');
                     const filterValue = this.getAttribute('data-value');
                     
-                    // Update active filter for this type
+                    // Update active filter
                     activeFilters[filterType] = filterValue;
                     
-                    // Toggle active class in this filter group
+                    // Update active class
                     document.querySelectorAll(`.filter-item[data-filter="${filterType}"]`).forEach(el => {
                         el.classList.remove('active');
                     });
                     this.classList.add('active');
                     
-                    // Apply all filters
-                    applyFilters();
+                    // Apply filters
+                    applyFilters(activeFilters);
                 });
             });
+        }
+        
+        // Apply active filters to cards
+        function applyFilters(activeFilters) {
+            const cards = document.querySelectorAll('.training-card');
             
-            // Filter application function
-            function applyFilters() {
-                trainingCards.forEach(card => {
-                    const cardSystem = card.getAttribute('data-system');
-                    const cardCategory = card.getAttribute('data-category');
-                    const cardLevel = card.getAttribute('data-level');
-                    
-                    // Check if card passes all filters
-                    const passesSystemFilter = activeFilters.system === 'all' || cardSystem === activeFilters.system;
-                    const passesCategoryFilter = activeFilters.category === 'all' || cardCategory === activeFilters.category;
-                    const passesLevelFilter = activeFilters.level === 'all' || cardLevel.includes(activeFilters.level);
-                    
-                    // Show/hide based on combined filter result
-                    if (passesSystemFilter && passesCategoryFilter && passesLevelFilter) {
-                        card.style.display = '';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            }
-            
-            // Update the view details button handler
-            document.querySelectorAll('.view-button').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const category = this.getAttribute('data-category');
-                    const subject = this.getAttribute('data-subject');
-                    
-                    // Find the item in our training data
-                    let item = null;
-                    Object.values(trainingData).forEach(dataItem => {
-                        if (dataItem.category === category && dataItem.subject === subject) {
-                            item = dataItem;
-                        }
-                    });
-                    
-                    if (!item) {
-                        console.error("Could not find item for", category, subject);
-                        return;
-                    }
-                    
-                    // Set modal header
-                    document.querySelector('.detail-title').textContent = subject;
-                    document.querySelector('.detail-category').textContent = category;
-                    
-                    // Clear previous content
-                    const detailContent = document.querySelector('.detail-content');
-                    detailContent.innerHTML = '';
-                    
-                    // Group topics by knowledge level
-                    const topicsByLevel = {};
-                    
-                    // Sort levels to ensure consistent order (L1, L2, L3, etc.)
-                    const sortedLevels = [...item.levels].sort();
-                    
-                    // Initialize groups for each level
-                    sortedLevels.forEach(level => {
-                        topicsByLevel[level] = [];
-                    });
-                    
-                    // Group topics by their level
-                    item.topics.forEach(topic => {
-                        if (topic.level && topicsByLevel[topic.level]) {
-                            topicsByLevel[topic.level].push(topic);
-                        } else {
-                            // If level doesn't match our groups, create "Other" category
-                            if (!topicsByLevel['Other']) {
-                                topicsByLevel['Other'] = [];
-                            }
-                            topicsByLevel['Other'].push(topic);
-                        }
-                    });
-                    
-                    // Create a section for each level
-                    Object.keys(topicsByLevel).forEach(level => {
-                        if (topicsByLevel[level].length === 0) return;
-                        
-                        // Create level section
-                        const levelSection = document.createElement('div');
-                        levelSection.className = 'detail-level-section';
-                        
-                        // Level header
-                        const levelHeader = document.createElement('h3');
-                        levelHeader.className = 'detail-level-header';
-                        levelHeader.textContent = `Knowledge Level: ${level}`;
-                        levelSection.appendChild(levelHeader);
-                        
-                        // Add topics for this level
-                        topicsByLevel[level].forEach(topic => {
-                            const detailItem = document.createElement('div');
-                            detailItem.className = 'detail-item';
-                            
-                            const detailHTML = `
-                                <div class="detail-topic">${topic.title || 'N/A'}</div>
-                                <div class="detail-requirements">${topic.details || 'N/A'}</div>
-                                <div class="detail-meta">
-                                    ${topic.duration ? `<div class="detail-duration">Duration: ${topic.duration}</div>` : ''}
-                                </div>
-                            `;
-                            
-                            detailItem.innerHTML = detailHTML;
-                            levelSection.appendChild(detailItem);
-                        });
-                        
-                        // Add the level section to detail content
-                        detailContent.appendChild(levelSection);
-                    });
-                    
-                    // Show modal
-                    modal.style.display = 'block';
-                });
-            });
-            
-            // Close modal when X is clicked
-            const modal = document.getElementById('detail-modal');
-            const closeModal = document.querySelector('.close-modal');
-            
-            closeModal.addEventListener('click', function() {
-                modal.style.display = 'none';
-            });
-            
-            // Close modal when clicking outside
-            window.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
+            cards.forEach(card => {
+                const cardSystem = card.getAttribute('data-system');
+                const cardLevel = card.getAttribute('data-level');
+                
+                // Check if card passes system filter
+                const passesSystemFilter = activeFilters.system === 'all' || cardSystem === activeFilters.system;
+                
+                // Check if card passes level filter
+                const passesLevelFilter = activeFilters.level === 'all' || cardLevel === activeFilters.level;
+                
+                // Show/hide card based on filters
+                if (passesSystemFilter && passesLevelFilter) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
                 }
             });
-        });
+        }
     </script>
 </body>
 </html>

@@ -323,7 +323,7 @@ app.post('/evaluation', async (req, res) => {
             recommend,
             averageScore
         } = req.body;
-
+        
         // Basic validation
         if (!trainingId || !trainingTitle || !trainingDate || !trainer || !location) {
             return res.status(400).json({ 
@@ -331,12 +331,22 @@ app.post('/evaluation', async (req, res) => {
                 details: 'Training information is required.'
             });
         }
-
+        
+        // Format date properly for Airtable
+        let formattedDate;
+        try {
+            // Try to parse and format the date
+            formattedDate = new Date(trainingDate).toISOString().split('T')[0];
+        } catch (e) {
+            // If parsing fails, use the original string
+            formattedDate = trainingDate;
+        }
+        
         // Format data for Airtable
         const fields = {
             'Training ID': trainingId,
             'Training Title': trainingTitle,
-            'Training Date': trainingDate,
+            'Training Date': formattedDate, // Properly formatted date for Airtable
             'Trainer': trainer,
             'Training Type': location,
             
@@ -355,18 +365,18 @@ app.post('/evaluation', async (req, res) => {
             'Comments': comments || '',
             'Would Recommend': recommend === 'Yes' || recommend === true,
             
-            // Average score for quick analytics
+            // Average score for quick analytics (now including recommendation)
             'Average Score': parseFloat(averageScore) || 0,
             
-            // Submission timestamp
-            'Submission Date': new Date().toISOString()
+            // Submission timestamp - properly formatted for Airtable
+            'Submission Date': new Date().toISOString().split('T')[0]
         };
-
+        
         // Create record in Airtable evaluations table
         const record = await trainingBase(EVALUATIONS_TABLE_NAME).create([{ fields }]);
         
         console.log('Evaluation recorded successfully with ID:', record[0].id);
-
+        
         // Success response
         res.status(200).json({
             message: 'Evaluation submitted successfully',

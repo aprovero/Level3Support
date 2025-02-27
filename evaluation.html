@@ -34,9 +34,9 @@
         }
         
         .rating-group {
-        display: flex;
-        margin-bottom: 15px;
-        align-items: center;
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
         }
 
         .rating-title {
@@ -59,7 +59,8 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-        }        
+        }
+        
         .rating-option input {
             margin-right: 5px;
         }
@@ -83,6 +84,41 @@
         
         .required {
             color: #dc3545;
+        }
+        
+        .recommend-options {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .recommend-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .recommend-option input {
+            margin-right: 5px;
+        }
+        
+        .message {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        
+        .message.error {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #b91c1c;
+        }
+        
+        .message-details {
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+        
+        .lookup-btn {
+            font-weight: bold;
         }
         
         /* Mobile responsiveness improvements */
@@ -130,7 +166,7 @@
         <form id="evaluationForm" class="form-container">
             <!-- Hidden field to store Training ID reference -->
             <input type="hidden" id="trainingRecordId" name="trainingRecordId">
-            
+
             <!-- Training ID Entry -->
             <div class="form-section">
                 <div class="form-section-title">Training Evaluation</div>
@@ -140,7 +176,7 @@
                     <label for="trainingId" class="block mb-2">Training ID <span class="required">*</span></label>
                     <div class="flex">
                         <input type="text" id="trainingId" name="trainingId" required class="flex-grow p-2 border border-gray-300 rounded-l" placeholder="Enter Training ID (e.g., TR-2025-001)">
-                        <button type="button" id="fetchTrainingBtn" class="bg-orange-500 text-white px-4 h-10 rounded-r hover:bg-orange-600 w-auto">Lookup</button>
+                        <button type="button" id="fetchTrainingBtn" class="bg-orange-500 text-white px-4 h-10 rounded-r hover:bg-orange-600 w-auto lookup-btn">Lookup</button>
                     </div>
                     <p id="fetchStatus" class="text-sm mt-2 hidden"></p>
                 </div>
@@ -185,104 +221,104 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Knowledge and expertise</div>
-                    <div class="rating-options grid grid-cols-5 gap-4">
-                        <div class="rating-option flex flex-col items-center">
+                    <div class="rating-options">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-knowledge-1" name="trainerKnowledge" value="1" required>
-                            <label for="trainer-knowledge-1" class="text-sm mt-1">Poor</label>
+                            <label for="trainer-knowledge-1" class="text-sm">Poor</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-knowledge-2" name="trainerKnowledge" value="2">
-                            <label for="trainer-knowledge-2" class="text-sm mt-1">Fair</label>
+                            <label for="trainer-knowledge-2" class="text-sm">Fair</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-knowledge-3" name="trainerKnowledge" value="3">
-                            <label for="trainer-knowledge-3" class="text-sm mt-1">Good</label>
+                            <label for="trainer-knowledge-3" class="text-sm">Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-knowledge-4" name="trainerKnowledge" value="4">
-                            <label for="trainer-knowledge-4" class="text-sm mt-1">Very Good</label>
+                            <label for="trainer-knowledge-4" class="text-sm">Very Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-knowledge-5" name="trainerKnowledge" value="5">
-                            <label for="trainer-knowledge-5" class="text-sm mt-1">Excellent</label>
+                            <label for="trainer-knowledge-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
                 
                 <div class="rating-group">
                     <div class="rating-title">Clarity of communication</div>
-                    <div class="rating-options grid grid-cols-5 gap-4">
-                        <div class="rating-option flex flex-col items-center">
+                    <div class="rating-options">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-clarity-1" name="trainerClarity" value="1" required>
-                            <label for="trainer-clarity-1" class="text-sm mt-1">Poor</label>
+                            <label for="trainer-clarity-1" class="text-sm">Poor</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-clarity-2" name="trainerClarity" value="2">
-                            <label for="trainer-clarity-2" class="text-sm mt-1">Fair</label>
+                            <label for="trainer-clarity-2" class="text-sm">Fair</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-clarity-3" name="trainerClarity" value="3">
-                            <label for="trainer-clarity-3" class="text-sm mt-1">Good</label>
+                            <label for="trainer-clarity-3" class="text-sm">Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-clarity-4" name="trainerClarity" value="4">
-                            <label for="trainer-clarity-4" class="text-sm mt-1">Very Good</label>
+                            <label for="trainer-clarity-4" class="text-sm">Very Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-clarity-5" name="trainerClarity" value="5">
-                            <label for="trainer-clarity-5" class="text-sm mt-1">Excellent</label>
+                            <label for="trainer-clarity-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="rating-group">
                     <div class="rating-title">Responsiveness to questions</div>
-                    <div class="rating-options grid grid-cols-5 gap-4">
-                        <div class="rating-option flex flex-col items-center">
+                    <div class="rating-options">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-responsiveness-1" name="trainerResponsiveness" value="1" required>
-                            <label for="trainer-responsiveness-1" class="text-sm mt-1">Poor</label>
+                            <label for="trainer-responsiveness-1" class="text-sm">Poor</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-responsiveness-2" name="trainerResponsiveness" value="2">
-                            <label for="trainer-responsiveness-2" class="text-sm mt-1">Fair</label>
+                            <label for="trainer-responsiveness-2" class="text-sm">Fair</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-responsiveness-3" name="trainerResponsiveness" value="3">
-                            <label for="trainer-responsiveness-3" class="text-sm mt-1">Good</label>
+                            <label for="trainer-responsiveness-3" class="text-sm">Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-responsiveness-4" name="trainerResponsiveness" value="4">
-                            <label for="trainer-responsiveness-4" class="text-sm mt-1">Very Good</label>
+                            <label for="trainer-responsiveness-4" class="text-sm">Very Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-responsiveness-5" name="trainerResponsiveness" value="5">
-                            <label for="trainer-responsiveness-5" class="text-sm mt-1">Excellent</label>
+                            <label for="trainer-responsiveness-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
                 
                 <div class="rating-group">
                     <div class="rating-title">Engagement and training style</div>
-                    <div class="rating-options grid grid-cols-5 gap-4">
-                        <div class="rating-option flex flex-col items-center">
+                    <div class="rating-options">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-engagement-1" name="trainerEngagement" value="1" required>
-                            <label for="trainer-engagement-1" class="text-sm mt-1">Poor</label>
+                            <label for="trainer-engagement-1" class="text-sm">Poor</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-engagement-2" name="trainerEngagement" value="2">
-                            <label for="trainer-engagement-2" class="text-sm mt-1">Fair</label>
+                            <label for="trainer-engagement-2" class="text-sm">Fair</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-engagement-3" name="trainerEngagement" value="3">
-                            <label for="trainer-engagement-3" class="text-sm mt-1">Good</label>
+                            <label for="trainer-engagement-3" class="text-sm">Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-engagement-4" name="trainerEngagement" value="4">
-                            <label for="trainer-engagement-4" class="text-sm mt-1">Very Good</label>
+                            <label for="trainer-engagement-4" class="text-sm">Very Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="trainer-engagement-5" name="trainerEngagement" value="5">
-                            <label for="trainer-engagement-5" class="text-sm mt-1">Excellent</label>
+                            <label for="trainer-engagement-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
@@ -295,104 +331,104 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Relevance to your needs</div>
-                    <div class="rating-options grid grid-cols-5 gap-4">
-                        <div class="rating-option flex flex-col items-center">
+                    <div class="rating-options">
+                        <div class="rating-option">
                             <input type="radio" id="content-relevance-1" name="contentRelevance" value="1" required>
-                            <label for="content-relevance-1" class="text-sm mt-1">Poor</label>
+                            <label for="content-relevance-1" class="text-sm">Poor</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-relevance-2" name="contentRelevance" value="2">
-                            <label for="content-relevance-2" class="text-sm mt-1">Fair</label>
+                            <label for="content-relevance-2" class="text-sm">Fair</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-relevance-3" name="contentRelevance" value="3">
-                            <label for="content-relevance-3" class="text-sm mt-1">Good</label>
+                            <label for="content-relevance-3" class="text-sm">Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-relevance-4" name="contentRelevance" value="4">
-                            <label for="content-relevance-4" class="text-sm mt-1">Very Good</label>
+                            <label for="content-relevance-4" class="text-sm">Very Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-relevance-5" name="contentRelevance" value="5">
-                            <label for="content-relevance-5" class="text-sm mt-1">Excellent</label>
+                            <label for="content-relevance-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
                 
                 <div class="rating-group">
                     <div class="rating-title">Depth of material</div>
-                    <div class="rating-options grid grid-cols-5 gap-4">
-                        <div class="rating-option flex flex-col items-center">
+                    <div class="rating-options">
+                        <div class="rating-option">
                             <input type="radio" id="content-depth-1" name="contentDepth" value="1" required>
-                            <label for="content-depth-1" class="text-sm mt-1">Poor</label>
+                            <label for="content-depth-1" class="text-sm">Poor</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-depth-2" name="contentDepth" value="2">
-                            <label for="content-depth-2" class="text-sm mt-1">Fair</label>
+                            <label for="content-depth-2" class="text-sm">Fair</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-depth-3" name="contentDepth" value="3">
-                            <label for="content-depth-3" class="text-sm mt-1">Good</label>
+                            <label for="content-depth-3" class="text-sm">Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-depth-4" name="contentDepth" value="4">
-                            <label for="content-depth-4" class="text-sm mt-1">Very Good</label>
+                            <label for="content-depth-4" class="text-sm">Very Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-depth-5" name="contentDepth" value="5">
-                            <label for="content-depth-5" class="text-sm mt-1">Excellent</label>
+                            <label for="content-depth-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="rating-group">
                     <div class="rating-title">Quality of materials (slides, handouts)</div>
-                    <div class="rating-options grid grid-cols-5 gap-4">
-                        <div class="rating-option flex flex-col items-center">
+                    <div class="rating-options">
+                        <div class="rating-option">
                             <input type="radio" id="content-materials-1" name="contentMaterials" value="1" required>
-                            <label for="content-materials-1" class="text-sm mt-1">Poor</label>
+                            <label for="content-materials-1" class="text-sm">Poor</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-materials-2" name="contentMaterials" value="2">
-                            <label for="content-materials-2" class="text-sm mt-1">Fair</label>
+                            <label for="content-materials-2" class="text-sm">Fair</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-materials-3" name="contentMaterials" value="3">
-                            <label for="content-materials-3" class="text-sm mt-1">Good</label>
+                            <label for="content-materials-3" class="text-sm">Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-materials-4" name="contentMaterials" value="4">
-                            <label for="content-materials-4" class="text-sm mt-1">Very Good</label>
+                            <label for="content-materials-4" class="text-sm">Very Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-materials-5" name="contentMaterials" value="5">
-                            <label for="content-materials-5" class="text-sm mt-1">Excellent</label>
+                            <label for="content-materials-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
                 
                 <div class="rating-group">
                     <div class="rating-title">Balance of theory and examples</div>
-                    <div class="rating-options grid grid-cols-5 gap-4">
-                        <div class="rating-option flex flex-col items-center">
+                    <div class="rating-options">
+                        <div class="rating-option">
                             <input type="radio" id="content-balance-1" name="contentBalance" value="1" required>
-                            <label for="content-balance-1" class="text-sm mt-1">Poor</label>
+                            <label for="content-balance-1" class="text-sm">Poor</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-balance-2" name="contentBalance" value="2">
-                            <label for="content-balance-2" class="text-sm mt-1">Fair</label>
+                            <label for="content-balance-2" class="text-sm">Fair</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-balance-3" name="contentBalance" value="3">
-                            <label for="content-balance-3" class="text-sm mt-1">Good</label>
+                            <label for="content-balance-3" class="text-sm">Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-balance-4" name="contentBalance" value="4">
-                            <label for="content-balance-4" class="text-sm mt-1">Very Good</label>
+                            <label for="content-balance-4" class="text-sm">Very Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="content-balance-5" name="contentBalance" value="5">
-                            <label for="content-balance-5" class="text-sm mt-1">Excellent</label>
+                            <label for="content-balance-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
@@ -404,26 +440,26 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Overall satisfaction with the training</div>
-                    <div class="rating-options grid grid-cols-5 gap-4">
-                        <div class="rating-option flex flex-col items-center">
+                    <div class="rating-options">
+                        <div class="rating-option">
                             <input type="radio" id="overall-satisfaction-1" name="overallSatisfaction" value="1" required>
-                            <label for="overall-satisfaction-1" class="text-sm mt-1">Poor</label>
+                            <label for="overall-satisfaction-1" class="text-sm">Poor</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="overall-satisfaction-2" name="overallSatisfaction" value="2">
-                            <label for="overall-satisfaction-2" class="text-sm mt-1">Fair</label>
+                            <label for="overall-satisfaction-2" class="text-sm">Fair</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="overall-satisfaction-3" name="overallSatisfaction" value="3">
-                            <label for="overall-satisfaction-3" class="text-sm mt-1">Good</label>
+                            <label for="overall-satisfaction-3" class="text-sm">Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="overall-satisfaction-4" name="overallSatisfaction" value="4">
-                            <label for="overall-satisfaction-4" class="text-sm mt-1">Very Good</label>
+                            <label for="overall-satisfaction-4" class="text-sm">Very Good</label>
                         </div>
-                        <div class="rating-option flex flex-col items-center">
+                        <div class="rating-option">
                             <input type="radio" id="overall-satisfaction-5" name="overallSatisfaction" value="5">
-                            <label for="overall-satisfaction-5" class="text-sm mt-1">Excellent</label>
+                            <label for="overall-satisfaction-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
@@ -435,24 +471,27 @@
                 
                 <div class="mb-4">
                     <label class="block mb-2">Would you recommend this training to others?</label>
-                    <div class="flex gap-4">
-                        <div class="flex items-center">
+                    <div class="recommend-options">
+                        <div class="recommend-option">
                             <input type="radio" id="recommend-yes" name="recommend" value="Yes" required>
-                            <label for="recommend-yes" class="ml-2">Yes</label>
+                            <label for="recommend-yes" class="text-sm mt-1">Yes</label>
                         </div>
-                        <div class="flex items-center">
+                        <div class="recommend-option">
                             <input type="radio" id="recommend-no" name="recommend" value="No">
-                            <label for="recommend-no" class="ml-2">No</label>
+                            <label for="recommend-no" class="text-sm mt-1">No</label>
                         </div>
                     </div>
                 </div>
             </div>
             
+            <!-- Message container for submit errors -->
+            <div id="submit-message-container"></div>
+            
             <div class="text-center">
                 <button type="submit" class="submit-button">SUBMIT EVALUATION</button>
             </div>
         </form>
-        
+
         <!-- Submission Confirmation (Hidden by default) -->
         <div id="submissionConfirmation" class="form-container text-center hidden">
             <h2 class="text-xl font-bold mb-4 text-green-600">Thank You for Your Feedback!</h2>
@@ -471,14 +510,18 @@
         </div>
 
         <script>
+
             // Function to connect with your Node.js backend
             async function submitToAirtable(formData) {
                 try {
+                    // Format dates properly for Airtable
+                    const formattedTrainingDate = formData.trainingDate ? new Date(formData.trainingDate).toISOString().split('T')[0] : '';
+                    
                     // Convert form data to the format expected by your server.js
                     const submissionData = {
                         trainingId: formData.trainingId,
                         trainingTitle: formData.trainingTitle,
-                        trainingDate: formData.trainingDate,
+                        trainingDate: formattedTrainingDate, // Properly formatted date
                         trainer: formData.trainer,
                         location: formData.location,
                         trainerKnowledge: parseInt(formData.trainerKnowledge),
@@ -492,6 +535,7 @@
                         overallSatisfaction: parseInt(formData.overallSatisfaction),
                         comments: formData.comments,
                         recommend: formData.recommend === 'Yes',
+                        // New average score calculation including the recommendation
                         averageScore: (
                             parseInt(formData.trainerKnowledge) +
                             parseInt(formData.trainerClarity) +
@@ -501,8 +545,9 @@
                             parseInt(formData.contentDepth) +
                             parseInt(formData.contentMaterials) +
                             parseInt(formData.contentBalance) +
-                            parseInt(formData.overallSatisfaction)
-                        ) / 9
+                            parseInt(formData.overallSatisfaction) +
+                            (formData.recommend === 'Yes' ? 5 : 1) // Adding 5 for Yes and 1 for No
+                        ) / 10 // Divide by 10 now (9 ratings + recommendation)
                     };
                     
                     // Make an actual POST request to your backend
@@ -531,115 +576,143 @@
                     return { success: false, error: error.message };
                 }
             }
+            
+            // Display error message function that matches the index page style
+            function showErrorMessage(container, title, details = '') {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message error';
+                messageElement.innerHTML = `
+                    <strong>${title}</strong>
+                    ${details ? `<div class="message-details">${details}</div>` : ''}
+                `;
+                container.innerHTML = '';
+                container.appendChild(messageElement);
+                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
 
             document.addEventListener('DOMContentLoaded', function() {
-            // Initialize the form
-            const form = document.getElementById('evaluationForm');
-            const trainingIdInput = document.getElementById('trainingId');
-            const fetchButton = document.getElementById('fetchTrainingBtn');
-            const fetchStatus = document.getElementById('fetchStatus');
-            const trainingInfoSection = document.getElementById('trainingInfoSection');
-            
-            // Show a message to the user
-            function showStatus(message, type) {
-                fetchStatus.textContent = message;
-                fetchStatus.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-blue-600');
+                // Initialize the form
+                const form = document.getElementById('evaluationForm');
+                const trainingIdInput = document.getElementById('trainingId');
+                const fetchButton = document.getElementById('fetchTrainingBtn');
+                const fetchStatus = document.getElementById('fetchStatus');
+                const trainingInfoSection = document.getElementById('trainingInfoSection');
+                const submitMessageContainer = document.getElementById('submit-message-container');
                 
-                switch (type) {
-                    case 'success':
-                        fetchStatus.classList.add('text-green-600');
-                        break;
-                    case 'error':
-                        fetchStatus.classList.add('text-red-600');
-                        break;
-                    case 'info':
-                        fetchStatus.classList.add('text-blue-600');
-                        break;
+                // Show a message to the user for lookup
+                function showStatus(message, type) {
+                    fetchStatus.textContent = message;
+                    fetchStatus.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-blue-600');
+                    
+                    switch (type) {
+                        case 'success':
+                            fetchStatus.classList.add('text-green-600');
+                            break;
+                        case 'error':
+                            fetchStatus.classList.add('text-red-600');
+                            break;
+                        case 'info':
+                            fetchStatus.classList.add('text-blue-600');
+                            break;
+                    }
+                    
+                    fetchStatus.classList.remove('hidden');
                 }
                 
-                fetchStatus.classList.remove('hidden');
-            }
-            
-            // Format date for display
-            function formatDate(dateString) {
-                if (!dateString) return '-';
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            }
-            
-            // Handle click on the lookup button
-            fetchButton.addEventListener('click', function() {
-                const trainingId = trainingIdInput.value.trim();
-                
-                if (!trainingId) {
-                    showStatus('Please enter a Training ID', 'error');
-                    return;
+                // Format date for display
+                function formatDate(dateString) {
+                    if (!dateString) return '-';
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                 }
                 
-                showStatus('Looking up training information...', 'info');
+                // Handle click on the lookup button
+                fetchButton.addEventListener('click', function() {
+                    const trainingId = trainingIdInput.value.trim();
+                    
+                    if (!trainingId) {
+                        showStatus('Please enter a Training ID', 'error');
+                        return;
+                    }
+                    
+                    showStatus('Looking up training information...', 'info');
+                    
+                    // Make API call to fetch training information from the server
+                    fetch(`https://level3support.onrender.com/training/${trainingId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                showStatus(data.error, 'error');
+                                return;
+                            }
+                            
+                            // Display the training information
+                            document.getElementById('displayTrainingTitle').textContent = data.title;
+                            document.getElementById('displayTrainingDate').textContent = formatDate(data.date);
+                            document.getElementById('displayTrainer').textContent = data.trainer;
+                            
+                            // Set hidden form fields
+                            document.getElementById('trainingTitle').value = data.title;
+                            document.getElementById('trainingDate').value = data.date;
+                            document.getElementById('trainer').value = data.trainer;
+                            
+                            // Show the training section
+                            trainingInfoSection.classList.remove('hidden');
+                            showStatus('Training information found', 'success');
+                        })
+                        .catch(error => {
+                            console.error('Error fetching training info:', error);
+                            showStatus('Error looking up training information. Please try again.', 'error');
+                        });
+                });
                 
-                // Make API call to fetch training information from the server
-                fetch(`https://level3support.onrender.com/training/${trainingId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.error) {
-                            showStatus(data.error, 'error');
-                            return;
-                        }
+                // Form submission handling
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    // Clear previous messages
+                    submitMessageContainer.innerHTML = '';
+                    
+                    // Validate that training info was retrieved
+                    if (trainingInfoSection.classList.contains('hidden')) {
+                        showErrorMessage(submitMessageContainer, 'Please lookup a valid Training ID first');
+                        return;
+                    }
+                    
+                    // Get form data
+                    const formData = new FormData(form);
+                    const formValues = Object.fromEntries(formData.entries());
+                    
+                    // Show loading state
+                    document.querySelector('.submit-button').disabled = true;
+                    document.querySelector('.submit-button').textContent = 'Submitting...';
+                    
+                    // Submit to Airtable via your backend
+                    const result = await submitToAirtable(formValues);
+                    
+                    if (result.success) {
+                        // Hide form and welcome message
+                        document.querySelector('h1').classList.add('hidden');
+                        document.querySelector('p.mb-6').classList.add('hidden');
+                        document.getElementById('evaluationForm').classList.add('hidden');
                         
-                        // Display the training information
-                        document.getElementById('displayTrainingTitle').textContent = data.title;
-                        document.getElementById('displayTrainingDate').textContent = formatDate(data.date);
-                        document.getElementById('displayTrainer').textContent = data.trainer;
+                        // Show confirmation
+                        document.getElementById('submissionConfirmation').classList.remove('hidden');
+                    } else {
+                        // Show error message above submit button
+                        showErrorMessage(
+                            submitMessageContainer, 
+                            'Error submitting evaluation', 
+                            result.error || 'Unknown error occurred. Please try again.'
+                        );
                         
-                        // Set hidden form fields
-                        document.getElementById('trainingTitle').value = data.title;
-                        document.getElementById('trainingDate').value = data.date;
-                        document.getElementById('trainer').value = data.trainer;
-                        
-                        // Show the training section
-                        trainingInfoSection.classList.remove('hidden');
-                        showStatus('Training information found', 'success');
-                    })
-                    .catch(error => {
-                        console.error('Error fetching training info:', error);
-                        showStatus('Error looking up training information. Please try again.', 'error');
-                    });
+                        // Reset button state
+                        document.querySelector('.submit-button').disabled = false;
+                        document.querySelector('.submit-button').textContent = 'SUBMIT EVALUATION';
+                    }
+                });
             });
-            
-            // Form submission handling
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                // Validate that training info was retrieved
-                if (trainingInfoSection.classList.contains('hidden')) {
-                    showStatus('Please lookup a valid Training ID first', 'error');
-                    return;
-                }
-                
-                // Get form data
-                const formData = new FormData(form);
-                const formValues = Object.fromEntries(formData.entries());
-                
-                // Show loading state
-                document.querySelector('.submit-button').disabled = true;
-                document.querySelector('.submit-button').textContent = 'Submitting...';
-                
-                // Submit to Airtable via your backend
-                const result = await submitToAirtable(formValues);
-                
-                if (result.success) {
-                    // Hide form and show confirmation
-                    document.getElementById('evaluationForm').classList.add('hidden');
-                    document.getElementById('submissionConfirmation').classList.remove('hidden');
-                } else {
-                    showStatus('Error submitting evaluation: ' + (result.error || 'Unknown error'), 'error');
-                    // Reset button state
-                    document.querySelector('.submit-button').disabled = false;
-                    document.querySelector('.submit-button').textContent = 'SUBMIT EVALUATION';
-                }
-            });
-        });
-    </script>
+        </script>
+    </div>
 </body>
 </html>
