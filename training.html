@@ -54,228 +54,6 @@
             background-color: #e6f2ff;
             border-radius: 4px;
         }
-        
-        .card-content {
-            padding: 15px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .topic-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            flex: 1;
-        }
-        
-        .topic-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .topic-item:last-child {
-            border-bottom: none;
-        }
-        
-        .view-button {
-            display: block;
-            text-align: center;
-            background-color: #ff9500;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 5px;
-            margin-top: 15px;
-            font-weight: bold;
-            text-decoration: none;
-            transition: background-color 0.3s;
-            margin-top: auto;
-        }
-        
-        .view-button:hover {
-            background-color: #b36b00;
-            text-decoration: none;
-            color: white;
-        }
-
-        /* Filter controls */
-        .filter-controls {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        
-        .filter-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .filter-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .filter-item {
-            background-color: #f0f7ff;
-            color: #333;
-            padding: 6px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-        .filter-item:hover {
-            background-color: #e1f0ff;
-        }
-        
-        .filter-item.active {
-            background-color: #007bff;
-            color: white;
-            border: 1px solid #0062cc;
-        }
-
-        /* Enhanced Resource Links Styles */
-        .resource-links {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .resource-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f0f7ff;
-            border: 1px solid #cce5ff;
-            border-radius: 8px;
-            padding: 15px;
-            text-decoration: none;
-            color: #0066cc;
-            transition: all 0.2s ease;
-            height: 100%;
-            text-align: center;
-        }
-
-        .resource-link:hover {
-            background-color: #e6f0ff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .link-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-        }
-
-        /* Enhanced Under Construction Banner */
-        .under-construction-banner {
-            background-color: #ffe066;
-            border: 2px solid #ffcc00;
-            border-left: 8px solid #ff9900;
-            border-radius: 8px;
-            padding: 15px 20px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
-            50% { box-shadow: 0 4px 12px rgba(255, 153, 0, 0.4); }
-            100% { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); }
-        }
-        .construction-icon {
-            font-size: 36px;
-            margin-right: 20px;
-        }
-
-        .construction-message h2 {
-            margin: 0 0 8px 0;
-            font-size: 22px;
-            color: #664d00;
-            font-weight: bold;
-        }
-
-        .construction-message p {
-            margin: 0;
-            color: #664d00;
-            font-size: 16px;
-        }
-
-        /* Detail Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        
-        .modal-content {
-            background-color: white;
-            margin: 50px auto;
-            padding: 20px;
-            width: 80%;
-            max-width: 800px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #555;
-            cursor: pointer;
-        }
-        
-        .close-modal:hover {
-            color: #000;
-        }
-        
-        /* Responsive design for filters and resource links */
-        @media (max-width: 768px) {
-            .filter-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .filter-item {
-                text-align: center;
-            }
-            
-            .resource-links {
-                grid-template-columns: 1fr;
-            }
-            
-            .under-construction-banner {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .construction-icon {
-                margin: 0 0 10px 0;
-            }
-            
-            .modal-content {
-                width: 95%;
-                margin: 20px auto;
-            }
-        }
     </style>
 </head>
 <body>
@@ -292,7 +70,7 @@
                 </div>
             </div>
         </div>
-        
+
         <a href="index.html" class="back-link">← Back to the Request Form</a>
         
         <!-- Under Construction Banner - MOVED ABOVE THE TITLE -->
@@ -311,13 +89,14 @@
         <div class="resource-links">
             <a href="https://sungrowdobrasil.com/" target="_blank" class="resource-link">
                 <img src="images/brazil-flag.png" alt="Brazil Flag" class="link-icon">
-                <span>SUNGROW Academy Brazil (Portuguese)</span>
+                <span>SUNGROW Academy (Portuguese)</span>
             </a>
             <a href="https://support.sungrowpower.com/home" target="_blank" class="resource-link">
                 <img src="images/resource-icon.png" alt="Resource Center" class="link-icon">
                 <span>SUNGROW Resource Center</span>
             </a>
         </div>
+
         <!-- Filter Section -->
         <div class="filter-controls">
             <div class="filter-title">Filter by:</div>
@@ -353,7 +132,6 @@
         <div class="training-grid">
             <!-- Cards will be dynamically inserted here -->
         </div>
-        
         <!-- Detail Modal -->
         <div id="detail-modal" class="modal">
             <div class="modal-content">
@@ -367,6 +145,7 @@
                 </div>
             </div>
         </div>
+        
         <!-- Footer -->
         <div class="footer">
             <div class="footer-text">
@@ -381,8 +160,7 @@
 
     <!-- Include the training data script -->
     <script src="unified-training-data.js"></script>
-    
-    <!-- Main JavaScript - First Part -->
+    <!-- Main JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log("Script started");
@@ -425,60 +203,137 @@
             } catch (e) {
                 console.error("Error setting up categories:", e);
             }
-            // Generate cards for each training item
-            const trainingGrid = document.querySelector('.training-grid');
-            
+
+            // Generate cards grouped by category
             try {
-                console.log("Generating cards");
-                let cardCount = 0;
+                console.log("Generating category-based cards");
+                const trainingGrid = document.querySelector('.training-grid');
                 
-                Object.keys(trainingData).forEach(key => {
-                    const item = trainingData[key];
+                // Group items by category
+                const categorizedItems = {};
+                
+                // First, group by category
+                Object.values(trainingData).forEach(item => {
+                    const category = item.category;
+                    if (!categorizedItems[category]) {
+                        categorizedItems[category] = {
+                            system: item.system,
+                            category: category,
+                            subjects: {},
+                            levels: new Set()
+                        };
+                    }
                     
-                    // Create category slug for data-category attribute
-                    const categorySlug = item.category.toLowerCase().replace(/\s+/g, '-');
+                    // Add subject to this category
+                    categorizedItems[category].subjects[item.subject] = item;
                     
-                    // Create level classes string (e.g., "l1 l2 l3")
-                    const levelClasses = item.levels.map(level => level.toLowerCase()).join(' ');
-                    
-                    // Get unique topic titles (excluding duplicates)
-                    const uniqueTopics = [];
-                    const topicTitles = new Set();
-                    
-                    item.topics.forEach(topic => {
-                        if (!topicTitles.has(topic.title)) {
-                            topicTitles.add(topic.title);
-                            uniqueTopics.push(topic.title);
-                        }
+                    // Collect all levels for this category
+                    item.levels.forEach(level => {
+                        categorizedItems[category].levels.add(level);
                     });
+                });
+                
+                console.log(`Found ${Object.keys(categorizedItems).length} categories`);
+                
+                // Create a card for each category
+                Object.keys(categorizedItems).forEach(categoryName => {
+                    const categoryData = categorizedItems[categoryName];
+                    const categorySlug = categoryName.toLowerCase().replace(/\s+/g, '-');
                     
-                    // Create the card HTML
+                    // Get all subjects in this category
+                    const subjects = Object.keys(categoryData.subjects);
+                    
+                    // Create level classes for the category card
+                    const levelClasses = Array.from(categoryData.levels)
+                        .map(level => level.toLowerCase())
+                        .join(' ');
+                    
+                    // Create the category card
                     const cardTemplate = `
-                        <div class="training-card" data-system="${item.system}" data-category="${categorySlug}" data-level="${levelClasses}" data-id="${item.id}">
+                        <div class="training-card" data-system="${categoryData.system}" data-category="${categorySlug}" data-level="${levelClasses}">
                             <div class="card-header">
-                                <div class="card-title">${item.subject}</div>
-                                <div class="card-category">${item.category}</div>
+                                <div class="card-title">${categoryName}</div>
+                                <div class="card-category">${categoryData.system.toUpperCase()} System</div>
                             </div>
                             <div class="card-content">
                                 <ul class="topic-list">
-                                    ${uniqueTopics.slice(0, 5).map(topic => `<li class="topic-item">${topic}</li>`).join('')}
-                                    ${uniqueTopics.length > 5 ? `<li class="topic-item">+${uniqueTopics.length - 5} more topics</li>` : ''}
+                                    ${subjects.slice(0, 5).map(subject => 
+                                        `<li class="topic-item subject-item" data-subject="${subject}" data-category="${categoryName}">
+                                            ${subject}
+                                        </li>`).join('')}
+                                    ${subjects.length > 5 ? `<li class="topic-item">+${subjects.length - 5} more subjects</li>` : ''}
                                 </ul>
-                                <a href="#" class="view-button">View Details</a>
+                                <div class="subject-details-wrapper" style="display:none;">
+                                    <h4 class="selected-subject-title"></h4>
+                                    <p class="selected-subject-description"></p>
+                                    <a href="#" class="view-button">View All Details</a>
+                                    <a href="#" class="back-to-subjects">← Back to Subjects</a>
+                                </div>
                             </div>
                         </div>
                     `;
                     
                     // Add the card to the grid
                     trainingGrid.insertAdjacentHTML('beforeend', cardTemplate);
-                    cardCount++;
                 });
                 
-                console.log(`Generated ${cardCount} cards`);
+                // Add click handlers for subject items
+                document.querySelectorAll('.subject-item').forEach(subjectItem => {
+                    subjectItem.addEventListener('click', function() {
+                        const subject = this.getAttribute('data-subject');
+                        const category = this.getAttribute('data-category');
+                        const card = this.closest('.training-card');
+                        
+                        // Hide all subjects
+                        card.querySelectorAll('.topic-list').forEach(list => {
+                            list.style.display = 'none';
+                        });
+                        
+                        // Show subject details wrapper
+                        const detailsWrapper = card.querySelector('.subject-details-wrapper');
+                        detailsWrapper.style.display = 'block';
+                        
+                        // Set subject title
+                        const subjectTitle = detailsWrapper.querySelector('.selected-subject-title');
+                        subjectTitle.textContent = subject;
+                        
+                        // Set the current category and subject for the view button
+                        const viewButton = detailsWrapper.querySelector('.view-button');
+                        viewButton.setAttribute('data-category', category);
+                        viewButton.setAttribute('data-subject', subject);
+                        
+                        // Add sample description
+                        const subjectDesc = detailsWrapper.querySelector('.selected-subject-description');
+                        const item = categorizedItems[category].subjects[subject];
+                        if (item) {
+                            const topicCount = item.topics.length;
+                            const levelText = item.levels.join(', ');
+                            subjectDesc.textContent = `${topicCount} topics - Knowledge Levels: ${levelText}`;
+                        }
+                    });
+                });
+                
+                // Add back to subjects button handler
+                document.querySelectorAll('.back-to-subjects').forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const card = this.closest('.training-card');
+                        
+                        // Show subject list
+                        card.querySelectorAll('.topic-list').forEach(list => {
+                            list.style.display = '';
+                        });
+                        
+                        // Hide details wrapper
+                        card.querySelector('.subject-details-wrapper').style.display = 'none';
+                    });
+                });
+                
             } catch (e) {
-                console.error("Error generating cards:", e);
+                console.error("Error generating category cards:", e);
                 console.error(e.stack);
             }
+            
             // Initialize filter system
             const filterItems = document.querySelectorAll('.filter-item');
             const trainingCards = document.querySelectorAll('.training-card');
@@ -531,24 +386,30 @@
                 });
             }
             
-            // Detail modal functionality
-            const modal = document.getElementById('detail-modal');
-            const closeModal = document.querySelector('.close-modal');
-            
-            // Attach event listeners to View Details buttons
+            // Update the view details button handler
             document.querySelectorAll('.view-button').forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    const card = this.closest('.training-card');
-                    const dataId = card.getAttribute('data-id');
-                    const item = trainingData[dataId];
+                    const category = this.getAttribute('data-category');
+                    const subject = this.getAttribute('data-subject');
                     
-                    if (!item) return;
+                    // Find the item in our training data
+                    let item = null;
+                    Object.values(trainingData).forEach(dataItem => {
+                        if (dataItem.category === category && dataItem.subject === subject) {
+                            item = dataItem;
+                        }
+                    });
+                    
+                    if (!item) {
+                        console.error("Could not find item for", category, subject);
+                        return;
+                    }
                     
                     // Set modal header
-                    document.querySelector('.detail-title').textContent = item.subject;
-                    document.querySelector('.detail-category').textContent = item.category;
+                    document.querySelector('.detail-title').textContent = subject;
+                    document.querySelector('.detail-category').textContent = category;
                     
                     // Clear previous content
                     const detailContent = document.querySelector('.detail-content');
@@ -620,6 +481,9 @@
             });
             
             // Close modal when X is clicked
+            const modal = document.getElementById('detail-modal');
+            const closeModal = document.querySelector('.close-modal');
+            
             closeModal.addEventListener('click', function() {
                 modal.style.display = 'none';
             });

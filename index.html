@@ -127,7 +127,7 @@
                 <textarea id="training-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
 
                 <label for="expected-date">Expected Date <span class="required-asterisk">*</span></label>
-                <div class="field-note">Minimum 15 days after requested date</div>
+                <div class="field-note">Minimum 1 month after requested date</div>
                 <input type="date" id="expected-date" name="expectedDate">
 
                 <label for="trainees-number">Number of Trainees <span class="required-asterisk">*</span></label>
@@ -220,9 +220,9 @@
             // Get today's date
             const today = new Date();
             
-            // Add 15 days
+            // Add 30 days
             const minDate = new Date(today);
-            minDate.setDate(today.getDate() + 15);
+            minDate.setDate(today.getDate() + 30);
             
             // Format the date as YYYY-MM-DD for the input
             const formattedDate = minDate.toISOString().split('T')[0];

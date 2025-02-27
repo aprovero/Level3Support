@@ -1,4 +1,7 @@
-require('dotenv').config();
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
@@ -9,11 +12,12 @@ const Airtable = require('airtable');
 const requiredEnvVars = [
     'AIRTABLE_API_KEY',
     'AIRTABLE_BASE_ID',
+    'AIRTABLE_TABLE_NAME',
     'EMAIL_USER',
     'EMAIL_PASS',
-    'AIRTABLE_TABLE_NAME',
     'AIRTABLE_EVALUATIONS_BASE_ID',
-    'AIRTABLE_EVALUATIONS_TABLE' 
+    'AIRTABLE_EVALUATIONS_TABLE',
+    'AIRTABLE_TRAININGS_TABLE'
 ];
 
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
@@ -66,9 +70,10 @@ const upload = multer({
 const mainBase = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
 const TABLE_NAME = process.env.AIRTABLE_TABLE_NAME;
 
-// Airtable configuration - evaluations base (separate base)
-const evaluationsBase = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_EVALUATIONS_BASE_ID);
+// Airtable configuration - evaluations & trainings base
+const trainingBase = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_EVALUATIONS_BASE_ID);
 const EVALUATIONS_TABLE_NAME = process.env.AIRTABLE_EVALUATIONS_TABLE;
+const TRAININGS_TABLE_NAME = process.env.AIRTABLE_TRAININGS_TABLE;
 
 // Email configuration
 const transporter = nodemailer.createTransport({
@@ -311,8 +316,8 @@ app.post('/evaluation', async (req, res) => {
             'Submission Date': new Date().toISOString()
         };
 
-        // Create record in Airtable evaluations base
-        const record = await evaluationsBase(EVALUATIONS_TABLE_NAME).create([{ fields }]);
+        // Create record in Airtable evaluations table
+        const record = await trainingBase(EVALUATIONS_TABLE_NAME).create([{ fields }]);
         
         console.log('Evaluation recorded successfully with ID:', record[0].id);
 
@@ -353,9 +358,47 @@ app.use((error, req, res, next) => {
     });
 });
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+// Lookup training information from Airtable
+app.get('/training/:id', async (req, res) => {
+    try {
+        const trainingId = req.params.id;
+        
+        if (!trainingId) {
+            return res.status(400).json({
+                error: 'Missing training ID',
+                details: 'Training ID is required'
+            });
+        }
+        
+        // Query the Trainings table in the evaluation base to find the training info
+        const records = await trainingBase(TRAININGS_TABLE_NAME).select({
+            filterByFormula: `{Training ID} = "${trainingId}"`,
+            maxRecords: 1
+        }).firstPage();
+        
+        if (!records || records.length === 0) {
+            return res.status(404).json({
+                error: 'Training not found',
+                details: 'No training found with the provided ID'
+            });
+        }
+        
+        const trainingData = records[0].fields;
+        
+        // Return the training information
+        res.status(200).json({
+            title: trainingData['Training Title'] || '',
+            date: trainingData['Training Date'] || '',
+            trainer: trainingData['Trainer'] || ''
+        });
+        
+    } catch (error) {
+        console.error('Error fetching training information:', error);
+        res.status(500).json({
+            error: 'Server error',
+            details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+        });
+    }
 });
 
 // Start server
