@@ -1,12 +1,13 @@
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
-});require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
 const nodemailer = require('nodemailer');
 const Airtable = require('airtable');
+
+// Initialize express app FIRST before using it
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Validate required environment variables
 const requiredEnvVars = [
@@ -26,13 +27,10 @@ if (missingVars.length > 0) {
     process.exit(1);
 }
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
 // CORS configuration
 app.use(cors({
     origin: 'https://aprovero.github.io',
-    methods: ['POST'],
+    methods: ['POST', 'GET'],  // Added GET for training lookup
     allowedHeaders: ['Content-Type'],
     credentials: true
 }));
@@ -107,6 +105,54 @@ function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Lookup training information from Airtable
+app.get('/training/:id', async (req, res) => {
+    try {
+        const trainingId = req.params.id;
+        
+        if (!trainingId) {
+            return res.status(400).json({
+                error: 'Missing training ID',
+                details: 'Training ID is required'
+            });
+        }
+        
+        // Query the Trainings table in the evaluation base to find the training info
+        const records = await trainingBase(TRAININGS_TABLE_NAME).select({
+            filterByFormula: `{Training ID} = "${trainingId}"`,
+            maxRecords: 1
+        }).firstPage();
+        
+        if (!records || records.length === 0) {
+            return res.status(404).json({
+                error: 'Training not found',
+                details: 'No training found with the provided ID'
+            });
+        }
+        
+        const trainingData = records[0].fields;
+        
+        // Return the training information
+        res.status(200).json({
+            title: trainingData['Training Title'] || '',
+            date: trainingData['Training Date'] || '',
+            trainer: trainingData['Trainer'] || ''
+        });
+        
+    } catch (error) {
+        console.error('Error fetching training information:', error);
+        res.status(500).json({
+            error: 'Server error',
+            details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+        });
+    }
+});
 
 // Main form submission endpoint
 app.post('/submit', upload.array('attachments', 5), async (req, res) => {
@@ -356,49 +402,6 @@ app.use((error, req, res, next) => {
         error: 'An unexpected error occurred',
         details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
-});
-
-// Lookup training information from Airtable
-app.get('/training/:id', async (req, res) => {
-    try {
-        const trainingId = req.params.id;
-        
-        if (!trainingId) {
-            return res.status(400).json({
-                error: 'Missing training ID',
-                details: 'Training ID is required'
-            });
-        }
-        
-        // Query the Trainings table in the evaluation base to find the training info
-        const records = await trainingBase(TRAININGS_TABLE_NAME).select({
-            filterByFormula: `{Training ID} = "${trainingId}"`,
-            maxRecords: 1
-        }).firstPage();
-        
-        if (!records || records.length === 0) {
-            return res.status(404).json({
-                error: 'Training not found',
-                details: 'No training found with the provided ID'
-            });
-        }
-        
-        const trainingData = records[0].fields;
-        
-        // Return the training information
-        res.status(200).json({
-            title: trainingData['Training Title'] || '',
-            date: trainingData['Training Date'] || '',
-            trainer: trainingData['Trainer'] || ''
-        });
-        
-    } catch (error) {
-        console.error('Error fetching training information:', error);
-        res.status(500).json({
-            error: 'Server error',
-            details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-        });
-    }
 });
 
 // Start server
