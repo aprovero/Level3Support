@@ -34,28 +34,32 @@
         }
         
         .rating-group {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 15px;
-            align-items: center;
-            margin-bottom: 15px;
+        display: flex;
+        margin-bottom: 15px;
+        align-items: center;
         }
-        
+
         .rating-title {
             font-weight: 500;
+            min-width: 200px;
+            padding-right: 15px;
+            text-align: left;
         }
-        
+
         .rating-options {
-            display: flex;
-            gap: 8px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            flex-grow: 1;
+            width: 100%;
         }
-        
+
         .rating-option {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            margin-right: 15px;
-        }
-        
+            text-align: center;
+        }        
         .rating-option input {
             margin-right: 5px;
         }
@@ -84,7 +88,13 @@
         /* Mobile responsiveness improvements */
         @media (max-width: 768px) {
             .rating-group {
-                grid-template-columns: 1fr;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .rating-title {
+                margin-bottom: 8px;
+                min-width: 100%;
             }
             
             .container {
@@ -175,7 +185,7 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Knowledge and expertise</div>
-                    <div class="rating-options flex justify-between">
+                    <div class="rating-option flex flex-col items-center">
                         <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="trainer-knowledge-1" name="trainerKnowledge" value="1" required>
                             <label for="trainer-knowledge-1" class="text-sm mt-1">Poor</label>
@@ -201,7 +211,7 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Clarity of communication</div>
-                    <div class="rating-options flex justify-between">
+                    <div class="rating-option flex flex-col items-center">
                         <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="trainer-clarity-1" name="trainerClarity" value="1" required>
                             <label for="trainer-clarity-1" class="text-sm mt-1">Poor</label>
@@ -227,7 +237,7 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Responsiveness to questions</div>
-                    <div class="rating-options flex justify-between">
+                    <div class="rating-option flex flex-col items-center">
                         <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="trainer-responsiveness-1" name="trainerResponsiveness" value="1" required>
                             <label for="trainer-responsiveness-1" class="text-sm mt-1">Poor</label>
@@ -253,7 +263,7 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Engagement and training style</div>
-                    <div class="rating-options flex justify-between">
+                    <div class="rating-option flex flex-col items-center">
                         <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="trainer-engagement-1" name="trainerEngagement" value="1" required>
                             <label for="trainer-engagement-1" class="text-sm mt-1">Poor</label>
@@ -285,7 +295,7 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Relevance to your needs</div>
-                    <div class="rating-options flex justify-between">
+                    <div class="rating-option flex flex-col items-center">
                         <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="content-relevance-1" name="contentRelevance" value="1" required>
                             <label for="content-relevance-1" class="text-sm mt-1">Poor</label>
@@ -311,7 +321,7 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Depth of material</div>
-                    <div class="rating-options flex justify-between">
+                    <div class="rating-option flex flex-col items-center">
                         <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="content-depth-1" name="contentDepth" value="1" required>
                             <label for="content-depth-1" class="text-sm mt-1">Poor</label>
@@ -337,7 +347,7 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Quality of materials (slides, handouts)</div>
-                    <div class="rating-options flex justify-between">
+                    <div class="rating-option flex flex-col items-center">
                         <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="content-materials-1" name="contentMaterials" value="1" required>
                             <label for="content-materials-1" class="text-sm mt-1">Poor</label>
@@ -363,7 +373,7 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Balance of theory and practical examples</div>
-                    <div class="rating-options flex justify-between">
+                    <div class="rating-option flex flex-col items-center">
                         <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="content-balance-1" name="contentBalance" value="1" required>
                             <label for="content-balance-1" class="text-sm mt-1">Poor</label>
@@ -394,7 +404,7 @@
                 
                 <div class="rating-group">
                     <div class="rating-title">Overall satisfaction with the training</div>
-                    <div class="rating-options flex justify-between">
+                    <div class="rating-option flex flex-col items-center">
                         <div class="rating-option flex flex-col items-center">
                             <input type="radio" id="overall-satisfaction-1" name="overallSatisfaction" value="1" required>
                             <label for="overall-satisfaction-1" class="text-sm mt-1">Poor</label>
