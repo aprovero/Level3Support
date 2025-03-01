@@ -18,7 +18,8 @@ const requiredEnvVars = [
     'EMAIL_PASS',
     'AIRTABLE_EVALUATIONS_BASE_ID',
     'AIRTABLE_EVALUATIONS_TABLE',
-    'AIRTABLE_TRAININGS_TABLE'
+    'AIRTABLE_TRAININGS_TABLE',
+    'AIRTABLE_AVAILTRAININGS_TABLE'
 ];
 
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
@@ -30,7 +31,7 @@ if (missingVars.length > 0) {
 // CORS configuration
 app.use(cors({
     origin: 'https://aprovero.github.io',
-    methods: ['POST', 'GET'],  // Added GET for training lookup
+    methods: ['POST', 'GET'],
     allowedHeaders: ['Content-Type'],
     credentials: true
 }));
@@ -38,7 +39,6 @@ app.use(cors({
 // Body parsing configuration
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-
 // Multer configuration for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -72,6 +72,7 @@ const TABLE_NAME = process.env.AIRTABLE_TABLE_NAME;
 const trainingBase = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_EVALUATIONS_BASE_ID);
 const EVALUATIONS_TABLE_NAME = process.env.AIRTABLE_EVALUATIONS_TABLE;
 const TRAININGS_TABLE_NAME = process.env.AIRTABLE_TRAININGS_TABLE;
+const AVAILTRAININGS_TABLE_NAME = process.env.AIRTABLE_AVAILTRAININGS_TABLE;
 
 // Email configuration
 const transporter = nodemailer.createTransport({
@@ -81,7 +82,6 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS
     }
 });
-
 // Validation utilities
 const validOptions = {
     'TYPE OF REQUEST': ['SUPPORT', 'RCA', 'TRAINING', 'OTHER'],
@@ -153,7 +153,6 @@ app.get('/training/:id', async (req, res) => {
         });
     }
 });
-
 // Main form submission endpoint
 app.post('/submit', upload.array('attachments', 5), async (req, res) => {
     try {
@@ -297,7 +296,6 @@ This is an automated message. Please do not reply to this email. For any questio
         });
     }
 });
-
 // Training Evaluation Route
 app.post('/evaluation', async (req, res) => {
     try {
@@ -391,6 +389,128 @@ app.post('/evaluation', async (req, res) => {
         res.status(500).json({
             error: 'Server error',
             details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+        });
+    }
+});
+
+// GET endpoint to retrieve all available trainings
+app.get('/api/trainings', async (req, res) => {
+    try {
+        // Query the Available Trainings table in Airtable
+        const records = await trainingBase(AVAILTRAININGS_TABLE_NAME).select().all();
+        
+        // Transform Airtable records to the format expected by the frontend
+        const trainings = records.map(record => {
+            const fields = record.fields;
+            
+            return {
+                id: record.id,
+                name: fields['Course Name'] || '',
+                system: fields['System Type'] || 'other',
+                level: fields['Knowledge Level'] || 'L1',
+                levelText: getLevelText(fields['Knowledge Level']),
+                model: fields['Model'] || '',
+                duration: fields['Duration'] || '',
+                content: fields['Content'] || [],
+                requirements: fields['Requirements'] || []
+            };
+        });
+        
+        // Return the transformed training data
+        res.status(200).json({
+            success: true,
+            trainings: trainings
+        });
+        
+    } catch (error) {
+        console.error('Error fetching training data:', error);
+        res.status(500).json({
+            success: false,
+            message: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+        });
+    }
+});
+
+// Helper function to get level text
+function getLevelText(level) {
+    switch(level) {
+        case 'L1': return 'Level 1';
+        case 'L2': return 'Level 2';
+        case 'L3': return 'Level 3 (CSP)';
+        default: return level || 'Unknown Level';
+    }
+}
+// POST endpoint to add a new available training
+app.post('/api/trainings', async (req, res) => {
+    try {
+        console.log('Received new training submission:', req.body);
+        
+        // Extract training data from request
+        const { 
+            name,
+            system,
+            level,
+            model,
+            duration,
+            content,
+            requirements
+        } = req.body;
+        
+        // Basic validation
+        if (!name || !system || !level || !model || !duration || !content || !requirements) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing required fields'
+            });
+        }
+        
+        // Validate system type
+        if (!['pv', 'bess', 'other'].includes(system)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid system type'
+            });
+        }
+        
+        // Validate level
+        if (!['L1', 'L2', 'L3'].includes(level)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid knowledge level'
+            });
+        }
+        
+        // Format data for Airtable
+        const fields = {
+            'Course Name': name,
+            'System Type': system,
+            'Knowledge Level': level,
+            'Model': model,
+            'Duration': duration,
+            'Content': content,
+            'Requirements': requirements
+        };
+        
+        // Create record in Airtable available trainings table
+        const record = await trainingBase(AVAILTRAININGS_TABLE_NAME).create([{ fields }]);
+        
+        console.log('Training course added successfully with ID:', record[0].id);
+        
+        // Success response
+        res.status(200).json({
+            success: true,
+            message: 'Training course added successfully',
+            recordId: record[0].id
+        });
+        
+    } catch (error) {
+        console.error('Error adding training course:', error);
+        console.error('Error stack:', error.stack);
+        
+        // Send appropriate error response
+        res.status(500).json({
+            success: false,
+            message: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
         });
     }
 });
