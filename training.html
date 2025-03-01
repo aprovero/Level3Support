@@ -206,7 +206,7 @@
             };
             
             // Base API URL - make sure this matches your server
-            const apiBaseUrl = 'https://your-api-url.com'; // Replace with your actual API URL
+            const apiBaseUrl = 'https://level3support.onrender.com/api/trainings'; // Replace with your actual API URL
             
             // Admin form toggle
             adminButton.addEventListener('click', function() {
@@ -303,7 +303,7 @@
                 };
                 
                 // Send data to server
-                fetch('/api/trainings', {
+                fetch('https://level3support.onrender.com/api/trainings', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -351,7 +351,7 @@
                 emptyState.style.display = 'none';
                 
                 // Fetch data with retry capability
-                fetchWithRetry('/api/trainings', 3)
+                fetchWithRetry('https://level3support.onrender.com/api/trainings', 3)
                     .then(data => {
                         if (data.success && data.trainings) {
                             renderTrainingData(data.trainings);
