@@ -30,7 +30,7 @@ if (missingVars.length > 0) {
 
 // CORS configuration
 app.use(cors({
-    origin: 'https://aprovero.github.io',
+    origin: ['https://aprovero.github.io', 'http://127.0.0.1:5500'], // Added localhost for testing
     methods: ['POST', 'GET'],
     allowedHeaders: ['Content-Type'],
     credentials: true
@@ -296,6 +296,7 @@ This is an automated message. Please do not reply to this email. For any questio
         });
     }
 });
+
 // Training Evaluation Route
 app.post('/evaluation', async (req, res) => {
     try {
@@ -392,12 +393,15 @@ app.post('/evaluation', async (req, res) => {
         });
     }
 });
-
 // GET endpoint to retrieve all available trainings
 app.get('/api/trainings', async (req, res) => {
     try {
+        console.log('Fetching available trainings from Airtable...');
+        
         // Query the Available Trainings table in Airtable
         const records = await trainingBase(AVAILTRAININGS_TABLE_NAME).select().all();
+        
+        console.log(`Found ${records.length} training records`);
         
         // Transform Airtable records to the format expected by the frontend
         const trainings = records.map(record => {
@@ -440,6 +444,7 @@ function getLevelText(level) {
         default: return level || 'Unknown Level';
     }
 }
+
 // POST endpoint to add a new available training
 app.post('/api/trainings', async (req, res) => {
     try {

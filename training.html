@@ -9,6 +9,81 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <!-- Shared styles -->
     <link href="shared-styles.css" rel="stylesheet">
+    <style>
+        /* Additional inline styles for form controls */
+        .content-item, .requirement-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .content-item input, .requirement-item input {
+            flex: 1;
+            margin-bottom: 0;
+            margin-right: 10px;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            font-size: 20px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Loading state */
+        .loading-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0066cc;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -133,7 +208,6 @@
                     </div>
                     <button type="button" id="add-content-btn" class="btn btn-success">+ Add Content Item</button>
                 </div>
-                
                 <div class="admin-form-section">
                     <label>Requirements*</label>
                     <div id="requirements-container">
@@ -180,7 +254,6 @@
             </div>
         </div>
     </div>
-    
     <!-- Training Page JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -205,8 +278,8 @@
                 model: 'all'
             };
             
-            // Base API URL - make sure this matches your server
-            const apiBaseUrl = 'https://level3support.onrender.com/trainings'; // Replace with your actual API URL
+            // Base API URL - Corrected to use the proper endpoint
+            const apiBaseUrl = 'https://level3support.onrender.com/api/trainings';
             
             // Admin form toggle
             adminButton.addEventListener('click', function() {
@@ -278,6 +351,7 @@
                     </div>
                 `;
             }
+            
             // Handle form submission
             adminForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -302,8 +376,8 @@
                     requirements: Array.from(formData.getAll('requirements[]')).filter(item => item.trim() !== '')
                 };
                 
-                // Send data to server
-                fetch('https://level3support.onrender.com/trainings', {
+                // Send data to server - corrected endpoint
+                fetch(apiBaseUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -350,9 +424,10 @@
                 trainingGrid.style.display = 'none';
                 emptyState.style.display = 'none';
                 
-                // Fetch data with retry capability
-                fetchWithRetry('https://level3support.onrender.com/trainings', 3)
+                // Fetch data with retry capability - corrected endpoint
+                fetchWithRetry(apiBaseUrl, 3)
                     .then(data => {
+                        console.log('Received data:', data); // Debug log
                         if (data.success && data.trainings) {
                             renderTrainingData(data.trainings);
                             setupModelFilters(data.trainings);
@@ -378,14 +453,20 @@
                     const attemptFetch = (retriesLeft) => {
                         fetch(url)
                             .then(response => {
+                                console.log('Response status:', response.status); // Debug log
                                 if (!response.ok) {
                                     throw new Error('Server error: ' + response.status);
                                 }
                                 return response.json();
                             })
-                            .then(resolve)
+                            .then(data => {
+                                console.log('Parsed data:', data); // Debug log
+                                resolve(data);
+                            })
                             .catch(error => {
+                                console.error('Fetch attempt error:', error); // Debug log
                                 if (retriesLeft > 0) {
+                                    console.log(`Retrying... ${retriesLeft} attempts left`); // Debug log
                                     // Wait 1 second before retrying
                                     setTimeout(() => attemptFetch(retriesLeft - 1), 1000);
                                 } else {
@@ -444,11 +525,11 @@
                             <div class="card-details" id="details-${item.id}">
                                 <h4>Covers:</h4>
                                 <ul class="content-list">
-                                    ${item.content.map(point => `<li>${point}</li>`).join('')}
+                                    ${Array.isArray(item.content) ? item.content.map(point => `<li>${point}</li>`).join('') : ''}
                                 </ul>
                                 <h4>Requirements:</h4>
                                 <ul class="requirements-list">
-                                    ${item.requirements.map(req => `<li>${req}</li>`).join('')}
+                                    ${Array.isArray(item.requirements) ? item.requirements.map(req => `<li>${req}</li>`).join('') : ''}
                                 </ul>
                                 <button class="hide-details-btn" data-id="${item.id}">HIDE DETAILS</button>
                             </div>
@@ -515,8 +596,36 @@
                         });
                         this.classList.add('active');
                         
-                        // Re-render training cards with updated filters
-                        fetchTrainingData();
+                        // Apply filters to existing data without fetching again
+                        const currentTrainings = document.querySelectorAll('.training-card');
+                        if (currentTrainings.length > 0) {
+                            currentTrainings.forEach(card => {
+                                const cardSystem = card.getAttribute('data-system');
+                                const cardLevel = card.getAttribute('data-level');
+                                const cardModel = card.getAttribute('data-model');
+                                
+                                const matchesSystem = activeFilters.system === 'all' || cardSystem === activeFilters.system;
+                                const matchesLevel = activeFilters.level === 'all' || cardLevel === activeFilters.level;
+                                const matchesModel = activeFilters.model === 'all' || cardModel === activeFilters.model;
+                                
+                                if (matchesSystem && matchesLevel && matchesModel) {
+                                    card.style.display = '';
+                                } else {
+                                    card.style.display = 'none';
+                                }
+                            });
+                            
+                            // Check if any cards are visible
+                            const visibleCards = document.querySelectorAll('.training-card[style=""]');
+                            if (visibleCards.length === 0) {
+                                emptyState.style.display = 'block';
+                            } else {
+                                emptyState.style.display = 'none';
+                            }
+                        } else {
+                            // If no cards exist yet, fetch data
+                            fetchTrainingData();
+                        }
                     });
                 });
             }
