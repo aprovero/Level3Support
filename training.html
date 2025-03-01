@@ -73,7 +73,7 @@
                     <div class="filter-item active" data-filter="level" data-value="all">All Levels</div>
                     <div class="filter-item" data-filter="level" data-value="l1">Level 1</div>
                     <div class="filter-item" data-filter="level" data-value="l2">Level 2</div>
-                    <div class="filter-item" data-filter="level" data-value="l3">Level 3 (CSP)</div>
+                    <div class="filter-item" data-filter="level" data-value="l3">Level 3 (Certification)</div>
                 </div>
             </div>
             <div class="filter-section">
@@ -107,7 +107,7 @@
                         <option value="">Select Knowledge Level</option>
                         <option value="L1">Level 1</option>
                         <option value="L2">Level 2</option>
-                        <option value="L3">Level 3 (CSP)</option>
+                        <option value="L3">Level 3 (Certification)</option>
                     </select>
                 </div>
                 <div class="form-field">
@@ -118,30 +118,33 @@
                     <label for="training-duration">Duration*</label>
                     <input type="text" id="training-duration" name="duration" required placeholder="e.g., 1 full day">
                 </div>
+                
                 <div class="admin-form-section">
-                    <div class="multi-input">
-                        <label>Course Content*</label>
-                        <div id="content-items" class="input-items">
-                            <div class="input-item">
-                                <input type="text" name="content[]" required>
-                                <button type="button" class="remove-item">-</button>
-                            </div>
+                    <label>Course Content*</label>
+                    <div id="content-container">
+                        <div class="content-item">
+                            <input type="text" name="content[]" class="form-control" required>
+                            <button type="button" class="btn btn-danger remove-content">×</button>
                         </div>
-                        <button type="button" id="add-content" class="add-item">+ Add Content Item</button>
+                        <div class="content-item">
+                            <input type="text" name="content[]" class="form-control" required>
+                            <button type="button" class="btn btn-danger remove-content">×</button>
+                        </div>
                     </div>
+                    <button type="button" id="add-content-btn" class="btn btn-success">+ Add Content Item</button>
                 </div>
+                
                 <div class="admin-form-section">
-                    <div class="multi-input">
-                        <label>Requirements*</label>
-                        <div id="requirements-items" class="input-items">
-                            <div class="input-item">
-                                <input type="text" name="requirements[]" required>
-                                <button type="button" class="remove-item">-</button>
-                            </div>
+                    <label>Requirements*</label>
+                    <div id="requirements-container">
+                        <div class="requirement-item">
+                            <input type="text" name="requirements[]" class="form-control" required>
+                            <button type="button" class="btn btn-danger remove-requirement">×</button>
                         </div>
-                        <button type="button" id="add-requirement" class="add-item">+ Add Requirement</button>
                     </div>
+                    <button type="button" id="add-requirement-btn" class="btn btn-success">+ Add Requirement</button>
                 </div>
+                
                 <div class="admin-form-actions">
                     <button type="button" id="cancel-button" class="cancel-button">Cancel</button>
                     <button type="submit" class="submit-button">Add Training</button>
@@ -149,6 +152,12 @@
             </form>
         </div>
                 
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading training courses...</p>
+        </div>
+        
         <!-- Training Materials Grid -->
         <div id="training-grid" class="training-grid">
             <!-- Cards will be dynamically inserted here -->
@@ -178,13 +187,16 @@
             // Get DOM elements
             const trainingGrid = document.getElementById('training-grid');
             const emptyState = document.getElementById('empty-state');
+            const loadingIndicator = document.getElementById('loading-indicator');
             const modelFiltersContainer = document.getElementById('model-filters');
             const adminButton = document.getElementById('admin-button');
             const adminFormContainer = document.getElementById('admin-form-container');
             const adminForm = document.getElementById('admin-form');
             const cancelButton = document.getElementById('cancel-button');
-            const addContentButton = document.getElementById('add-content');
-            const addRequirementButton = document.getElementById('add-requirement');
+            const addContentBtn = document.getElementById('add-content-btn');
+            const addRequirementBtn = document.getElementById('add-requirement-btn');
+            const contentContainer = document.getElementById('content-container');
+            const requirementsContainer = document.getElementById('requirements-container');
             
             // Track active filters
             const activeFilters = {
@@ -192,6 +204,9 @@
                 level: 'all',
                 model: 'all'
             };
+            
+            // Base API URL - make sure this matches your server
+            const apiBaseUrl = 'https://your-api-url.com'; // Replace with your actual API URL
             
             // Admin form toggle
             adminButton.addEventListener('click', function() {
@@ -201,65 +216,77 @@
             cancelButton.addEventListener('click', function() {
                 adminFormContainer.classList.remove('visible');
                 adminForm.reset();
-                resetMultiInputs();
+                resetFormItems();
             });
             
-            // Handle multi-input fields (content and requirements)
-            function addMultiInputField(containerId, inputName) {
-                const container = document.getElementById(containerId);
+            // Add content item
+            addContentBtn.addEventListener('click', function() {
                 const newItem = document.createElement('div');
-                newItem.className = 'input-item';
+                newItem.className = 'content-item';
                 newItem.innerHTML = `
-                    <input type="text" name="${inputName}[]" required>
-                    <button type="button" class="remove-item">-</button>
+                    <input type="text" name="content[]" class="form-control" required>
+                    <button type="button" class="btn btn-danger remove-content">×</button>
                 `;
-                container.appendChild(newItem);
-                
-                // Add remove event listener to the new item
-                newItem.querySelector('.remove-item').addEventListener('click', function() {
-                    container.removeChild(newItem);
-                });
-            }
-            
-            // Add event listeners for multi-input add buttons
-            addContentButton.addEventListener('click', function() {
-                addMultiInputField('content-items', 'content');
+                contentContainer.appendChild(newItem);
             });
             
-            addRequirementButton.addEventListener('click', function() {
-                addMultiInputField('requirements-items', 'requirements');
+            // Add requirement item
+            addRequirementBtn.addEventListener('click', function() {
+                const newItem = document.createElement('div');
+                newItem.className = 'requirement-item';
+                newItem.innerHTML = `
+                    <input type="text" name="requirements[]" class="form-control" required>
+                    <button type="button" class="btn btn-danger remove-requirement">×</button>
+                `;
+                requirementsContainer.appendChild(newItem);
             });
             
-            // Event delegation for remove buttons
+            // Remove content item
             document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-item')) {
-                    const item = e.target.closest('.input-item');
-                    const container = item.parentNode;
-                    if (container.children.length > 1) {
-                        container.removeChild(item);
+                if (e.target.classList.contains('remove-content')) {
+                    const item = e.target.closest('.content-item');
+                    if (contentContainer.children.length > 1) {
+                        contentContainer.removeChild(item);
+                    }
+                }
+                
+                if (e.target.classList.contains('remove-requirement')) {
+                    const item = e.target.closest('.requirement-item');
+                    if (requirementsContainer.children.length > 1) {
+                        requirementsContainer.removeChild(item);
                     }
                 }
             });
             
-            // Reset multi-input fields
-            function resetMultiInputs() {
-                document.getElementById('content-items').innerHTML = `
-                    <div class="input-item">
-                        <input type="text" name="content[]" required>
-                        <button type="button" class="remove-item">-</button>
+            // Reset form items
+            function resetFormItems() {
+                contentContainer.innerHTML = `
+                    <div class="content-item">
+                        <input type="text" name="content[]" class="form-control" required>
+                        <button type="button" class="btn btn-danger remove-content">×</button>
+                    </div>
+                    <div class="content-item">
+                        <input type="text" name="content[]" class="form-control" required>
+                        <button type="button" class="btn btn-danger remove-content">×</button>
                     </div>
                 `;
                 
-                document.getElementById('requirements-items').innerHTML = `
-                    <div class="input-item">
-                        <input type="text" name="requirements[]" required>
-                        <button type="button" class="remove-item">-</button>
+                requirementsContainer.innerHTML = `
+                    <div class="requirement-item">
+                        <input type="text" name="requirements[]" class="form-control" required>
+                        <button type="button" class="btn btn-danger remove-requirement">×</button>
                     </div>
                 `;
             }
             // Handle form submission
             adminForm.addEventListener('submit', function(e) {
                 e.preventDefault();
+                
+                // Show loading state
+                const submitBtn = adminForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Adding...';
+                submitBtn.disabled = true;
                 
                 // Collect form data
                 const formData = new FormData(adminForm);
@@ -283,12 +310,17 @@
                     },
                     body: JSON.stringify(jsonData)
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Server error: ' + response.status);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
                         // Reset form and hide it
                         adminForm.reset();
-                        resetMultiInputs();
+                        resetFormItems();
                         adminFormContainer.classList.remove('visible');
                         
                         // Reload training data
@@ -303,25 +335,66 @@
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Failed to add training course. Please try again.');
+                })
+                .finally(() => {
+                    // Reset button state
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
                 });
             });
             
             // Fetch training data from server
             function fetchTrainingData() {
-                fetch('/api/trainings')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success && data.trainings) {
-                        renderTrainingData(data.trainings);
-                        setupModelFilters(data.trainings);
-                    } else {
-                        console.error('Error fetching training data:', data.message || 'Unknown error');
+                // Show loading indicator
+                loadingIndicator.style.display = 'flex';
+                trainingGrid.style.display = 'none';
+                emptyState.style.display = 'none';
+                
+                // Fetch data with retry capability
+                fetchWithRetry('/api/trainings', 3)
+                    .then(data => {
+                        if (data.success && data.trainings) {
+                            renderTrainingData(data.trainings);
+                            setupModelFilters(data.trainings);
+                        } else {
+                            console.error('Error fetching training data:', data.message || 'Unknown error');
+                            trainingGrid.innerHTML = '<div class="error-message">Failed to load training data. Please refresh the page or try again later.</div>';
+                            trainingGrid.style.display = 'block';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
                         trainingGrid.innerHTML = '<div class="error-message">Failed to load training data. Please refresh the page or try again later.</div>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    trainingGrid.innerHTML = '<div class="error-message">Failed to load training data. Please refresh the page or try again later.</div>';
+                        trainingGrid.style.display = 'block';
+                    })
+                    .finally(() => {
+                        loadingIndicator.style.display = 'none';
+                    });
+            }
+            
+            // Fetch with retry functionality
+            function fetchWithRetry(url, maxRetries) {
+                return new Promise((resolve, reject) => {
+                    const attemptFetch = (retriesLeft) => {
+                        fetch(url)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Server error: ' + response.status);
+                                }
+                                return response.json();
+                            })
+                            .then(resolve)
+                            .catch(error => {
+                                if (retriesLeft > 0) {
+                                    // Wait 1 second before retrying
+                                    setTimeout(() => attemptFetch(retriesLeft - 1), 1000);
+                                } else {
+                                    reject(error);
+                                }
+                            });
+                    };
+                    
+                    attemptFetch(maxRetries);
                 });
             }
             
@@ -342,9 +415,11 @@
                 // Show empty state if no results
                 if (filteredTrainings.length === 0) {
                     emptyState.style.display = 'block';
+                    trainingGrid.style.display = 'none';
                     return;
                 } else {
                     emptyState.style.display = 'none';
+                    trainingGrid.style.display = 'grid';
                 }
                 
                 // Create card for each training item
@@ -393,7 +468,7 @@
                 switch(level.toLowerCase()) {
                     case 'l1': return 'Level 1';
                     case 'l2': return 'Level 2';
-                    case 'l3': return 'Level 3 (CSP)';
+                    case 'l3': return 'Level 3 (Certification)';
                     default: return level;
                 }
             }
@@ -401,7 +476,7 @@
             // Set up model filters based on available data
             function setupModelFilters(trainings) {
                 // Get unique models
-                const uniqueModels = [...new Set(trainings.map(item => item.model))];
+                const uniqueModels = [...new Set(trainings.map(item => item.model))].sort();
                 
                 // Clear existing model filters (except "All Models")
                 const allModelsFilter = modelFiltersContainer.querySelector('[data-value="all"]');

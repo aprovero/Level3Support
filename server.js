@@ -436,7 +436,7 @@ function getLevelText(level) {
     switch(level) {
         case 'L1': return 'Level 1';
         case 'L2': return 'Level 2';
-        case 'L3': return 'Level 3 (CSP)';
+        case 'L3': return 'Level 3 (Certification)';
         default: return level || 'Unknown Level';
     }
 }
