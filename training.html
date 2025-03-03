@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoE Level 3 - Training Catalogs</title>
+    <title>CoE Level 3 - Training Catalog</title>
     <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
     <!-- External CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
@@ -145,9 +145,9 @@
                 <div class="filter-label">Knowledge Level:</div>
                 <div class="filter-row">
                     <div class="filter-item active" data-filter="level" data-value="all">All Levels</div>
-                    <div class="filter-item" data-filter="level" data-value="l1">Level 1</div>
-                    <div class="filter-item" data-filter="level" data-value="l2">Level 2</div>
-                    <div class="filter-item" data-filter="level" data-value="l3">Level 3 (Certification)</div>
+                    <div class="filter-item" data-filter="level" data-value="L1">Level 1</div>
+                    <div class="filter-item" data-filter="level" data-value="L2">Level 2</div>
+                    <div class="filter-item" data-filter="level" data-value="L3">Level 3 (Certification)</div>
                 </div>
             </div>
             <div class="filter-section">
@@ -365,59 +365,72 @@
                 submitBtn.textContent = 'Adding...';
                 submitBtn.disabled = true;
                 
-                // Collect form data
-                const formData = new FormData(adminForm);
-                
-                // Convert to JSON object
-                const jsonData = {
-                    name: formData.get('name'),
-                    system: formData.get('system'),
-                    level: formData.get('level'),
-                    model: formData.get('model'),
-                    duration: formData.get('duration'),
-                    content: Array.from(formData.getAll('content[]')).filter(item => item.trim() !== ''),
-                    requirements: Array.from(formData.getAll('requirements[]')).filter(item => item.trim() !== '')
-                };
-                
-                // Send data to server - corrected endpoint
-                fetch(apiBaseUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(jsonData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Server error: ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        // Reset form and hide it
-                        adminForm.reset();
-                        resetFormItems();
-                        adminFormContainer.classList.remove('visible');
-                        
-                        // Reload training data
-                        fetchTrainingData();
-                        
-                        // Show success message
-                        alert('Training course added successfully!');
-                    } else {
-                        alert('Error: ' + (data.message || 'Failed to add training course'));
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to add training course. Please try again.');
-                })
-                .finally(() => {
-                    // Reset button state
+                try {
+                    // Collect form data as plain strings (not FormData object)
+                    const contentInputs = Array.from(document.querySelectorAll('input[name="content[]"]'));
+                    const requirementInputs = Array.from(document.querySelectorAll('input[name="requirements[]"]'));
+                    
+                    // Build the JSON data manually
+                    const jsonData = {
+                        name: document.getElementById('training-name').value,
+                        system: document.getElementById('training-system').value,
+                        level: document.getElementById('training-level').value,
+                        model: document.getElementById('training-model').value,
+                        duration: document.getElementById('training-duration').value,
+                        // Extract values directly from inputs as an array of strings
+                        content: contentInputs.map(input => input.value.trim()).filter(val => val !== ''),
+                        requirements: requirementInputs.map(input => input.value.trim()).filter(val => val !== '')
+                    };
+                    
+                    console.log('Sending data to server:', jsonData);
+                    
+                    // Send data to server
+                    fetch(apiBaseUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(jsonData)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => {
+                                throw new Error(JSON.stringify(err));
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            // Reset form and hide it
+                            adminForm.reset();
+                            resetFormItems();
+                            adminFormContainer.classList.remove('visible');
+                            
+                            // Reload training data
+                            fetchTrainingData();
+                            
+                            // Show success message
+                            alert('Training course added successfully!');
+                        } else {
+                            alert('Error: ' + (data.message || 'Failed to add training course'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to add training course: ' + error.message);
+                    })
+                    .finally(() => {
+                        // Reset button state
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    });
+                } catch (error) {
+                    console.error('Error preparing form data:', error);
+                    alert('Failed to prepare form data: ' + error.message);
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
-                });
+                }
             });
             
             // Fetch training data from server
@@ -427,10 +440,10 @@
                 trainingGrid.style.display = 'none';
                 emptyState.style.display = 'none';
                 
-                // Fetch data with retry capability - corrected endpoint
+                // Fetch data with retry capability
                 fetchWithRetry(apiBaseUrl, 3)
                     .then(data => {
-                        console.log('Received data:', data); // Debug log
+                        console.log('Received data:', data);
                         if (data.success && data.trainings) {
                             // Store all trainings for later filtering
                             allTrainings = data.trainings;
@@ -456,11 +469,19 @@
             
             // Apply filters to training data
             function applyFilters() {
-                // Apply filters to training data
+                // Apply filters to training data - Fixed case sensitivity issues
                 const filteredTrainings = allTrainings.filter(item => {
-                    const matchesSystem = activeFilters.system === 'all' || item.system === activeFilters.system;
-                    const matchesLevel = activeFilters.level === 'all' || item.level.toLowerCase() === activeFilters.level;
-                    const matchesModel = activeFilters.model === 'all' || item.model === activeFilters.model;
+                    // Fix case sensitivity in system comparison
+                    const matchesSystem = activeFilters.system === 'all' || 
+                                        item.system.toLowerCase() === activeFilters.system.toLowerCase();
+                    
+                    // Match exactly the level value without lowercase conversion
+                    const matchesLevel = activeFilters.level === 'all' || 
+                                        item.level === activeFilters.level;
+                    
+                    // Case insensitive comparison for model
+                    const matchesModel = activeFilters.model === 'all' || 
+                                        item.model.toLowerCase() === activeFilters.model.toLowerCase();
                     
                     return matchesSystem && matchesLevel && matchesModel;
                 });
@@ -475,20 +496,19 @@
                     const attemptFetch = (retriesLeft) => {
                         fetch(url)
                             .then(response => {
-                                console.log('Response status:', response.status); // Debug log
+                                console.log('Response status:', response.status);
                                 if (!response.ok) {
                                     throw new Error('Server error: ' + response.status);
                                 }
                                 return response.json();
                             })
                             .then(data => {
-                                console.log('Parsed data:', data); // Debug log
                                 resolve(data);
                             })
                             .catch(error => {
-                                console.error('Fetch attempt error:', error); // Debug log
+                                console.error('Fetch attempt error:', error);
                                 if (retriesLeft > 0) {
-                                    console.log(`Retrying... ${retriesLeft} attempts left`); // Debug log
+                                    console.log(`Retrying... ${retriesLeft} attempts left`);
                                     // Wait 1 second before retrying
                                     setTimeout(() => attemptFetch(retriesLeft - 1), 1000);
                                 } else {
@@ -522,7 +542,7 @@
                     card.className = 'training-card';
                     card.setAttribute('data-id', item.id);
                     card.setAttribute('data-system', item.system);
-                    card.setAttribute('data-level', item.level.toLowerCase());
+                    card.setAttribute('data-level', item.level);
                     card.setAttribute('data-model', item.model);
                     
                     // Create card HTML
@@ -559,10 +579,10 @@
             
             // Helper function to get level text
             function getLevelText(level) {
-                switch(level.toLowerCase()) {
-                    case 'l1': return 'Level 1';
-                    case 'l2': return 'Level 2';
-                    case 'l3': return 'Level 3 (Certification)';
+                switch(level) {
+                    case 'L1': return 'Level 1';
+                    case 'L2': return 'Level 2';
+                    case 'L3': return 'Level 3 (Certification)';
                     default: return level;
                 }
             }
