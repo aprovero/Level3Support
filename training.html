@@ -378,7 +378,7 @@
                     level: document.getElementById('training-level').value,
                     model: document.getElementById('training-model').value,
                     duration: document.getElementById('training-duration').value,
-                    // Extract values directly from inputs as an array of strings
+                    // Only send simple string values, not complex arrays
                     content: contentInputs.map(input => input.value.trim()).filter(val => val !== ''),
                     requirements: requirementInputs.map(input => input.value.trim()).filter(val => val !== '')
                 };
@@ -561,15 +561,17 @@
                 if (item.content) {
                     const contentArray = Array.isArray(item.content) ? item.content : [item.content];
                     if (contentArray.length > 0) {
-                        contentHTML = contentArray.map(point => `<li>${point}</li>`).join('');
+                        // Ensure each item is on its own line
+                        contentHTML = contentArray.map(point => `<li>${point.replace(/\n/g, '<br>')}</li>`).join('');
                     }
                 }
-                
+
                 // Handle requirements array or string
                 if (item.requirements) {
                     const requirementsArray = Array.isArray(item.requirements) ? item.requirements : [item.requirements];
                     if (requirementsArray.length > 0) {
-                        requirementsHTML = requirementsArray.map(req => `<li>${req}</li>`).join('');
+                        // Ensure each item is on its own line
+                        requirementsHTML = requirementsArray.map(req => `<li>${req.replace(/\n/g, '<br>')}</li>`).join('');
                     }
                 }
                 
