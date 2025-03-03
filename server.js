@@ -399,7 +399,6 @@ app.get('/api/trainings', async (req, res) => {
         console.log('Fetching available trainings from Airtable...');
         
         // Query the Available Trainings table in Airtable
-        // Only fetch records where Active is checked/true
         const records = await trainingBase(AVAILTRAININGS_TABLE_NAME)
             .select({
                 filterByFormula: '{Active} = TRUE()'
@@ -408,24 +407,38 @@ app.get('/api/trainings', async (req, res) => {
         
         console.log(`Found ${records.length} active training records`);
         
+        // Add debug logs to inspect content and requirements
+        if (records.length > 0) {
+            console.log('Sample record content:', records[0].fields['Content']);
+            console.log('Sample record requirements:', records[0].fields['Requirements']);
+        }
+        
         // Transform Airtable records to the format expected by the frontend
         const trainings = records.map(record => {
             const fields = record.fields;
             
-            // Log the first few records for debugging
-            if (records.indexOf(record) < 3) {
-                console.log('Sample record fields:', fields);
+            // Ensure content and requirements are always arrays
+            let content = fields['Content'] || [];
+            let requirements = fields['Requirements'] || [];
+            
+            // If content or requirements are strings, convert them to arrays
+            if (typeof content === 'string') {
+                content = [content];
+            }
+            
+            if (typeof requirements === 'string') {
+                requirements = [requirements];
             }
             
             return {
                 id: record.id,
                 name: fields['Course Name'] || '',
                 system: fields['System Type'] || 'other',
-                level: fields['Knowledge Level'] || 'Level 1', // Matching the values in Airtable
+                level: fields['Knowledge Level'] || 'Level 1',
                 model: fields['Model'] || '',
                 duration: fields['Duration'] || '',
-                content: fields['Content'] || [],
-                requirements: fields['Requirements'] || [],
+                content: content,
+                requirements: requirements,
                 active: fields['Active'] || false
             };
         });

@@ -256,427 +256,445 @@
     </div>
     
     <!-- Training Page JavaScript -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get DOM elements
-            const trainingGrid = document.getElementById('training-grid');
-            const emptyState = document.getElementById('empty-state');
-            const loadingIndicator = document.getElementById('loading-indicator');
-            const modelFiltersContainer = document.getElementById('model-filters');
-            const adminButton = document.getElementById('admin-button');
-            const adminFormContainer = document.getElementById('admin-form-container');
-            const adminForm = document.getElementById('admin-form');
-            const cancelButton = document.getElementById('cancel-button');
-            const addContentBtn = document.getElementById('add-content-btn');
-            const addRequirementBtn = document.getElementById('add-requirement-btn');
-            const contentContainer = document.getElementById('content-container');
-            const requirementsContainer = document.getElementById('requirements-container');
+<!-- Training Page JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get DOM elements
+        const trainingGrid = document.getElementById('training-grid');
+        const emptyState = document.getElementById('empty-state');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const modelFiltersContainer = document.getElementById('model-filters');
+        const adminButton = document.getElementById('admin-button');
+        const adminFormContainer = document.getElementById('admin-form-container');
+        const adminForm = document.getElementById('admin-form');
+        const cancelButton = document.getElementById('cancel-button');
+        const addContentBtn = document.getElementById('add-content-btn');
+        const addRequirementBtn = document.getElementById('add-requirement-btn');
+        const contentContainer = document.getElementById('content-container');
+        const requirementsContainer = document.getElementById('requirements-container');
+        
+        // Track active filters
+        const activeFilters = {
+            system: 'all',
+            level: 'all',
+            model: 'all'
+        };
+        
+        // Store all training data
+        let allTrainings = [];
+        
+        // Base API URL - Corrected to use the proper endpoint
+        const apiBaseUrl = 'https://level3support.onrender.com/api/trainings';
+        
+        // Admin form toggle
+        adminButton.addEventListener('click', function() {
+            adminFormContainer.classList.toggle('visible');
+        });
+        
+        cancelButton.addEventListener('click', function() {
+            adminFormContainer.classList.remove('visible');
+            adminForm.reset();
+            resetFormItems();
+        });
+        
+        // Add content item
+        addContentBtn.addEventListener('click', function() {
+            const newItem = document.createElement('div');
+            newItem.className = 'content-item';
+            newItem.innerHTML = `
+                <input type="text" name="content[]" class="form-control" required>
+                <button type="button" class="btn btn-danger remove-content">×</button>
+            `;
+            contentContainer.appendChild(newItem);
+        });
+        
+        // Add requirement item
+        addRequirementBtn.addEventListener('click', function() {
+            const newItem = document.createElement('div');
+            newItem.className = 'requirement-item';
+            newItem.innerHTML = `
+                <input type="text" name="requirements[]" class="form-control" required>
+                <button type="button" class="btn btn-danger remove-requirement">×</button>
+            `;
+            requirementsContainer.appendChild(newItem);
+        });
+        // Remove content item
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-content')) {
+                const item = e.target.closest('.content-item');
+                if (contentContainer.children.length > 1) {
+                    contentContainer.removeChild(item);
+                }
+            }
             
-            // Track active filters
-            const activeFilters = {
-                system: 'all',
-                level: 'all',
-                model: 'all'
-            };
-            
-            // Store all training data
-            let allTrainings = [];
-            
-            // Base API URL - Corrected to use the proper endpoint
-            const apiBaseUrl = 'https://level3support.onrender.com/api/trainings';
-            
-            // Admin form toggle
-            adminButton.addEventListener('click', function() {
-                adminFormContainer.classList.toggle('visible');
-            });
-            
-            cancelButton.addEventListener('click', function() {
-                adminFormContainer.classList.remove('visible');
-                adminForm.reset();
-                resetFormItems();
-            });
-            
-            // Add content item
-            addContentBtn.addEventListener('click', function() {
-                const newItem = document.createElement('div');
-                newItem.className = 'content-item';
-                newItem.innerHTML = `
+            if (e.target.classList.contains('remove-requirement')) {
+                const item = e.target.closest('.requirement-item');
+                if (requirementsContainer.children.length > 1) {
+                    requirementsContainer.removeChild(item);
+                }
+            }
+        });
+        
+        // Reset form items
+        function resetFormItems() {
+            contentContainer.innerHTML = `
+                <div class="content-item">
                     <input type="text" name="content[]" class="form-control" required>
                     <button type="button" class="btn btn-danger remove-content">×</button>
-                `;
-                contentContainer.appendChild(newItem);
-            });
+                </div>
+                <div class="content-item">
+                    <input type="text" name="content[]" class="form-control" required>
+                    <button type="button" class="btn btn-danger remove-content">×</button>
+                </div>
+            `;
             
-            // Add requirement item
-            addRequirementBtn.addEventListener('click', function() {
-                const newItem = document.createElement('div');
-                newItem.className = 'requirement-item';
-                newItem.innerHTML = `
+            requirementsContainer.innerHTML = `
+                <div class="requirement-item">
                     <input type="text" name="requirements[]" class="form-control" required>
                     <button type="button" class="btn btn-danger remove-requirement">×</button>
-                `;
-                requirementsContainer.appendChild(newItem);
-            });
-            // Remove content item
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-content')) {
-                    const item = e.target.closest('.content-item');
-                    if (contentContainer.children.length > 1) {
-                        contentContainer.removeChild(item);
-                    }
-                }
-                
-                if (e.target.classList.contains('remove-requirement')) {
-                    const item = e.target.closest('.requirement-item');
-                    if (requirementsContainer.children.length > 1) {
-                        requirementsContainer.removeChild(item);
-                    }
-                }
-            });
+                </div>
+            `;
+        }
+        
+        // Handle form submission
+        adminForm.addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // Reset form items
-            function resetFormItems() {
-                contentContainer.innerHTML = `
-                    <div class="content-item">
-                        <input type="text" name="content[]" class="form-control" required>
-                        <button type="button" class="btn btn-danger remove-content">×</button>
-                    </div>
-                    <div class="content-item">
-                        <input type="text" name="content[]" class="form-control" required>
-                        <button type="button" class="btn btn-danger remove-content">×</button>
-                    </div>
-                `;
-                
-                requirementsContainer.innerHTML = `
-                    <div class="requirement-item">
-                        <input type="text" name="requirements[]" class="form-control" required>
-                        <button type="button" class="btn btn-danger remove-requirement">×</button>
-                    </div>
-                `;
-            }
+            // Show loading state
+            const submitBtn = adminForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Adding...';
+            submitBtn.disabled = true;
             
-            // Handle form submission
-            adminForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+            try {
+                // Collect form data as plain strings (not FormData object)
+                const contentInputs = Array.from(document.querySelectorAll('input[name="content[]"]'));
+                const requirementInputs = Array.from(document.querySelectorAll('input[name="requirements[]"]'));
                 
-                // Show loading state
-                const submitBtn = adminForm.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Adding...';
-                submitBtn.disabled = true;
+                // Build the JSON data manually
+                const jsonData = {
+                    name: document.getElementById('training-name').value,
+                    system: document.getElementById('training-system').value,
+                    level: document.getElementById('training-level').value,
+                    model: document.getElementById('training-model').value,
+                    duration: document.getElementById('training-duration').value,
+                    // Extract values directly from inputs as an array of strings
+                    content: contentInputs.map(input => input.value.trim()).filter(val => val !== ''),
+                    requirements: requirementInputs.map(input => input.value.trim()).filter(val => val !== '')
+                };
                 
-                try {
-                    // Collect form data as plain strings (not FormData object)
-                    const contentInputs = Array.from(document.querySelectorAll('input[name="content[]"]'));
-                    const requirementInputs = Array.from(document.querySelectorAll('input[name="requirements[]"]'));
-                    
-                    // Build the JSON data manually
-                    const jsonData = {
-                        name: document.getElementById('training-name').value,
-                        system: document.getElementById('training-system').value,
-                        level: document.getElementById('training-level').value,
-                        model: document.getElementById('training-model').value,
-                        duration: document.getElementById('training-duration').value,
-                        // Extract values directly from inputs as an array of strings
-                        content: contentInputs.map(input => input.value.trim()).filter(val => val !== ''),
-                        requirements: requirementInputs.map(input => input.value.trim()).filter(val => val !== '')
-                    };
-                    
-                    console.log('Sending data to server:', jsonData);
-                    
-                    // Send data to server
-                    fetch(apiBaseUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(jsonData)
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            return response.json().then(err => {
-                                throw new Error(JSON.stringify(err));
-                            });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            // Reset form and hide it
-                            adminForm.reset();
-                            resetFormItems();
-                            adminFormContainer.classList.remove('visible');
-                            
-                            // Reload training data
-                            fetchTrainingData();
-                            
-                            // Show success message
-                            alert('Training course added successfully!');
-                        } else {
-                            alert('Error: ' + (data.message || 'Failed to add training course'));
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Failed to add training course: ' + error.message);
-                    })
-                    .finally(() => {
-                        // Reset button state
-                        submitBtn.textContent = originalText;
-                        submitBtn.disabled = false;
-                    });
-                } catch (error) {
-                    console.error('Error preparing form data:', error);
-                    alert('Failed to prepare form data: ' + error.message);
+                console.log('Sending data to server:', jsonData);
+                
+                // Send data to server
+                fetch(apiBaseUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(jsonData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(JSON.stringify(err));
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Reset form and hide it
+                        adminForm.reset();
+                        resetFormItems();
+                        adminFormContainer.classList.remove('visible');
+                        
+                        // Reload training data
+                        fetchTrainingData();
+                        
+                        // Show success message
+                        alert('Training course added successfully!');
+                    } else {
+                        alert('Error: ' + (data.message || 'Failed to add training course'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to add training course: ' + error.message);
+                })
+                .finally(() => {
+                    // Reset button state
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
+                });
+            } catch (error) {
+                console.error('Error preparing form data:', error);
+                alert('Failed to prepare form data: ' + error.message);
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        // Fetch training data from server
+        function fetchTrainingData() {
+            // Show loading indicator
+            loadingIndicator.style.display = 'flex';
+            trainingGrid.style.display = 'none';
+            emptyState.style.display = 'none';
+            
+            // Fetch data with retry capability
+            fetchWithRetry(apiBaseUrl, 3)
+                .then(data => {
+                    console.log('Received data:', data);
+                    if (data.success && data.trainings) {
+                        // Store all trainings for later filtering
+                        allTrainings = data.trainings;
+                        // Apply current filters
+                        applyFilters();
+                        // Setup model filters based on all data
+                        setupModelFilters(allTrainings);
+                    } else {
+                        console.error('Error fetching training data:', data.message || 'Unknown error');
+                        trainingGrid.innerHTML = '<div class="error-message">Failed to load training data. Please refresh the page or try again later.</div>';
+                        trainingGrid.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    trainingGrid.innerHTML = '<div class="error-message">Failed to load training data. Please refresh the page or try again later.</div>';
+                    trainingGrid.style.display = 'block';
+                })
+                .finally(() => {
+                    loadingIndicator.style.display = 'none';
+                });
+        }
+        
+        // Apply filters to training data
+        function applyFilters() {
+            // Debug logs to help troubleshoot filter issues
+            console.log("Active filters:", activeFilters);
+            
+            // Apply filters to training data - exact matches for everything
+            const filteredTrainings = allTrainings.filter(item => {
+                // System filter - case insensitive
+                const matchesSystem = activeFilters.system === 'all' || 
+                                    item.system.toLowerCase() === activeFilters.system.toLowerCase();
+                
+                // Level filter - exact match with the actual values from Airtable
+                const matchesLevel = activeFilters.level === 'all' || 
+                                    item.level === activeFilters.level;
+                
+                // Model filter - case insensitive
+                const matchesModel = activeFilters.model === 'all' || 
+                                    item.model.toLowerCase() === activeFilters.model.toLowerCase();
+                
+                return matchesSystem && matchesLevel && matchesModel;
+            });
+            
+            console.log("Filtered trainings count:", filteredTrainings.length);
+            
+            // Render the filtered data
+            renderTrainingData(filteredTrainings);
+        }
+        
+        // Fetch with retry functionality
+        function fetchWithRetry(url, maxRetries) {
+            return new Promise((resolve, reject) => {
+                const attemptFetch = (retriesLeft) => {
+                    fetch(url)
+                        .then(response => {
+                            console.log('Response status:', response.status);
+                            if (!response.ok) {
+                                throw new Error('Server error: ' + response.status);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            resolve(data);
+                        })
+                        .catch(error => {
+                            console.error('Fetch attempt error:', error);
+                            if (retriesLeft > 0) {
+                                console.log(`Retrying... ${retriesLeft} attempts left`);
+                                // Wait 1 second before retrying
+                                setTimeout(() => attemptFetch(retriesLeft - 1), 1000);
+                            } else {
+                                reject(error);
+                            }
+                        });
+                };
+                
+                attemptFetch(maxRetries);
+            });
+        }
+        
+        // Render training data as cards
+        function renderTrainingData(trainings) {
+            // Clear the grid
+            trainingGrid.innerHTML = '';
+            
+            // Show empty state if no results
+            if (trainings.length === 0) {
+                emptyState.style.display = 'block';
+                trainingGrid.style.display = 'none';
+                return;
+            } else {
+                emptyState.style.display = 'none';
+                trainingGrid.style.display = 'grid';
+            }
+            
+            // Create card for each training item
+            trainings.forEach(item => {
+                // Debug log to inspect the content and requirements
+                console.log(`Training: ${item.name}, Content:`, item.content, 'Requirements:', item.requirements);
+                
+                const card = document.createElement('div');
+                card.className = 'training-card';
+                card.setAttribute('data-id', item.id);
+                card.setAttribute('data-system', item.system);
+                card.setAttribute('data-level', item.level);
+                card.setAttribute('data-model', item.model);
+                
+                // Prepare content and requirements HTML
+                let contentHTML = '<li>No content information available</li>';
+                let requirementsHTML = '<li>No requirements information available</li>';
+                
+                // Handle content array or string
+                if (item.content) {
+                    const contentArray = Array.isArray(item.content) ? item.content : [item.content];
+                    if (contentArray.length > 0) {
+                        contentHTML = contentArray.map(point => `<li>${point}</li>`).join('');
+                    }
+                }
+                
+                // Handle requirements array or string
+                if (item.requirements) {
+                    const requirementsArray = Array.isArray(item.requirements) ? item.requirements : [item.requirements];
+                    if (requirementsArray.length > 0) {
+                        requirementsHTML = requirementsArray.map(req => `<li>${req}</li>`).join('');
+                    }
+                }
+                
+                // Create card HTML
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-system-tag system-${item.system}">[${item.system.toUpperCase()}]</div>
+                        <div class="card-title">${item.name}</div>
+                        <div class="card-level">${item.level}</div>
+                        <div class="card-duration">Duration: ${item.duration}</div>
+                    </div>
+                    <div class="card-content">
+                        <button class="view-details-btn" data-id="${item.id}">VIEW DETAILS</button>
+                        <div class="card-details" id="details-${item.id}">
+                            <h4>Covers:</h4>
+                            <ul class="content-list">
+                                ${contentHTML}
+                            </ul>
+                            <h4>Requirements:</h4>
+                            <ul class="requirements-list">
+                                ${requirementsHTML}
+                            </ul>
+                            <button class="hide-details-btn" data-id="${item.id}">HIDE DETAILS</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add card to grid
+                trainingGrid.appendChild(card);
+            });
+            
+            // Add click handlers for view/hide buttons
+            setupDetailButtons();
+        }
+        
+        // Set up model filters based on available data
+        function setupModelFilters(trainings) {
+            // Get unique models
+            const uniqueModels = [...new Set(trainings.map(item => item.model))].sort();
+            
+            // Clear existing model filters (except "All Models")
+            const allModelsFilter = modelFiltersContainer.querySelector('[data-value="all"]');
+            modelFiltersContainer.innerHTML = '';
+            modelFiltersContainer.appendChild(allModelsFilter);
+            
+            // Add model filters
+            uniqueModels.forEach(model => {
+                if (model && model.trim() !== '') {
+                    const filterItem = document.createElement('div');
+                    filterItem.className = 'filter-item';
+                    filterItem.setAttribute('data-filter', 'model');
+                    filterItem.setAttribute('data-value', model);
+                    filterItem.textContent = model;
+                    modelFiltersContainer.appendChild(filterItem);
                 }
             });
             
-            // Fetch training data from server
-            function fetchTrainingData() {
-                // Show loading indicator
-                loadingIndicator.style.display = 'flex';
-                trainingGrid.style.display = 'none';
-                emptyState.style.display = 'none';
-                
-                // Fetch data with retry capability
-                fetchWithRetry(apiBaseUrl, 3)
-                    .then(data => {
-                        console.log('Received data:', data);
-                        if (data.success && data.trainings) {
-                            // Store all trainings for later filtering
-                            allTrainings = data.trainings;
-                            // Apply current filters
-                            applyFilters();
-                            // Setup model filters based on all data
-                            setupModelFilters(allTrainings);
-                        } else {
-                            console.error('Error fetching training data:', data.message || 'Unknown error');
-                            trainingGrid.innerHTML = '<div class="error-message">Failed to load training data. Please refresh the page or try again later.</div>';
-                            trainingGrid.style.display = 'block';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        trainingGrid.innerHTML = '<div class="error-message">Failed to load training data. Please refresh the page or try again later.</div>';
-                        trainingGrid.style.display = 'block';
-                    })
-                    .finally(() => {
-                        loadingIndicator.style.display = 'none';
+            // Reattach filter click handlers
+            setupFilters();
+        }
+        
+        // Set up filter functionality
+        function setupFilters() {
+            const filterItems = document.querySelectorAll('.filter-item');
+            
+            filterItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const filterType = this.getAttribute('data-filter');
+                    const filterValue = this.getAttribute('data-value');
+                    
+                    // Update active filter
+                    activeFilters[filterType] = filterValue;
+                    
+                    // Update active class
+                    document.querySelectorAll(`.filter-item[data-filter="${filterType}"]`).forEach(el => {
+                        el.classList.remove('active');
                     });
-            }
-            
-            // Apply filters to training data
-            function applyFilters() {
-                // Debug logs to help troubleshoot filter issues
-                console.log("Active filters:", activeFilters);
-                console.log("Sample training level values:", allTrainings.length > 0 ? allTrainings.map(t => t.level).slice(0, 5) : []);
-                
-                // Apply filters to training data - exact matches for everything
-                const filteredTrainings = allTrainings.filter(item => {
-                    // System filter - case insensitive
-                    const matchesSystem = activeFilters.system === 'all' || 
-                                        item.system.toLowerCase() === activeFilters.system.toLowerCase();
+                    this.classList.add('active');
                     
-                    // Level filter - exact match with the actual values from Airtable
-                    const matchesLevel = activeFilters.level === 'all' || 
-                                        item.level === activeFilters.level;
+                    // Apply filters without fetching data again
+                    applyFilters();
+                });
+            });
+        }
+        
+        // Set up detail view/hide buttons
+        function setupDetailButtons() {
+            document.querySelectorAll('.view-details-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
                     
-                    // Model filter - case insensitive
-                    const matchesModel = activeFilters.model === 'all' || 
-                                        item.model.toLowerCase() === activeFilters.model.toLowerCase();
+                    // Show details
+                    const detailsSection = document.getElementById(`details-${id}`);
+                    detailsSection.style.display = 'block';
                     
-                    return matchesSystem && matchesLevel && matchesModel;
-                });
-                
-                console.log("Filtered trainings count:", filteredTrainings.length);
-                
-                // Render the filtered data
-                renderTrainingData(filteredTrainings);
-            }
-            
-            // Fetch with retry functionality
-            function fetchWithRetry(url, maxRetries) {
-                return new Promise((resolve, reject) => {
-                    const attemptFetch = (retriesLeft) => {
-                        fetch(url)
-                            .then(response => {
-                                console.log('Response status:', response.status);
-                                if (!response.ok) {
-                                    throw new Error('Server error: ' + response.status);
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                resolve(data);
-                            })
-                            .catch(error => {
-                                console.error('Fetch attempt error:', error);
-                                if (retriesLeft > 0) {
-                                    console.log(`Retrying... ${retriesLeft} attempts left`);
-                                    // Wait 1 second before retrying
-                                    setTimeout(() => attemptFetch(retriesLeft - 1), 1000);
-                                } else {
-                                    reject(error);
-                                }
-                            });
-                    };
+                    // Hide view button
+                    this.style.display = 'none';
                     
-                    attemptFetch(maxRetries);
+                    // Show hide button
+                    const hideButton = document.querySelector(`.hide-details-btn[data-id="${id}"]`);
+                    hideButton.style.display = 'block';
                 });
-            }
+            });
             
-            // Render training data as cards
-            function renderTrainingData(trainings) {
-                // Clear the grid
-                trainingGrid.innerHTML = '';
-                
-                // Show empty state if no results
-                if (trainings.length === 0) {
-                    emptyState.style.display = 'block';
-                    trainingGrid.style.display = 'none';
-                    return;
-                } else {
-                    emptyState.style.display = 'none';
-                    trainingGrid.style.display = 'grid';
-                }
-                
-                // Create card for each training item
-                trainings.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'training-card';
-                    card.setAttribute('data-id', item.id);
-                    card.setAttribute('data-system', item.system);
-                    card.setAttribute('data-level', item.level);
-                    card.setAttribute('data-model', item.model);
+            document.querySelectorAll('.hide-details-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
                     
-                    // Create card HTML
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <div class="card-system-tag system-${item.system}">[${item.system.toUpperCase()}]</div>
-                            <div class="card-title">${item.name}</div>
-                            <div class="card-level">${item.level}</div>
-                            <div class="card-duration">Duration: ${item.duration}</div>
-                        </div>
-                        <div class="card-content">
-                            <button class="view-details-btn" data-id="${item.id}">VIEW DETAILS</button>
-                            <div class="card-details" id="details-${item.id}">
-                                <h4>Covers:</h4>
-                                <ul class="content-list">
-                                    ${Array.isArray(item.content) && item.content.length > 0 
-                                    ? item.content.map(point => `<li>${point}</li>`).join('') 
-                                    : '<li>No content information available</li>'}
-                                </ul>
-                                <h4>Requirements:</h4>
-                                <ul class="requirements-list">
-                                    ${Array.isArray(item.requirements) && item.requirements.length > 0
-                                    ? item.requirements.map(req => `<li>${req}</li>`).join('')
-                                    : '<li>No requirements information available</li>'}
-                                </ul>
-                                <button class="hide-details-btn" data-id="${item.id}">HIDE DETAILS</button>
-                            </div>
-                        </div>
-                    `;
+                    // Hide details
+                    const detailsSection = document.getElementById(`details-${id}`);
+                    detailsSection.style.display = 'none';
                     
-                    // Add card to grid
-                    trainingGrid.appendChild(card);
+                    // Show view button
+                    const viewButton = document.querySelector(`.view-details-btn[data-id="${id}"]`);
+                    viewButton.style.display = 'block';
+                    
+                    // Hide hide button
+                    this.style.display = 'none';
                 });
-                
-                // Add click handlers for view/hide buttons
-                setupDetailButtons();
-            }
-            
-            // Set up model filters based on available data
-            function setupModelFilters(trainings) {
-                // Get unique models
-                const uniqueModels = [...new Set(trainings.map(item => item.model))].sort();
-                
-                // Clear existing model filters (except "All Models")
-                const allModelsFilter = modelFiltersContainer.querySelector('[data-value="all"]');
-                modelFiltersContainer.innerHTML = '';
-                modelFiltersContainer.appendChild(allModelsFilter);
-                
-                // Add model filters
-                uniqueModels.forEach(model => {
-                    if (model && model.trim() !== '') {
-                        const filterItem = document.createElement('div');
-                        filterItem.className = 'filter-item';
-                        filterItem.setAttribute('data-filter', 'model');
-                        filterItem.setAttribute('data-value', model);
-                        filterItem.textContent = model;
-                        modelFiltersContainer.appendChild(filterItem);
-                    }
-                });
-                
-                // Reattach filter click handlers
-                setupFilters();
-            }
-            
-            // Set up filter functionality
-            function setupFilters() {
-                const filterItems = document.querySelectorAll('.filter-item');
-                
-                filterItems.forEach(item => {
-                    item.addEventListener('click', function() {
-                        const filterType = this.getAttribute('data-filter');
-                        const filterValue = this.getAttribute('data-value');
-                        
-                        // Update active filter
-                        activeFilters[filterType] = filterValue;
-                        
-                        // Update active class
-                        document.querySelectorAll(`.filter-item[data-filter="${filterType}"]`).forEach(el => {
-                            el.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        
-                        // Apply filters without fetching data again
-                        applyFilters();
-                    });
-                });
-            }
-            
-            // Set up detail view/hide buttons
-            function setupDetailButtons() {
-                document.querySelectorAll('.view-details-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const id = this.getAttribute('data-id');
-                        
-                        // Show details
-                        const detailsSection = document.getElementById(`details-${id}`);
-                        detailsSection.style.display = 'block';
-                        
-                        // Hide view button
-                        this.style.display = 'none';
-                        
-                        // Show hide button
-                        const hideButton = document.querySelector(`.hide-details-btn[data-id="${id}"]`);
-                        hideButton.style.display = 'block';
-                    });
-                });
-                
-                document.querySelectorAll('.hide-details-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const id = this.getAttribute('data-id');
-                        
-                        // Hide details
-                        const detailsSection = document.getElementById(`details-${id}`);
-                        detailsSection.style.display = 'none';
-                        
-                        // Show view button
-                        const viewButton = document.querySelector(`.view-details-btn[data-id="${id}"]`);
-                        viewButton.style.display = 'block';
-                        
-                        // Hide hide button
-                        this.style.display = 'none';
-                    });
-                });
-            }
-            
-            // Initialize the page
-            fetchTrainingData();
-        });
-    </script>
+            });
+        }
+        
+        // Initialize the page
+        fetchTrainingData();
+    });
+</script>
 </body>
 </html>
