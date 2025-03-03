@@ -161,6 +161,9 @@
                 height: 30px;
                 margin: 0 auto;
             }
+            #trainingId {
+                text-transform: uppercase;
+            }
         }
     </style>
 </head>
@@ -688,6 +691,7 @@
                     // Validate that training info was retrieved
                     if (trainingInfoSection.classList.contains('hidden')) {
                         showErrorMessage(submitMessageContainer, 'Please lookup a valid Training ID first');
+                        submitMessageContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         return;
                     }
                     
