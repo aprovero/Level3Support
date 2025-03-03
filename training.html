@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoE Level 3 - Training Catalog</title>
+    <title>Training Catalogs</title>
     <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
     <!-- External CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
@@ -110,7 +110,7 @@
                 <p>We're currently updating our training materials database. Some content may be incomplete or subject to change.</p>
             </div>
         </div>
-        <h1>PV & BESS Training Programs</h1>
+        <h1>Training Catalogs</h1>
         <p>Browse our comprehensive training programs for PV and BESS systems. Filter by system type, knowledge level, or model to find the right course for your needs.</p>
         
         <!-- Resource Links -->
@@ -124,7 +124,6 @@
                 <span>SUNGROW Resource Center</span>
             </a>
         </div>
-        
         <!-- Filter Section -->
         <div class="filter-controls">
             <div class="filter-title">
@@ -208,6 +207,7 @@
                     </div>
                     <button type="button" id="add-content-btn" class="btn btn-success">+ Add Content Item</button>
                 </div>
+                
                 <div class="admin-form-section">
                     <label>Requirements*</label>
                     <div id="requirements-container">
@@ -254,6 +254,7 @@
             </div>
         </div>
     </div>
+    
     <!-- Training Page JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -277,6 +278,9 @@
                 level: 'all',
                 model: 'all'
             };
+            
+            // Store all training data
+            let allTrainings = [];
             
             // Base API URL - Corrected to use the proper endpoint
             const apiBaseUrl = 'https://level3support.onrender.com/api/trainings';
@@ -313,7 +317,6 @@
                 `;
                 requirementsContainer.appendChild(newItem);
             });
-            
             // Remove content item
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('remove-content')) {
@@ -429,8 +432,12 @@
                     .then(data => {
                         console.log('Received data:', data); // Debug log
                         if (data.success && data.trainings) {
-                            renderTrainingData(data.trainings);
-                            setupModelFilters(data.trainings);
+                            // Store all trainings for later filtering
+                            allTrainings = data.trainings;
+                            // Apply current filters
+                            applyFilters();
+                            // Setup model filters based on all data
+                            setupModelFilters(allTrainings);
                         } else {
                             console.error('Error fetching training data:', data.message || 'Unknown error');
                             trainingGrid.innerHTML = '<div class="error-message">Failed to load training data. Please refresh the page or try again later.</div>';
@@ -445,6 +452,21 @@
                     .finally(() => {
                         loadingIndicator.style.display = 'none';
                     });
+            }
+            
+            // Apply filters to training data
+            function applyFilters() {
+                // Apply filters to training data
+                const filteredTrainings = allTrainings.filter(item => {
+                    const matchesSystem = activeFilters.system === 'all' || item.system === activeFilters.system;
+                    const matchesLevel = activeFilters.level === 'all' || item.level.toLowerCase() === activeFilters.level;
+                    const matchesModel = activeFilters.model === 'all' || item.model === activeFilters.model;
+                    
+                    return matchesSystem && matchesLevel && matchesModel;
+                });
+                
+                // Render the filtered data
+                renderTrainingData(filteredTrainings);
             }
             
             // Fetch with retry functionality
@@ -484,17 +506,8 @@
                 // Clear the grid
                 trainingGrid.innerHTML = '';
                 
-                // Apply filters to training data
-                const filteredTrainings = trainings.filter(item => {
-                    const matchesSystem = activeFilters.system === 'all' || item.system === activeFilters.system;
-                    const matchesLevel = activeFilters.level === 'all' || item.level.toLowerCase() === activeFilters.level;
-                    const matchesModel = activeFilters.model === 'all' || item.model === activeFilters.model;
-                    
-                    return matchesSystem && matchesLevel && matchesModel;
-                });
-                
                 // Show empty state if no results
-                if (filteredTrainings.length === 0) {
+                if (trainings.length === 0) {
                     emptyState.style.display = 'block';
                     trainingGrid.style.display = 'none';
                     return;
@@ -504,7 +517,7 @@
                 }
                 
                 // Create card for each training item
-                filteredTrainings.forEach(item => {
+                trainings.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'training-card';
                     card.setAttribute('data-id', item.id);
@@ -566,12 +579,14 @@
                 
                 // Add model filters
                 uniqueModels.forEach(model => {
-                    const filterItem = document.createElement('div');
-                    filterItem.className = 'filter-item';
-                    filterItem.setAttribute('data-filter', 'model');
-                    filterItem.setAttribute('data-value', model);
-                    filterItem.textContent = model;
-                    modelFiltersContainer.appendChild(filterItem);
+                    if (model && model.trim() !== '') {
+                        const filterItem = document.createElement('div');
+                        filterItem.className = 'filter-item';
+                        filterItem.setAttribute('data-filter', 'model');
+                        filterItem.setAttribute('data-value', model);
+                        filterItem.textContent = model;
+                        modelFiltersContainer.appendChild(filterItem);
+                    }
                 });
                 
                 // Reattach filter click handlers
@@ -596,36 +611,8 @@
                         });
                         this.classList.add('active');
                         
-                        // Apply filters to existing data without fetching again
-                        const currentTrainings = document.querySelectorAll('.training-card');
-                        if (currentTrainings.length > 0) {
-                            currentTrainings.forEach(card => {
-                                const cardSystem = card.getAttribute('data-system');
-                                const cardLevel = card.getAttribute('data-level');
-                                const cardModel = card.getAttribute('data-model');
-                                
-                                const matchesSystem = activeFilters.system === 'all' || cardSystem === activeFilters.system;
-                                const matchesLevel = activeFilters.level === 'all' || cardLevel === activeFilters.level;
-                                const matchesModel = activeFilters.model === 'all' || cardModel === activeFilters.model;
-                                
-                                if (matchesSystem && matchesLevel && matchesModel) {
-                                    card.style.display = '';
-                                } else {
-                                    card.style.display = 'none';
-                                }
-                            });
-                            
-                            // Check if any cards are visible
-                            const visibleCards = document.querySelectorAll('.training-card[style=""]');
-                            if (visibleCards.length === 0) {
-                                emptyState.style.display = 'block';
-                            } else {
-                                emptyState.style.display = 'none';
-                            }
-                        } else {
-                            // If no cards exist yet, fetch data
-                            fetchTrainingData();
-                        }
+                        // Apply filters without fetching data again
+                        applyFilters();
                     });
                 });
             }
@@ -669,7 +656,6 @@
             
             // Initialize the page
             fetchTrainingData();
-            setupFilters();
         });
     </script>
 </body>

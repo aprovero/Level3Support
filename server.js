@@ -399,9 +399,14 @@ app.get('/api/trainings', async (req, res) => {
         console.log('Fetching available trainings from Airtable...');
         
         // Query the Available Trainings table in Airtable
-        const records = await trainingBase(AVAILTRAININGS_TABLE_NAME).select().all();
+        // Only fetch records where Active is checked/true
+        const records = await trainingBase(AVAILTRAININGS_TABLE_NAME)
+            .select({
+                filterByFormula: '{Active} = TRUE()' // Filter for active courses only
+            })
+            .all();
         
-        console.log(`Found ${records.length} training records`);
+        console.log(`Found ${records.length} active training records`);
         
         // Transform Airtable records to the format expected by the frontend
         const trainings = records.map(record => {
@@ -416,7 +421,8 @@ app.get('/api/trainings', async (req, res) => {
                 model: fields['Model'] || '',
                 duration: fields['Duration'] || '',
                 content: fields['Content'] || [],
-                requirements: fields['Requirements'] || []
+                requirements: fields['Requirements'] || [],
+                active: fields['Active'] || false
             };
         });
         
@@ -493,7 +499,8 @@ app.post('/api/trainings', async (req, res) => {
             'Model': model,
             'Duration': duration,
             'Content': content,
-            'Requirements': requirements
+            'Requirements': requirements,
+            'Active': true // Set new courses to active by default
         };
         
         // Create record in Airtable available trainings table
