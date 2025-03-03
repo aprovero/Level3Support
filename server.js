@@ -402,7 +402,7 @@ app.get('/api/trainings', async (req, res) => {
         // Only fetch records where Active is checked/true
         const records = await trainingBase(AVAILTRAININGS_TABLE_NAME)
             .select({
-                filterByFormula: '{Active} = TRUE()' // Filter for active courses only
+                filterByFormula: '{Active} = TRUE()'
             })
             .all();
         
@@ -412,12 +412,16 @@ app.get('/api/trainings', async (req, res) => {
         const trainings = records.map(record => {
             const fields = record.fields;
             
+            // Log the first few records for debugging
+            if (records.indexOf(record) < 3) {
+                console.log('Sample record fields:', fields);
+            }
+            
             return {
                 id: record.id,
                 name: fields['Course Name'] || '',
                 system: fields['System Type'] || 'other',
-                level: fields['Knowledge Level'] || 'L1',
-                levelText: getLevelText(fields['Knowledge Level']),
+                level: fields['Knowledge Level'] || 'Level 1', // Matching the values in Airtable
                 model: fields['Model'] || '',
                 duration: fields['Duration'] || '',
                 content: fields['Content'] || [],
@@ -441,16 +445,6 @@ app.get('/api/trainings', async (req, res) => {
     }
 });
 
-// Helper function to get level text
-function getLevelText(level) {
-    switch(level) {
-        case 'L1': return 'Level 1';
-        case 'L2': return 'Level 2';
-        case 'L3': return 'Level 3 (Certification)';
-        default: return level || 'Unknown Level';
-    }
-}
-
 // POST endpoint to add a new available training
 app.post('/api/trainings', async (req, res) => {
     try {
@@ -467,11 +461,30 @@ app.post('/api/trainings', async (req, res) => {
             requirements
         } = req.body;
         
+        // Log the content and requirements for debugging
+        console.log('Content data type:', typeof content, Array.isArray(content));
+        console.log('Requirements data type:', typeof requirements, Array.isArray(requirements));
+        
         // Basic validation
-        if (!name || !system || !level || !model || !duration || !content || !requirements) {
+        if (!name || !system || !level || !model || !duration) {
             return res.status(400).json({
                 success: false,
                 message: 'Missing required fields'
+            });
+        }
+        
+        // Validate content and requirements are arrays
+        if (!Array.isArray(content) || !Array.isArray(requirements)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Content and requirements must be arrays'
+            });
+        }
+        
+        if (content.length === 0 || requirements.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Content and requirements cannot be empty'
             });
         }
         
@@ -483,11 +496,12 @@ app.post('/api/trainings', async (req, res) => {
             });
         }
         
-        // Validate level
-        if (!['L1', 'L2', 'L3'].includes(level)) {
+        // Validate level (matching the values in Airtable)
+        const validLevels = ['Level 1', 'Level 2', 'Level 3 (Certification)'];
+        if (!validLevels.includes(level)) {
             return res.status(400).json({
                 success: false,
-                message: 'Invalid knowledge level'
+                message: 'Invalid knowledge level. Must be one of: ' + validLevels.join(', ')
             });
         }
         
@@ -498,10 +512,12 @@ app.post('/api/trainings', async (req, res) => {
             'Knowledge Level': level,
             'Model': model,
             'Duration': duration,
-            'Content': content,
+            'Content': content, // These must be arrays of strings
             'Requirements': requirements,
             'Active': true // Set new courses to active by default
         };
+        
+        console.log('Formatted data for Airtable:', fields);
         
         // Create record in Airtable available trainings table
         const record = await trainingBase(AVAILTRAININGS_TABLE_NAME).create([{ fields }]);
@@ -519,10 +535,11 @@ app.post('/api/trainings', async (req, res) => {
         console.error('Error adding training course:', error);
         console.error('Error stack:', error.stack);
         
-        // Send appropriate error response
+        // Send appropriate error response with more details
         res.status(500).json({
             success: false,
-            message: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+            message: error.message || 'Internal server error',
+            details: error.toString()
         });
     }
 });

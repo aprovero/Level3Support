@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoE Level 3 - Training Catalog</title>
+    <title>CoE Level 3 - Training Catalogs</title>
     <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
     <!-- External CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
@@ -145,9 +145,9 @@
                 <div class="filter-label">Knowledge Level:</div>
                 <div class="filter-row">
                     <div class="filter-item active" data-filter="level" data-value="all">All Levels</div>
-                    <div class="filter-item" data-filter="level" data-value="L1">Level 1</div>
-                    <div class="filter-item" data-filter="level" data-value="L2">Level 2</div>
-                    <div class="filter-item" data-filter="level" data-value="L3">Level 3 (Certification)</div>
+                    <div class="filter-item" data-filter="level" data-value="Level 1">Level 1</div>
+                    <div class="filter-item" data-filter="level" data-value="Level 2">Level 2</div>
+                    <div class="filter-item" data-filter="level" data-value="Level 3 (Certification)">Level 3 (Certification)</div>
                 </div>
             </div>
             <div class="filter-section">
@@ -179,9 +179,9 @@
                     <label for="training-level">Knowledge Level*</label>
                     <select id="training-level" name="level" required>
                         <option value="">Select Knowledge Level</option>
-                        <option value="L1">Level 1</option>
-                        <option value="L2">Level 2</option>
-                        <option value="L3">Level 3 (Certification)</option>
+                        <option value="Level 1">Level 1</option>
+                        <option value="Level 2">Level 2</option>
+                        <option value="Level 3 (Certification)">Level 3 (Certification)</option>
                     </select>
                 </div>
                 <div class="form-field">
@@ -469,22 +469,28 @@
             
             // Apply filters to training data
             function applyFilters() {
-                // Apply filters to training data - Fixed case sensitivity issues
+                // Debug logs to help troubleshoot filter issues
+                console.log("Active filters:", activeFilters);
+                console.log("Sample training level values:", allTrainings.length > 0 ? allTrainings.map(t => t.level).slice(0, 5) : []);
+                
+                // Apply filters to training data - exact matches for everything
                 const filteredTrainings = allTrainings.filter(item => {
-                    // Fix case sensitivity in system comparison
+                    // System filter - case insensitive
                     const matchesSystem = activeFilters.system === 'all' || 
                                         item.system.toLowerCase() === activeFilters.system.toLowerCase();
                     
-                    // Match exactly the level value without lowercase conversion
+                    // Level filter - exact match with the actual values from Airtable
                     const matchesLevel = activeFilters.level === 'all' || 
                                         item.level === activeFilters.level;
                     
-                    // Case insensitive comparison for model
+                    // Model filter - case insensitive
                     const matchesModel = activeFilters.model === 'all' || 
                                         item.model.toLowerCase() === activeFilters.model.toLowerCase();
                     
                     return matchesSystem && matchesLevel && matchesModel;
                 });
+                
+                console.log("Filtered trainings count:", filteredTrainings.length);
                 
                 // Render the filtered data
                 renderTrainingData(filteredTrainings);
@@ -550,7 +556,7 @@
                         <div class="card-header">
                             <div class="card-system-tag system-${item.system}">[${item.system.toUpperCase()}]</div>
                             <div class="card-title">${item.name}</div>
-                            <div class="card-level">${item.levelText || getLevelText(item.level)}</div>
+                            <div class="card-level">${item.level}</div>
                             <div class="card-duration">Duration: ${item.duration}</div>
                         </div>
                         <div class="card-content">
@@ -575,16 +581,6 @@
                 
                 // Add click handlers for view/hide buttons
                 setupDetailButtons();
-            }
-            
-            // Helper function to get level text
-            function getLevelText(level) {
-                switch(level) {
-                    case 'L1': return 'Level 1';
-                    case 'L2': return 'Level 2';
-                    case 'L3': return 'Level 3 (Certification)';
-                    default: return level;
-                }
             }
             
             // Set up model filters based on available data
