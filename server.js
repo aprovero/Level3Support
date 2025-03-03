@@ -474,9 +474,9 @@ app.post('/api/trainings', async (req, res) => {
             requirements
         } = req.body;
         
-        // Log the content and requirements for debugging
-        console.log('Content data type:', typeof content, Array.isArray(content));
-        console.log('Requirements data type:', typeof requirements, Array.isArray(requirements));
+        // Log the exact format of the received data
+        console.log('Content type:', typeof content, 'Is array:', Array.isArray(content), 'Value:', JSON.stringify(content));
+        console.log('Requirements type:', typeof requirements, 'Is array:', Array.isArray(requirements), 'Value:', JSON.stringify(requirements));
         
         // Basic validation
         if (!name || !system || !level || !model || !duration) {
@@ -486,51 +486,44 @@ app.post('/api/trainings', async (req, res) => {
             });
         }
         
-        // Validate content and requirements are arrays
-        if (!Array.isArray(content) || !Array.isArray(requirements)) {
+        // Ensure content and requirements are valid
+        if (!content || !requirements) {
             return res.status(400).json({
                 success: false,
-                message: 'Content and requirements must be arrays'
+                message: 'Content and requirements are required'
             });
         }
         
-        if (content.length === 0 || requirements.length === 0) {
+        // Sanitize content and requirements to ensure they are arrays of simple strings
+        const sanitizedContent = Array.isArray(content) 
+            ? content.map(item => String(item).trim()).filter(Boolean)
+            : [String(content).trim()].filter(Boolean);
+            
+        const sanitizedRequirements = Array.isArray(requirements)
+            ? requirements.map(item => String(item).trim()).filter(Boolean)
+            : [String(requirements).trim()].filter(Boolean);
+        
+        // Validate after sanitization
+        if (sanitizedContent.length === 0 || sanitizedRequirements.length === 0) {
             return res.status(400).json({
                 success: false,
                 message: 'Content and requirements cannot be empty'
             });
         }
         
-        // Validate system type
-        if (!['pv', 'bess', 'other'].includes(system)) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid system type'
-            });
-        }
-        
-        // Validate level (matching the values in Airtable)
-        const validLevels = ['Level 1', 'Level 2', 'Level 3 (Certification)'];
-        if (!validLevels.includes(level)) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid knowledge level. Must be one of: ' + validLevels.join(', ')
-            });
-        }
-        
-        // Format data for Airtable
+        // Format data for Airtable - use sanitized values
         const fields = {
             'Course Name': name,
             'System Type': system,
             'Knowledge Level': level,
             'Model': model,
             'Duration': duration,
-            'Content': content, // These must be arrays of strings
-            'Requirements': requirements,
-            'Active': true // Set new courses to active by default
+            'Content': sanitizedContent,
+            'Requirements': sanitizedRequirements,
+            'Active': true
         };
         
-        console.log('Formatted data for Airtable:', fields);
+        console.log('Formatted data for Airtable:', JSON.stringify(fields));
         
         // Create record in Airtable available trainings table
         const record = await trainingBase(AVAILTRAININGS_TABLE_NAME).create([{ fields }]);
