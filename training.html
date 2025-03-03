@@ -564,11 +564,15 @@
                             <div class="card-details" id="details-${item.id}">
                                 <h4>Covers:</h4>
                                 <ul class="content-list">
-                                    ${Array.isArray(item.content) ? item.content.map(point => `<li>${point}</li>`).join('') : ''}
+                                    ${Array.isArray(item.content) && item.content.length > 0 
+                                    ? item.content.map(point => `<li>${point}</li>`).join('') 
+                                    : '<li>No content information available</li>'}
                                 </ul>
                                 <h4>Requirements:</h4>
                                 <ul class="requirements-list">
-                                    ${Array.isArray(item.requirements) ? item.requirements.map(req => `<li>${req}</li>`).join('') : ''}
+                                    ${Array.isArray(item.requirements) && item.requirements.length > 0
+                                    ? item.requirements.map(req => `<li>${req}</li>`).join('')
+                                    : '<li>No requirements information available</li>'}
                                 </ul>
                                 <button class="hide-details-btn" data-id="${item.id}">HIDE DETAILS</button>
                             </div>
