@@ -367,25 +367,28 @@
             submitBtn.disabled = true;
             
             try {
-                // Collect form data as plain strings (not FormData object)
+                // Collect form data as simple strings
                 const contentInputs = Array.from(document.querySelectorAll('input[name="content[]"]'));
                 const requirementInputs = Array.from(document.querySelectorAll('input[name="requirements[]"]'));
                 
-                // Build the JSON data manually
+                // Get simple string arrays (avoiding any complex formatting)
+                const contentValues = contentInputs.map(input => input.value.trim()).filter(val => val !== '');
+                const requirementValues = requirementInputs.map(input => input.value.trim()).filter(val => val !== '');
+                
+                // Build the JSON data with properly formatted arrays
                 const jsonData = {
                     name: document.getElementById('training-name').value,
                     system: document.getElementById('training-system').value,
                     level: document.getElementById('training-level').value,
                     model: document.getElementById('training-model').value,
                     duration: document.getElementById('training-duration').value,
-                    // Only send simple string values, not complex arrays
-                    content: contentInputs.map(input => input.value.trim()).filter(val => val !== ''),
-                    requirements: requirementInputs.map(input => input.value.trim()).filter(val => val !== '')
+                    content: contentValues,
+                    requirements: requirementValues
                 };
                 
-                console.log('Sending data to server:', jsonData);
+                console.log('Sending data to server:', JSON.stringify(jsonData));
                 
-                // Send data to server
+                // Send data to server with explicit JSON serialization and content type
                 fetch(apiBaseUrl, {
                     method: 'POST',
                     headers: {
