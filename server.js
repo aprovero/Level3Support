@@ -494,32 +494,33 @@ app.post('/api/trainings', async (req, res) => {
             });
         }
         
-        // Sanitize content and requirements to ensure they are arrays of simple strings
-        const sanitizedContent = Array.isArray(content) 
-            ? content.map(item => String(item).trim()).filter(Boolean)
-            : [String(content).trim()].filter(Boolean);
+        // Sanitize content and requirements
+        // For Long Text fields in Airtable, convert arrays to strings with line breaks
+        const contentString = Array.isArray(content) 
+            ? content.map(item => String(item).trim()).filter(Boolean).join('\n')
+            : String(content).trim();
             
-        const sanitizedRequirements = Array.isArray(requirements)
-            ? requirements.map(item => String(item).trim()).filter(Boolean)
-            : [String(requirements).trim()].filter(Boolean);
+        const requirementsString = Array.isArray(requirements)
+            ? requirements.map(item => String(item).trim()).filter(Boolean).join('\n')
+            : String(requirements).trim();
         
         // Validate after sanitization
-        if (sanitizedContent.length === 0 || sanitizedRequirements.length === 0) {
+        if (!contentString || !requirementsString) {
             return res.status(400).json({
                 success: false,
                 message: 'Content and requirements cannot be empty'
             });
         }
         
-        // Format data for Airtable - use sanitized values
+        // Format data for Airtable - send strings with line breaks for Long Text fields
         const fields = {
             'Course Name': name,
             'System Type': system,
             'Knowledge Level': level,
             'Model': model,
             'Duration': duration,
-            'Content': sanitizedContent,
-            'Requirements': sanitizedRequirements,
+            'Content': contentString,
+            'Requirements': requirementsString,
             'Active': true
         };
         
