@@ -3,703 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoE Level 3 - Training Catalogs</title>
-    <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
-    <!-- External CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <!-- Shared styles -->
-    <link href="shared-styles.css" rel="stylesheet">
-    <style>
-        /* Additional inline styles for form controls */
-        .content-item, .requirement-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            width: 100%;
-        }
-
-        .content-item input, .requirement-item input {
-            flex: 1;
-            margin-bottom: 0;
-            margin-right: 10px;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            font-size: 20px;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        .btn-success {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 8px 12px;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        /* Loading state */
-        .loading-state {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 0;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #0066cc;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .error-message {
-            text-align: center;
-            padding: 20px;
-            background-color: #f8d7da;
-            color: #721c24;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-    </style>
+    <title>CoE Level 3 - Training Resources</title>
+    <link rel="stylesheet" href="css/shared-styles.css">
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <!-- Header -->
+        <header class="header">
             <div class="logo">
-                <img src="images/LOGO.png" alt="Logo">
+                <img src="images/logo.png" alt="CoE LATAM Logo">
             </div>
             <div class="header-icons">
                 <div class="contact-icon">
                     <a href="contacts.html">
-                        <img src="images/contact-icon.png" alt="Contact Directory">
+                        <img src="images/contacts.png" alt="Contact Directory">
+                    </a>
+                </div>
+                <div class="training-icon">
+                    <a href="index.html">
+                        <img src="images/home.png" alt="Home">
                     </a>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <a href="index.html" class="back-link">← Back to the Request Form</a>
-        
-        <!-- Under Construction Banner -->
-        <div class="under-construction-banner">
-            <div class="construction-icon">🚧</div>
-            <div class="construction-message">
-                <h2>Page Under Construction</h2>
-                <p>We're currently updating our training materials database. Some content may be incomplete or subject to change.</p>
-            </div>
-        </div>
-        <h1>Training Catalogs</h1>
-        <p>Browse our comprehensive training programs for PV and BESS systems. Filter by system type, knowledge level, or model to find the right course for your needs.</p>
-        
-        <!-- Resource Links -->
-        <div class="resource-links">
-            <a href="https://sungrowdobrasil.com/" target="_blank" class="resource-link">
-                <img src="images/brazil-flag.png" alt="Brazil Flag" class="link-icon">
-                <span>SUNGROW Academy (Portuguese)</span>
-            </a>
-            <a href="https://support.sungrowpower.com/home" target="_blank" class="resource-link">
-                <img src="images/resource-icon.png" alt="Resource Center" class="link-icon">
-                <span>SUNGROW Resource Center</span>
-            </a>
-        </div>
-        <!-- Filter Section -->
+        <a href="index.html" class="back-link">← Back to Support Portal</a>
+        <h1>Training Resources</h1>
+
+        <!-- Filter Controls -->
         <div class="filter-controls">
             <div class="filter-title">
-                Filter by:
+                <span>Filter Training Courses</span>
                 <div class="admin-controls">
-                    <button id="admin-button" class="admin-button" title="Add new training course">+</button>
+                    <button class="admin-button" id="toggle-admin-form">+</button>
                 </div>
             </div>
+            
             <div class="filter-section">
                 <div class="filter-label">System Type:</div>
-                <div class="filter-row">
-                    <div class="filter-item active" data-filter="system" data-value="all">All Systems</div>
-                    <div class="filter-item" data-filter="system" data-value="pv">PV Systems</div>
-                    <div class="filter-item" data-filter="system" data-value="bess">BESS Systems</div>
-                    <div class="filter-item" data-filter="system" data-value="other">Other</div>
+                <div class="filter-row" id="system-filters">
+                    <div class="filter-item active" data-filter="all">All</div>
+                    <div class="filter-item" data-filter="pv">PV</div>
+                    <div class="filter-item" data-filter="bess">BESS</div>
+                    <div class="filter-item" data-filter="other">Other</div>
                 </div>
             </div>
+            
             <div class="filter-section">
-                <div class="filter-label">Knowledge Level:</div>
-                <div class="filter-row">
-                    <div class="filter-item active" data-filter="level" data-value="all">All Levels</div>
-                    <div class="filter-item" data-filter="level" data-value="Level 1">Level 1</div>
-                    <div class="filter-item" data-filter="level" data-value="Level 2">Level 2</div>
-                    <div class="filter-item" data-filter="level" data-value="Level 3 (Certification)">Level 3 (Certification)</div>
-                </div>
-            </div>
-            <div class="filter-section">
-                <div class="filter-label">Model:</div>
-                <div class="filter-row" id="model-filters">
-                    <div class="filter-item active" data-filter="model" data-value="all">All Models</div>
-                    <!-- Model filters will be dynamically added here based on available data -->
+                <div class="filter-label">Level:</div>
+                <div class="filter-row" id="level-filters">
+                    <div class="filter-item active" data-filter="all">All</div>
+                    <div class="filter-item" data-filter="basic">Basic</div>
+                    <div class="filter-item" data-filter="intermediate">Intermediate</div>
+                    <div class="filter-item" data-filter="advanced">Advanced</div>
                 </div>
             </div>
         </div>
-        <!-- Admin Form Container -->
-        <div id="admin-form-container" class="admin-form-container">
+
+        <!-- Admin Form -->
+        <div class="admin-form-container" id="admin-form-container">
             <div class="admin-form-title">Add New Training Course</div>
-            <form id="admin-form" class="admin-form">
+            <form id="training-form" class="admin-form">
                 <div class="form-field">
-                    <label for="training-name">Course Name*</label>
-                    <input type="text" id="training-name" name="name" required>
+                    <label for="title">Course Title <span class="required-asterisk">*</span></label>
+                    <input type="text" id="title" name="title" required>
                 </div>
+                
                 <div class="form-field">
-                    <label for="training-system">System Type*</label>
-                    <select id="training-system" name="system" required>
-                        <option value="">Select System Type</option>
-                        <option value="PV">PV Systems</option>
-                        <option value="BESS">BESS Systems</option>
-                        <option value="Other">Other</option>
+                    <label for="system-type">System Type <span class="required-asterisk">*</span></label>
+                    <select id="system-type" name="system-type" required>
+                        <option value="" selected disabled>Select system type</option>
+                        <option value="pv">PV</option>
+                        <option value="bess">BESS</option>
+                        <option value="other">Other</option>
                     </select>
                 </div>
+                
                 <div class="form-field">
-                    <label for="training-level">Knowledge Level*</label>
-                    <select id="training-level" name="level" required>
-                        <option value="">Select Knowledge Level</option>
-                        <option value="Level 1">Level 1</option>
-                        <option value="Level 2">Level 2</option>
-                        <option value="Level 3 (Certification)">Level 3 (Certification)</option>
+                    <label for="level">Level <span class="required-asterisk">*</span></label>
+                    <select id="level" name="level" required>
+                        <option value="" selected disabled>Select level</option>
+                        <option value="basic">Basic</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
                     </select>
                 </div>
+                
                 <div class="form-field">
-                    <label for="training-model">Model*</label>
-                    <input type="text" id="training-model" name="model" required>
-                </div>
-                <div class="form-field">
-                    <label for="training-duration">Duration*</label>
-                    <input type="text" id="training-duration" name="duration" required placeholder="e.g., 1 full day">
+                    <label for="duration">Duration (hours) <span class="required-asterisk">*</span></label>
+                    <input type="number" id="duration" name="duration" min="0.5" step="0.5" required>
                 </div>
                 
                 <div class="admin-form-section">
-                    <label>Course Content*</label>
-                    <div id="content-container">
-                        <div class="content-item">
-                            <input type="text" name="content[]" class="form-control" required>
-                            <button type="button" class="btn btn-danger remove-content">×</button>
-                        </div>
-                        <div class="content-item">
-                            <input type="text" name="content[]" class="form-control" required>
-                            <button type="button" class="btn btn-danger remove-content">×</button>
-                        </div>
-                    </div>
-                    <button type="button" id="add-content-btn" class="btn btn-success">+ Add Content Item</button>
+                    <label for="description">Description <span class="required-asterisk">*</span></label>
+                    <textarea id="description" name="description" rows="3" required></textarea>
                 </div>
                 
                 <div class="admin-form-section">
-                    <label>Requirements*</label>
-                    <div id="requirements-container">
-                        <div class="requirement-item">
-                            <input type="text" name="requirements[]" class="form-control" required>
-                            <button type="button" class="btn btn-danger remove-requirement">×</button>
+                    <div class="multi-input">
+                        <label>Course Content <span class="required-asterisk">*</span></label>
+                        <div class="input-items" id="content-items">
+                            <div class="input-item">
+                                <input type="text" name="content[]" placeholder="Course content item" required>
+                                <button type="button" class="remove-item">×</button>
+                            </div>
                         </div>
+                        <button type="button" class="add-item" id="add-content">+ Add Content Item</button>
                     </div>
-                    <button type="button" id="add-requirement-btn" class="btn btn-success">+ Add Requirement</button>
+                </div>
+                
+                <div class="admin-form-section">
+                    <div class="multi-input">
+                        <label>Requirements</label>
+                        <div class="input-items" id="requirement-items">
+                            <div class="input-item">
+                                <input type="text" name="requirements[]" placeholder="Requirement item">
+                                <button type="button" class="remove-item">×</button>
+                            </div>
+                        </div>
+                        <button type="button" class="add-item" id="add-requirement">+ Add Requirement</button>
+                    </div>
                 </div>
                 
                 <div class="admin-form-actions">
-                    <button type="button" id="cancel-button" class="cancel-button">Cancel</button>
-                    <button type="submit" class="submit-button">Add Training</button>
+                    <button type="button" class="cancel-button" id="cancel-form">Cancel</button>
+                    <button type="submit" class="btn-success">Add Course</button>
                 </div>
             </form>
         </div>
-                
-        <!-- Loading Indicator -->
-        <div id="loading-indicator" class="loading-state">
+
+        <!-- Training Grid -->
+        <div class="training-grid" id="training-grid">
+            <!-- Training cards will be dynamically inserted here -->
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="loading-state flex items-center justify-center">
             <div class="spinner"></div>
             <p>Loading training courses...</p>
         </div>
-        
-        <!-- Training Materials Grid -->
-        <div id="training-grid" class="training-grid">
-            <!-- Cards will be dynamically inserted here -->
+
+        <!-- Message container for status updates -->
+        <div id="message-container" class="message hidden"></div>
+
+        <!-- Modals -->
+        <div id="error-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h2>Error</h2>
+                <p id="error-message">There was an error processing your request.</p>
+                <div id="error-details" class="message-details"></div>
+                <button class="modal-button" id="error-close-btn">Close</button>
+            </div>
         </div>
         
-        <!-- Empty State (shown when no courses match filters) -->
-        <div id="empty-state" class="empty-state" style="display: none;">
-            <div class="empty-state-icon">📚</div>
-            <div class="empty-state-heading">No courses found</div>
-            <div class="empty-state-text">Try adjusting your filters to see more results.</div>
+        <div id="success-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h2>Success</h2>
+                <p id="success-message">Training course added successfully.</p>
+                <button class="modal-button" id="success-close-btn">Close</button>
+            </div>
         </div>
+
         <!-- Footer -->
-        <div class="footer">
+        <footer class="footer">
             <div class="footer-text">
-                <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
-                <div class="footer-creator">Created by Andres Provero</div>
+                <div class="footer-copyright">© 2023 CoE LATAM Support Portal</div>
+                <div class="footer-creator">Created by CoE Level 3 Team</div>
             </div>
             <div class="footer-logo">
-                <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
+                <a href="https://www.anthropic.com" target="_blank">
+                    <img src="images/CLAUDE_LOGO.png" alt="Claude Logo">
+                </a>
+                <img src="images/logo.png" alt="CoE LATAM Logo">
+            </div>
+        </footer>
+    </div>
+
+    <!-- Template for training cards -->
+    <template id="training-card-template">
+        <div class="training-card" data-system="" data-level="">
+            <div class="card-header">
+                <div class="card-system-tag"></div>
+                <div class="card-title"></div>
+                <div class="card-level"></div>
+                <div class="card-duration"></div>
+            </div>
+            <div class="card-content">
+                <p class="card-description"></p>
+                <div class="card-details">
+                    <h4>Course Content:</h4>
+                    <ul class="card-content-list"></ul>
+                    <h4>Requirements:</h4>
+                    <ul class="card-requirements-list"></ul>
+                </div>
+                <button class="view-details-btn">View Details</button>
+                <button class="hide-details-btn">Hide Details</button>
             </div>
         </div>
-    </div>
-    
-    <!-- Training Page JavaScript -->
-<!-- Training Page JavaScript -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get DOM elements
-        const trainingGrid = document.getElementById('training-grid');
-        const emptyState = document.getElementById('empty-state');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const modelFiltersContainer = document.getElementById('model-filters');
-        const adminButton = document.getElementById('admin-button');
-        const adminFormContainer = document.getElementById('admin-form-container');
-        const adminForm = document.getElementById('admin-form');
-        const cancelButton = document.getElementById('cancel-button');
-        const addContentBtn = document.getElementById('add-content-btn');
-        const addRequirementBtn = document.getElementById('add-requirement-btn');
-        const contentContainer = document.getElementById('content-container');
-        const requirementsContainer = document.getElementById('requirements-container');
-        
-        // Track active filters
-        const activeFilters = {
-            system: 'all',
-            level: 'all',
-            model: 'all'
-        };
-        
-        // Store all training data
-        let allTrainings = [];
-        
-        // Base API URL - Corrected to use the proper endpoint
-        const apiBaseUrl = 'https://level3support.onrender.com/api/trainings';
-        
-        // Admin form toggle
-        adminButton.addEventListener('click', function() {
-            adminFormContainer.classList.toggle('visible');
-        });
-        
-        cancelButton.addEventListener('click', function() {
-            adminFormContainer.classList.remove('visible');
-            adminForm.reset();
-            resetFormItems();
-        });
-        
-        // Add content item
-        addContentBtn.addEventListener('click', function() {
-            const newItem = document.createElement('div');
-            newItem.className = 'content-item';
-            newItem.innerHTML = `
-                <input type="text" name="content[]" class="form-control" required>
-                <button type="button" class="btn btn-danger remove-content">×</button>
-            `;
-            contentContainer.appendChild(newItem);
-        });
-        
-        // Add requirement item
-        addRequirementBtn.addEventListener('click', function() {
-            const newItem = document.createElement('div');
-            newItem.className = 'requirement-item';
-            newItem.innerHTML = `
-                <input type="text" name="requirements[]" class="form-control" required>
-                <button type="button" class="btn btn-danger remove-requirement">×</button>
-            `;
-            requirementsContainer.appendChild(newItem);
-        });
-        // Remove content item
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-content')) {
-                const item = e.target.closest('.content-item');
-                if (contentContainer.children.length > 1) {
-                    contentContainer.removeChild(item);
-                }
-            }
-            
-            if (e.target.classList.contains('remove-requirement')) {
-                const item = e.target.closest('.requirement-item');
-                if (requirementsContainer.children.length > 1) {
-                    requirementsContainer.removeChild(item);
-                }
-            }
-        });
-        
-        // Reset form items
-        function resetFormItems() {
-            contentContainer.innerHTML = `
-                <div class="content-item">
-                    <input type="text" name="content[]" class="form-control" required>
-                    <button type="button" class="btn btn-danger remove-content">×</button>
-                </div>
-                <div class="content-item">
-                    <input type="text" name="content[]" class="form-control" required>
-                    <button type="button" class="btn btn-danger remove-content">×</button>
-                </div>
-            `;
-            
-            requirementsContainer.innerHTML = `
-                <div class="requirement-item">
-                    <input type="text" name="requirements[]" class="form-control" required>
-                    <button type="button" class="btn btn-danger remove-requirement">×</button>
-                </div>
-            `;
-        }
-        
-        // Handle form submission
-        adminForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Show loading state
-            const submitBtn = adminForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Adding...';
-            submitBtn.disabled = true;
-            
-            try {
-                // Collect form data as simple strings
-                const contentInputs = Array.from(document.querySelectorAll('input[name="content[]"]'));
-                const requirementInputs = Array.from(document.querySelectorAll('input[name="requirements[]"]'));
-                
-                // Get simple string arrays (avoiding any complex formatting)
-                const contentValues = contentInputs.map(input => input.value.trim()).filter(val => val !== '');
-                const requirementValues = requirementInputs.map(input => input.value.trim()).filter(val => val !== '');
-                
-                // Build the JSON data with properly formatted arrays
-                const jsonData = {
-                    name: document.getElementById('training-name').value,
-                    system: document.getElementById('training-system').value,
-                    level: document.getElementById('training-level').value,
-                    model: document.getElementById('training-model').value,
-                    duration: document.getElementById('training-duration').value,
-                    content: contentValues,
-                    requirements: requirementValues
-                };
-                
-                console.log('Sending data to server:', JSON.stringify(jsonData));
-                
-                // Send data to server with explicit JSON serialization and content type
-                fetch(apiBaseUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(jsonData)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => {
-                            throw new Error(JSON.stringify(err));
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        // Reset form and hide it
-                        adminForm.reset();
-                        resetFormItems();
-                        adminFormContainer.classList.remove('visible');
-                        
-                        // Reload training data
-                        fetchTrainingData();
-                        
-                        // Show success message
-                        alert('Training course added successfully!');
-                    } else {
-                        alert('Error: ' + (data.message || 'Failed to add training course'));
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to add training course: ' + error.message);
-                })
-                .finally(() => {
-                    // Reset button state
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                });
-            } catch (error) {
-                console.error('Error preparing form data:', error);
-                alert('Failed to prepare form data: ' + error.message);
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }
-        });
-        // Fetch training data from server
-        function fetchTrainingData() {
-            // Show loading indicator
-            loadingIndicator.style.display = 'flex';
-            trainingGrid.style.display = 'none';
-            emptyState.style.display = 'none';
-            
-            // Fetch data with retry capability
-            fetchWithRetry(apiBaseUrl, 3)
-                .then(data => {
-                    console.log('Received data:', data);
-                    if (data.success && data.trainings) {
-                        // Store all trainings for later filtering
-                        allTrainings = data.trainings;
-                        // Apply current filters
-                        applyFilters();
-                        // Setup model filters based on all data
-                        setupModelFilters(allTrainings);
-                    } else {
-                        console.error('Error fetching training data:', data.message || 'Unknown error');
-                        trainingGrid.innerHTML = '<div class="error-message">Failed to load training data. Please refresh the page or try again later.</div>';
-                        trainingGrid.style.display = 'block';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    trainingGrid.innerHTML = '<div class="error-message">Failed to load training data. Please refresh the page or try again later.</div>';
-                    trainingGrid.style.display = 'block';
-                })
-                .finally(() => {
-                    loadingIndicator.style.display = 'none';
-                });
-        }
-        
-        // Apply filters to training data
-        function applyFilters() {
-            // Debug logs to help troubleshoot filter issues
-            console.log("Active filters:", activeFilters);
-            
-            // Apply filters to training data - exact matches for everything
-            const filteredTrainings = allTrainings.filter(item => {
-                // System filter - case insensitive
-                const matchesSystem = activeFilters.system === 'all' || 
-                                    item.system.toLowerCase() === activeFilters.system.toLowerCase();
-                
-                // Level filter - exact match with the actual values from Airtable
-                const matchesLevel = activeFilters.level === 'all' || 
-                                    item.level === activeFilters.level;
-                
-                // Model filter - case insensitive
-                const matchesModel = activeFilters.model === 'all' || 
-                                    item.model.toLowerCase() === activeFilters.model.toLowerCase();
-                
-                return matchesSystem && matchesLevel && matchesModel;
-            });
-            
-            console.log("Filtered trainings count:", filteredTrainings.length);
-            
-            // Render the filtered data
-            renderTrainingData(filteredTrainings);
-        }
-        
-        // Fetch with retry functionality
-        function fetchWithRetry(url, maxRetries) {
-            return new Promise((resolve, reject) => {
-                const attemptFetch = (retriesLeft) => {
-                    fetch(url)
-                        .then(response => {
-                            console.log('Response status:', response.status);
-                            if (!response.ok) {
-                                throw new Error('Server error: ' + response.status);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            resolve(data);
-                        })
-                        .catch(error => {
-                            console.error('Fetch attempt error:', error);
-                            if (retriesLeft > 0) {
-                                console.log(`Retrying... ${retriesLeft} attempts left`);
-                                // Wait 1 second before retrying
-                                setTimeout(() => attemptFetch(retriesLeft - 1), 1000);
-                            } else {
-                                reject(error);
-                            }
-                        });
-                };
-                
-                attemptFetch(maxRetries);
-            });
-        }
-        
-        // Render training data as cards
-        function renderTrainingData(trainings) {
-            // Clear the grid
-            trainingGrid.innerHTML = '';
-            
-            // Show empty state if no results
-            if (trainings.length === 0) {
-                emptyState.style.display = 'block';
-                trainingGrid.style.display = 'none';
-                return;
-            } else {
-                emptyState.style.display = 'none';
-                trainingGrid.style.display = 'grid';
-            }
-            
-            // Create card for each training item
-            trainings.forEach(item => {
-                // Debug log to inspect the content and requirements
-                console.log(`Training: ${item.name}, Content:`, item.content, 'Requirements:', item.requirements);
-                
-                const card = document.createElement('div');
-                card.className = 'training-card';
-                card.setAttribute('data-id', item.id);
-                card.setAttribute('data-system', item.system);
-                card.setAttribute('data-level', item.level);
-                card.setAttribute('data-model', item.model);
-                
-                // Prepare content and requirements HTML
-                let contentHTML = '<li>No content information available</li>';
-                let requirementsHTML = '<li>No requirements information available</li>';
-                
-                // Handle content array or string
-                if (item.content) {
-                    const contentArray = Array.isArray(item.content) ? item.content : [item.content];
-                    if (contentArray.length > 0) {
-                        // Ensure each item is on its own line
-                        contentHTML = contentArray.map(point => `<li>${point.replace(/\n/g, '<br>')}</li>`).join('');
-                    }
-                }
+    </template>
 
-                // Handle requirements array or string
-                if (item.requirements) {
-                    const requirementsArray = Array.isArray(item.requirements) ? item.requirements : [item.requirements];
-                    if (requirementsArray.length > 0) {
-                        // Ensure each item is on its own line
-                        requirementsHTML = requirementsArray.map(req => `<li>${req.replace(/\n/g, '<br>')}</li>`).join('');
-                    }
-                }
-                
-                // Create card HTML
-                card.innerHTML = `
-                    <div class="card-header">
-                        <div class="card-system-tag system-${item.system}">[${item.system.toUpperCase()}]</div>
-                        <div class="card-title">${item.name}</div>
-                        <div class="card-level">${item.level}</div>
-                        <div class="card-duration">Duration: ${item.duration}</div>
-                    </div>
-                    <div class="card-content">
-                        <button class="view-details-btn" data-id="${item.id}">VIEW DETAILS</button>
-                        <div class="card-details" id="details-${item.id}">
-                            <h4>Covers:</h4>
-                            <ul class="content-list">
-                                ${contentHTML}
-                            </ul>
-                            <h4>Requirements:</h4>
-                            <ul class="requirements-list">
-                                ${requirementsHTML}
-                            </ul>
-                            <button class="hide-details-btn" data-id="${item.id}">HIDE DETAILS</button>
-                        </div>
-                    </div>
-                `;
-                
-                // Add card to grid
-                trainingGrid.appendChild(card);
-            });
-            
-            // Add click handlers for view/hide buttons
-            setupDetailButtons();
-        }
-        
-        // Set up model filters based on available data
-        function setupModelFilters(trainings) {
-            // Get unique models
-            const uniqueModels = [...new Set(trainings.map(item => item.model))].sort();
-            
-            // Clear existing model filters (except "All Models")
-            const allModelsFilter = modelFiltersContainer.querySelector('[data-value="all"]');
-            modelFiltersContainer.innerHTML = '';
-            modelFiltersContainer.appendChild(allModelsFilter);
-            
-            // Add model filters
-            uniqueModels.forEach(model => {
-                if (model && model.trim() !== '') {
-                    const filterItem = document.createElement('div');
-                    filterItem.className = 'filter-item';
-                    filterItem.setAttribute('data-filter', 'model');
-                    filterItem.setAttribute('data-value', model);
-                    filterItem.textContent = model;
-                    modelFiltersContainer.appendChild(filterItem);
-                }
-            });
-            
-            // Reattach filter click handlers
-            setupFilters();
-        }
-        
-        // Set up filter functionality
-        function setupFilters() {
-            const filterItems = document.querySelectorAll('.filter-item');
-            
-            filterItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const filterType = this.getAttribute('data-filter');
-                    const filterValue = this.getAttribute('data-value');
-                    
-                    // Update active filter
-                    activeFilters[filterType] = filterValue;
-                    
-                    // Update active class
-                    document.querySelectorAll(`.filter-item[data-filter="${filterType}"]`).forEach(el => {
-                        el.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // Apply filters without fetching data again
-                    applyFilters();
-                });
-            });
-        }
-        
-        // Set up detail view/hide buttons
-        function setupDetailButtons() {
-            document.querySelectorAll('.view-details-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    
-                    // Show details
-                    const detailsSection = document.getElementById(`details-${id}`);
-                    detailsSection.style.display = 'block';
-                    
-                    // Hide view button
-                    this.style.display = 'none';
-                    
-                    // Show hide button
-                    const hideButton = document.querySelector(`.hide-details-btn[data-id="${id}"]`);
-                    hideButton.style.display = 'block';
-                });
-            });
-            
-            document.querySelectorAll('.hide-details-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    
-                    // Hide details
-                    const detailsSection = document.getElementById(`details-${id}`);
-                    detailsSection.style.display = 'none';
-                    
-                    // Show view button
-                    const viewButton = document.querySelector(`.view-details-btn[data-id="${id}"]`);
-                    viewButton.style.display = 'block';
-                    
-                    // Hide hide button
-                    this.style.display = 'none';
-                });
-            });
-        }
-        
-        // Initialize the page
-        fetchTrainingData();
-    });
-</script>
+    <!-- Scripts -->
+    <script src="js/common.js"></script>
+    <script src="js/training.js"></script>
 </body>
 </html>
