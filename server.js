@@ -494,8 +494,7 @@ app.post('/api/trainings', async (req, res) => {
             });
         }
         
-        // Sanitize content and requirements
-        // For Long Text fields in Airtable, convert arrays to strings with line breaks
+        // Sanitize content and requirements to ensure they are strings with line breaks
         const contentString = Array.isArray(content) 
             ? content.map(item => String(item).trim()).filter(Boolean).join('\n')
             : String(content).trim();
@@ -512,11 +511,26 @@ app.post('/api/trainings', async (req, res) => {
             });
         }
         
-        // Format data for Airtable - send strings with line breaks for Long Text fields
+        // Map system values to match exactly what's in Airtable
+        // IMPORTANT: These must match the exact values defined in Airtable's Single Select options
+        const systemMap = {
+            'pv': 'PV',
+            'bess': 'BESS',
+            'other': 'Other'
+        };
+        
+        // Map level values to match exactly what's in Airtable
+        const levelMap = {
+            'Level 1': 'Level 1',
+            'Level 2': 'Level 2',
+            'Level 3 (Certification)': 'Level 3 (Certification)'
+        };
+        
+        // Format data for Airtable - use the mapped values for Single Select fields
         const fields = {
             'Course Name': name,
-            'System Type': system,
-            'Knowledge Level': level,
+            'System Type': systemMap[system.toLowerCase()] || system, // Use mapped value or original as fallback
+            'Knowledge Level': levelMap[level] || level, // Use mapped value or original as fallback
             'Model': model,
             'Duration': duration,
             'Content': contentString,
