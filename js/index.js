@@ -440,6 +440,7 @@ function removeFile(index) {
  * Handle form submission
  * @param {Event} e - The submit event
  */
+// Handle form submission
 async function handleFormSubmit(e) {
     e.preventDefault();
     
@@ -487,24 +488,35 @@ async function handleFormSubmit(e) {
     showLoadingSpinner('loading-spinner', 'Submitting your request...');
     
     try {
-        // Create FormData object
-        const formData = new FormData(form);
+        // Create FormData object, but don't include the form directly
+        // This avoids the issue with multiple description fields
+        const formData = new FormData();
         
-        // Add files to FormData
-        uploadedFiles.forEach(file => {
-            formData.append('attachments', file);
-        });
+        // Manually add each form field we need
+        formData.append('requesterName', document.getElementById('requester-name').value);
+        formData.append('requesterEmail', document.getElementById('requester-email').value);
+        formData.append('request', document.getElementById('request').value);
+        formData.append('location', document.getElementById('location').value);
+        formData.append('projectName', document.getElementById('project-name').value);
+        formData.append('productType', document.getElementById('product-type').value);
+        formData.append('model', document.getElementById('model').value);
         
-        // Fix description field for different form types
+        // Handle the description field differently based on request type
         const requestType = document.getElementById('request').value;
         
-        // Handle Support/RCA description
         if (['SUPPORT', 'RCA'].includes(requestType)) {
-            const description = document.getElementById('description').value;
-            // Ensure description is a single string
-            formData.set('description', description);
-        }
-        // Handle Training description
+            formData.append('description', document.getElementById('description').value);
+            
+            // Add Support/RCA specific fields
+            const gspTicket = document.getElementById('gsp-ticket').value;
+            if (gspTicket) formData.append('gspTicket', gspTicket);
+            
+            const serialNumbers = document.getElementById('serial-numbers').value;
+            if (serialNumbers) formData.append('serialNumbers', serialNumbers);
+            
+            const esrCompleted = document.getElementById('esr-completed').checked;
+            formData.append('esrCompleted', esrCompleted);
+        } 
         else if (requestType === 'TRAINING') {
             const description = document.getElementById('training-description').value;
             const expectedDate = document.getElementById('expected-date').value;
@@ -512,13 +524,20 @@ async function handleFormSubmit(e) {
             
             // Combine training fields into description
             const combinedDescription = `${description}\nNumber of Trainees: ${traineesNumber}\nExpected Date: ${expectedDate}`;
-            formData.set('description', combinedDescription);
-        }
-        // Handle Other description
+            formData.append('description', combinedDescription);
+            
+            // Also add the original fields separately in case server needs them
+            formData.append('expectedDate', expectedDate);
+            formData.append('traineesNumber', traineesNumber);
+        } 
         else if (requestType === 'OTHER') {
-            const description = document.getElementById('other-description').value;
-            formData.set('description', description);
+            formData.append('description', document.getElementById('other-description').value);
         }
+        
+        // Add files to FormData
+        uploadedFiles.forEach(file => {
+            formData.append('attachments', file);
+        });
         
         // Show info message during submission
         showInfoMessage(
