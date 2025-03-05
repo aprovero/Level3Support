@@ -1343,7 +1343,7 @@ button:disabled, .submit-button:disabled {
         padding: 12px;
         width: 94%; /* Increase width for mobile */
     }
-    
+ 
     .form-group, .form-section {
         padding: 10px;
         margin-bottom: 15px;
@@ -1445,6 +1445,8 @@ button:disabled, .submit-button:disabled {
         grid-column: span 1;
     }
 
+}
+ 
 /* Mobile phones */
 @media (max-width: 480px) {
     .logo img {
