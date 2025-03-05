@@ -46,11 +46,19 @@ let modelFiltersContainer;
  * --------------------
  */
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Training page initialization started');
+    
     // Cache DOM elements
     trainingGrid = document.getElementById('training-grid');
     emptyState = document.getElementById('empty-state');
     loadingIndicator = document.getElementById('loading-indicator');
     modelFiltersContainer = document.getElementById('model-filters');
+    
+    console.log('DOM elements cached:', { 
+        trainingGrid: !!trainingGrid, 
+        emptyState: !!emptyState, 
+        loadingIndicator: !!loadingIndicator 
+    });
     
     // Initialize filter functionality
     initializeFilters();
@@ -60,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load training data
     fetchTrainingData();
+    
+    console.log('Training page initialization completed');
 });
 
 /**
@@ -67,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function initializeFilters() {
     const filterItems = document.querySelectorAll('.filter-item');
+    console.log('Found', filterItems.length, 'filter items');
     
     filterItems.forEach(item => {
         item.addEventListener('click', handleFilterClick);
@@ -82,13 +93,14 @@ function initializeFilters() {
  * Fetch training data from server
  */
 function fetchTrainingData() {
+    console.log('Fetching training data...');
     // Show loading indicator
     showLoadingState(true);
     
     const trainingEndpoint = API_BASE_URL + API_ENDPOINTS.getTrainings;
     console.log('Fetching training data from:', trainingEndpoint);
     
-    // Direct fetch without using fetchWithRetry
+    // Direct fetch with better error handling
     fetch(trainingEndpoint)
         .then(response => {
             console.log('Response status:', response.status);
@@ -110,7 +122,7 @@ function fetchTrainingData() {
                 // Setup model filters based on all data
                 setupModelFilters(allTrainings);
             } else {
-                console.error('No training data found in response:', data);
+                console.warn('No training data found in response:', data);
                 handleTrainingDataError('No training data available. Please try again later.');
             }
         })
@@ -132,6 +144,9 @@ function handleTrainingDataError(message) {
         trainingGrid.innerHTML = `<div class="error-message">${message}</div>`;
         trainingGrid.style.display = 'block';
     }
+    if (emptyState) {
+        emptyState.style.display = 'none';
+    }
 }
 
 /**
@@ -139,7 +154,12 @@ function handleTrainingDataError(message) {
  * @param {boolean} isLoading - Whether to show loading state
  */
 function showLoadingState(isLoading) {
-    if (!loadingIndicator || !trainingGrid || !emptyState) return;
+    console.log('Setting loading state:', isLoading);
+    
+    if (!loadingIndicator || !trainingGrid || !emptyState) {
+        console.warn('Missing DOM elements for loading state');
+        return;
+    }
     
     if (isLoading) {
         loadingIndicator.style.display = 'flex';
@@ -147,6 +167,7 @@ function showLoadingState(isLoading) {
         emptyState.style.display = 'none';
     } else {
         loadingIndicator.style.display = 'none';
+        // Grid visibility will be set by renderTrainingData
     }
 }
 
@@ -162,6 +183,8 @@ function showLoadingState(isLoading) {
 function handleFilterClick(event) {
     const filterType = this.getAttribute('data-filter');
     const filterValue = this.getAttribute('data-value');
+    
+    console.log('Filter clicked:', filterType, filterValue);
     
     // Update active filter
     activeFilters[filterType] = filterValue;
@@ -180,22 +203,26 @@ function handleFilterClick(event) {
  * Apply current filters to training data
  */
 function applyFilters() {
-    // Apply filters to training data - exact matches for everything
+    console.log('Applying filters:', activeFilters);
+    
+    // Apply filters to training data - case insensitive for everything
     const filteredTrainings = allTrainings.filter(item => {
-        // System filter - case insensitive
+        // System filter
         const matchesSystem = activeFilters.system === 'all' || 
                             item.system.toLowerCase() === activeFilters.system.toLowerCase();
         
-        // Level filter - exact match with the actual values from Airtable
+        // Level filter
         const matchesLevel = activeFilters.level === 'all' || 
                             item.level === activeFilters.level;
         
-        // Model filter - case insensitive
+        // Model filter
         const matchesModel = activeFilters.model === 'all' || 
                             item.model.toLowerCase() === activeFilters.model.toLowerCase();
         
         return matchesSystem && matchesLevel && matchesModel;
     });
+    
+    console.log('Filtered trainings:', filteredTrainings.length);
     
     // Render the filtered data
     renderTrainingData(filteredTrainings);
@@ -206,10 +233,14 @@ function applyFilters() {
  * @param {Array} trainings - Array of training objects
  */
 function setupModelFilters(trainings) {
-    if (!modelFiltersContainer) return;
+    if (!modelFiltersContainer) {
+        console.warn('Model filters container not found');
+        return;
+    }
     
     // Get unique models
     const uniqueModels = [...new Set(trainings.map(item => item.model))].sort();
+    console.log('Unique models found:', uniqueModels);
     
     // Clear existing model filters (except "All Models")
     const allModelsFilter = modelFiltersContainer.querySelector('[data-value="all"]');
@@ -231,8 +262,12 @@ function setupModelFilters(trainings) {
     });
     
     // Reattach filter click handlers
-    initializeFilters();
+    document.querySelectorAll('.filter-item').forEach(item => {
+        item.removeEventListener('click', handleFilterClick);
+        item.addEventListener('click', handleFilterClick);
+    });
 }
+
 /**
  * 5. Training Data Rendering
  * ------------------------
@@ -243,7 +278,12 @@ function setupModelFilters(trainings) {
  * @param {Array} trainings - Array of training objects
  */
 function renderTrainingData(trainings) {
-    if (!trainingGrid) return;
+    console.log('Rendering', trainings.length, 'training cards');
+    
+    if (!trainingGrid) {
+        console.warn('Training grid element not found');
+        return;
+    }
     
     // Clear the grid
     trainingGrid.innerHTML = '';
@@ -364,6 +404,8 @@ function setupDetailButtons() {
     document.querySelectorAll('.hide-details-btn').forEach(button => {
         button.addEventListener('click', hideCourseDetails);
     });
+    
+    console.log('Detail buttons set up');
 }
 
 /**
@@ -372,6 +414,7 @@ function setupDetailButtons() {
  */
 function showCourseDetails(event) {
     const id = this.getAttribute('data-id');
+    console.log('Showing details for course:', id);
     
     // Show details
     const detailsSection = document.getElementById(`details-${id}`);
@@ -395,6 +438,7 @@ function showCourseDetails(event) {
  */
 function hideCourseDetails(event) {
     const id = this.getAttribute('data-id');
+    console.log('Hiding details for course:', id);
     
     // Hide details
     const detailsSection = document.getElementById(`details-${id}`);
@@ -433,6 +477,7 @@ function getSystemTagClass(system) {
         return 'system-other';
     }
 }
+
 /**
  * 8. Admin Controls
  * ---------------
@@ -444,30 +489,32 @@ function getSystemTagClass(system) {
 function initializeAdminControls() {
     const adminButton = document.getElementById('admin-button');
     const adminFormContainer = document.getElementById('admin-form-container');
-    
-    console.log('Admin elements:', { adminButton, adminFormContainer });
-    
-    // Admin button click with direct onclick assignment
-    if (adminButton && adminFormContainer) {
-        // Replace event listener with direct onclick
-        adminButton.onclick = function() {
-            console.log('Admin button clicked');
-            if (adminFormContainer.classList.contains('visible')) {
-                adminFormContainer.classList.remove('visible');
-            } else {
-                adminFormContainer.classList.add('visible');
-            }
-        };
-    }
-    
-    const adminForm = document.getElementById('admin-form');
     const cancelButton = document.getElementById('cancel-button');
     const addContentBtn = document.getElementById('add-content-btn');
     const addRequirementBtn = document.getElementById('add-requirement-btn');
+    const adminForm = document.getElementById('admin-form');
     
-    // Cancel button click
+    console.log('Admin elements:', { 
+        adminButton: !!adminButton, 
+        adminFormContainer: !!adminFormContainer,
+        cancelButton: !!cancelButton,
+        addContentBtn: !!addContentBtn,
+        addRequirementBtn: !!addRequirementBtn,
+        adminForm: !!adminForm
+    });
+    
+    // Admin button click handler
+    if (adminButton && adminFormContainer) {
+        adminButton.addEventListener('click', function() {
+            console.log('Admin button clicked');
+            adminFormContainer.classList.toggle('visible');
+        });
+    }
+    
+    // Cancel button click handler
     if (cancelButton && adminFormContainer) {
-        cancelButton.onclick = function() {
+        cancelButton.addEventListener('click', function() {
+            console.log('Cancel button clicked');
             adminFormContainer.classList.remove('visible');
             
             // Reset form
@@ -475,21 +522,23 @@ function initializeAdminControls() {
                 adminForm.reset();
                 resetFormItems();
             }
-        };
+        });
     }
     
-    // Add content button click
+    // Add content button click handler
     if (addContentBtn) {
-        addContentBtn.onclick = function() {
+        addContentBtn.addEventListener('click', function() {
+            console.log('Add content button clicked');
             addFormItem('content');
-        };
+        });
     }
     
-    // Add requirement button click
+    // Add requirement button click handler
     if (addRequirementBtn) {
-        addRequirementBtn.onclick = function() {
+        addRequirementBtn.addEventListener('click', function() {
+            console.log('Add requirement button clicked');
             addFormItem('requirement');
-        };
+        });
     }
     
     // Form submission
@@ -497,7 +546,7 @@ function initializeAdminControls() {
         adminForm.addEventListener('submit', handleAdminFormSubmit);
     }
     
-    // Remove item buttons (delegated event)
+    // Set up delegated event listeners for remove buttons
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('remove-content')) {
             removeFormItem(e.target, 'content');
@@ -525,7 +574,10 @@ function addFormItem(type) {
         isContent ? 'content-container' : 'requirements-container'
     );
     
-    if (!container) return;
+    if (!container) {
+        console.warn(`Container for ${type} not found`);
+        return;
+    }
     
     const className = isContent ? 'content-item' : 'requirement-item';
     const nameAttr = isContent ? 'content[]' : 'requirements[]';
@@ -539,6 +591,7 @@ function addFormItem(type) {
     `;
     
     container.appendChild(newItem);
+    console.log(`Added new ${type} item`);
 }
 
 /**
@@ -547,6 +600,7 @@ function addFormItem(type) {
  * @param {string} type - 'content' or 'requirement'
  */
 function removeFormItem(button, type) {
+    console.log(`Removing ${type} item`);
     const isContent = type === 'content';
     
     // Get the parent item
@@ -557,11 +611,16 @@ function removeFormItem(button, type) {
         isContent ? 'content-container' : 'requirements-container'
     );
     
-    if (!item || !container) return;
+    if (!item || !container) {
+        console.warn('Item or container not found for removal');
+        return;
+    }
     
     // Only remove if there's more than one item
     if (container.children.length > 1) {
         container.removeChild(item);
+    } else {
+        console.log('Cannot remove the last item');
     }
 }
 
@@ -569,6 +628,7 @@ function removeFormItem(button, type) {
  * Reset form items to default state
  */
 function resetFormItems() {
+    console.log('Resetting form items');
     const contentContainer = document.getElementById('content-container');
     const requirementsContainer = document.getElementById('requirements-container');
     
@@ -606,6 +666,7 @@ function resetFormItems() {
  */
 async function handleAdminFormSubmit(e) {
     e.preventDefault();
+    console.log('Admin form submitted');
     
     // Get form and submit button
     const form = e.target;
@@ -619,14 +680,6 @@ async function handleAdminFormSubmit(e) {
     submitBtn.disabled = true;
     
     try {
-        // Validate form
-        const { isValid, invalidFields } = validateForm(form);
-        
-        if (!isValid) {
-            // Form validation failed, error messages are already displayed
-            return;
-        }
-        
         // Collect form data
         const contentInputs = Array.from(form.querySelectorAll('input[name="content[]"]'));
         const requirementInputs = Array.from(form.querySelectorAll('input[name="requirements[]"]'));
@@ -663,16 +716,23 @@ async function handleAdminFormSubmit(e) {
             requirements: requirementValues
         };
         
+        console.log('Submitting training data:', jsonData);
+        
         // Send data to server
-        await postRequest(
-            API_BASE_URL + API_ENDPOINTS.getTrainings, 
-            jsonData,
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
+        const response = await fetch(API_BASE_URL + API_ENDPOINTS.getTrainings, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        });
+        
+        const data = await response.json();
+        console.log('Server response:', data);
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to add training course');
+        }
         
         // Reset form and hide it
         form.reset();
@@ -690,11 +750,10 @@ async function handleAdminFormSubmit(e) {
         showSuccessMessage('Training course added successfully!', '', '#message-container');
         
     } catch (error) {
+        console.error('Error submitting form:', error);
         // Handle errors
-        const errorMessage = error.data?.message || 'Failed to add training course';
-        const errorDetails = error.data?.details || error.message || 'An unexpected error occurred';
-        
-        showErrorMessage(errorMessage, errorDetails, '#message-container');
+        const errorMessage = error.message || 'Failed to add training course';
+        showErrorMessage(errorMessage, 'Please try again later.', '#message-container');
     } finally {
         // Reset button state
         submitBtn.textContent = originalText;
