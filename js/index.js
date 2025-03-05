@@ -16,16 +16,6 @@
  */
 // File related
 let uploadedFiles = [];
-const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
-const ALLOWED_FILE_TYPES = [
-    'image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp',
-    'application/pdf',
-    'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    'text/plain',
-    'application/zip', 'application/x-rar-compressed'
-];
 
 // Form sections
 const FORM_SECTIONS = {

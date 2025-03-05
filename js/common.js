@@ -37,6 +37,43 @@ const MESSAGE_TYPES = {
 // Required field indicator
 const REQUIRED_FIELD_INDICATOR = '<span class="required-asterisk">*</span>';
 
+// File upload constants
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+const ALLOWED_FILE_TYPES = [
+    'image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp',
+    'application/pdf',
+    'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'text/plain',
+    'application/zip', 'application/x-rar-compressed'
+];
+
+// Location abbreviation mapping (from server)
+const LOCATION_MAP = {
+    'MEXICO': 'MEX',
+    'CENTRAL AMERICA': 'CENAM',
+    'DOMINICAN REPUBLIC': 'DOR',
+    'COLOMBIA': 'COL',
+    'BRAZIL': 'BRA',
+    'CHILE': 'CHL',
+    'OTHER': 'OTH'
+};
+
+// System type mapping (from server)
+const SYSTEM_TYPE_MAP = {
+    'pv': 'PV',
+    'bess': 'BESS',
+    'other': 'Other'
+};
+
+// Valid options for form validation
+const VALID_OPTIONS = {
+    'TYPE OF REQUEST': ['SUPPORT', 'RCA', 'TRAINING', 'OTHER'],
+    'Location': ['MEXICO', 'CENTRAL AMERICA', 'DOMINICAN REPUBLIC', 'COLOMBIA', 'BRAZIL', 'CHILE', 'OTHER'],
+    'TYPE OF PRODUCT': ['STRING', 'CENTRAL', 'MVS', 'PVS', 'STORAGE', 'COMMUNICATION']
+};
+
 /**
  * 2. Message System
  * ----------------
@@ -286,6 +323,7 @@ function hideLoadingSpinner(containerId = 'loading-spinner') {
         parentForm.classList.remove('loading');
     }
 }
+
 /**
  * 5. Form Validation
  * ----------------
@@ -668,4 +706,37 @@ function postRequest(url, data, options = {}) {
     }
     
     return makeRequest(url, fetchOptions);
+}
+
+/**
+ * Fetch with retry functionality
+ * @param {string} url - URL to fetch
+ * @param {number} maxRetries - Maximum number of retry attempts
+ * @returns {Promise} - Promise resolving to the response data
+ */
+function fetchWithRetry(url, maxRetries) {
+    return new Promise((resolve, reject) => {
+        const attemptFetch = (retriesLeft) => {
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Server error: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    resolve(data);
+                })
+                .catch(error => {
+                    if (retriesLeft > 0) {
+                        // Wait 1 second before retrying
+                        setTimeout(() => attemptFetch(retriesLeft - 1), 1000);
+                    } else {
+                        reject(error);
+                    }
+                });
+        };
+        
+        attemptFetch(maxRetries);
+    });
 }

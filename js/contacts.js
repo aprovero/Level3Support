@@ -5,8 +5,8 @@
  * 1. Global Variables and Constants
  * 2. Page Initialization
  * 3. Contact Card Interactions
- * 4. Filter Functionality
- * 5. Email Handling
+ * 4. Filter Functionality (for future use)
+ * 5. Email Tracking
  * 6. Animation Effects
  */
 
@@ -14,7 +14,7 @@
  * 1. Global Variables and Constants
  * --------------------------------
  */
-// Contact categories for filtering
+// Contact categories for filtering (if needed in the future)
 const CONTACT_CATEGORIES = {
     all: 'All',
     string: 'String',
@@ -24,11 +24,8 @@ const CONTACT_CATEGORIES = {
     training: 'Training'
 };
 
-// Store contact elements for filtering
+// Store contact elements
 let contactCards = [];
-
-// Current active filter
-let activeFilter = 'all';
 
 /**
  * 2. Page Initialization
@@ -38,11 +35,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize contact cards
     initializeContactCards();
     
-    // Initialize filter buttons if they exist
-    initializeFilters();
-    
     // Add email tracking if needed
     initializeEmailTracking();
+    
+    // Add staggered animation for card appearance
+    addStaggeredAnimation();
 });
 
 /**
@@ -63,7 +60,7 @@ function initializeContactCards() {
             this.classList.remove('hover');
         });
         
-        // Add click handler for mobile devices (optional)
+        // Add click handler for mobile devices
         card.addEventListener('click', function(e) {
             // Only handle card clicks, not email link clicks
             if (e.target.tagName.toLowerCase() !== 'a') {
@@ -83,162 +80,7 @@ function initializeContactCards() {
 }
 
 /**
- * Initialize filter functionality if filter buttons exist
- */
-function initializeFilters() {
-    // Check if filter container exists
-    const filterContainer = document.getElementById('contact-filters');
-    if (!filterContainer) return;
-    
-    // Create filter buttons
-    createFilterButtons(filterContainer);
-    
-    // Set initial state
-    updateFilters('all');
-}
-
-/**
- * Create filter buttons in the specified container
- * @param {Element} container - The container element for filter buttons
- */
-function createFilterButtons(container) {
-    // Create buttons for each category
-    Object.entries(CONTACT_CATEGORIES).forEach(([key, label]) => {
-        const button = document.createElement('button');
-        button.className = 'filter-item' + (key === 'all' ? ' active' : '');
-        button.setAttribute('data-filter', key);
-        button.textContent = label;
-        
-        // Add click event
-        button.addEventListener('click', function() {
-            updateFilters(key);
-        });
-        
-        container.appendChild(button);
-    });
-}
-
-/**
- * 3. Contact Card Interactions
- * --------------------------
- */
-
-/**
- * Add an expand/collapse feature to contact cards
- * Note: Only needed if cards will have expandable content
- * @param {Element} card - The contact card element
- */
-function makeCardExpandable(card) {
-    const expandButton = document.createElement('button');
-    expandButton.className = 'expand-button';
-    expandButton.innerHTML = '<span class="icon">+</span>';
-    expandButton.setAttribute('aria-label', 'Expand contact details');
-    
-    // Create collapsible content container
-    const expandableContent = document.createElement('div');
-    expandableContent.className = 'expandable-content hidden';
-    
-    // Get any additional content from data attributes or create default
-    const additionalInfo = card.getAttribute('data-additional-info') || '';
-    expandableContent.innerHTML = `
-        <div class="additional-info">
-            ${additionalInfo || 'No additional information available.'}
-        </div>
-    `;
-    
-    // Add elements to card
-    card.appendChild(expandButton);
-    card.appendChild(expandableContent);
-    
-    // Add click handler
-    expandButton.addEventListener('click', function(e) {
-        e.stopPropagation(); // Prevent card click
-        
-        const isExpanded = !expandableContent.classList.contains('hidden');
-        
-        if (isExpanded) {
-            // Collapse
-            expandableContent.classList.add('hidden');
-            expandButton.innerHTML = '<span class="icon">+</span>';
-            expandButton.setAttribute('aria-label', 'Expand contact details');
-        } else {
-            // Expand
-            expandableContent.classList.remove('hidden');
-            expandButton.innerHTML = '<span class="icon">-</span>';
-            expandButton.setAttribute('aria-label', 'Collapse contact details');
-        }
-    });
-}
-
-/**
- * 4. Filter Functionality
- * ---------------------
- */
-
-/**
- * Update filters and display based on selected filter
- * @param {string} filterValue - The filter to apply
- */
-function updateFilters(filterValue) {
-    // Update active filter
-    activeFilter = filterValue;
-    
-    // Update filter buttons
-    const filterButtons = document.querySelectorAll('.filter-item');
-    filterButtons.forEach(button => {
-        if (button.getAttribute('data-filter') === filterValue) {
-            button.classList.add('active');
-        } else {
-            button.classList.remove('active');
-        }
-    });
-    
-    // Apply filtering to contact cards
-    filterContacts(filterValue);
-}
-
-/**
- * Filter contact cards based on expertise
- * @param {string} filter - The filter value to apply
- */
-function filterContacts(filter) {
-    // If filter is 'all', show all contacts
-    if (filter === 'all') {
-        contactCards.forEach(card => {
-            card.style.display = 'block';
-        });
-        return;
-    }
-    
-    // Otherwise, filter based on expertise
-    contactCards.forEach(card => {
-        const expertise = card.querySelector('.contact-expertise');
-        if (!expertise) {
-            // If no expertise found, always show the card
-            card.style.display = 'block';
-            return;
-        }
-        
-        const expertiseText = expertise.textContent.toLowerCase();
-        
-        if (expertiseText.includes(filter.toLowerCase())) {
-            // Show cards matching the filter
-            card.style.display = 'block';
-            
-            // Add subtle highlight animation
-            card.classList.add('filtered-in');
-            setTimeout(() => {
-                card.classList.remove('filtered-in');
-            }, 500);
-        } else {
-            // Hide non-matching cards
-            card.style.display = 'none';
-        }
-    });
-}
-
-/**
- * 5. Email Handling
+ * 3. Email Tracking
  * --------------
  */
 
@@ -263,7 +105,58 @@ function initializeEmailTracking() {
 }
 
 /**
- * 6. Animation Effects
+ * 4. Filter Functionality (not currently used but prepared for future)
+ * -------------------------------------------------------------------
+ */
+
+/**
+ * Filter contacts by expertise (could be added in future updates)
+ * @param {string} filterType - The type of filter to apply (e.g., 'expertise')
+ * @param {string} filterValue - The value to filter by
+ */
+function filterContacts(filterType, filterValue) {
+    // Don't do anything if no contacts
+    if (!contactCards.length) return;
+    
+    // Show all cards if filter is 'all'
+    if (filterValue === 'all') {
+        contactCards.forEach(card => {
+            card.style.display = 'block';
+        });
+        return;
+    }
+    
+    // Otherwise apply specific filter
+    contactCards.forEach(card => {
+        // For expertise filtering
+        if (filterType === 'expertise') {
+            const expertise = card.querySelector('.contact-expertise');
+            if (!expertise) {
+                card.style.display = 'block'; // Always show if no expertise found
+                return;
+            }
+            
+            const expertiseText = expertise.textContent.toLowerCase();
+            
+            if (expertiseText.includes(filterValue.toLowerCase())) {
+                // Show cards matching the filter
+                card.style.display = 'block';
+                
+                // Add subtle highlight animation
+                card.classList.add('filtered-in');
+                setTimeout(() => {
+                    card.classList.remove('filtered-in');
+                }, 500);
+            } else {
+                // Hide non-matching cards
+                card.style.display = 'none';
+            }
+        }
+    });
+}
+
+/**
+ * 5. Animation Effects
  * -----------------
  */
 
@@ -285,8 +178,26 @@ function addStaggeredAnimation() {
     });
 }
 
-// Initialize staggered animation on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Add a small delay to ensure DOM is fully ready
-    setTimeout(addStaggeredAnimation, 100);
-});
+/**
+ * 6. Utility Functions
+ * -----------------
+ */
+
+/**
+ * Copy email address to clipboard (for future use)
+ * @param {string} email - The email address to copy
+ */
+function copyEmailToClipboard(email) {
+    navigator.clipboard.writeText(email).then(
+        function() {
+            // Show success message
+            showSuccessMessage('Email copied to clipboard!');
+        },
+        function(err) {
+            console.error('Could not copy email: ', err);
+        }
+    );
+}
+
+// Expose necessary functions to global scope if needed for inline handlers
+window.filterContacts = filterContacts;

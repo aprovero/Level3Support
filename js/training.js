@@ -1,7 +1,7 @@
 /**
  * CoE Level 3 Support Portal - Training Page JavaScript
  * 
- * Table of Contents (Part 1):
+ * Table of Contents:
  * 1. Global Variables and State
  * 2. Page Initialization
  * 3. Training Data Loading
@@ -107,39 +107,6 @@ function fetchTrainingData() {
         .finally(() => {
             showLoadingState(false);
         });
-}
-
-/**
- * Fetch with retry functionality
- * @param {string} url - URL to fetch
- * @param {number} maxRetries - Maximum number of retry attempts
- * @returns {Promise} - Promise resolving to the response data
- */
-function fetchWithRetry(url, maxRetries) {
-    return new Promise((resolve, reject) => {
-        const attemptFetch = (retriesLeft) => {
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Server error: ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    resolve(data);
-                })
-                .catch(error => {
-                    if (retriesLeft > 0) {
-                        // Wait 1 second before retrying
-                        setTimeout(() => attemptFetch(retriesLeft - 1), 1000);
-                    } else {
-                        reject(error);
-                    }
-                });
-        };
-        
-        attemptFetch(maxRetries);
-    });
 }
 
 /**
