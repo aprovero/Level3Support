@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoE Level 3 - Training Catalogs</title>
+    <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
+    <!-- External CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <!-- Shared styles -->
+    <link href="shared-styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="images/LOGO.png" alt="Logo">
+            </div>
+            <div class="header-icons">
+                <div class="contact-icon">
+                    <a href="contacts.html">
+                        <img src="images/contact-icon.png" alt="Contact Directory">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">← Back to the Request Form</a>
+        
+        <!-- Under Construction Banner -->
+        <div class="under-construction-banner">
+            <div class="construction-icon">🚧</div>
+            <div class="construction-message">
+                <h2>Page Under Construction</h2>
+                <p>We're currently updating our training materials database. Some content may be incomplete or subject to change.</p>
+            </div>
+        </div>
+        <h1>Training Catalogs</h1>
+        <p>Browse our comprehensive training programs for PV and BESS systems. Filter by system type, knowledge level, or model to find the right course for your needs.</p>
+        
+        <!-- Resource Links -->
+        <div class="resource-links">
+            <a href="https://sungrowdobrasil.com/" target="_blank" class="resource-link">
+                <img src="images/brazil-flag.png" alt="Brazil Flag" class="link-icon">
+                <span>SUNGROW Academy (Portuguese)</span>
+            </a>
+            <a href="https://support.sungrowpower.com/home" target="_blank" class="resource-link">
+                <img src="images/resource-icon.png" alt="Resource Center" class="link-icon">
+                <span>SUNGROW Resource Center</span>
+            </a>
+        </div>
+        <!-- Filter Section -->
+        <div class="filter-controls">
+            <div class="filter-title">
+                Filter by:
+                <div class="admin-controls">
+                    <button id="admin-button" class="admin-button" title="Add new training course">+</button>
+                </div>
+            </div>
+            <div class="filter-section">
+                <div class="filter-label">System Type:</div>
+                <div class="filter-row">
+                    <div class="filter-item active" data-filter="system" data-value="all">All Systems</div>
+                    <div class="filter-item" data-filter="system" data-value="pv">PV Systems</div>
+                    <div class="filter-item" data-filter="system" data-value="bess">BESS Systems</div>
+                    <div class="filter-item" data-filter="system" data-value="other">Other</div>
+                </div>
+            </div>
+            <div class="filter-section">
+                <div class="filter-label">Knowledge Level:</div>
+                <div class="filter-row">
+                    <div class="filter-item active" data-filter="level" data-value="all">All Levels</div>
+                    <div class="filter-item" data-filter="level" data-value="Level 1">Level 1</div>
+                    <div class="filter-item" data-filter="level" data-value="Level 2">Level 2</div>
+                    <div class="filter-item" data-filter="level" data-value="Level 3 (Certification)">Level 3 (Certification)</div>
+                </div>
+            </div>
+            <div class="filter-section">
+                <div class="filter-label">Model:</div>
+                <div class="filter-row" id="model-filters">
+                    <div class="filter-item active" data-filter="model" data-value="all">All Models</div>
+                    <!-- Model filters will be dynamically added here based on available data -->
+                </div>
+            </div>
+        </div>
+        <!-- Admin Form Container -->
+        <div id="admin-form-container" class="admin-form-container">
+            <div class="admin-form-title">Add New Training Course</div>
+            <form id="admin-form" class="admin-form">
+                <div class="form-field">
+                    <label for="training-name">Course Name*</label>
+                    <input type="text" id="training-name" name="name" required>
+                </div>
+                <div class="form-field">
+                    <label for="training-system">System Type*</label>
+                    <select id="training-system" name="system" required>
+                        <option value="">Select System Type</option>
+                        <option value="PV">PV Systems</option>
+                        <option value="BESS">BESS Systems</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="training-level">Knowledge Level*</label>
+                    <select id="training-level" name="level" required>
+                        <option value="">Select Knowledge Level</option>
+                        <option value="Level 1">Level 1</option>
+                        <option value="Level 2">Level 2</option>
+                        <option value="Level 3 (Certification)">Level 3 (Certification)</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="training-model">Model*</label>
+                    <input type="text" id="training-model" name="model" required>
+                </div>
+                <div class="form-field">
+                    <label for="training-duration">Duration*</label>
+                    <input type="text" id="training-duration" name="duration" required placeholder="e.g., 1 full day">
+                </div>
+                
+                <div class="admin-form-section">
+                    <label>Course Content*</label>
+                    <div id="content-container">
+                        <div class="content-item">
+                            <input type="text" name="content[]" class="form-control" required>
+                            <button type="button" class="btn btn-danger remove-content">×</button>
+                        </div>
+                        <div class="content-item">
+                            <input type="text" name="content[]" class="form-control" required>
+                            <button type="button" class="btn btn-danger remove-content">×</button>
+                        </div>
+                    </div>
+                    <button type="button" id="add-content-btn" class="btn btn-success">+ Add Content Item</button>
+                </div>
+                
+                <div class="admin-form-section">
+                    <label>Requirements*</label>
+                    <div id="requirements-container">
+                        <div class="requirement-item">
+                            <input type="text" name="requirements[]" class="form-control" required>
+                            <button type="button" class="btn btn-danger remove-requirement">×</button>
+                        </div>
+                    </div>
+                    <button type="button" id="add-requirement-btn" class="btn btn-success">+ Add Requirement</button>
+                </div>
+                
+                <div class="admin-form-actions">
+                    <button type="button" id="cancel-button" class="cancel-button">Cancel</button>
+                    <button type="submit" class="submit-button">Add Training</button>
+                </div>
+            </form>
+        </div>
+                
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading training courses...</p>
+        </div>
+        
+        <!-- Training Materials Grid -->
+        <div id="training-grid" class="training-grid">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+        
+        <!-- Empty State (shown when no courses match filters) -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">📚</div>
+            <div class="empty-state-heading">No courses found</div>
+            <div class="empty-state-text">Try adjusting your filters to see more results.</div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-text">
+                <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
+                <div class="footer-creator">Created by Andres Provero</div>
+            </div>
+            <div class="footer-logo">
+                <a href="https://www.anthropic.com" target="_blank">
+                    <img src="images/CLAUDE_LOGO.png" alt="Claude Logo">
+                </a>
+                <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
+            </div>
+        </footer>
+    </div>
+
+    <!-- paths -->
+    <link rel="stylesheet" href="css/shared-styles.css">
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>

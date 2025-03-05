@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoE Level 3 - Support Portal</title>
+    <link rel="stylesheet" href="css/shared-styles.css">
+</head>
+<body>
+    <!-- Welcome Modal -->
+    <div id="welcome-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="text-xl font-bold mb-4">When to use this form:</h2>
+            <ol class="list-decimal pl-6 mb-6 space-y-2">
+                <li>For technical issues that are not solved by Tech-support and FSE, those cases can be sent to CoE team for review.</li>
+                <li>For training requests, Internal, 3rd party or customer.</li>
+                <li>For RCA requests.</li>
+                <li>For other issues. (Customer requested reports, Quality issues, etc.)</li>
+            </ol>
+            <p class="mb-6 font-bold">Please make sure to provide all needed information for CoE team to do analysis.</p>
+            <p class="mb-8 font-bold">Note if the request does not have all needed information, processing time will be delayed.</p>
+            <button id="understand-btn" class="modal-button">I UNDERSTAND</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2>Request Submitted</h2>
+            <p>Your support request has been successfully submitted.</p>
+            <p>Request ID: <span id="request-id">COERQYYMM####</span></p>
+            <button class="modal-button" id="success-close-btn">Close</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <img src="images/LOGO.png" alt="SUNGROW Logo">
+            </div>
+            <div class="header-icons">
+                <div class="contact-icon">
+                    <a href="contacts.html">
+                        <img src="images/contact-icon.png" alt="Contact Directory">
+                    </a>
+                </div>
+                <div class="training-icon">
+                    <a href="training.html">
+                        <img src="images/training-icon.png" alt="Training Resources">
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <h1>CoE Level 3 Support Request</h1>
+
+        <!-- Main Form -->
+        <div class="form-container">
+            <form id="support-form">
+                <!-- Common Initial Fields -->
+                <div class="form-group">
+                    <label for="requester-name">Requester Name <span class="required-asterisk">*</span></label>
+                    <input type="text" id="requester-name" name="requesterName" placeholder="Enter your name" required>
+
+                    <label for="requester-email">Requester Email <span class="required-asterisk">*</span></label>
+                    <input type="email" id="requester-email" name="requesterEmail" placeholder="Enter your email" required>
+
+                    <label for="request">Type of Request <span class="required-asterisk">*</span></label>
+                    <select id="request" name="request" required>
+                        <option value="">-- Select --</option>
+                        <option value="SUPPORT">SUPPORT</option>
+                        <option value="TRAINING">TRAINING</option>
+                        <option value="RCA">RCA</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
+                </div>
+
+                <!-- Common Fields for All Forms -->
+                <div id="common-fields" class="form-group" style="display: none;">
+                    <label for="location">Location <span class="required-asterisk">*</span></label>
+                    <select id="location" name="location">
+                        <option value="">-- Select Location --</option>
+                        <option value="MEXICO">MEXICO</option>
+                        <option value="CENTRAL AMERICA">CENTRAL AMERICA</option>
+                        <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
+                        <option value="COLOMBIA">COLOMBIA</option>
+                        <option value="BRAZIL">BRAZIL</option>
+                        <option value="CHILE">CHILE</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
+
+                    <label for="project-name">Project Name <span class="required-asterisk">*</span></label>
+                    <input type="text" id="project-name" name="projectName" placeholder="Enter project name">
+
+                    <label for="product-type">TYPE OF PRODUCT <span class="required-asterisk">*</span></label>
+                    <select id="product-type" name="productType">
+                        <option value="">-- Select --</option>
+                        <option value="STRING">STRING</option>
+                        <option value="CENTRAL">CENTRAL</option>
+                        <option value="MVS">MVS</option>
+                        <option value="PVS">PVS</option>
+                        <option value="STORAGE">STORAGE</option>
+                        <option value="COMMUNICATION">COMMUNICATION</option>
+                    </select>
+
+                    <label for="model">Model</label>
+                    <input type="text" id="model" name="model" placeholder="Enter model">
+                </div>
+                <!-- Training Form Fields -->
+                <div id="training-fields" class="form-group" style="display: none;">
+                    <label for="training-description">Description <span class="required-asterisk">*</span></label>
+                    <textarea id="training-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
+
+                    <label for="expected-date">Expected Date <span class="required-asterisk">*</span></label>
+                    <div class="field-note">Minimum 1 month after requested date</div>
+                    <input type="date" id="expected-date" name="expectedDate">
+
+                    <label for="trainees-number">Number of Trainees <span class="required-asterisk">*</span></label>
+                    <input type="number" id="trainees-number" name="traineesNumber" min="1" step="1">
+                </div>
+
+                <!-- Support and RCA Fields -->
+                <div id="support-rca-fields" class="form-group" style="display: none;">
+                    <label for="description">Description <span class="required-asterisk">*</span></label>
+                    <textarea id="description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
+
+                    <label for="gsp-ticket">GSP Ticket</label>
+                    <input type="text" id="gsp-ticket" name="gspTicket" placeholder="Enter GSP ticket number">
+
+                    <label for="serial-numbers">Serial Numbers</label>
+                    <textarea id="serial-numbers" name="serialNumbers" rows="3" placeholder="Enter serial numbers"></textarea>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="esr-completed" name="esrCompleted">
+                        <label for="esr-completed">FIELD REPORT completed?</label>
+                    </div>
+                </div>
+
+                <!-- OTHER Fields -->
+                <div id="other-fields" class="form-group" style="display: none;">
+                    <label for="other-description">Description <span class="required-asterisk">*</span></label>
+                    <textarea id="other-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
+                </div>
+
+                <!-- File Upload Section -->
+                <div id="file-upload-section" class="form-group" style="display: none;">
+                    <label>ATTACHMENTS<span id="attachment-required" class="text-red-500 hidden"> *</span></label>
+                    <div id="file-upload" class="file-upload">
+                        <div id="upload-text">
+                            Drop files here or click to upload (allowed types: txt, zip, rar, pictures, PDFs, MS Office files)
+                            <input type="file" id="file-input" name="attachments" multiple style="display: none;">
+                        </div>
+                        <div id="file-list" class="file-list"></div>
+                    </div>
+                </div>
+
+                <!-- Message container -->
+                <div id="message-container" class="mb-4"></div>
+
+                <div id="loading-spinner" class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Submitting your request...</p>
+                </div>
+
+                <button type="submit" id="submit-btn" style="display: none;">SUBMIT</button>
+            </form>
+        </div>
+        
+        <!-- Error Modal -->
+        <div id="error-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h2>Error</h2>
+                <p id="error-message">There was an error processing your request.</p>
+                <div id="error-details" class="message-details"></div>
+                <button class="modal-button" id="error-close-btn">Close</button>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-text">
+                <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
+                <div class="footer-creator">Created by Andres Provero</div>
+            </div>
+            <div class="footer-logo">
+                <a href="https://www.anthropic.com" target="_blank">
+                    <img src="images/CLAUDE_LOGO.png" alt="Claude Logo">
+                </a>
+                <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
+            </div>
+        </footer>
+    </div>
+
+    <!-- paths -->
+    <link rel="stylesheet" href="css/shared-styles.css">
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>

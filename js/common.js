@@ -18,7 +18,7 @@
  */
 
 // API endpoints
-const API_BASE_URL = 'https://level3support.onrender.com';
+const API_BASE_URL = ''; // Empty string for relative paths
 const API_ENDPOINTS = {
     submitRequest: '/submit',
     submitEvaluation: '/evaluation',
@@ -141,15 +141,25 @@ function showWarningMessage(title, details = '', container = '#message-container
 function showSuccessModal(title, message, onClose) {
     const successModal = document.getElementById('success-modal');
     const successMessage = document.getElementById('success-message');
+    const requestIdSpan = document.getElementById('request-id');
     const closeBtn = document.getElementById('success-close-btn');
     
-    if (!successModal || !successMessage) {
+    if (!successModal) {
         console.warn('Success modal elements not found');
         return;
     }
     
-    // Set modal content
-    successMessage.innerHTML = `<strong>${title}</strong><br>${message}`;
+    // Check if this is a request ID message
+    if (requestIdSpan && message.includes('Issue ID:')) {
+        // Extract issue ID from message
+        const issueIdMatch = message.match(/Issue ID: (.*)/);
+        if (issueIdMatch && issueIdMatch[1]) {
+            requestIdSpan.textContent = issueIdMatch[1];
+        }
+    } else if (successMessage) {
+        // For other success messages, use the standard approach
+        successMessage.innerHTML = `<strong>${title}</strong><br>${message}`;
+    }
     
     // Show the modal
     successModal.style.display = 'flex';
