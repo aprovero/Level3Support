@@ -130,12 +130,12 @@ body {
 }
 
 .container {
-    max-width: 720px;
-    margin: 30px auto;
+    max-width: 720px; /* Smaller than original 800px */
+    margin: 20px auto; /* Reduced from 50px */
     background: var(--background-light);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-md);
-    padding: 20px;
+    padding: 10px;
     position: relative;
 }
 
@@ -411,7 +411,7 @@ textarea {
     width: 100%;
 }
 
-.rating-option {
+.rating-option, .recommend-option {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -419,12 +419,12 @@ textarea {
     gap: 3px;
 }
 
-.rating-option input[type="radio"] {
+.rating-option input[type="radio"], .recommend-option input[type="radio"]{
     margin-bottom: 0px;
     width: auto;
 }
 
-.rating-option label {
+.rating-option label, .recommend-option label {
     margin-top: 0px;
     line-height: 1;
     font-weight: normal;
@@ -667,9 +667,9 @@ button:disabled, .submit-button:disabled {
 
 .modal-content {
     background-color: white;
-    padding: 2rem;
+    padding: 1.75rem;
     border-radius: var(--border-radius-lg);
-    max-width: 600px;
+    max-width: 500px;
     width: 90%;
     box-shadow: var(--shadow-lg);
 }
@@ -1341,7 +1341,7 @@ button:disabled, .submit-button:disabled {
     .container {
         margin: 10px auto;
         padding: 12px;
-        width: 94%; /* Increase width for mobile */
+        width: 92%; /* Increase width for mobile */
     }
  
     .form-group, .form-section {
@@ -1362,10 +1362,16 @@ button:disabled, .submit-button:disabled {
     }
     
     .header {
-        padding-bottom: 15px;
-        margin-bottom: 15px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
     
+    .header-icons {
+        margin-top: 10px;
+        justify-content: center;
+    }
+
     .logo img {
         width: 120px;
     }
@@ -1395,17 +1401,19 @@ button:disabled, .submit-button:disabled {
     }
     
     .footer {
-        margin-top: 20px;
-        padding: 15px 10px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
     
+
     .footer-text {
         text-align: center;
         margin-bottom: 10px;
     }
     
-    .footer-logo img {
-        height: 35px;
+    .footer-logo {
+        margin-top: 10px;
     }
     
     .footer-copyright,
@@ -1446,7 +1454,7 @@ button:disabled, .submit-button:disabled {
     }
 
 }
- 
+
 /* Mobile phones */
 @media (max-width: 480px) {
     .logo img {

@@ -85,19 +85,22 @@ function fetchTrainingData() {
     // Show loading indicator
     showLoadingState(true);
     
-    console.log('Fetching training data from:', API_BASE_URL + API_ENDPOINTS.getTrainings);
+    const trainingEndpoint = API_BASE_URL + API_ENDPOINTS.getTrainings;
+    console.log('Fetching training data from:', trainingEndpoint);
     
-    // Use standard fetch for simplicity and to avoid potential issues
-    fetch(API_BASE_URL + API_ENDPOINTS.getTrainings)
+    // Direct fetch without using fetchWithRetry
+    fetch(trainingEndpoint)
         .then(response => {
+            console.log('Response status:', response.status);
             if (!response.ok) {
-                throw new Error('Server error: ' + response.status);
+                throw new Error(`Server error: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
             console.log('Received training data:', data);
-            if (data.success && data.trainings) {
+            
+            if (data && data.trainings && data.trainings.length > 0) {
                 // Store all trainings for later filtering
                 allTrainings = data.trainings;
                 
@@ -107,12 +110,13 @@ function fetchTrainingData() {
                 // Setup model filters based on all data
                 setupModelFilters(allTrainings);
             } else {
-                handleTrainingDataError('Failed to load training data. Please refresh the page or try again later.');
+                console.error('No training data found in response:', data);
+                handleTrainingDataError('No training data available. Please try again later.');
             }
         })
         .catch(error => {
             console.error('Error fetching training data:', error);
-            handleTrainingDataError('Failed to load training data. Please refresh the page or try again later.');
+            handleTrainingDataError(`Failed to load training data: ${error.message}`);
         })
         .finally(() => {
             showLoadingState(false);
@@ -441,21 +445,19 @@ function initializeAdminControls() {
     const adminButton = document.getElementById('admin-button');
     const adminFormContainer = document.getElementById('admin-form-container');
     
-    // Add debug logging
-    console.log('Admin button:', adminButton);
-    console.log('Admin form container:', adminFormContainer);
+    console.log('Admin elements:', { adminButton, adminFormContainer });
     
-    // Admin button click with improved event binding
+    // Admin button click with direct onclick assignment
     if (adminButton && adminFormContainer) {
-        // Remove any existing listeners
-        const newAdminButton = adminButton.cloneNode(true);
-        adminButton.parentNode.replaceChild(newAdminButton, adminButton);
-        
-        // Add new click handler
-        newAdminButton.addEventListener('click', function() {
+        // Replace event listener with direct onclick
+        adminButton.onclick = function() {
             console.log('Admin button clicked');
-            adminFormContainer.classList.toggle('visible');
-        });
+            if (adminFormContainer.classList.contains('visible')) {
+                adminFormContainer.classList.remove('visible');
+            } else {
+                adminFormContainer.classList.add('visible');
+            }
+        };
     }
     
     const adminForm = document.getElementById('admin-form');
@@ -465,7 +467,7 @@ function initializeAdminControls() {
     
     // Cancel button click
     if (cancelButton && adminFormContainer) {
-        cancelButton.addEventListener('click', function() {
+        cancelButton.onclick = function() {
             adminFormContainer.classList.remove('visible');
             
             // Reset form
@@ -473,21 +475,21 @@ function initializeAdminControls() {
                 adminForm.reset();
                 resetFormItems();
             }
-        });
+        };
     }
     
     // Add content button click
     if (addContentBtn) {
-        addContentBtn.addEventListener('click', function() {
+        addContentBtn.onclick = function() {
             addFormItem('content');
-        });
+        };
     }
     
     // Add requirement button click
     if (addRequirementBtn) {
-        addRequirementBtn.addEventListener('click', function() {
+        addRequirementBtn.onclick = function() {
             addFormItem('requirement');
-        });
+        };
     }
     
     // Form submission

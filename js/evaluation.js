@@ -44,30 +44,35 @@ function initializeEvaluationForm() {
     const fetchButton = document.getElementById('fetchTrainingBtn');
     const trainingIdInput = document.getElementById('trainingId');
     
-    // Add event listener for lookup button
-    if (fetchButton) {
-        // Remove existing listeners by replacing with clone
-        const newFetchButton = fetchButton.cloneNode(true);
-        fetchButton.parentNode.replaceChild(newFetchButton, fetchButton);
-        
-        // Add new click handler
-        newFetchButton.addEventListener('click', handleTrainingLookup);
-        console.log('Added lookup button handler');
-    }
-    
-    // Auto-uppercase training ID
+    // Force uppercase for training ID
     if (trainingIdInput) {
+        // Convert to uppercase on input
         trainingIdInput.addEventListener('input', function() {
             this.value = this.value.toUpperCase();
         });
         
-        // Force uppercase on all interactions
+        // Set placeholder
+        trainingIdInput.placeholder = "Enter Training ID (e.g., TR25010001)";
+        
+        // Force uppercase on paste
+        trainingIdInput.addEventListener('paste', function(e) {
+            setTimeout(() => {
+                this.value = this.value.toUpperCase();
+            }, 0);
+        });
+        
+        // Force uppercase on blur (when field loses focus)
         trainingIdInput.addEventListener('blur', function() {
             this.value = this.value.toUpperCase();
         });
-        
-        // Add placeholder to show example format
-        trainingIdInput.placeholder = "Enter Training ID (e.g., TR25010001)";
+    }
+    
+    // Add direct onclick for lookup button
+    if (fetchButton) {
+        fetchButton.onclick = function() {
+            console.log("Lookup button clicked");
+            handleTrainingLookup();
+        };
     }
     
     // Add event listener for form submission
@@ -141,10 +146,28 @@ function handleTrainingLookup() {
     // Show loading status
     showStatus('Looking up training information...', 'info');
     
-    console.log('Fetching training with ID:', trainingId);
+    // Create the API URL
+    const trainingEndpoint = API_BASE_URL + '/training/' + trainingId;
+    console.log('Fetching training data from:', trainingEndpoint);
     
-    // Fetch training information from the server
-    fetchTrainingInfo(trainingId);
+    // Use direct fetch
+    fetch(trainingEndpoint)
+        .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`Training not found (${response.status})`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Training data received:', data);
+            populateTrainingInfo(data);
+            showStatus('Training information found', 'success');
+        })
+        .catch(error => {
+            console.error('Error fetching training:', error);
+            showStatus('Training not found. Please check the ID and try again.', 'error');
+        });
 }
 
 /**
@@ -445,7 +468,7 @@ async function submitEvaluation(formValues) {
         // Make sure recommend is in the right format
         formValues.recommend = formValues.recommend === 'Yes';
         
-        // Submit to server using regular fetch for simplicity
+        // Submit to server using direct fetch
         const response = await fetch(API_BASE_URL + API_ENDPOINTS.submitEvaluation, {
             method: 'POST',
             headers: {

@@ -513,36 +513,49 @@ async function handleFormSubmit(e) {
             'This may take a few moments. Please don\'t close the page.'
         );
         
-        // Make API request
-        const response = await postRequest(
-            API_BASE_URL + API_ENDPOINTS.submitRequest, 
-            formData,
-            {
-                timeout: 60000 // 60 second timeout
+        // Direct fetch instead of using the helper function
+        console.log('Submitting to endpoint:', API_BASE_URL + API_ENDPOINTS.submitRequest);
+        const response = await fetch(API_BASE_URL + API_ENDPOINTS.submitRequest, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        console.log('Submit response:', data);
+        
+        // Check if response is successful
+        if (response.ok) {
+            // Handle successful submission
+            const successMessage = 'Form submitted successfully!';
+            const successDetails = data.issueId ? 
+                `Issue ID: ${data.issueId}` : 
+                'Your request has been processed.';
+            
+            // Show success modal
+            const successModal = document.getElementById('success-modal');
+            const requestIdSpan = document.getElementById('request-id');
+            
+            if (requestIdSpan && data.issueId) {
+                requestIdSpan.textContent = data.issueId;
             }
-        );
-        
-        // Handle successful submission
-        const successMessage = 'Form submitted successfully!';
-        const successDetails = response.issueId ? 
-            `Issue ID: ${response.issueId}` : 
-            'Your request has been processed.';
-        
-        // Show success modal
-        showSuccessModal(successMessage, successDetails);
+            
+            if (successModal) {
+                successModal.style.display = 'flex';
+            }
+            
+            // Clear any info messages
+            messageContainer.innerHTML = '';
+        } else {
+            throw new Error(data.error || 'Submission failed');
+        }
         
     } catch (error) {
+        console.error('Submission error:', error);
         // Handle errors
-        if (error.message === 'Request timed out') {
-            showInfoMessage(
-                'Form Submitted', 
-                'Your form was submitted but is taking longer than expected to process. You\'ll receive an email confirmation shortly.'
-            );
-        } else {
-            const errorMessage = error.data?.error || 'Network error';
-            const errorDetails = error.data?.details || 'Failed to submit the form. Please check your connection and try again.';
-            showErrorMessage(errorMessage, errorDetails);
-        }
+        showErrorMessage(
+            'Error submitting form', 
+            error.message || 'Failed to submit the form. Please check your connection and try again.'
+        );
     } finally {
         // Re-enable submit button and hide loading spinner
         if (submitBtn) {
