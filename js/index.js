@@ -202,6 +202,41 @@ function showTrainingFields() {
 }
 
 /**
+ * Set minimum date for a date input
+ * @param {string} inputId - ID of the date input element
+ * @param {number} daysFromNow - Number of days from today
+ */
+function setMinimumDate(inputId, daysFromNow = 0) {
+    const dateInput = document.getElementById(inputId);
+    if (!dateInput) return;
+    
+    // Calculate minimum date
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + daysFromNow);
+    
+    // Format as YYYY-MM-DD for the input
+    const formattedDate = formatDate(minDate, 'yyyy-MM-dd');
+    
+    // Set the minimum date
+    dateInput.min = formattedDate;
+    dateInput.setAttribute('min', formattedDate); // Ensure attribute is set
+    
+    // Force disable past dates with a validation function
+    dateInput.addEventListener('input', function() {
+        const selectedDate = new Date(this.value);
+        if (selectedDate < minDate) {
+            showErrorMessage(
+                'Invalid Date', 
+                `Please select a date at least ${daysFromNow} days from today.`,
+                '#message-container'
+            );
+            this.value = formattedDate; // Set to minimum valid date
+        }
+    });
+}
+
+/**
  * Show support/RCA specific fields
  */
 function showSupportRcaFields() {
@@ -244,6 +279,7 @@ function handleEsrCheckboxChange() {
     if (attachmentRequired) {
         if (this.checked) {
             attachmentRequired.classList.remove('hidden');
+            attachmentRequired.style.color = 'var(--error-color)'; // Ensure color is red
         } else {
             attachmentRequired.classList.add('hidden');
         }

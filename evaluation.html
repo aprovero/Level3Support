@@ -16,18 +16,6 @@
             <div class="logo">
                 <img src="images/LOGO.png" alt="Logo">
             </div>
-            <div class="header-icons">
-                <div class="contact-icon">
-                    <a href="contacts.html">
-                        <img src="images/contact-icon.png" alt="Contact Directory">
-                    </a>
-                </div>
-                <div class="training-icon">
-                    <a href="training.html">
-                        <img src="images/training-icon.png" alt="Training Resources">
-                    </a>
-                </div>
-            </div>
         </div>
         
         <h1>Training Evaluation Form</h1>
@@ -44,8 +32,8 @@
                 
                 <div class="mb-6">
                     <label for="trainingId" class="block mb-2">Training ID <span class="required">*</span></label>
-                    <div class="flex">
-                        <input type="text" id="trainingId" name="trainingId" required class="flex-grow p-2 border border-gray-300 rounded-l" placeholder="Enter Training ID (e.g., TR25010001)">
+                    <div class="flex items-center">
+                        <input type="text" id="trainingId" name="trainingId" required class="flex-grow p-2 border border-gray-300 rounded-l h-10" placeholder="Enter Training ID (e.g., TR25010001)">
                         <button type="button" id="fetchTrainingBtn" class="bg-orange-500 text-white px-4 h-10 rounded-r hover:bg-orange-600 w-auto lookup-btn">Lookup</button>
                     </div>
                     <p id="fetchStatus" class="text-sm mt-2 hidden"></p>

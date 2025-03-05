@@ -85,9 +85,18 @@ function fetchTrainingData() {
     // Show loading indicator
     showLoadingState(true);
     
-    // Fetch data with retry capability
-    fetchWithRetry(API_BASE_URL + API_ENDPOINTS.getTrainings, 3)
+    console.log('Fetching training data from:', API_BASE_URL + API_ENDPOINTS.getTrainings);
+    
+    // Use standard fetch for simplicity and to avoid potential issues
+    fetch(API_BASE_URL + API_ENDPOINTS.getTrainings)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server error: ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Received training data:', data);
             if (data.success && data.trainings) {
                 // Store all trainings for later filtering
                 allTrainings = data.trainings;
@@ -102,6 +111,7 @@ function fetchTrainingData() {
             }
         })
         .catch(error => {
+            console.error('Error fetching training data:', error);
             handleTrainingDataError('Failed to load training data. Please refresh the page or try again later.');
         })
         .finally(() => {
@@ -430,17 +440,28 @@ function getSystemTagClass(system) {
 function initializeAdminControls() {
     const adminButton = document.getElementById('admin-button');
     const adminFormContainer = document.getElementById('admin-form-container');
+    
+    // Add debug logging
+    console.log('Admin button:', adminButton);
+    console.log('Admin form container:', adminFormContainer);
+    
+    // Admin button click with improved event binding
+    if (adminButton && adminFormContainer) {
+        // Remove any existing listeners
+        const newAdminButton = adminButton.cloneNode(true);
+        adminButton.parentNode.replaceChild(newAdminButton, adminButton);
+        
+        // Add new click handler
+        newAdminButton.addEventListener('click', function() {
+            console.log('Admin button clicked');
+            adminFormContainer.classList.toggle('visible');
+        });
+    }
+    
     const adminForm = document.getElementById('admin-form');
     const cancelButton = document.getElementById('cancel-button');
     const addContentBtn = document.getElementById('add-content-btn');
     const addRequirementBtn = document.getElementById('add-requirement-btn');
-    
-    // Admin button click
-    if (adminButton && adminFormContainer) {
-        adminButton.addEventListener('click', function() {
-            adminFormContainer.classList.toggle('visible');
-        });
-    }
     
     // Cancel button click
     if (cancelButton && adminFormContainer) {

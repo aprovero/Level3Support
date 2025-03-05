@@ -46,7 +46,13 @@ function initializeEvaluationForm() {
     
     // Add event listener for lookup button
     if (fetchButton) {
-        fetchButton.addEventListener('click', handleTrainingLookup);
+        // Remove existing listeners by replacing with clone
+        const newFetchButton = fetchButton.cloneNode(true);
+        fetchButton.parentNode.replaceChild(newFetchButton, fetchButton);
+        
+        // Add new click handler
+        newFetchButton.addEventListener('click', handleTrainingLookup);
+        console.log('Added lookup button handler');
     }
     
     // Auto-uppercase training ID
@@ -54,6 +60,14 @@ function initializeEvaluationForm() {
         trainingIdInput.addEventListener('input', function() {
             this.value = this.value.toUpperCase();
         });
+        
+        // Force uppercase on all interactions
+        trainingIdInput.addEventListener('blur', function() {
+            this.value = this.value.toUpperCase();
+        });
+        
+        // Add placeholder to show example format
+        trainingIdInput.placeholder = "Enter Training ID (e.g., TR25010001)";
     }
     
     // Add event listener for form submission
@@ -107,7 +121,8 @@ function initializeRatingGroups() {
  * Handle the training lookup button click
  */
 function handleTrainingLookup() {
-    const trainingId = document.getElementById('trainingId').value.trim();
+    console.log('Training lookup initiated');
+    const trainingId = document.getElementById('trainingId').value.trim().toUpperCase();
     const fetchStatus = document.getElementById('fetchStatus');
     
     // Clear any previous status
@@ -126,6 +141,8 @@ function handleTrainingLookup() {
     // Show loading status
     showStatus('Looking up training information...', 'info');
     
+    console.log('Fetching training with ID:', trainingId);
+    
     // Fetch training information from the server
     fetchTrainingInfo(trainingId);
 }
@@ -136,21 +153,30 @@ function handleTrainingLookup() {
  */
 async function fetchTrainingInfo(trainingId) {
     try {
-        // Fetch training data
-        const data = await getRequest(API_BASE_URL + API_ENDPOINTS.getTrainingById(trainingId));
+        console.log('Making request to:', API_BASE_URL + API_ENDPOINTS.getTrainingById(trainingId));
+        
+        // Use regular fetch to avoid potential issues
+        const response = await fetch(API_BASE_URL + API_ENDPOINTS.getTrainingById(trainingId));
+        const data = await response.json();
+        
+        console.log('Training data received:', data);
         
         // If successful, populate the training info
-        if (data) {
+        if (response.ok && data) {
             populateTrainingInfo(data);
             showStatus('Training information found', 'success');
+        } else {
+            // Handle error responses
+            const errorMessage = data.error || 'Training not found';
+            const errorDetails = data.details || 'Please check the Training ID and try again';
+            
+            showStatus(errorMessage, 'error');
+            console.error('Error fetching training info:', errorMessage);
         }
     } catch (error) {
-        // Handle errors
-        const errorMessage = error.data?.error || 'Training not found';
-        const errorDetails = error.data?.details || 'Please check the Training ID and try again';
-        
-        showStatus(errorMessage, 'error');
-        console.error('Error fetching training info:', error.message);
+        // Handle unexpected errors
+        console.error('Error in fetchTrainingInfo:', error);
+        showStatus('Error connecting to server. Please try again later.', 'error');
     }
 }
 
@@ -413,17 +439,34 @@ function calculateAverageScore(formValues) {
  */
 async function submitEvaluation(formValues) {
     try {
-        // Submit to server
-        const response = await postRequest(
-            API_BASE_URL + API_ENDPOINTS.submitEvaluation,
-            formValues
-        );
+        console.log('Submitting evaluation with values:', formValues);
         
-        return { success: true, recordId: response.recordId };
+        // Adjust the data format to match what the server expects
+        // Make sure recommend is in the right format
+        formValues.recommend = formValues.recommend === 'Yes';
+        
+        // Submit to server using regular fetch for simplicity
+        const response = await fetch(API_BASE_URL + API_ENDPOINTS.submitEvaluation, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formValues)
+        });
+        
+        const data = await response.json();
+        console.log('Evaluation response:', data);
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Server error');
+        }
+        
+        return { success: true, recordId: data.recordId || data.id };
     } catch (error) {
+        console.error('Error submitting evaluation:', error);
         return { 
             success: false, 
-            error: error.data?.error || error.message || 'Submission failed' 
+            error: error.message || 'Submission failed' 
         };
     }
 }

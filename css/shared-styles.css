@@ -130,8 +130,8 @@ body {
 }
 
 .container {
-    max-width: 800px;
-    margin: 50px auto;
+    max-width: 720px;
+    margin: 30px auto;
     background: var(--background-light);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-md);
@@ -179,7 +179,7 @@ body {
 /* Header icons */
 .header-icons {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     align-items: center;
 }
 
@@ -232,6 +232,7 @@ body {
 .footer-logo {
     display: flex;
     align-items: center;
+    gap: 15px;
 }
 
 .footer-logo img {
@@ -415,16 +416,16 @@ textarea {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 2px;
+    gap: 3px;
 }
 
 .rating-option input[type="radio"] {
-    margin-bottom: 2px;
+    margin-bottom: 0px;
     width: auto;
 }
 
 .rating-option label {
-    margin-top: 2px;
+    margin-top: 0px;
     line-height: 1;
     font-weight: normal;
     display: block;
@@ -435,22 +436,25 @@ textarea {
 .recommend-options {
     display: flex;
     gap: 20px;
+    margin-top: 10px;
 }
 
 .recommend-option {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 5px;
+    text-align: center;
+    gap: 3px;
 }
 
 .recommend-option input {
-    margin-right: 2px;
+    margin-right: 0px;
     width: auto;
 }
 
 .recommend-option label {
     margin-top: 0;
-    display: inline;
+    display: block;
     font-weight: normal;
 }
 
@@ -1335,14 +1339,14 @@ button:disabled, .submit-button:disabled {
 /* Tablet and smaller */
 @media (max-width: 768px) {
     .container {
-        margin: 20px;
-        padding: 15px;
-        width: calc(100% - 40px);
-        max-width: 100%;
+        margin: 10px auto;
+        padding: 12px;
+        width: 94%; /* Increase width for mobile */
     }
-
+    
     .form-group, .form-section {
         padding: 10px;
+        margin-bottom: 15px;
     }
 
     .contacts-grid {
@@ -1358,9 +1362,8 @@ button:disabled, .submit-button:disabled {
     }
     
     .header {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
     }
     
     .logo img {
@@ -1368,6 +1371,7 @@ button:disabled, .submit-button:disabled {
     }
     
     input, select, textarea {
+        margin-bottom: 12px;
         font-size: 16px; /* Prevents auto-zoom on iOS */
         padding: 8px;
     }
@@ -1391,10 +1395,8 @@ button:disabled, .submit-button:disabled {
     }
     
     .footer {
-        margin-top: 25px;
-        padding: 15px;
-        flex-direction: column;
-        text-align: center;
+        margin-top: 20px;
+        padding: 15px 10px;
     }
     
     .footer-text {
@@ -1442,7 +1444,6 @@ button:disabled, .submit-button:disabled {
     .admin-form-actions {
         grid-column: span 1;
     }
-}
 
 /* Mobile phones */
 @media (max-width: 480px) {

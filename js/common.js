@@ -18,7 +18,7 @@
  */
 
 // API endpoints
-const API_BASE_URL = ''; // Empty string for relative paths
+const API_BASE_URL = 'https://level3support.onrender.com'; // Update this to your actual API URL
 const API_ENDPOINTS = {
     submitRequest: '/submit',
     submitEvaluation: '/evaluation',
