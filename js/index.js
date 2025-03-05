@@ -56,7 +56,20 @@ function initializeWelcomeModal() {
  * Initialize the success modal
  */
 function initializeSuccessModal() {
-    initializeModal('success-modal', 'success-close-btn', null, resetFormToInitial);
+    const modal = document.getElementById('success-modal');
+    const closeButton = document.getElementById('success-close-btn');
+    
+    if (!modal || !closeButton) {
+        console.warn('Success modal elements not found');
+        return;
+    }
+    
+    // Close button event
+    closeButton.addEventListener('click', function() {
+        modal.style.display = 'none';
+        modal.classList.add('hidden');
+        resetFormToInitial(); // Make sure form is reset when modal is closed
+    });
 }
 
 /**
@@ -80,6 +93,41 @@ function initializeFormHandlers() {
     // Form submission
     if (form) {
         form.addEventListener('submit', handleFormSubmit);
+    }
+}
+
+/**
+ * Initialize the success modal
+ * @param {string} issueId - The issue ID to display
+ */
+function showSuccessModal(issueId) {
+    const successModal = document.getElementById('success-modal');
+    const requestIdSpan = document.getElementById('request-id');
+    
+    if (!successModal || !requestIdSpan) {
+        console.warn('Success modal elements not found');
+        return;
+    }
+    
+    // Set the issue ID
+    requestIdSpan.textContent = issueId || 'N/A';
+    
+    // Show the modal
+    successModal.style.display = 'flex';
+    successModal.classList.remove('hidden');
+    
+    // Add event listener to close button if it hasn't been set up yet
+    const closeButton = document.getElementById('success-close-btn');
+    if (closeButton) {
+        // Remove existing event listeners to prevent duplicates
+        const newCloseBtn = closeButton.cloneNode(true);
+        closeButton.parentNode.replaceChild(newCloseBtn, closeButton);
+        
+        newCloseBtn.addEventListener('click', function() {
+            successModal.style.display = 'none';
+            successModal.classList.add('hidden');
+            resetFormToInitial(); // Reset form when modal is closed
+        });
     }
 }
 
@@ -557,28 +605,11 @@ async function handleFormSubmit(e) {
         
         // Check if response is successful
         if (response.ok) {
-            // Handle successful submission
-            const successMessage = 'Form submitted successfully!';
-            const successDetails = data.issueId ? 
-                `Issue ID: ${data.issueId}` : 
-                'Your request has been processed.';
-            
-            // Show success modal
-            const successModal = document.getElementById('success-modal');
-            const requestIdSpan = document.getElementById('request-id');
-            
-            if (requestIdSpan && data.issueId) {
-                requestIdSpan.textContent = data.issueId;
-            }
-            
-            if (successModal) {
-                successModal.style.display = 'flex';
-            }
+            // Show success modal with the issue ID
+            showSuccessModal(data.issueId);
             
             // Clear any info messages
             messageContainer.innerHTML = '';
-        } else {
-            throw new Error(data.error || 'Submission failed');
         }
         
     } catch (error) {
@@ -615,6 +646,12 @@ function resetFormToInitial() {
     // Hide form sections
     hideAllFormSections();
     
+    // Reset the request type dropdown to empty state
+    const requestSelect = document.getElementById('request');
+    if (requestSelect) {
+        requestSelect.value = '';
+    }
+    
     // Clear messages
     const messageContainer = document.getElementById('message-container');
     if (messageContainer) {
@@ -626,6 +663,20 @@ function resetFormToInitial() {
     if (attachmentRequired) {
         attachmentRequired.classList.add('hidden');
     }
+    
+    // Reset ESR checkbox if present
+    const esrCheckbox = document.getElementById('esr-completed');
+    if (esrCheckbox) {
+        esrCheckbox.checked = false;
+    }
+    
+    // Ensure the submit button is hidden until a request type is selected
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn) {
+        submitBtn.style.display = 'none';
+    }
+    
+    console.log('Form has been reset to initial state');
 }
 
 /**
