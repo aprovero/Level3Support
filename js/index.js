@@ -495,9 +495,17 @@ async function handleFormSubmit(e) {
             formData.append('attachments', file);
         });
         
-        // Add training specific data if needed
+        // Fix description field for different form types
         const requestType = document.getElementById('request').value;
-        if (requestType === 'TRAINING') {
+        
+        // Handle Support/RCA description
+        if (['SUPPORT', 'RCA'].includes(requestType)) {
+            const description = document.getElementById('description').value;
+            // Ensure description is a single string
+            formData.set('description', description);
+        }
+        // Handle Training description
+        else if (requestType === 'TRAINING') {
             const description = document.getElementById('training-description').value;
             const expectedDate = document.getElementById('expected-date').value;
             const traineesNumber = document.getElementById('trainees-number').value;
@@ -505,6 +513,11 @@ async function handleFormSubmit(e) {
             // Combine training fields into description
             const combinedDescription = `${description}\nNumber of Trainees: ${traineesNumber}\nExpected Date: ${expectedDate}`;
             formData.set('description', combinedDescription);
+        }
+        // Handle Other description
+        else if (requestType === 'OTHER') {
+            const description = document.getElementById('other-description').value;
+            formData.set('description', description);
         }
         
         // Show info message during submission
