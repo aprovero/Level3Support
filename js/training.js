@@ -22,11 +22,14 @@
 let allTrainings = [];
 
 // Map system types to match the server's expected values
-const SYSTEM_TYPE_MAP = {
-    'pv': 'PV',
-    'bess': 'BESS',
-    'other': 'Other'
-};
+if (typeof SYSTEM_TYPE_MAP === 'undefined') {
+    // Map system types to match the server's expected values
+    const SYSTEM_TYPE_MAP = {
+        'pv': 'PV',
+        'bess': 'BESS',
+        'other': 'Other'
+    };
+}
 
 // Track active filters
 const activeFilters = {
