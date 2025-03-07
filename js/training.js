@@ -208,8 +208,8 @@ function handleFilterClick(event) {
 function applyFilters() {
     console.log('Applying filters:', activeFilters);
     
-    // Apply filters to training data - case insensitive for everything
-    const filteredTrainings = allTrainings.filter(item => {
+    // Apply filters to training data
+    let filteredTrainings = allTrainings.filter(item => {
         // System filter
         const matchesSystem = activeFilters.system === 'all' || 
                             item.system.toLowerCase() === activeFilters.system.toLowerCase();
@@ -225,9 +225,24 @@ function applyFilters() {
         return matchesSystem && matchesLevel && matchesModel;
     });
     
-    console.log('Filtered trainings:', filteredTrainings.length);
+    // Sort by system type first, then by level
+    filteredTrainings.sort((a, b) => {
+        // Sort by system type (PV, BESS, Other)
+        const systemOrder = { 'PV': 1, 'BESS': 2, 'Other': 3 };
+        const systemA = systemOrder[a.system] || 999;
+        const systemB = systemOrder[b.system] || 999;
+        
+        if (systemA !== systemB) return systemA - systemB;
+        
+        // Then sort by level (Level 1, Level 2, Level 3)
+        const levelOrder = { 'Level 1': 1, 'Level 2': 2, 'Level 3 (Certification)': 3 };
+        const levelA = levelOrder[a.level] || 999;
+        const levelB = levelOrder[b.level] || 999;
+        
+        return levelA - levelB;
+    });
     
-    // Render the filtered data
+    // Render the filtered and sorted data
     renderTrainingData(filteredTrainings);
 }
 
@@ -511,6 +526,14 @@ function initializeAdminControls() {
         adminButton.addEventListener('click', function() {
             console.log('Admin button clicked');
             adminFormContainer.classList.toggle('visible');
+            
+            // Focus on first input field when form is shown
+            if (adminFormContainer.classList.contains('visible')) {
+                const firstInput = document.getElementById('training-name');
+                if (firstInput) {
+                    setTimeout(() => firstInput.focus(), 50);
+                }
+            }
         });
     }
     
@@ -740,17 +763,46 @@ async function handleAdminFormSubmit(e) {
         // Reset form and hide it
         form.reset();
         resetFormItems();
-        
+
         const adminFormContainer = document.getElementById('admin-form-container');
         if (adminFormContainer) {
             adminFormContainer.classList.remove('visible');
         }
-        
+
+        // Show a proper success modal
+        const successMessage = `Training course "${jsonData.name}" has been added successfully!`;
+
+        // Create a modal if it doesn't exist
+        let successModal = document.getElementById('success-modal');
+        if (!successModal) {
+            successModal = document.createElement('div');
+            successModal.id = 'success-modal';
+            successModal.className = 'modal-overlay';
+            successModal.innerHTML = `
+                <div class="modal-content">
+                    <h2>Success</h2>
+                    <p id="success-message"></p>
+                    <button class="modal-button" id="success-close-btn">Close</button>
+                </div>
+            `;
+            document.body.appendChild(successModal);
+            
+            // Add event listener to close button
+            const closeBtn = successModal.querySelector('#success-close-btn');
+            closeBtn.addEventListener('click', function() {
+                successModal.style.display = 'none';
+            });
+        }
+
+        // Update message and display modal
+        const messageElement = successModal.querySelector('#success-message');
+        if (messageElement) {
+            messageElement.textContent = successMessage;
+        }
+        successModal.style.display = 'flex';
+
         // Reload training data
         fetchTrainingData();
-        
-        // Show success message
-        showSuccessMessage('Training course added successfully!', '', '#message-container');
         
     } catch (error) {
         console.error('Error submitting form:', error);

@@ -250,7 +250,7 @@ function showTrainingFields() {
 }
 
 /**
- * Set minimum date for a date input
+ * Set strict minimum date for a date input
  * @param {string} inputId - ID of the date input element
  * @param {number} daysFromNow - Number of days from today
  */
@@ -268,10 +268,14 @@ function setMinimumDate(inputId, daysFromNow = 0) {
     
     // Set the minimum date
     dateInput.min = formattedDate;
-    dateInput.setAttribute('min', formattedDate); // Ensure attribute is set
+    
+    // Set current value to minimum date as a default
+    if (!dateInput.value) {
+        dateInput.value = formattedDate;
+    }
     
     // Force disable past dates with a validation function
-    dateInput.addEventListener('input', function() {
+    dateInput.addEventListener('change', function() {
         const selectedDate = new Date(this.value);
         if (selectedDate < minDate) {
             showErrorMessage(
@@ -280,6 +284,14 @@ function setMinimumDate(inputId, daysFromNow = 0) {
                 '#message-container'
             );
             this.value = formattedDate; // Set to minimum valid date
+        }
+    });
+    
+    // Also intercept on blur to catch manual entry
+    dateInput.addEventListener('blur', function() {
+        const selectedDate = new Date(this.value);
+        if (selectedDate < minDate || isNaN(selectedDate.getTime())) {
+            this.value = formattedDate; // Reset to minimum date if invalid
         }
     });
 }
@@ -552,6 +564,7 @@ async function handleFormSubmit(e) {
         // Handle the description field differently based on request type
         const requestType = document.getElementById('request').value;
         
+
         if (['SUPPORT', 'RCA'].includes(requestType)) {
             formData.append('description', document.getElementById('description').value);
             
@@ -562,9 +575,10 @@ async function handleFormSubmit(e) {
             const serialNumbers = document.getElementById('serial-numbers').value;
             if (serialNumbers) formData.append('serialNumbers', serialNumbers);
             
+            // Add ESR checkbox value as boolean - ensure it gets sent even if false
             const esrCompleted = document.getElementById('esr-completed').checked;
-            formData.append('esrCompleted', esrCompleted);
-        } 
+            formData.append('esrCompleted', esrCompleted.toString());
+        }
         else if (requestType === 'TRAINING') {
             const description = document.getElementById('training-description').value;
             const expectedDate = document.getElementById('expected-date').value;

@@ -9,6 +9,7 @@
  * 5. Form Validation
  * 6. Form Utilities
  * 7. AJAX Requests
+ * 8.
  */
 
 /**
@@ -739,4 +740,110 @@ function fetchWithRetry(url, maxRetries) {
         
         attemptFetch(maxRetries);
     });
+}
+// Add these functions after your existing AJAX Requests section (section 7)
+// Look for a comment like "7. AJAX Requests" or similar
+
+/**
+ * Make a fetch request with timeout and retry functionality
+ * @param {string} url - The URL to fetch
+ * @param {Object} options - Fetch options
+ * @param {number} timeout - Timeout in milliseconds (default: 15000)
+ * @param {number} retries - Number of retries (default: 2)
+ * @returns {Promise} - Promise resolving to the response
+ */
+async function fetchWithTimeout(url, options = {}, timeout = 15000, retries = 2) {
+    // Create abort controller for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    // Add signal to options
+    const fetchOptions = {
+        ...options,
+        mode: 'cors',
+        credentials: 'include',
+        signal: controller.signal
+    };
+    
+    // Log request details
+    console.log(`Fetching ${options.method || 'GET'} ${url}`);
+    
+    try {
+        const response = await fetch(url, fetchOptions);
+        clearTimeout(timeoutId);
+        
+        // Log response details
+        console.log(`Response from ${url}: ${response.status}`);
+        
+        if (!response.ok) {
+            throw new Error(`Server responded with ${response.status}`);
+        }
+        
+        return response;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        
+        // Check if we have retries left
+        if (error.name === 'AbortError') {
+            console.warn(`Request to ${url} timed out after ${timeout}ms`);
+        } else {
+            console.error(`Error fetching ${url}:`, error);
+        }
+        
+        if (retries > 0) {
+            console.log(`Retrying... (${retries} left)`);
+            // Exponential backoff: wait longer for each retry
+            const delay = 1000 * (Math.pow(2, 3 - retries) - 1);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return fetchWithTimeout(url, options, timeout, retries - 1);
+        }
+        
+        throw error;
+    }
+}
+
+/**
+ * Make a GET request with timeout and retry
+ * @param {string} url - The URL to request
+ * @param {Object} options - Additional fetch options
+ * @returns {Promise} Promise resolving to the response data
+ */
+async function getRequestWithRetry(url, options = {}) {
+    const response = await fetchWithTimeout(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        ...options
+    });
+    
+    return response.json();
+}
+
+/**
+ * Make a POST request with timeout and retry
+ * @param {string} url - The URL to request
+ * @param {Object|FormData} data - The data to send
+ * @param {Object} options - Additional fetch options
+ * @returns {Promise} Promise resolving to the response data
+ */
+async function postRequestWithRetry(url, data, options = {}) {
+    const fetchOptions = {
+        method: 'POST',
+        ...options
+    };
+    
+    // Handle different data types
+    if (data instanceof FormData) {
+        fetchOptions.body = data;
+    } else {
+        fetchOptions.headers = {
+            'Content-Type': 'application/json',
+            ...options.headers
+        };
+        fetchOptions.body = JSON.stringify(data);
+    }
+    
+    const response = await fetchWithTimeout(url, fetchOptions);
+    return response.json();
 }

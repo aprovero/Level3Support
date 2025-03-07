@@ -279,6 +279,8 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
             if (model) fields['MODEL'] = model;
             if (gspTicket) fields['GSP TICKET'] = gspTicket;
             if (serialNumbers) fields['SERIAL NUMBERS'] = serialNumbers;
+            const esrCompletedValue = req.body.esrCompleted === 'true' || req.body.esrCompleted === true;
+            fields['FIELD REPORT'] = esrCompletedValue;
         }
 
         // Add attachments field if files are present

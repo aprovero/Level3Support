@@ -240,6 +240,17 @@ body {
     width: auto;
 }
 
+/* Adjust Claude logo size */
+.footer-logo img[alt="Claude Logo"] {
+    height: 28px;
+    width: auto;
+}
+  
+/* Keep the CoE LATAM Logo at original size */
+.footer-logo img[alt="CoE LATAM Logo"] {
+    height: 40px;
+}
+
 /* Back link styles */
 .back-link {
     display: inline-block;
@@ -432,6 +443,24 @@ textarea {
     font-size: 0.85em;
 }
 
+/* Radio button styling for evaluation */
+.rating-option input[type="radio"]:checked + label {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius-sm);
+    padding: 2px 5px;
+}
+  
+.rating-option:hover {
+    background-color: #f5f5f5;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+}
+  
+.rating-option {
+    transition: all 0.2s ease;
+}
+
 /* Recommendation options */
 .recommend-options {
     display: flex;
@@ -456,6 +485,19 @@ textarea {
     margin-top: 0;
     display: block;
     font-weight: normal;
+}
+
+.recommend-option input[type="radio"]:checked + label {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius-sm);
+    padding: 2px 5px;
+}
+  
+.recommend-option:hover {
+    background-color: #f5f5f5;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
 }
 
 /* ==========================================================================
@@ -494,14 +536,25 @@ button:disabled, .submit-button:disabled {
 
 /* Lookup button styling */
 .lookup-btn {
+    height: 40px;
+    margin-top: 0;
+    border-radius: 0 5px 5px 0;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  
+  /* Ensure the input field has the same height */
+  input[type="text"]#trainingId {
     height: 40px;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-top: 0;
-}
+    border-radius: 5px 0 0 5px;
+  }
+  
+  /* Container flex alignment */
+  .flex.items-center {
+    display: flex;
+    align-items: center;
+  }
 
 /* Modal buttons */
 .modal-button {
@@ -1457,6 +1510,17 @@ button:disabled, .submit-button:disabled {
 
 /* Mobile phones */
 @media (max-width: 480px) {
+    .container {
+        margin: 8px auto;
+        padding: 10px;
+        width: calc(100% - 20px);
+        max-width: none;
+    }
+      
+    .form-container {
+        padding: 15px;
+    }
+
     .logo img {
         width: 120px;
     }
