@@ -32,6 +32,9 @@ const FORM_SECTIONS = {
  * --------------------
  */
 document.addEventListener('DOMContentLoaded', function() {
+    // Wake up the server
+    wakeUpServer();
+
     // Initialize the form
     initializeEvaluationForm();
 });

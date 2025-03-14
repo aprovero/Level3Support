@@ -31,6 +31,9 @@ const FORM_SECTIONS = {
  * --------------------
  */
 document.addEventListener('DOMContentLoaded', function() {
+    // Wake up the server
+    wakeUpServer();
+
     // Initialize modals
     initializeWelcomeModal();
     initializeSuccessModal();

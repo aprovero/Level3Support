@@ -9,7 +9,6 @@
  * 5. Form Validation
  * 6. Form Utilities
  * 7. AJAX Requests
- * 8.
  */
 
 /**
@@ -741,8 +740,6 @@ function fetchWithRetry(url, maxRetries) {
         attemptFetch(maxRetries);
     });
 }
-// Add these functions after your existing AJAX Requests section (section 7)
-// Look for a comment like "7. AJAX Requests" or similar
 
 /**
  * Make a fetch request with timeout and retry functionality
@@ -846,4 +843,55 @@ async function postRequestWithRetry(url, data, options = {}) {
     
     const response = await fetchWithTimeout(url, fetchOptions);
     return response.json();
+}
+
+/**
+ * Check if the server is up and attempt to wake it up if it's not
+ * Call this function when the page loads
+ */
+function wakeUpServer() {
+    console.log('Checking server status and attempting wake-up if needed...');
+    
+    // Make a request to the health endpoint
+    fetch(`${API_BASE_URL}/health`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        },
+        // 5 second timeout for the initial check
+        signal: AbortSignal.timeout(5000)
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Server is already up and running');
+            return true;
+        } else {
+            console.warn('Server returned an error:', response.status);
+            return false;
+        }
+    })
+    .catch(error => {
+        console.log('Server appears to be down or sleeping, initiating wake-up request');
+        
+        // Make a second request to force server wake-up
+        // This will happen in the background while the user fills out the form
+        fetch(`${API_BASE_URL}/health`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+            // Longer timeout for the wake-up request
+            signal: AbortSignal.timeout(30000)
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Server wake-up successful');
+            } else {
+                console.warn('Server wake-up request received response but with error:', response.status);
+            }
+        })
+        .catch(e => {
+            console.error('Server wake-up request failed:', e);
+        });
+    });
 }

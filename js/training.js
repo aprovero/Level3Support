@@ -49,6 +49,9 @@ let modelFiltersContainer;
  * --------------------
  */
 document.addEventListener('DOMContentLoaded', function() {
+    // Wake up the server
+    wakeUpServer();
+
     console.log('Training page initialization started');
     
     // Cache DOM elements

@@ -32,6 +32,9 @@ let contactCards = [];
  * --------------------
  */
 document.addEventListener('DOMContentLoaded', function() {
+    // Wake up the server
+    wakeUpServer();
+
     // Initialize contact cards
     initializeContactCards();
     
