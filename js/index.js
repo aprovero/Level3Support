@@ -500,7 +500,6 @@ function removeFile(index) {
  * Handle form submission
  * @param {Event} e - The submit event
  */
-// Handle form submission
 async function handleFormSubmit(e) {
     e.preventDefault();
     
@@ -548,52 +547,81 @@ async function handleFormSubmit(e) {
     showLoadingSpinner('loading-spinner', 'Submitting your request...');
     
     try {
-        // Create FormData object, but don't include the form directly
-        // This avoids the issue with multiple description fields
+        // Create FormData object
         const formData = new FormData();
         
-        // Manually add each form field we need
+        // Add common fields
         formData.append('requesterName', document.getElementById('requester-name').value);
         formData.append('requesterEmail', document.getElementById('requester-email').value);
         formData.append('request', document.getElementById('request').value);
-        formData.append('location', document.getElementById('location').value);
-        formData.append('projectName', document.getElementById('project-name').value);
-        formData.append('productType', document.getElementById('product-type').value);
-        formData.append('model', document.getElementById('model').value);
         
-        // Handle the description field differently based on request type
+        // Only add these fields if they exist and have values
+        const location = document.getElementById('location');
+        if (location && location.value) {
+            formData.append('location', location.value);
+        }
+        
+        const projectName = document.getElementById('project-name');
+        if (projectName && projectName.value) {
+            formData.append('projectName', projectName.value);
+        }
+        
+        const productType = document.getElementById('product-type');
+        if (productType && productType.value) {
+            formData.append('productType', productType.value);
+        }
+        
+        const model = document.getElementById('model');
+        if (model && model.value) {
+            formData.append('model', model.value);
+        }
+        
+        // Handle the description field based on request type
         const requestType = document.getElementById('request').value;
         
-
-        if (['SUPPORT', 'RCA'].includes(requestType)) {
-            formData.append('description', document.getElementById('description').value);
+        if (requestType === 'TRAINING') {
+            const trainingDesc = document.getElementById('training-description');
+            if (trainingDesc && trainingDesc.value) {
+                formData.append('description', trainingDesc.value);
+            }
             
-            // Add Support/RCA specific fields
-            const gspTicket = document.getElementById('gsp-ticket').value;
-            if (gspTicket) formData.append('gspTicket', gspTicket);
+            const expectedDate = document.getElementById('expected-date');
+            if (expectedDate && expectedDate.value) {
+                formData.append('expectedDate', expectedDate.value);
+            }
             
-            const serialNumbers = document.getElementById('serial-numbers').value;
-            if (serialNumbers) formData.append('serialNumbers', serialNumbers);
+            const traineesNumber = document.getElementById('trainees-number');
+            if (traineesNumber && traineesNumber.value) {
+                formData.append('traineesNumber', traineesNumber.value);
+            }
+        } 
+        else if (['SUPPORT', 'RCA'].includes(requestType)) {
+            const description = document.getElementById('description');
+            if (description && description.value) {
+                formData.append('description', description.value);
+            }
             
-            // Add ESR checkbox value as boolean - ensure it gets sent even if false
-            const esrCompleted = document.getElementById('esr-completed').checked;
-            formData.append('esrCompleted', esrCompleted.toString());
-        }
-        else if (requestType === 'TRAINING') {
-            const description = document.getElementById('training-description').value;
-            const expectedDate = document.getElementById('expected-date').value;
-            const traineesNumber = document.getElementById('trainees-number').value;
+            const gspTicket = document.getElementById('gsp-ticket');
+            if (gspTicket && gspTicket.value) {
+                formData.append('gspTicket', gspTicket.value);
+            }
             
-            // Combine training fields into description
-            const combinedDescription = `${description}\nNumber of Trainees: ${traineesNumber}\nExpected Date: ${expectedDate}`;
-            formData.append('description', combinedDescription);
+            const serialNumbers = document.getElementById('serial-numbers');
+            if (serialNumbers && serialNumbers.value) {
+                formData.append('serialNumbers', serialNumbers.value);
+            }
             
-            // Also add the original fields separately in case server needs them
-            formData.append('expectedDate', expectedDate);
-            formData.append('traineesNumber', traineesNumber);
+            // Add ESR checkbox value - only if it exists
+            const esrCompleted = document.getElementById('esr-completed');
+            if (esrCompleted) {
+                formData.append('esrCompleted', esrCompleted.checked.toString());
+            }
         } 
         else if (requestType === 'OTHER') {
-            formData.append('description', document.getElementById('other-description').value);
+            const otherDescription = document.getElementById('other-description');
+            if (otherDescription && otherDescription.value) {
+                formData.append('description', otherDescription.value);
+            }
         }
         
         // Add files to FormData
@@ -607,13 +635,23 @@ async function handleFormSubmit(e) {
             'This may take a few moments. Please don\'t close the page.'
         );
         
-        // Direct fetch instead of using the helper function
+        // Log what we're sending for debugging
         console.log('Submitting to endpoint:', API_BASE_URL + API_ENDPOINTS.submitRequest);
+        console.log('Form type:', requestType);
+        
+        // Use fetch with timeout to ensure we don't hang forever
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+        
         const response = await fetch(API_BASE_URL + API_ENDPOINTS.submitRequest, {
             method: 'POST',
-            body: formData
+            body: formData,
+            signal: controller.signal
         });
         
+        clearTimeout(timeoutId);
+        
+        // Parse response
         const data = await response.json();
         console.log('Submit response:', data);
         
@@ -623,16 +661,32 @@ async function handleFormSubmit(e) {
             showSuccessModal(data.issueId);
             
             // Clear any info messages
-            messageContainer.innerHTML = '';
+            if (messageContainer) {
+                messageContainer.innerHTML = '';
+            }
+        } else {
+            // Handle server error with error message from server
+            const errorMsg = data.error || 'Server error';
+            const errorDetails = data.details || 'Please try again later';
+            
+            showErrorMessage(errorMsg, errorDetails);
         }
-        
     } catch (error) {
         console.error('Submission error:', error);
-        // Handle errors
-        showErrorMessage(
-            'Error submitting form', 
-            error.message || 'Failed to submit the form. Please check your connection and try again.'
-        );
+        
+        // Check for abort error (timeout)
+        if (error.name === 'AbortError') {
+            showErrorMessage(
+                'Request timed out', 
+                'The server is taking too long to respond. Please try again later.'
+            );
+        } else {
+            // Handle other errors
+            showErrorMessage(
+                'Error submitting form', 
+                error.message || 'Failed to submit the form. Please check your connection and try again.'
+            );
+        }
     } finally {
         // Re-enable submit button and hide loading spinner
         if (submitBtn) {
