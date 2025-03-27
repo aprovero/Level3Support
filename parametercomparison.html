@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoE Level 3 - 1+X Parameter Comparison Tool</title>
+    <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
+    <!-- External CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <!-- Your shared styles -->
+    <link href="shared-styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="images/LOGO.png" alt="Logo">
+            </div>
+            <div class="header-icons">
+                <div class="training-icon">
+                    <a href="training.html">
+                        <img src="images/training-icon.png" alt="Training Materials">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <a href="index.html" class="back-link">← Back to the Request Form</a>
+        <h1>1+X Parameter Comparison Tool</h1>
+        <p>Upload 2 or 3 parameter files (.csv) to compare their settings. The tool will highlight differences and allow you to focus on parameters that vary between files.</p>
+        
+        <!-- File Upload Section -->
+        <div class="form-section">
+            <div class="form-section-title">Upload Parameter Files</div>
+            <p class="mb-2">Select CSV files with the Parameter Name, Current Value, and Illustrate columns:</p>
+            
+            <div class="file-input-wrapper mb-3">
+                <button class="file-input-button">Choose CSV Files</button>
+                <input type="file" id="file-input" accept=".csv" multiple>
+            </div>
+            <p class="small-text">Files must have different names. Maximum 3 files recommended.</p>
+            
+            <div id="upload-status" class="mt-2"></div>
+            
+            <!-- Uploaded Files List -->
+            <div id="file-list" class="mt-3"></div>
+        </div>
+        
+        <!-- Comparison Controls -->
+        <div id="comparison-controls" class="form-section hidden">
+            <div class="form-section-title">Comparison Settings</div>
+            
+            <div class="flex items-center mb-3">
+                <input type="checkbox" id="show-differences" class="mr-2">
+                <label for="show-differences">Show only parameters with differences</label>
+            </div>
+            
+            <div class="flex items-center">
+                <div class="relative flex-1 max-w-xs">
+                    <input type="text" id="search-parameter" placeholder="Search parameters..." class="w-full p-2 pl-8 text-sm border border-gray-300 rounded-md">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                
+                <button id="reset-btn" class="ml-4 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+                    Reset
+                </button>
+            </div>
+            
+            <div id="stats-container" class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-md shadow-sm">
+                    <p class="text-sm text-gray-500">Total Parameters</p>
+                    <p id="total-params" class="text-2xl font-bold">-</p>
+                </div>
+                <div class="bg-white p-4 rounded-md shadow-sm">
+                    <p class="text-sm text-gray-500">Different Parameters</p>
+                    <p id="diff-params" class="text-2xl font-bold text-yellow-600">-</p>
+                </div>
+                <div class="bg-white p-4 rounded-md shadow-sm">
+                    <p class="text-sm text-gray-500">Missing Parameters</p>
+                    <p id="missing-params" class="text-2xl font-bold text-red-600">-</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="results-section" class="hidden">
+            <div id="table-container" class="table-container">
+                <table id="parameter-table" class="parameter-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter Name</th>
+                            <!-- File columns will be added dynamically -->
+                            <th>Allowed Values</th>
+                        </tr>
+                    </thead>
+                    <tbody id="parameter-tbody">
+                        <!-- Table content will be added dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="no-results" class="bg-white p-6 text-center border rounded-md mt-4 hidden">
+                <p class="text-gray-500">No parameters found matching your criteria.</p>
+            </div>
+        </div>
+        
+        <!-- Instructions Section -->
+        <div id="instructions" class="bg-gray-50 p-6 rounded mt-4">
+            <h3 class="text-lg font-semibold mb-2">How to Use This Tool</h3>
+            <ol class="list-decimal ml-5 space-y-2">
+                <li>Upload 2 or 3 CSV files containing system parameters with the columns:
+                    <ul class="list-disc ml-5 mt-1">
+                        <li>Parameter Name</li>
+                        <li>Current Value</li>
+                        <li>Illustrate (allowed values/ranges)</li>
+                    </ul>
+                </li>
+                <li>The tool will automatically compare all parameters across files</li>
+                <li>Use the checkbox to show only parameters that differ between files</li>
+                <li>Use the search box to find specific parameters</li>
+                <li>Parameters with differences will be highlighted in red and rows will have a yellow background</li>
+            </ol>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-text">
+                <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
+                <div class="footer-creator">Created by Andres Provero</div>
+            </div>
+            <div class="footer-logo">
+                <a href="https://www.anthropic.com" target="_blank">
+                    <img src="images/CLAUDE_LOGO.png" alt="Claude Logo">
+                </a>
+                <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const fileInput = document.getElementById('file-input');
+            const fileList = document.getElementById('file-list');
+            const uploadStatus = document.getElementById('upload-status');
+            const comparisonControls = document.getElementById('comparison-controls');
+            const resultsSection = document.getElementById('results-section');
+            const parameterTable = document.getElementById('parameter-table');
+            const parameterTbody = document.getElementById('parameter-tbody');
+            const showDifferences = document.getElementById('show-differences');
+            const searchParameter = document.getElementById('search-parameter');
+            const resetBtn = document.getElementById('reset-btn');
+            const instructions = document.getElementById('instructions');
+            const noResults = document.getElementById('no-results');
+            const totalParamsEl = document.getElementById('total-params');
+            const diffParamsEl = document.getElementById('diff-params');
+            const missingParamsEl = document.getElementById('missing-params');
+            
+            // Global data storage
+            let files = {};
+            let allParameters = [];
+            let comparisonData = [];
+            
+            // Listen for file uploads
+            fileInput.addEventListener('change', handleFileUpload);
+            
+            // Listen for filter changes
+            showDifferences.addEventListener('change', filterResults);
+            searchParameter.addEventListener('input', filterResults);
+            
+            // Reset button
+            resetBtn.addEventListener('click', resetAll);
+            
+            async function handleFileUpload(event) {
+                const uploadedFiles = event.target.files;
+                if (!uploadedFiles.length) return;
+                
+                // Check for duplicate file names
+                const existingFileNames = Object.keys(files);
+                for (let i = 0; i < uploadedFiles.length; i++) {
+                    const file = uploadedFiles[i];
+                    if (existingFileNames.includes(file.name)) {
+                        uploadStatus.innerHTML = `<div class="message error">Error: File "${file.name}" is already uploaded. Files must have different names.</div>`;
+                        return;
+                    }
+                }
+                
+                // Limit to 3 files
+                if (existingFileNames.length + uploadedFiles.length > 3) {
+                    uploadStatus.innerHTML = `<div class="message warning">Maximum 3 files recommended. Please remove some files first.</div>`;
+                    return;
+                }
+                
+                uploadStatus.innerHTML = `<div class="message info">Reading files, please wait...</div>`;
+                
+                // Process each file
+                for (let i = 0; i < uploadedFiles.length; i++) {
+                    const file = uploadedFiles[i];
+                    try {
+                        const content = await readFileAsText(file);
+                        const parsedData = parseCSV(content);
+                        
+                        if (!isValidParameterFile(parsedData)) {
+                            uploadStatus.innerHTML = `<div class="message error">Error: "${file.name}" does not appear to be a valid parameter file. It should have columns for Parameter Name, Current Value, and Illustrate.</div>`;
+                            return;
+                        }
+                        
+                        // Create parameter map
+                        const paramMap = {};
+                        parsedData.data.forEach(row => {
+                            if (!row['Parameter Name'] || row['Current Value'] === undefined) return;
+                            
+                            paramMap[row['Parameter Name']] = {
+                                value: normalizeValue(row['Current Value']),
+                                illustrate: row['Illustrate'] || ''
+                            };
+                        });
+                        
+                        // Store the file data
+                        files[file.name] = {
+                            paramMap,
+                            displayName: file.name.replace('.csv', '')
+                        };
+                        
+                        // Update UI
+                        updateFileList();
+                        updateAllParameters();
+                    } catch (err) {
+                        uploadStatus.innerHTML = `<div class="message error">Error reading ${file.name}: ${err.message}</div>`;
+                    }
+                }
+                
+                // Clear file input for re-uploads
+                fileInput.value = '';
+                uploadStatus.innerHTML = '';
+                
+                // Show comparison controls if we have at least 2 files
+                if (Object.keys(files).length >= 2) {
+                    comparisonControls.classList.remove('hidden');
+                    resultsSection.classList.remove('hidden');
+                    instructions.classList.add('hidden');
+                    generateComparisonData();
+                }
+            }
+            
+            // Normalize numeric values to have 2 decimal places
+            function normalizeValue(value) {
+                if (value === undefined || value === null || value === '') return '';
+                
+                // Check if it's a number
+                const num = parseFloat(value);
+                if (!isNaN(num)) {
+                    // Return with 2 decimal places, removing trailing zeros
+                    return Number(num.toFixed(2)).toString();
+                }
+                
+                // Return original value if not a number
+                return value.toString().trim();
+            }
+            
+            // Check if the parsed data appears to be a valid parameter file
+            function isValidParameterFile(parsedData) {
+                if (!parsedData.data || !parsedData.data.length) return false;
+                
+                // Check if the required columns exist
+                const fields = Object.keys(parsedData.data[0]);
+                return fields.includes('Parameter Name') && fields.includes('Current Value');
+            }
+            
+            // Helper function to read file as text
+            function readFileAsText(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = (e) => reject(new Error("File reading failed"));
+                    reader.readAsText(file);
+                });
+            }
+            
+            // Parse CSV data
+            function parseCSV(csvText) {
+                // Simple CSV parser
+                const lines = csvText.split(/\r\n|\n/);
+                const headers = lines[0].split(',').map(h => h.trim());
+                
+                const data = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    const values = line.split(',');
+                    const row = {};
+                    
+                    for (let j = 0; j < headers.length; j++) {
+                        row[headers[j]] = values[j] ? values[j].trim() : '';
+                    }
+                    
+                    data.push(row);
+                }
+                
+                return { data, headers };
+            }
+            
+            // Update the file list UI
+            function updateFileList() {
+                fileList.innerHTML = '';
+                
+                Object.keys(files).forEach(fileName => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'uploaded-file-item';
+                    
+                    fileItem.innerHTML = `
+                        <div>${fileName}</div>
+                        <button class="remove-file" data-file="${fileName}">✕</button>
+                    `;
+                    
+                    fileList.appendChild(fileItem);
+                });
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-file').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const fileName = this.getAttribute('data-file');
+                        delete files[fileName];
+                        updateFileList();
+                        updateAllParameters();
+                        
+                        // Hide comparison controls if we have fewer than 2 files
+                        if (Object.keys(files).length < 2) {
+                            comparisonControls.classList.add('hidden');
+                            resultsSection.classList.add('hidden');
+                            instructions.classList.remove('hidden');
+                        } else {
+                            generateComparisonData();
+                        }
+                    });
+                });
+            }
+            
+            // Update the master list of all parameters
+            function updateAllParameters() {
+                const paramSet = new Set();
+                
+                Object.values(files).forEach(file => {
+                    Object.keys(file.paramMap).forEach(param => {
+                        paramSet.add(param);
+                    });
+                });
+                
+                allParameters = [...paramSet].sort();
+                
+                // Update stats
+                if (totalParamsEl) {
+                    totalParamsEl.textContent = allParameters.length;
+                }
+            }
+            
+            // Generate comparison data and update table
+            function generateComparisonData() {
+                if (Object.keys(files).length < 2 || !allParameters.length) {
+                    comparisonData = [];
+                    return;
+                }
+                
+                const fileNames = Object.keys(files);
+                
+                comparisonData = allParameters.map(param => {
+                    const paramData = {
+                        parameterName: param,
+                        hasDifferences: false,
+                        values: {}
+                    };
+                    
+                    // Store parameter values from each file
+                    fileNames.forEach(fileName => {
+                        const file = files[fileName];
+                        paramData.values[file.displayName] = file.paramMap[param] || { value: 'N/A', illustrate: '' };
+                    });
+                    
+                    // Check if there are differences in parameter values
+                    const uniqueValues = new Set();
+                    Object.values(paramData.values).forEach(v => uniqueValues.add(v.value));
+                    paramData.hasDifferences = uniqueValues.size > 1;
+                    
+                    return paramData;
+                });
+                
+                updateTable();
+                updateStats();
+            }
+            
+            // Update the parameter comparison table
+            function updateTable() {
+                // First, update the header row with file names
+                const headerRow = parameterTable.querySelector('thead tr');
+                
+                // Clear existing file columns
+                const headerCells = headerRow.querySelectorAll('th');
+                for (let i = headerCells.length - 2; i > 0; i--) {
+                    headerRow.removeChild(headerCells[i]);
+                }
+                
+                // Add file columns
+                const fileDisplayNames = Object.values(files).map(f => f.displayName);
+                const lastCell = headerRow.lastElementChild;
+                fileDisplayNames.forEach(name => {
+                    const th = document.createElement('th');
+                    th.textContent = name;
+                    headerRow.insertBefore(th, lastCell);
+                });
+                
+                // Filter data if needed
+                const filteredData = filterData();
+                
+                // Clear and rebuild tbody
+                parameterTbody.innerHTML = '';
+                
+                if (filteredData.length === 0) {
+                    noResults.classList.remove('hidden');
+                    return;
+                }
+                
+                noResults.classList.add('hidden');
+                
+                // Add data rows
+                filteredData.forEach(param => {
+                    const row = document.createElement('tr');
+                    if (param.hasDifferences) {
+                        row.className = 'row-different';
+                    }
+                    
+                    // Parameter name cell
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = param.parameterName;
+                    row.appendChild(nameCell);
+                    
+                    // Value cells for each file
+                    fileDisplayNames.forEach(displayName => {
+                        const valueCell = document.createElement('td');
+                        const paramValue = param.values[displayName].value;
+                        
+                        valueCell.textContent = paramValue;
+                        
+                        // Highlight differences
+                        if (param.hasDifferences) {
+                            const otherValues = Object.entries(param.values)
+                                .filter(([name]) => name !== displayName)
+                                .map(([_, v]) => v.value);
+                            
+                            const isDifferent = otherValues.some(v => v !== paramValue && v !== 'N/A');
+                            if (isDifferent) {
+                                valueCell.className = 'param-different';
+                            }
+                        }
+                        
+                        row.appendChild(valueCell);
+                    });
+                    
+                    // Illustrate cell (allowed values)
+                    const illustrateCell = document.createElement('td');
+                    // Get illustrate value from the first file that has it
+                    for (const displayName of fileDisplayNames) {
+                        const illustrateValue = param.values[displayName].illustrate;
+                        if (illustrateValue) {
+                            illustrateCell.textContent = illustrateValue;
+                            break;
+                        }
+                    }
+                    row.appendChild(illustrateCell);
+                    
+                    parameterTbody.appendChild(row);
+                });
+            }
+            
+            // Filter data based on user settings
+            function filterData() {
+                if (!comparisonData.length) return [];
+                
+                let filtered = [...comparisonData];
+                
+                // Filter for differences only
+                if (showDifferences.checked) {
+                    filtered = filtered.filter(item => item.hasDifferences);
+                }
+                
+                // Filter by search term
+                const search = searchParameter.value.toLowerCase();
+                if (search) {
+                    filtered = filtered.filter(item => 
+                        item.parameterName.toLowerCase().includes(search)
+                    );
+                }
+                
+                return filtered;
+            }
+            
+            // Handle filter changes
+            function filterResults() {
+                updateTable();
+            }
+            
+            // Update statistics
+            function updateStats() {
+                if (!comparisonData.length) return;
+                
+                const totalParams = allParameters.length;
+                const diffParams = comparisonData.filter(p => p.hasDifferences).length;
+                const missingParams = comparisonData.filter(p => 
+                    Object.values(p.values).some(v => v.value === 'N/A')
+                ).length;
+                
+                totalParamsEl.textContent = totalParams;
+                diffParamsEl.textContent = diffParams;
+                missingParamsEl.textContent = missingParams;
+            }
+            
+            // Reset everything
+            function resetAll() {
+                files = {};
+                allParameters = [];
+                comparisonData = [];
+                fileList.innerHTML = '';
+                uploadStatus.innerHTML = '';
+                comparisonControls.classList.add('hidden');
+                resultsSection.classList.add('hidden');
+                instructions.classList.remove('hidden');
+                showDifferences.checked = false;
+                searchParameter.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -7,6 +7,9 @@
    3. Base Styles
    4. Layout Components
    5. Typography 
+
+
+   18. 1+X Parameter Comparisson Tool styles
    ========================================================================== */
 
 /* ==========================================================================
@@ -1632,4 +1635,86 @@ button:disabled, .submit-button:disabled {
 
 .shake {
     animation: shake 0.6s ease-in-out;
+}
+
+/* ==========================================================================
+   18. 1+X Parameter Comparisson Tool styles
+   ========================================================================== */
+.file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.file-input-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-input-button {
+    display: inline-block;
+    background-color: var(--info-color);
+    color: white;
+    padding: 10px 20px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: var(--transition-default);
+}
+
+.file-input-button:hover {
+    background-color: #0056b3;
+}
+
+.param-different {
+    font-weight: bold;
+    color: var(--error-text);
+}
+
+.row-different {
+    background-color: var(--warning-light);
+}
+
+.small-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.uploaded-file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 8px;
+}
+
+.parameter-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.parameter-table th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 10;
+}
+
+.parameter-table th, .parameter-table td {
+    padding: 8px 12px;
+    border: 1px solid var(--border-light);
+    text-align: left;
+}
+
+.table-container {
+    max-height: 600px;
+    overflow-y: auto;
+    margin-top: 20px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius-sm);
 }
