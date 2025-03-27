@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1CoE Level 3 - Parameter Comparison Tool</title>
+    <title>2CoE Level 3 - Parameter Comparison Tool</title>
     <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
     <!-- Your shared styles -->
     <link rel="stylesheet" href="css/shared-styles.css">
@@ -13,6 +13,505 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
     
+    <style>
+        /* Reset to override shared styles for clean look */
+        #parameter-comparison-app * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        /* Container and layout */
+        .tool-container {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #212529;
+        }
+        
+        /* File upload */
+        .button-primary {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .button-primary:hover {
+            background-color: #0a58ca;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .helper-text {
+            display: block;
+            font-size: 13px;
+            color: #6c757d;
+            margin-top: 8px;
+        }
+        
+        /* File list */
+        .files-container {
+            margin-top: 16px;
+        }
+        
+        .files-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        
+        .file-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .file-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: #212529;
+        }
+        
+        .file-display-name {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+        
+        .file-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .rename-button {
+            background: none;
+            border: none;
+            color: #0d6efd;
+            font-size: 14px;
+            cursor: pointer;
+            margin-right: 8px;
+            padding: 4px;
+        }
+        
+        .remove-button {
+            background: none;
+            border: none;
+            color: #dc3545;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 4px;
+        }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .filter-checkbox {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        
+        .filter-label {
+            font-size: 14px;
+            color: #212529;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        
+        .search-control {
+            position: relative;
+            flex-grow: 1;
+            max-width: 300px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 32px;
+            font-size: 14px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            color: #212529;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .button-reset {
+            background-color: #f8f9fa;
+            color: #212529;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .button-reset:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .stat-value.total {
+            color: #212529;
+        }
+        
+        .stat-value.different {
+            color: #ffc107;
+        }
+        
+        .stat-value.missing {
+            color: #0d6efd;
+        }
+        
+        /* Table */
+        .table-container {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .table-scrollable {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .parameter-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .parameter-table th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #f8f9fa;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 14px;
+        }
+        
+        .parameter-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 14px;
+            color: #212529;
+        }
+        
+        .parameter-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .parameter-table tr.different-row {
+            background-color: #fff3cd;
+        }
+        
+        .parameter-name {
+            font-weight: 500;
+        }
+        
+        .value-cell {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+        
+        .different-value {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        
+        .missing-value {
+            color: #0d6efd;
+            font-weight: 600;
+        }
+        
+        .allowed-values {
+            color: #6c757d;
+            font-size: 13px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .empty-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #212529;
+        }
+        
+        .empty-list {
+            padding-left: 24px;
+            margin-bottom: 0;
+        }
+        
+        .empty-list li {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .empty-list ul {
+            padding-left: 24px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .empty-list ul li {
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .legend-item {
+            display: inline-block;
+            margin-right: 16px;
+            font-size: 13px;
+        }
+        
+        .legend-different {
+            color: #dc3545;
+            font-weight: 600;
+        }
+        
+        .legend-missing {
+            color: #0d6efd;
+            font-weight: 600;
+        }
+        
+        .legend-row {
+            background-color: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 2px;
+        }
+        
+        /* Messages */
+        .message {
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .message.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .message.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 32px;
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(33, 37, 41, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 24px;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90vw;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #212529;
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .rename-input {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .button-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .button-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .button-secondary.cancel {
+            background-color: #f8f9fa;
+            color: #212529;
+            border: 1px solid #ced4da;
+        }
+        
+        .button-secondary.cancel:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Make sure no other styles from shared-styles.css affect our tool */
+        #parameter-comparison-app button,
+        #parameter-comparison-app input[type="checkbox"],
+        #parameter-comparison-app input[type="text"] {
+            margin-bottom: 0;
+            width: auto;
+        }
+        
+        #parameter-comparison-app .search-input {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -55,218 +554,359 @@
             </div>
         </footer>
     </div>
-
-    <!-- React Component Script -->
-    <script type="text/babel">
-        // Parameter Comparison Tool React Component
-        const { useState, useEffect } = React;
+<!-- React Component Script - Part 1 -->
+<script type="text/babel">
+    // Parameter Comparison Tool React Component
+    const { useState, useEffect } = React;
+    
+    // Rename Modal Component
+    const RenameModal = ({ isOpen, fileName, currentName, onConfirm, onCancel }) => {
+        const [newName, setNewName] = useState(currentName);
         
-        const ParameterComparisonTool = () => {
-            const [files, setFiles] = useState({});
-            const [allParameters, setAllParameters] = useState([]);
-            const [comparisonData, setComparisonData] = useState([]);
-            const [showOnlyDifferences, setShowOnlyDifferences] = useState(false);
-            const [searchTerm, setSearchTerm] = useState('');
-            const [message, setMessage] = useState({ type: '', text: '' });
+        useEffect(() => {
+            setNewName(currentName);
+        }, [currentName]);
+        
+        if (!isOpen) return null;
+        
+        return (
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <h3 className="modal-title">Rename Column</h3>
+                    <div className="modal-body">
+                        <p>Enter a display name for <strong>{fileName}</strong>:</p>
+                        <input 
+                            type="text" 
+                            value={newName} 
+                            onChange={(e) => setNewName(e.target.value)}
+                            className="rename-input"
+                            autoFocus
+                        />
+                    </div>
+                    <div className="modal-footer">
+                        <button onClick={onCancel} className="button-secondary cancel">
+                            Cancel
+                        </button>
+                        <button 
+                            onClick={() => onConfirm(newName)} 
+                            className="button-primary"
+                            disabled={!newName.trim()}
+                        >
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+    
+    const ParameterComparisonTool = () => {
+        const [files, setFiles] = useState({});
+        const [allParameters, setAllParameters] = useState([]);
+        const [comparisonData, setComparisonData] = useState([]);
+        const [filterMode, setFilterMode] = useState({
+            all: true,
+            differentValues: false,
+            notIncluded: false
+        });
+        const [searchTerm, setSearchTerm] = useState('');
+        const [message, setMessage] = useState({ type: '', text: '' });
+        
+        // State for rename modal
+        const [renameModal, setRenameModal] = useState({
+            isOpen: false,
+            fileName: '',
+            currentName: '',
+        });
+        
+        // Update all parameters when files change
+        useEffect(() => {
+            if (Object.keys(files).length > 0) {
+                updateAllParameters();
+            }
+        }, [files]);
+        
+        // Generate comparison data when parameters or files change
+        useEffect(() => {
+            if (Object.keys(files).length >= 2 && allParameters.length > 0) {
+                generateComparisonData();
+            }
+        }, [allParameters, files]);
+        
+        // Handle file upload
+        const handleFileUpload = async (event) => {
+            const uploadedFiles = event.target.files;
+            if (!uploadedFiles || !uploadedFiles.length) return;
             
-            // Update all parameters when files change
-            useEffect(() => {
-                if (Object.keys(files).length > 0) {
-                    updateAllParameters();
-                }
-            }, [files]);
-            
-            // Generate comparison data when parameters or files change
-            useEffect(() => {
-                if (Object.keys(files).length >= 2 && allParameters.length > 0) {
-                    generateComparisonData();
-                }
-            }, [allParameters, files]);
-            
-            // Handle file upload
-            const handleFileUpload = async (event) => {
-                const uploadedFiles = event.target.files;
-                if (!uploadedFiles || !uploadedFiles.length) return;
-                
-                // Check for duplicate file names
-                const existingFileNames = Object.keys(files);
-                for (let i = 0; i < uploadedFiles.length; i++) {
-                    const file = uploadedFiles[i];
-                    if (existingFileNames.includes(file.name)) {
-                        setMessage({ 
-                            type: 'error', 
-                            text: `Error: File "${file.name}" is already uploaded. Files must have different names.` 
-                        });
-                        return;
-                    }
-                }
-                
-                // Limit to 3 files
-                if (existingFileNames.length + uploadedFiles.length > 3) {
+            // Check for duplicate file names
+            const existingFileNames = Object.keys(files);
+            for (let i = 0; i < uploadedFiles.length; i++) {
+                const file = uploadedFiles[i];
+                if (existingFileNames.includes(file.name)) {
                     setMessage({ 
-                        type: 'warning', 
-                        text: 'Maximum 3 files recommended. Please remove some files first.' 
+                        type: 'error', 
+                        text: `Error: File "${file.name}" is already uploaded. Files must have different names.` 
                     });
                     return;
                 }
-                
-                setMessage({ type: 'info', text: 'Reading files, please wait...' });
-                
-                // Process each file
-                const newFiles = { ...files };
-                for (let i = 0; i < uploadedFiles.length; i++) {
-                    const file = uploadedFiles[i];
-                    try {
-                        const content = await readFileAsText(file);
-                        const parsedData = parseCSV(content);
-                        
-                        if (!isValidParameterFile(parsedData)) {
-                            setMessage({ 
-                                type: 'error', 
-                                text: `Error: "${file.name}" does not appear to be a valid parameter file. It should have columns for Parameter Name, Current Value, and Illustrate.` 
-                            });
-                            return;
-                        }
-                        
-                        // Create parameter map
-                        const paramMap = {};
-                        parsedData.data.forEach(row => {
-                            if (!row['Parameter Name'] || row['Current Value'] === undefined) return;
-                            
-                            paramMap[row['Parameter Name']] = {
-                                value: normalizeValue(row['Current Value']),
-                                illustrate: row['Illustrate'] || ''
-                            };
-                        });
-                        
-                        // Store the file data
-                        newFiles[file.name] = {
-                            paramMap,
-                            displayName: file.name.replace('.csv', '')
-                        };
-                    } catch (err) {
+            }
+            
+            // Limit to 3 files
+            if (existingFileNames.length + uploadedFiles.length > 3) {
+                setMessage({ 
+                    type: 'warning', 
+                    text: 'Maximum 3 files recommended. Please remove some files first.' 
+                });
+                return;
+            }
+            
+            setMessage({ type: 'info', text: 'Reading files, please wait...' });
+            
+            // Process each file
+            const newFiles = { ...files };
+            for (let i = 0; i < uploadedFiles.length; i++) {
+                const file = uploadedFiles[i];
+                try {
+                    const content = await readFileAsText(file);
+                    const parsedData = parseCSV(content);
+                    
+                    if (!isValidParameterFile(parsedData)) {
                         setMessage({ 
                             type: 'error', 
-                            text: `Error reading ${file.name}: ${err.message}` 
+                            text: `Error: "${file.name}" does not appear to be a valid parameter file. It should have columns for Parameter Name, Current Value, and Illustrate.` 
                         });
                         return;
                     }
-                }
-                
-                setFiles(newFiles);
-                setMessage({ type: '', text: '' });
-                
-                // Clear file input for re-uploads
-                event.target.value = '';
-            };
-            
-            // Normalize numeric values to have 2 decimal places
-            const normalizeValue = (value) => {
-                if (value === undefined || value === null || value === '') return '';
-                
-                // Check if it's a numeric string (could have decimals or not)
-                if (/^-?\d+(\.\d+)?$/.test(value.toString().trim())) {
-                    const num = parseFloat(value);
-                    // Only add decimals if the original value had them
-                    if (value.toString().includes('.')) {
-                        return num.toFixed(2);
-                    }
-                    return num.toString();
-                }
-                
-                // Return original value if not a number
-                return value.toString().trim();
-            };
-            
-            // Check if the parsed data appears to be a valid parameter file
-            const isValidParameterFile = (parsedData) => {
-                if (!parsedData.data || !parsedData.data.length) return false;
-                
-                // Check if the required columns exist
-                const fields = Object.keys(parsedData.data[0] || {});
-                return fields.includes('Parameter Name') && fields.includes('Current Value');
-            };
-            
-            // Helper function to read file as text
-            const readFileAsText = (file) => {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.onerror = (e) => reject(new Error("File reading failed"));
-                    reader.readAsText(file);
-                });
-            };
-            
-            // Parse CSV data
-            const parseCSV = (csvText) => {
-                // Simple CSV parser
-                const lines = csvText.split(/\r\n|\n/);
-                const headers = lines[0].split(',').map(h => h.trim());
-                
-                const data = [];
-                for (let i = 1; i < lines.length; i++) {
-                    const line = lines[i].trim();
-                    if (!line) continue;
                     
-                    const values = line.split(',');
-                    const row = {};
-                    
-                    for (let j = 0; j < headers.length; j++) {
-                        row[headers[j]] = values[j] ? values[j].trim() : '';
-                    }
-                    
-                    data.push(row);
-                }
-                
-                return { data, headers };
-            };
-            
-            // Update the master list of all parameters
-            const updateAllParameters = () => {
-                const paramSet = new Set();
-                
-                Object.values(files).forEach(file => {
-                    Object.keys(file.paramMap).forEach(param => {
-                        paramSet.add(param);
+                    // Create parameter map
+                    const paramMap = {};
+                    parsedData.data.forEach(row => {
+                        if (!row['Parameter Name'] || row['Current Value'] === undefined) return;
+                        
+                        paramMap[row['Parameter Name']] = {
+                            value: normalizeValue(row['Current Value']),
+                            illustrate: row['Illustrate'] || ''
+                        };
                     });
-                });
-                
-                setAllParameters([...paramSet].sort());
-            };
-            
-            // Generate data for comparison table
-            const generateComparisonData = () => {
-                if (Object.keys(files).length < 2 || !allParameters.length) {
-                    setComparisonData([]);
-                    return;
-                }
-                
-                const fileNames = Object.keys(files);
-                
-                const data = allParameters.map(param => {
-                    const paramData = {
-                        parameterName: param,
-                        hasDifferences: false,
-                        values: {}
+                    
+                    // Default display name is file name without extension
+                    const displayName = file.name.replace(/\.[^/.]+$/, '');
+                    
+                    // Store the file data
+                    newFiles[file.name] = {
+                        paramMap,
+                        displayName: displayName
                     };
                     
-                    // Store parameter values from each file
-                    fileNames.forEach(fileName => {
-                        const file = files[fileName];
-                        paramData.values[file.displayName] = file.paramMap[param] || { value: 'N/A', illustrate: '' };
+                    // Prompt to rename column after successful file load
+                    setTimeout(() => {
+                        openRenameModal(file.name, displayName);
+                    }, 100);
+                } catch (err) {
+                    setMessage({ 
+                        type: 'error', 
+                        text: `Error reading ${file.name}: ${err.message}` 
                     });
+                    return;
+                }
+            }
+            
+            setFiles(newFiles);
+            setMessage({ type: '', text: '' });
+            
+            // Clear file input for re-uploads
+            event.target.value = '';
+        };
+        
+        // Open rename modal
+        const openRenameModal = (fileName, currentName) => {
+            setRenameModal({
+                isOpen: true,
+                fileName,
+                currentName,
+            });
+        };
+        
+        // Handle rename confirmation
+        const handleRenameConfirm = (newName) => {
+            const { fileName } = renameModal;
+            if (!fileName || !newName.trim()) return;
+            
+            setFiles(prev => {
+                const newFiles = { ...prev };
+                if (newFiles[fileName]) {
+                    newFiles[fileName] = {
+                        ...newFiles[fileName],
+                        displayName: newName.trim()
+                    };
+                }
+                return newFiles;
+            });
+            
+            setRenameModal({
+                isOpen: false,
+                fileName: '',
+                currentName: ''
+            });
+        };
+        
+        // Handle rename cancel
+        const handleRenameCancel = () => {
+            setRenameModal({
+                isOpen: false,
+                fileName: '',
+                currentName: ''
+            });
+        };
+        
+        // Normalize numeric values - improved to preserve integer format
+        const normalizeValue = (value) => {
+            if (value === undefined || value === null || value === '') return '';
+            
+            // Check if it's a numeric string (could have decimals or not)
+            if (/^-?\d+(\.\d+)?$/.test(value.toString().trim())) {
+                const num = parseFloat(value);
+                // Only add decimals if the original value had them
+                if (value.toString().includes('.')) {
+                    return num.toFixed(2);
+                }
+                return num.toString();
+            }
+            
+            // Return original value if not a number
+            return value.toString().trim();
+        };
+        
+        // Check if the parsed data appears to be a valid parameter file
+        const isValidParameterFile = (parsedData) => {
+            if (!parsedData.data || !parsedData.data.length) return false;
+            
+            // Check if the required columns exist
+            const fields = Object.keys(parsedData.data[0] || {});
+            return fields.includes('Parameter Name') && fields.includes('Current Value');
+        };
+        
+        // Helper function to read file as text
+        const readFileAsText = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(new Error("File reading failed"));
+                reader.readAsText(file);
+            });
+        };
+        
+        // Parse CSV data
+        const parseCSV = (csvText) => {
+            // Simple CSV parser
+            const lines = csvText.split(/\r\n|\n/);
+            const headers = lines[0].split(',').map(h => h.trim());
+            
+            const data = [];
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const values = line.split(',');
+                const row = {};
+                
+                for (let j = 0; j < headers.length; j++) {
+                    row[headers[j]] = values[j] ? values[j].trim() : '';
+                }
+                
+                data.push(row);
+            }
+            
+            return { data, headers };
+        };
+        
+        // Update the master list of all parameters
+        const updateAllParameters = () => {
+            const paramSet = new Set();
+            
+            Object.values(files).forEach(file => {
+                Object.keys(file.paramMap).forEach(param => {
+                    paramSet.add(param);
+                });
+            });
+            
+            setAllParameters([...paramSet].sort());
+        };
+        
+        // Generate data for comparison table
+        const generateComparisonData = () => {
+            if (Object.keys(files).length < 2 || !allParameters.length) {
+                setComparisonData([]);
+                return;
+            }
+            
+            const fileNames = Object.keys(files);
+            
+            const data = allParameters.map(param => {
+                const paramData = {
+                    parameterName: param,
+                    hasDifferences: false,
+                    notIncludedInAll: false,
+                    values: {}
+                };
+                
+                // Store parameter values from each file
+                let missingInSomeFiles = false;
+                fileNames.forEach(fileName => {
+                    const file = files[fileName];
+                    const hasParam = file.paramMap[param] !== undefined;
                     
-                    // Check if there are differences in parameter values
-                    const uniqueValues = new Set();
-                    Object.values(paramData.values).forEach(v => uniqueValues.add(v.value));
-                    paramData.hasDifferences = uniqueValues.size > 1;
+                    paramData.values[file.displayName] = file.paramMap[param] || { value: 'N/A', illustrate: '' };
                     
-                    return paramData;
+                    // Check if this parameter is missing in any file
+                    if (!hasParam) {
+                        missingInSomeFiles = true;
+                    }
                 });
                 
-                setComparisonData(data);
-            };
+                paramData.notIncludedInAll = missingInSomeFiles;
+                
+                // Check if there are differences in parameter values (excluding missing)
+                const presentValues = Object.values(paramData.values)
+                    .filter(v => v.value !== 'N/A')
+                    .map(v => v.value);
+                
+                const uniqueValues = new Set(presentValues);
+                paramData.hasDifferences = uniqueValues.size > 1;
+                
+                return paramData;
+            });
             
+            setComparisonData(data);
+        };
+        
+        // Handle filter change
+        const handleFilterChange = (filterType) => {
+            if (filterType === 'all') {
+                // When "All" is selected, disable other filters
+                setFilterMode({
+                    all: true,
+                    differentValues: false,
+                    notIncluded: false
+                });
+            } else {
+                // When any other filter is selected, disable "All"
+                setFilterMode(prev => {
+                    const newMode = { 
+                        ...prev, 
+                        [filterType]: !prev[filterType],
+                        all: false 
+                    };
+                    
+                    // If no filters are selected, default to "All"
+                    if (!newMode.differentValues && !newMode.notIncluded) {
+                        newMode.all = true;
+                    }
+                    
+                    return newMode;
+                });
+            }
+        };
             // Remove a file
             const removeFile = (fileName) => {
                 const newFiles = { ...files };
@@ -280,19 +920,27 @@
                 setAllParameters([]);
                 setComparisonData([]);
                 setMessage({ type: '', text: '' });
-                setShowOnlyDifferences(false);
+                setFilterMode({
+                    all: true,
+                    differentValues: false,
+                    notIncluded: false
+                });
                 setSearchTerm('');
             };
             
-            // Filter data based on search and show only differences
+            // Filter data based on search and filter mode
             const getFilteredData = () => {
                 if (!comparisonData.length) return [];
                 
                 let filtered = [...comparisonData];
                 
-                // Filter for differences
-                if (showOnlyDifferences) {
-                    filtered = filtered.filter(item => item.hasDifferences);
+                // Apply filter mode
+                if (!filterMode.all) {
+                    // Filter by both conditions
+                    filtered = filtered.filter(item => 
+                        (filterMode.differentValues && item.hasDifferences) || 
+                        (filterMode.notIncluded && item.notIncludedInAll)
+                    );
                 }
                 
                 // Filter by search term
@@ -310,20 +958,18 @@
             const getStats = () => {
                 const totalParams = allParameters.length;
                 const diffParams = comparisonData.filter(p => p.hasDifferences).length;
-                const missingParams = comparisonData.filter(p => 
-                    Object.values(p.values).some(v => v.value === 'N/A')
-                ).length;
+                const missingParams = comparisonData.filter(p => p.notIncludedInAll).length;
                 
                 return { totalParams, diffParams, missingParams };
             };
             
-            // Render file upload section
+            // File upload card
             const renderFileUpload = () => {
                 return (
                     <div className="card">
                         <h2 className="card-title">Upload CSV Files (2-3 recommended)</h2>
                         <div>
-                            <label className="file-upload-button" htmlFor="file-input">
+                            <label htmlFor="file-input" className="button-primary">
                                 Choose CSV Files
                             </label>
                             <input 
@@ -334,7 +980,7 @@
                                 onChange={handleFileUpload} 
                                 className="file-input"
                             />
-                            <span className="file-info">Files must have different names.</span>
+                            <span className="helper-text">Files must have different names.</span>
                             
                             {message.text && (
                                 <div className={`message ${message.type}`}>
@@ -343,19 +989,36 @@
                             )}
                             
                             {Object.keys(files).length > 0 && (
-                                <div className="file-list">
-                                    <p>Uploaded Files ({Object.keys(files).length}):</p>
-                                    {Object.keys(files).map(fileName => (
-                                        <div key={fileName} className="file-item">
-                                            <span className="file-name">{fileName}</span>
-                                            <button 
-                                                className="remove-button" 
-                                                onClick={() => removeFile(fileName)}
-                                            >
-                                                ×
-                                            </button>
-                                        </div>
-                                    ))}
+                                <div className="files-container">
+                                    <h3 className="files-title">Uploaded Files ({Object.keys(files).length}):</h3>
+                                    <ul className="file-list">
+                                        {Object.keys(files).map(fileName => (
+                                            <li key={fileName} className="file-item">
+                                                <div className="file-info">
+                                                    <span className="file-name">{fileName}</span>
+                                                    <span className="file-display-name">
+                                                        Displayed as: {files[fileName].displayName}
+                                                    </span>
+                                                </div>
+                                                <div className="file-actions">
+                                                    <button 
+                                                        className="rename-button"
+                                                        onClick={() => openRenameModal(fileName, files[fileName].displayName)}
+                                                        title="Rename"
+                                                    >
+                                                        ✏️
+                                                    </button>
+                                                    <button 
+                                                        className="remove-button"
+                                                        onClick={() => removeFile(fileName)}
+                                                        title="Remove"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
                             )}
                         </div>
@@ -363,13 +1026,13 @@
                 );
             };
             
-            // Render comparison section
+            // Comparison section
             const renderComparison = () => {
                 if (Object.keys(files).length < 2) {
                     return (
-                        <div className="instructions">
-                            <h3>How to Use This Tool</h3>
-                            <ol>
+                        <div className="empty-state">
+                            <h3 className="empty-title">How to Use This Tool</h3>
+                            <ol className="empty-list">
                                 <li>Upload 2 or 3 CSV files containing system parameters with the columns:
                                     <ul>
                                         <li>Parameter Name</li>
@@ -377,10 +1040,17 @@
                                         <li>Illustrate (allowed values/ranges)</li>
                                     </ul>
                                 </li>
+                                <li>You'll be prompted to give each file a custom display name</li>
                                 <li>The tool will automatically compare all parameters across files</li>
-                                <li>Use the checkbox to show only parameters that differ between files</li>
+                                <li>Use the filter options to focus on specific parameter types</li>
                                 <li>Use the search box to find specific parameters</li>
-                                <li>Parameters with differences will be highlighted in yellow and red</li>
+                                <li>Different colors indicate status:
+                                    <ul>
+                                        <li><span className="legend-different">Red text</span>: Different values</li>
+                                        <li><span className="legend-row">Yellow background</span>: Row with differences</li>
+                                        <li><span className="legend-missing">Blue text</span>: Missing values (N/A)</li>
+                                    </ul>
+                                </li>
                             </ol>
                         </div>
                     );
@@ -395,14 +1065,42 @@
                         <div className="card">
                             <h2 className="card-title">Comparison Settings</h2>
                             <div className="controls">
-                                <div className="checkbox-control">
-                                    <input 
-                                        type="checkbox" 
-                                        id="show-differences" 
-                                        checked={showOnlyDifferences}
-                                        onChange={() => setShowOnlyDifferences(!showOnlyDifferences)}
-                                    />
-                                    <label htmlFor="show-differences">Show only different parameters</label>
+                                <div className="filter-controls">
+                                    <h3 className="filter-title">Show Parameters:</h3>
+                                    <div className="filter-options">
+                                        <div className="filter-option">
+                                            <input 
+                                                type="checkbox"
+                                                id="filter-all"
+                                                className="filter-checkbox"
+                                                checked={filterMode.all}
+                                                onChange={() => handleFilterChange('all')}
+                                            />
+                                            <label htmlFor="filter-all" className="filter-label">All</label>
+                                        </div>
+                                        <div className="filter-option">
+                                            <input 
+                                                type="checkbox"
+                                                id="filter-diff"
+                                                className="filter-checkbox"
+                                                checked={filterMode.differentValues}
+                                                onChange={() => handleFilterChange('differentValues')}
+                                                disabled={filterMode.all}
+                                            />
+                                            <label htmlFor="filter-diff" className="filter-label">Different values</label>
+                                        </div>
+                                        <div className="filter-option">
+                                            <input 
+                                                type="checkbox"
+                                                id="filter-missing"
+                                                className="filter-checkbox"
+                                                checked={filterMode.notIncluded}
+                                                onChange={() => handleFilterChange('notIncluded')}
+                                                disabled={filterMode.all}
+                                            />
+                                            <label htmlFor="filter-missing" className="filter-label">Not included in both files</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <div className="search-control">
@@ -420,7 +1118,7 @@
                                     />
                                 </div>
                                 
-                                <button className="reset-button" onClick={resetAll}>
+                                <button className="button-reset" onClick={resetAll}>
                                     Reset All
                                 </button>
                             </div>
@@ -443,8 +1141,8 @@
                         
                         {filteredData.length > 0 ? (
                             <div className="table-container">
-                                <div className="scrollable">
-                                    <table>
+                                <div className="table-scrollable">
+                                    <table className="parameter-table">
                                         <thead>
                                             <tr>
                                                 <th>Parameter Name</th>
@@ -458,7 +1156,7 @@
                                             {filteredData.map(param => (
                                                 <tr 
                                                     key={param.parameterName}
-                                                    className={param.hasDifferences ? 'highlight-row' : ''}
+                                                    className={param.hasDifferences ? 'different-row' : ''}
                                                 >
                                                     <td className="parameter-name">{param.parameterName}</td>
                                                     
@@ -469,10 +1167,16 @@
                                                                 .filter(([name]) => name !== displayName)
                                                                 .some(([_, v]) => v.value !== paramValue && v.value !== 'N/A');
                                                         
+                                                        const isMissing = paramValue === 'N/A';
+                                                        
+                                                        let cellClassName = 'value-cell';
+                                                        if (isDifferent) cellClassName += ' different-value';
+                                                        if (isMissing) cellClassName += ' missing-value';
+                                                        
                                                         return (
                                                             <td 
                                                                 key={`${param.parameterName}-${displayName}`}
-                                                                className={isDifferent ? 'different-value' : ''}
+                                                                className={cellClassName}
                                                             >
                                                                 {paramValue}
                                                             </td>
@@ -507,9 +1211,16 @@
             };
             
             return (
-                <div className="app-container">
+                <div className="tool-container">
                     {renderFileUpload()}
                     {renderComparison()}
+                    <RenameModal 
+                        isOpen={renameModal.isOpen}
+                        fileName={renameModal.fileName}
+                        currentName={renameModal.currentName}
+                        onConfirm={handleRenameConfirm}
+                        onCancel={handleRenameCancel}
+                    />
                 </div>
             );
         };
