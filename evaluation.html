@@ -30,9 +30,14 @@
                 
                 <div class="mb-6">
                     <label for="trainingId" class="block mb-2">Training ID <span class="required">*</span></label>
-                    <div class="flex items-center">
-                        <input type="text" id="trainingId" name="trainingId" required class="flex-grow p-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-orange-500 h-10" placeholder="Enter Training ID (e.g., TR25010001)">
-                        <button type="button" id="fetchTrainingBtn" class="bg-orange-500 text-white px-4 h-10 rounded-r hover:bg-orange-600 flex items-center justify-center">Lookup</button>
+                    <div style="display: flex;">
+                        <input type="text" id="trainingId" name="trainingId" required 
+                               style="flex: 1; height: 40px; padding: 8px; border: 1px solid #ccc; border-right: none; border-radius: 4px 0 0 4px;" 
+                               placeholder="Enter Training ID (e.g., TR25010001)">
+                        <button type="button" id="fetchTrainingBtn" 
+                                style="height: 40px; padding: 0 16px; background-color: #f97316; color: white; border: none; border-radius: 0 4px 4px 0;">
+                            Lookup
+                        </button>
                     </div>
                     <p id="fetchStatus" class="text-sm mt-2 hidden"></p>
                 </div>
