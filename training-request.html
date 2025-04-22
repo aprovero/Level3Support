@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoE Level 3 - Training Request</title>
+    <link rel="icon" type="image/png" href="images/SIMPLE_LOGO.png">
+    <link rel="stylesheet" href="css/shared-styles.css">
+</head>
+<body>
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2>Request Submitted</h2>
+            <p>Your training request has been successfully submitted.</p>
+            <p>Request ID: <span id="request-id">COERQYYMM####</span></p>
+            <button class="modal-button" id="success-close-btn">Close</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <img src="images/LOGO.png" alt="SUNGROW Logo">
+            </div>
+        </header>
+
+        <h1>CoE Level 3 Training Request</h1>
+
+        <!-- Main Form -->
+        <div class="form-container">
+            <form id="support-form">
+                <!-- Common Initial Fields -->
+                <div class="form-group">
+                    <label for="requester-name">Requester Name <span class="required-asterisk">*</span></label>
+                    <input type="text" id="requester-name" name="requesterName" placeholder="Enter your name" required>
+
+                    <label for="requester-email">Requester Email <span class="required-asterisk">*</span></label>
+                    <input type="email" id="requester-email" name="requesterEmail" placeholder="Enter your email" required>
+
+                    <!-- Hidden field for request type -->
+                    <input type="hidden" id="request" name="request" value="TRAINING">
+                </div>
+
+                <!-- Common Fields for All Forms -->
+                <div id="common-fields" class="form-group">
+                    <label for="location">Location <span class="required-asterisk">*</span></label>
+                    <select id="location" name="location" required>
+                        <option value="">-- Select Location --</option>
+                        <option value="MEXICO">MEXICO</option>
+                        <option value="CENTRAL AMERICA">CENTRAL AMERICA</option>
+                        <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
+                        <option value="COLOMBIA">COLOMBIA</option>
+                        <option value="BRAZIL">BRAZIL</option>
+                        <option value="CHILE">CHILE</option>
+                        <option value="OTHER">OTHER</option>
+                    </select>
+
+                    <label for="project-name">Project Name <span class="required-asterisk">*</span></label>
+                    <input type="text" id="project-name" name="projectName" placeholder="Enter project name" required>
+
+                    <label for="product-type">TYPE OF PRODUCT <span class="required-asterisk">*</span></label>
+                    <select id="product-type" name="productType" required>
+                        <option value="">-- Select --</option>
+                        <option value="STRING">STRING</option>
+                        <option value="CENTRAL">CENTRAL</option>
+                        <option value="MVS">MVS</option>
+                        <option value="PVS">PVS</option>
+                        <option value="STORAGE">STORAGE</option>
+                        <option value="COMMUNICATION">COMMUNICATION</option>
+                    </select>
+
+                    <label for="model">Model</label>
+                    <input type="text" id="model" name="model" placeholder="Enter model">
+                </div>
+                
+                <!-- Training Form Fields -->
+                <div id="training-fields" class="form-group">
+                    <label for="training-description">Description <span class="required-asterisk">*</span></label>
+                    <textarea id="training-description" name="description" rows="5" placeholder="Enter detailed description including Scope, Location, Cost per Person" required></textarea>
+
+                    <label for="expected-date">Expected Date <span class="required-asterisk">*</span></label>
+                    <div class="field-note">Minimum 1 month after requested date</div>
+                    <input type="date" id="expected-date" name="expectedDate" required>
+
+                    <label for="trainees-number">Number of Trainees <span class="required-asterisk">*</span></label>
+                    <input type="number" id="trainees-number" name="traineesNumber" min="1" step="1" placeholder="Minimum 3, Maximum 10 per session" required>
+                </div>
+
+                <!-- File Upload Section -->
+                <div id="file-upload-section" class="form-group">
+                    <label>ATTACHMENTS</label>
+                    <div id="file-upload" class="file-upload">
+                        <div id="upload-text">
+                            Drop files here or click to upload (allowed types: txt, zip, rar, pictures, PDFs, MS Office files)
+                            <input type="file" id="file-input" name="attachments" multiple style="display: none;">
+                        </div>
+                        <div id="file-list" class="file-list"></div>
+                    </div>
+                </div>
+
+                <!-- Message container -->
+                <div id="message-container" class="mb-4"></div>
+
+                <div id="loading-spinner" class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Submitting your request...</p>
+                </div>
+
+                <button type="submit" id="submit-btn">SUBMIT</button>
+            </form>
+        </div>
+        
+        <!-- Error Modal -->
+        <div id="error-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h2>Error</h2>
+                <p id="error-message">There was an error processing your request.</p>
+                <div id="error-details" class="message-details"></div>
+                <button class="modal-button" id="error-close-btn">Close</button>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-text">
+                <div class="footer-copyright">©2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
+                <div class="footer-creator">Created by Andres Provero</div>
+            </div>
+            <div class="footer-logo">
+                <a href="https://www.anthropic.com" target="_blank">
+                    <img src="images/CLAUDE_LOGO.png" alt="Claude Logo">
+                </a>
+                <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/common.js"></script>
+    <script src="js/training-request.js"></script>
+</body>
+</html>
