@@ -58,7 +58,7 @@
                     </select>
 
                     <label for="project-name">Project Name <span class="required-asterisk">*</span></label>
-                    <input type="text" id="project-name" name="projectName" placeholder="Enter project name" required>
+                    <input type="text" id="project-name" name="projectName" placeholder="Enter name of Customer/Partner in case it´s not related to a specific project" required>
 
                     <label for="product-type">TYPE OF PRODUCT <span class="required-asterisk">*</span></label>
                     <select id="product-type" name="productType" required>
@@ -71,8 +71,8 @@
                         <option value="COMMUNICATION">COMMUNICATION</option>
                     </select>
 
-                    <label for="model">Model</label>
-                    <input type="text" id="model" name="model" placeholder="Enter model">
+                    <label for="model">Model of Equipment</label>
+                    <input type="text" id="model" name="model" placeholder="Only 1 model per request" required>
                 </div>
                 
                 <!-- Training Form Fields -->
@@ -85,7 +85,7 @@
                     <input type="date" id="expected-date" name="expectedDate" required>
 
                     <label for="trainees-number">Number of Trainees <span class="required-asterisk">*</span></label>
-                    <input type="number" id="trainees-number" name="traineesNumber" min="1" step="1" placeholder="For Onsite training: Minimum 3, Maximum 10 per session" required>
+                    <input type="number" id="trainees-number" name="traineesNumber" min="1" step="1" placeholder="Onsite training: Minimum 3, Maximum 10 per session / Online: Maximum 20 spots per session" required>
                 </div>
 
                 <!-- File Upload Section -->
