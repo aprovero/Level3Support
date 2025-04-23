@@ -55,7 +55,7 @@ function initializeEvaluationForm() {
         });
         
         // Set placeholder
-        trainingIdInput.placeholder = "Enter Training ID (e.g., TR25010001)";
+        trainingIdInput.placeholder = "Enter the 10 digit Training ID (e.g., TR25010001)";
         
         // Force uppercase on paste
         trainingIdInput.addEventListener('paste', function(e) {
