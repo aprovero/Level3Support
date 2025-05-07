@@ -1,25 +1,25 @@
 /**
- * CoE Nivel 3 Portal de Soporte - JavaScript de Página de Evaluación
+ * CoE Level 3 Support Portal - Evaluation Page JavaScript
  * 
- * Tabla de Contenidos:
- * 1. Variables Globales y Constantes
- * 2. Inicialización de Página
- * 3. Búsqueda de Información de Capacitación
- * 4. Gestión de Campos del Formulario
- * 5. Validación del Formulario
- * 6. Envío del Formulario
- * 7. Manejo de Éxito
+ * Table of Contents:
+ * 1. Global Variables and Constants
+ * 2. Page Initialization
+ * 3. Training Information Lookup
+ * 4. Form Field Management
+ * 5. Form Validation
+ * 6. Form Submission
+ * 7. Success Handling
  * 8. Event Listeners
  */
 
 /**
- * 1. Variables Globales y Constantes
+ * 1. Global Variables and Constants
  * --------------------------------
  */
-// Datos de capacitación actual
+// Current training data
 let currentTrainingData = null;
 
-// Secciones del formulario
+// Form sections
 const FORM_SECTIONS = {
     trainingInfo: 'trainingInfoSection',
     trainerEval: 'trainerEvaluationSection',
@@ -28,70 +28,70 @@ const FORM_SECTIONS = {
 };
 
 /**
- * 2. Inicialización de Página
+ * 2. Page Initialization
  * --------------------
  */
 document.addEventListener('DOMContentLoaded', function() {
-    // Despertar el servidor
+    // Wake up the server
     wakeUpServer();
 
-    // Inicializar el formulario
+    // Initialize the form
     initializeEvaluationForm();
 });
 
 /**
- * Inicializar el formulario de evaluación y event listeners
+ * Initialize the evaluation form and event listeners
  */
 function initializeEvaluationForm() {
     const form = document.getElementById('evaluationForm');
     const fetchButton = document.getElementById('fetchTrainingBtn');
     const trainingIdInput = document.getElementById('trainingId');
     
-    // Forzar mayúsculas para ID de capacitación
+    // Force uppercase for training ID
     if (trainingIdInput) {
-        // Convertir a mayúsculas en input
+        // Convert to uppercase on input
         trainingIdInput.addEventListener('input', function() {
             this.value = this.value.toUpperCase();
         });
         
-        // Establecer placeholder
-        trainingIdInput.placeholder = "Ingrese el ID de Capacitación de 10 dígitos (ej., TR25010001)";
+        // Set placeholder
+        trainingIdInput.placeholder = "Enter the 10 digit Training ID (e.g., TR25010001)";
         
-        // Forzar mayúsculas al pegar
+        // Force uppercase on paste
         trainingIdInput.addEventListener('paste', function(e) {
             setTimeout(() => {
                 this.value = this.value.toUpperCase();
             }, 0);
         });
         
-        // Forzar mayúsculas al perder el foco
+        // Force uppercase on blur (when field loses focus)
         trainingIdInput.addEventListener('blur', function() {
             this.value = this.value.toUpperCase();
         });
     }
     
-    // Agregar onclick directo para el botón de búsqueda
+    // Add direct onclick for lookup button
     if (fetchButton) {
         fetchButton.onclick = function() {
-            console.log("Botón de búsqueda clickeado");
+            console.log("Lookup button clicked");
             handleTrainingLookup();
         };
     }
     
-    // Agregar event listener para el envío del formulario
+    // Add event listener for form submission
     if (form) {
         form.addEventListener('submit', handleFormSubmit);
     }
     
-    // Inicializar grupos de botones de radio para mejor UX
+    // Initialize radio button groups for better UX
     initializeRatingGroups();
 }
 
 /**
- * Inicializar mejoras de UI para grupos de calificación
+ * Initialize rating group UI enhancements
  */
 function initializeRatingGroups() {
-    // Agregar efectos hover y clicks de etiqueta para mejor usabilidad
+    // Add hover effects and label clicks for better usability
     const ratingGroups = document.querySelectorAll('.rating-group');
     
     ratingGroups.forEach(group => {
@@ -101,14 +101,14 @@ function initializeRatingGroups() {
             const radio = option.querySelector('input[type="radio"]');
             const label = option.querySelector('label');
             
-            // Hacer que al hacer clic en la etiqueta se seleccione el radio
+            // Make clicking on label select the radio
             if (label && radio) {
                 label.addEventListener('click', function() {
                     radio.checked = true;
                 });
             }
             
-            // Agregar efecto hover para mejor UX
+            // Add hover effect for better UX
             option.addEventListener('mouseenter', function() {
                 this.style.backgroundColor = '#f0f7ff';
             });
@@ -121,110 +121,110 @@ function initializeRatingGroups() {
 }
 
 /**
- * 3. Búsqueda de Información de Capacitación
+ * 3. Training Information Lookup
  * ----------------------------
  */
 
 /**
- * Manejar el clic del botón de búsqueda de capacitación
+ * Handle the training lookup button click
  */
 function handleTrainingLookup() {
-    console.log('Búsqueda de capacitación iniciada');
+    console.log('Training lookup initiated');
     const trainingId = document.getElementById('trainingId').value.trim().toUpperCase();
     const fetchStatus = document.getElementById('fetchStatus');
     
-    // Limpiar cualquier estado anterior
+    // Clear any previous status
     if (fetchStatus) {
         fetchStatus.textContent = '';
         fetchStatus.className = 'text-sm mt-2';
         fetchStatus.classList.remove('hidden');
     }
     
-    // Validar ID de capacitación
+    // Validate training ID
     if (!trainingId) {
-        showStatus('Por favor ingrese un ID de Capacitación', 'error');
+        showStatus('Please enter a Training ID', 'error');
         return;
     }
     
-    // Mostrar estado de carga
-    showStatus('Buscando información de capacitación...', 'info');
+    // Show loading status
+    showStatus('Looking up training information...', 'info');
     
-    // Crear la URL de la API
+    // Create the API URL
     const trainingEndpoint = API_BASE_URL + '/training/' + trainingId;
-    console.log('Obteniendo datos de capacitación desde:', trainingEndpoint);
+    console.log('Fetching training data from:', trainingEndpoint);
     
-    // Usar fetch directo
+    // Use direct fetch
     fetch(trainingEndpoint)
         .then(response => {
-            console.log('Estado de respuesta:', response.status);
+            console.log('Response status:', response.status);
             if (!response.ok) {
-                throw new Error(`Capacitación no encontrada (${response.status})`);
+                throw new Error(`Training not found (${response.status})`);
             }
             return response.json();
         })
         .then(data => {
-            console.log('Datos de capacitación recibidos:', data);
+            console.log('Training data received:', data);
             populateTrainingInfo(data);
-            showStatus('Información de capacitación encontrada', 'success');
+            showStatus('Training information found', 'success');
         })
         .catch(error => {
-            console.error('Error al buscar capacitación:', error);
-            showStatus('Capacitación no encontrada. Por favor revise el ID e intente de nuevo.', 'error');
+            console.error('Error fetching training:', error);
+            showStatus('Training not found. Please check the ID and try again.', 'error');
         });
 }
 
 /**
- * Obtener información de capacitación del servidor
- * @param {string} trainingId - El ID de capacitación a buscar
+ * Fetch training information from the server
+ * @param {string} trainingId - The training ID to look up
  */
 async function fetchTrainingInfo(trainingId) {
     try {
-        console.log('Realizando solicitud a:', API_BASE_URL + API_ENDPOINTS.getTrainingById(trainingId));
+        console.log('Making request to:', API_BASE_URL + API_ENDPOINTS.getTrainingById(trainingId));
         
-        // Usar fetch regular para evitar problemas potenciales
+        // Use regular fetch to avoid potential issues
         const response = await fetch(API_BASE_URL + API_ENDPOINTS.getTrainingById(trainingId));
         const data = await response.json();
         
-        console.log('Datos de capacitación recibidos:', data);
+        console.log('Training data received:', data);
         
-        // Si es exitoso, poblar la información de capacitación
+        // If successful, populate the training info
         if (response.ok && data) {
             populateTrainingInfo(data);
-            showStatus('Información de capacitación encontrada', 'success');
+            showStatus('Training information found', 'success');
         } else {
-            // Manejar respuestas de error
-            const errorMessage = data.error || 'Capacitación no encontrada';
-            const errorDetails = data.details || 'Por favor revise el ID de Capacitación e intente de nuevo';
+            // Handle error responses
+            const errorMessage = data.error || 'Training not found';
+            const errorDetails = data.details || 'Please check the Training ID and try again';
             
             showStatus(errorMessage, 'error');
-            console.error('Error al obtener información de capacitación:', errorMessage);
+            console.error('Error fetching training info:', errorMessage);
         }
     } catch (error) {
-        // Manejar errores inesperados
-        console.error('Error en fetchTrainingInfo:', error);
-        showStatus('Error al conectar con el servidor. Por favor intente más tarde.', 'error');
+        // Handle unexpected errors
+        console.error('Error in fetchTrainingInfo:', error);
+        showStatus('Error connecting to server. Please try again later.', 'error');
     }
 }
 
 /**
- * Poblar la sección de información de capacitación con datos
- * @param {Object} data - El objeto de datos de capacitación
+ * Populate the training information section with data
+ * @param {Object} data - The training data object
  */
 function populateTrainingInfo(data) {
-    // Almacenar los datos de capacitación actuales
+    // Store the current training data
     currentTrainingData = data;
     
-    // Mostrar información de capacitación
+    // Display training information
     document.getElementById('displayTrainingTitle').textContent = data.title || '-';
     document.getElementById('displayTrainingDate').textContent = formatDate(new Date(data.date)) || '-';
     document.getElementById('displayTrainer').textContent = data.trainer || '-';
     
-    // Establecer campos ocultos del formulario
+    // Set hidden form fields
     document.getElementById('trainingTitle').value = data.title || '';
     document.getElementById('trainingDate').value = data.date || '';
     document.getElementById('trainer').value = data.trainer || '';
     
-    // Mostrar la sección de capacitación
+    // Show the training section
     const trainingInfoSection = document.getElementById(FORM_SECTIONS.trainingInfo);
     if (trainingInfoSection) {
         trainingInfoSection.classList.remove('hidden');
@@ -232,9 +232,9 @@ function populateTrainingInfo(data) {
 }
 
 /**
- * Mostrar mensaje de estado
- * @param {string} message - El mensaje a mostrar
- * @param {string} type - El tipo de mensaje: 'success', 'error', o 'info'
+ * Show status message
+ * @param {string} message - The message to show
+ * @param {string} type - The message type: 'success', 'error', or 'info'
  */
 function showStatus(message, type) {
     const fetchStatus = document.getElementById('fetchStatus');
@@ -257,83 +257,83 @@ function showStatus(message, type) {
 }
 
 /**
- * 4. Gestión de Campos del Formulario
+ * 4. Form Field Management
  * ----------------------
  */
 
 /**
- * Reiniciar campos del formulario a su estado inicial
+ * Reset form fields to their initial state
  */
 function resetForm() {
     const form = document.getElementById('evaluationForm');
     if (!form) return;
     
-    // Reiniciar campos del formulario
+    // Reset form fields
     form.reset();
     
-    // Ocultar sección de información de capacitación
+    // Hide training info section
     const trainingInfoSection = document.getElementById(FORM_SECTIONS.trainingInfo);
     if (trainingInfoSection) {
         trainingInfoSection.classList.add('hidden');
     }
     
-    // Limpiar mensaje de estado
+    // Clear status message
     const fetchStatus = document.getElementById('fetchStatus');
     if (fetchStatus) {
         fetchStatus.textContent = '';
         fetchStatus.classList.add('hidden');
     }
     
-    // Limpiar datos de capacitación
+    // Clear training data
     currentTrainingData = null;
     
-    // Limpiar campos de visualización
+    // Clear display fields
     document.getElementById('displayTrainingTitle').textContent = '-';
     document.getElementById('displayTrainingDate').textContent = '-';
     document.getElementById('displayTrainer').textContent = '-';
     
-    // Limpiar campos ocultos del formulario
+    // Clear hidden form fields
     document.getElementById('trainingTitle').value = '';
     document.getElementById('trainingDate').value = '';
     document.getElementById('trainer').value = '';
 }
 
 /**
- * 5. Validación del Formulario
+ * 5. Form Validation
  * ----------------
  */
 
 /**
- * Validar el formulario de evaluación antes del envío
- * @returns {boolean} True si el formulario es válido
+ * Validate the evaluation form before submission
+ * @returns {boolean} True if the form is valid
  */
 function validateEvaluationForm() {
     const form = document.getElementById('evaluationForm');
     if (!form) return false;
     
-    // Verificar si se ha recuperado la información de capacitación
+    // Check if training info has been retrieved
     if (!currentTrainingData) {
         showErrorMessage(
-            'Falta Información de Capacitación', 
-            'Por favor busque un ID de Capacitación válido primero',
+            'Missing Training Information', 
+            'Please lookup a valid Training ID first',
             '#submit-message-container'
         );
         return false;
     }
     
-    // Validar selección de tipo de capacitación
+    // Validate training type selection
     const locationType = document.getElementById('location');
     if (!locationType || !locationType.value) {
         showErrorMessage(
-            'Falta Tipo de Capacitación', 
-            'Por favor seleccione el tipo de capacitación (En Línea o Presencial)',
+            'Missing Training Type', 
+            'Please select the training type (Online or In Person)',
             '#submit-message-container'
         );
         locationType.focus();
         return false;
     }
     
-    // Verificar todos los grupos de botones de radio requeridos
+    // Check all required radio button groups
     const requiredRadioGroups = [
         'trainerKnowledge', 'trainerClarity', 'trainerResponsiveness', 'trainerEngagement',
         'contentRelevance', 'contentDepth', 'contentMaterials', 'contentBalance',
@@ -344,17 +344,17 @@ function validateEvaluationForm() {
         const selectedOption = form.querySelector(`input[name="${groupName}"]:checked`);
         
         if (!selectedOption) {
-            // Encontrar la sección que contiene este grupo
+            // Find the section containing this group
             const radioGroup = form.querySelector(`input[name="${groupName}"]`).closest('.form-section');
             const groupTitle = radioGroup.querySelector('.form-section-title').textContent;
             
             showErrorMessage(
-                'Evaluación Incompleta', 
-                `Por favor complete todas las calificaciones en la sección "${groupTitle}"`,
+                'Incomplete Evaluation', 
+                `Please complete all ratings in the "${groupTitle}" section`,
                 '#submit-message-container'
             );
             
-            // Desplazarse a la sección
+            // Scroll to the section
             radioGroup.scrollIntoView({ behavior: 'smooth', block: 'start' });
             return false;
         }
@@ -364,81 +364,81 @@ function validateEvaluationForm() {
 }
 
 /**
- * 6. Envío del Formulario
+ * 6. Form Submission
  * ----------------
  */
 
 /**
- * Manejar el envío del formulario
- * @param {Event} e - El evento de envío
+ * Handle form submission
+ * @param {Event} e - The submit event
  */
 async function handleFormSubmit(e) {
     e.preventDefault();
     
-    // Limpiar mensajes previos
+    // Clear previous messages
     const messageContainer = document.getElementById('submit-message-container');
     if (messageContainer) {
         messageContainer.innerHTML = '';
     }
     
-    // Validar el formulario
+    // Validate the form
     if (!validateEvaluationForm()) {
         return;
     }
     
-    // Obtener datos del formulario
+    // Get form data
     const form = e.target;
     const formData = new FormData(form);
     const formValues = Object.fromEntries(formData.entries());
     
-    // Deshabilitar botón de envío
+    // Disable submit button
     const submitButton = document.querySelector('.submit-button');
     if (submitButton) {
         submitButton.disabled = true;
-        submitButton.textContent = 'Enviando...';
+        submitButton.textContent = 'Submitting...';
     }
     
     try {
-        // Calcular puntuación promedio incluyendo recomendación
+        // Calculate average score including recommendation
         formValues.averageScore = calculateAverageScore(formValues);
         
-        // Enviar al servidor
+        // Submit to server
         const result = await submitEvaluation(formValues);
         
         if (result.success) {
-            // Mostrar confirmación de éxito
+            // Show success confirmation
             showSubmissionConfirmation();
         } else {
-            // Mostrar mensaje de error
+            // Show error message
             showErrorMessage(
-                'Error al enviar evaluación', 
-                result.error || 'Ocurrió un error desconocido. Por favor intente de nuevo.',
+                'Error submitting evaluation', 
+                result.error || 'Unknown error occurred. Please try again.',
                 '#submit-message-container'
             );
         }
     } catch (error) {
-        // Manejar error de envío
+        // Handle submission error
         showErrorMessage(
-            'Error al enviar evaluación', 
-            error.message || 'Ocurrió un error inesperado. Por favor intente de nuevo.',
+            'Error submitting evaluation', 
+            error.message || 'An unexpected error occurred. Please try again.',
             '#submit-message-container'
         );
     } finally {
-        // Restablecer estado del botón
+        // Reset button state
         if (submitButton) {
             submitButton.disabled = false;
-            submitButton.textContent = 'ENVIAR EVALUACIÓN';
+            submitButton.textContent = 'SUBMIT EVALUATION';
         }
     }
 }
 
 /**
- * Calcular la puntuación promedio de todas las calificaciones
- * @param {Object} formValues - Los valores del formulario
- * @returns {number} La puntuación promedio calculada
+ * Calculate the average score from all ratings
+ * @param {Object} formValues - The form values
+ * @returns {number} The calculated average score
  */
 function calculateAverageScore(formValues) {
-    // Obtener todos los valores de calificación
+    // Get all rating values
     const ratings = [
         parseInt(formValues.trainerKnowledge),
         parseInt(formValues.trainerClarity),
@@ -449,29 +449,29 @@ function calculateAverageScore(formValues) {
         parseInt(formValues.contentMaterials),
         parseInt(formValues.contentBalance),
         parseInt(formValues.overallSatisfaction),
-        // Agregar valor de recomendación (5 para Sí, 1 para No)
+        // Add recommendation value (5 for Yes, 1 for No)
         formValues.recommend === 'Yes' ? 5 : 1
     ];
     
-    // Calcular promedio (suma dividida por número de calificaciones)
+    // Calculate average (sum divided by number of ratings)
     const sum = ratings.reduce((total, rating) => total + rating, 0);
     return (sum / ratings.length).toFixed(2);
 }
 
 /**
- * Enviar la evaluación al servidor
- * @param {Object} formValues - Los valores del formulario a enviar
- * @returns {Object} El resultado del envío
+ * Submit the evaluation to the server
+ * @param {Object} formValues - The form values to submit
+ * @returns {Object} The result of the submission
  */
 async function submitEvaluation(formValues) {
     try {
-        console.log('Enviando evaluación con valores:', formValues);
+        console.log('Submitting evaluation with values:', formValues);
         
-        // Ajustar el formato de datos para que coincida con lo que espera el servidor
-        // Asegurarse de que recommend esté en el formato correcto
+        // Adjust the data format to match what the server expects
+        // Make sure recommend is in the right format
         formValues.recommend = formValues.recommend === 'Yes';
         
-        // Enviar al servidor usando fetch directo
+        // Submit to server using direct fetch
         const response = await fetch(API_BASE_URL + API_ENDPOINTS.submitEvaluation, {
             method: 'POST',
             headers: {
@@ -481,37 +481,37 @@ async function submitEvaluation(formValues) {
         });
         
         const data = await response.json();
-        console.log('Respuesta de evaluación:', data);
+        console.log('Evaluation response:', data);
         
         if (!response.ok) {
-            throw new Error(data.error || 'Error del servidor');
+            throw new Error(data.error || 'Server error');
         }
         
         return { success: true, recordId: data.recordId || data.id };
     } catch (error) {
-        console.error('Error al enviar evaluación:', error);
+        console.error('Error submitting evaluation:', error);
         return { 
             success: false, 
-            error: error.message || 'Envío fallido' 
+            error: error.message || 'Submission failed' 
         };
     }
 }
 
 /**
- * 7. Manejo de Éxito
+ * 7. Success Handling
  * ----------------
  */
 
 /**
- * Mostrar la confirmación de envío
+ * Show the submission confirmation
  */
 function showSubmissionConfirmation() {
-    // Ocultar formulario y encabezado
+    // Hide form and header
     document.querySelector('h1').classList.add('hidden');
     document.querySelector('p.mb-6').classList.add('hidden');
     document.getElementById('evaluationForm').classList.add('hidden');
     
-    // Mostrar confirmación
+    // Show confirmation
     document.getElementById('submissionConfirmation').classList.remove('hidden');
 }
 
@@ -519,4 +519,4 @@ function showSubmissionConfirmation() {
  * 8. Event Listeners
  * ----------------
  */
-// No es necesario exportar globalmente a window ya que no hay manejadores en línea en el HTML
+// No need for global window exports as there are no inline handlers in the HTML

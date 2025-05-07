@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoE Nivel 3 - Evaluación de Capacitación</title>
+    <title>CoE Level 3 - Training Evaluation</title>
     <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
     <!-- External CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
@@ -16,8 +16,8 @@
             </div>
         </div>
         
-        <h1>Formulario de Evaluación de Capacitación</h1>
-        <p class="mb-6">Gracias por participar en nuestra sesión de capacitación. Por favor, dedique un momento para proporcionar sus comentarios y ayudarnos a mejorar futuras experiencias de capacitación.</p>
+        <h1>Training Evaluation Form</h1>
+        <p class="mb-6">Thank you for participating in our training session. Please take a moment to provide your feedback to help us improve future training experiences.</p>
 
         <form id="evaluationForm" class="form-container">
             <!-- Hidden field to store Training ID reference -->
@@ -25,19 +25,19 @@
 
             <!-- Training ID Entry -->
             <div class="form-section">
-                <div class="form-section-title">Evaluación de la Capacitación</div>
-                <p class="mb-4">Por favor, ingrese el ID de Capacitación proporcionado al final de su sesión para comenzar la evaluación anónima.</p>
+                <div class="form-section-title">Training Evaluation</div>
+                <p class="mb-4">Please enter the Training ID provided at the end of your session to begin the anonymous evaluation.</p>
                 
                 <div class="mb-6">
-                    <label for="trainingId" class="block mb-2">ID de Capacitación <span class="required">*</span></label>
+                    <label for="trainingId" class="block mb-2">Training ID <span class="required">*</span></label>
 
                     <input type="text" id="trainingId" name="trainingId" required 
                            style="width: 100%; height: 40px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1px;" 
-                           placeholder="Ingrese el ID de Capacitación de 10 dígitos (ej., TR25010001)">
+                           placeholder="Enter the 10 digit Training ID (e.g., TR25010001)">
 
                     <button type="button" id="fetchTrainingBtn" 
                             style="height: 40px; width: 120px; padding: 0 16px; background-color: #f97316; color: white; border: none; border-radius: 4px;">
-                        Buscar
+                        Lookup
                     </button>
                     <p id="fetchStatus" class="text-sm mt-2 hidden"></p>
                 </div>
@@ -45,29 +45,29 @@
                 <!-- Training Information (Read-only, populated from Airtable) -->
                 <div id="trainingInfoSection" class="hidden">
                     <div class="bg-gray-100 p-4 rounded mb-4">
-                        <h3 class="font-bold mb-2">Información de la Capacitación:</h3>
+                        <h3 class="font-bold mb-2">Training Information:</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <p class="text-sm text-gray-600">Título de la Capacitación:</p>
+                                <p class="text-sm text-gray-600">Training Title:</p>
                                 <p id="displayTrainingTitle" class="font-medium">-</p>
                                 <input type="hidden" id="trainingTitle" name="trainingTitle">
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600">Fecha de la Capacitación:</p>
+                                <p class="text-sm text-gray-600">Training Date:</p>
                                 <p id="displayTrainingDate" class="font-medium">-</p>
                                 <input type="hidden" id="trainingDate" name="trainingDate">
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600">Instructor:</p>
+                                <p class="text-sm text-gray-600">Trainer:</p>
                                 <p id="displayTrainer" class="font-medium">-</p>
                                 <input type="hidden" id="trainer" name="trainer">
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600">Tipo de Capacitación:</p>
+                                <p class="text-sm text-gray-600">Training Type:</p>
                                 <select id="location" name="location" class="w-full p-2 border border-gray-300 rounded mt-1" required>
-                                    <option value="">-- Seleccione Tipo de Capacitación --</option>
-                                    <option value="Online">En Línea</option>
-                                    <option value="In Person">Presencial</option>
+                                    <option value="">-- Select Training Type --</option>
+                                    <option value="Online">Online</option>
+                                    <option value="In Person">In Person</option>
                                 </select>
                             </div>
                         </div>
@@ -77,109 +77,109 @@
 
             <!-- Trainer Evaluation -->
             <div class="form-section">
-                <div class="form-section-title">Evaluación del Instructor</div>
-                <p class="mb-3">Por favor, evalúe los siguientes aspectos del desempeño del instructor:</p>
+                <div class="form-section-title">Trainer Evaluation</div>
+                <p class="mb-3">Please rate the following aspects of the trainer's performance:</p>
                 
                 <div class="rating-group">
-                    <div class="rating-title">Conocimiento y experiencia</div>
+                    <div class="rating-title">Knowledge and expertise</div>
                     <div class="rating-options">
                         <div class="rating-option">
                             <input type="radio" id="trainer-knowledge-1" name="trainerKnowledge" value="1" required>
-                            <label for="trainer-knowledge-1" class="text-sm">Deficiente</label>
+                            <label for="trainer-knowledge-1" class="text-sm">Poor</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-knowledge-2" name="trainerKnowledge" value="2">
-                            <label for="trainer-knowledge-2" class="text-sm">Regular</label>
+                            <label for="trainer-knowledge-2" class="text-sm">Fair</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-knowledge-3" name="trainerKnowledge" value="3">
-                            <label for="trainer-knowledge-3" class="text-sm">Bueno</label>
+                            <label for="trainer-knowledge-3" class="text-sm">Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-knowledge-4" name="trainerKnowledge" value="4">
-                            <label for="trainer-knowledge-4" class="text-sm">Muy Bueno</label>
+                            <label for="trainer-knowledge-4" class="text-sm">Very Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-knowledge-5" name="trainerKnowledge" value="5">
-                            <label for="trainer-knowledge-5" class="text-sm">Excelente</label>
+                            <label for="trainer-knowledge-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
                 
                 <div class="rating-group">
-                    <div class="rating-title">Claridad en la comunicación</div>
+                    <div class="rating-title">Clarity of communication</div>
                     <div class="rating-options">
                         <div class="rating-option">
                             <input type="radio" id="trainer-clarity-1" name="trainerClarity" value="1" required>
-                            <label for="trainer-clarity-1" class="text-sm">Deficiente</label>
+                            <label for="trainer-clarity-1" class="text-sm">Poor</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-clarity-2" name="trainerClarity" value="2">
-                            <label for="trainer-clarity-2" class="text-sm">Regular</label>
+                            <label for="trainer-clarity-2" class="text-sm">Fair</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-clarity-3" name="trainerClarity" value="3">
-                            <label for="trainer-clarity-3" class="text-sm">Bueno</label>
+                            <label for="trainer-clarity-3" class="text-sm">Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-clarity-4" name="trainerClarity" value="4">
-                            <label for="trainer-clarity-4" class="text-sm">Muy Bueno</label>
+                            <label for="trainer-clarity-4" class="text-sm">Very Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-clarity-5" name="trainerClarity" value="5">
-                            <label for="trainer-clarity-5" class="text-sm">Excelente</label>
+                            <label for="trainer-clarity-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="rating-group">
-                    <div class="rating-title">Capacidad de respuesta a preguntas</div>
+                    <div class="rating-title">Responsiveness to questions</div>
                     <div class="rating-options">
                         <div class="rating-option">
                             <input type="radio" id="trainer-responsiveness-1" name="trainerResponsiveness" value="1" required>
-                            <label for="trainer-responsiveness-1" class="text-sm">Deficiente</label>
+                            <label for="trainer-responsiveness-1" class="text-sm">Poor</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-responsiveness-2" name="trainerResponsiveness" value="2">
-                            <label for="trainer-responsiveness-2" class="text-sm">Regular</label>
+                            <label for="trainer-responsiveness-2" class="text-sm">Fair</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-responsiveness-3" name="trainerResponsiveness" value="3">
-                            <label for="trainer-responsiveness-3" class="text-sm">Bueno</label>
+                            <label for="trainer-responsiveness-3" class="text-sm">Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-responsiveness-4" name="trainerResponsiveness" value="4">
-                            <label for="trainer-responsiveness-4" class="text-sm">Muy Bueno</label>
+                            <label for="trainer-responsiveness-4" class="text-sm">Very Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-responsiveness-5" name="trainerResponsiveness" value="5">
-                            <label for="trainer-responsiveness-5" class="text-sm">Excelente</label>
+                            <label for="trainer-responsiveness-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
                 
                 <div class="rating-group">
-                    <div class="rating-title">Compromiso y estilo de capacitación</div>
+                    <div class="rating-title">Engagement and training style</div>
                     <div class="rating-options">
                         <div class="rating-option">
                             <input type="radio" id="trainer-engagement-1" name="trainerEngagement" value="1" required>
-                            <label for="trainer-engagement-1" class="text-sm">Deficiente</label>
+                            <label for="trainer-engagement-1" class="text-sm">Poor</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-engagement-2" name="trainerEngagement" value="2">
-                            <label for="trainer-engagement-2" class="text-sm">Regular</label>
+                            <label for="trainer-engagement-2" class="text-sm">Fair</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-engagement-3" name="trainerEngagement" value="3">
-                            <label for="trainer-engagement-3" class="text-sm">Bueno</label>
+                            <label for="trainer-engagement-3" class="text-sm">Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-engagement-4" name="trainerEngagement" value="4">
-                            <label for="trainer-engagement-4" class="text-sm">Muy Bueno</label>
+                            <label for="trainer-engagement-4" class="text-sm">Very Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="trainer-engagement-5" name="trainerEngagement" value="5">
-                            <label for="trainer-engagement-5" class="text-sm">Excelente</label>
+                            <label for="trainer-engagement-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
@@ -187,109 +187,109 @@
 
             <!-- Content Evaluation -->
             <div class="form-section">
-                <div class="form-section-title">Evaluación del Contenido de la Capacitación</div>
-                <p class="mb-3">Por favor, evalúe los siguientes aspectos del contenido de la capacitación:</p>
+                <div class="form-section-title">Training Content Evaluation</div>
+                <p class="mb-3">Please rate the following aspects of the training content:</p>
                 
                 <div class="rating-group">
-                    <div class="rating-title">Relevancia para sus actividades diarias</div>
+                    <div class="rating-title">Relevance to your daily activities</div>
                     <div class="rating-options">
                         <div class="rating-option">
                             <input type="radio" id="content-relevance-1" name="contentRelevance" value="1" required>
-                            <label for="content-relevance-1" class="text-sm">Deficiente</label>
+                            <label for="content-relevance-1" class="text-sm">Poor</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-relevance-2" name="contentRelevance" value="2">
-                            <label for="content-relevance-2" class="text-sm">Regular</label>
+                            <label for="content-relevance-2" class="text-sm">Fair</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-relevance-3" name="contentRelevance" value="3">
-                            <label for="content-relevance-3" class="text-sm">Bueno</label>
+                            <label for="content-relevance-3" class="text-sm">Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-relevance-4" name="contentRelevance" value="4">
-                            <label for="content-relevance-4" class="text-sm">Muy Bueno</label>
+                            <label for="content-relevance-4" class="text-sm">Very Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-relevance-5" name="contentRelevance" value="5">
-                            <label for="content-relevance-5" class="text-sm">Excelente</label>
+                            <label for="content-relevance-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
                 
                 <div class="rating-group">
-                    <div class="rating-title">Profundidad del material</div>
+                    <div class="rating-title">Depth of material</div>
                     <div class="rating-options">
                         <div class="rating-option">
                             <input type="radio" id="content-depth-1" name="contentDepth" value="1" required>
-                            <label for="content-depth-1" class="text-sm">Deficiente</label>
+                            <label for="content-depth-1" class="text-sm">Poor</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-depth-2" name="contentDepth" value="2">
-                            <label for="content-depth-2" class="text-sm">Regular</label>
+                            <label for="content-depth-2" class="text-sm">Fair</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-depth-3" name="contentDepth" value="3">
-                            <label for="content-depth-3" class="text-sm">Bueno</label>
+                            <label for="content-depth-3" class="text-sm">Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-depth-4" name="contentDepth" value="4">
-                            <label for="content-depth-4" class="text-sm">Muy Bueno</label>
+                            <label for="content-depth-4" class="text-sm">Very Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-depth-5" name="contentDepth" value="5">
-                            <label for="content-depth-5" class="text-sm">Excelente</label>
+                            <label for="content-depth-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="rating-group">
-                    <div class="rating-title">Calidad de los materiales (diapositivas, documentos)</div>
+                    <div class="rating-title">Quality of materials (slides, handouts)</div>
                     <div class="rating-options">
                         <div class="rating-option">
                             <input type="radio" id="content-materials-1" name="contentMaterials" value="1" required>
-                            <label for="content-materials-1" class="text-sm">Deficiente</label>
+                            <label for="content-materials-1" class="text-sm">Poor</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-materials-2" name="contentMaterials" value="2">
-                            <label for="content-materials-2" class="text-sm">Regular</label>
+                            <label for="content-materials-2" class="text-sm">Fair</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-materials-3" name="contentMaterials" value="3">
-                            <label for="content-materials-3" class="text-sm">Bueno</label>
+                            <label for="content-materials-3" class="text-sm">Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-materials-4" name="contentMaterials" value="4">
-                            <label for="content-materials-4" class="text-sm">Muy Bueno</label>
+                            <label for="content-materials-4" class="text-sm">Very Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-materials-5" name="contentMaterials" value="5">
-                            <label for="content-materials-5" class="text-sm">Excelente</label>
+                            <label for="content-materials-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
                 
                 <div class="rating-group">
-                    <div class="rating-title">Equilibrio entre teoría y ejemplos</div>
+                    <div class="rating-title">Balance of theory and examples</div>
                     <div class="rating-options">
                         <div class="rating-option">
                             <input type="radio" id="content-balance-1" name="contentBalance" value="1" required>
-                            <label for="content-balance-1" class="text-sm">Deficiente</label>
+                            <label for="content-balance-1" class="text-sm">Poor</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-balance-2" name="contentBalance" value="2">
-                            <label for="content-balance-2" class="text-sm">Regular</label>
+                            <label for="content-balance-2" class="text-sm">Fair</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-balance-3" name="contentBalance" value="3">
-                            <label for="content-balance-3" class="text-sm">Bueno</label>
+                            <label for="content-balance-3" class="text-sm">Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-balance-4" name="contentBalance" value="4">
-                            <label for="content-balance-4" class="text-sm">Muy Bueno</label>
+                            <label for="content-balance-4" class="text-sm">Very Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="content-balance-5" name="contentBalance" value="5">
-                            <label for="content-balance-5" class="text-sm">Excelente</label>
+                            <label for="content-balance-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
@@ -297,45 +297,45 @@
             
             <!-- Overall Experience -->
             <div class="form-section">
-                <div class="form-section-title">Experiencia General</div>
+                <div class="form-section-title">Overall Experience</div>
                 
                 <div class="rating-group">
-                    <div class="rating-title">Satisfacción general con la capacitación</div>
+                    <div class="rating-title">Overall satisfaction with the training</div>
                     <div class="rating-options">
                         <div class="rating-option">
                             <input type="radio" id="overall-satisfaction-1" name="overallSatisfaction" value="1" required>
-                            <label for="overall-satisfaction-1" class="text-sm">Deficiente</label>
+                            <label for="overall-satisfaction-1" class="text-sm">Poor</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="overall-satisfaction-2" name="overallSatisfaction" value="2">
-                            <label for="overall-satisfaction-2" class="text-sm">Regular</label>
+                            <label for="overall-satisfaction-2" class="text-sm">Fair</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="overall-satisfaction-3" name="overallSatisfaction" value="3">
-                            <label for="overall-satisfaction-3" class="text-sm">Bueno</label>
+                            <label for="overall-satisfaction-3" class="text-sm">Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="overall-satisfaction-4" name="overallSatisfaction" value="4">
-                            <label for="overall-satisfaction-4" class="text-sm">Muy Bueno</label>
+                            <label for="overall-satisfaction-4" class="text-sm">Very Good</label>
                         </div>
                         <div class="rating-option">
                             <input type="radio" id="overall-satisfaction-5" name="overallSatisfaction" value="5">
-                            <label for="overall-satisfaction-5" class="text-sm">Excelente</label>
+                            <label for="overall-satisfaction-5" class="text-sm">Excellent</label>
                         </div>
                     </div>
                 </div>
                 
                 <div class="mb-4 mt-6">
-                    <label for="comments" class="block mb-2">Comentarios:</label>
-                    <textarea id="comments" name="comments" rows="5" class="w-full p-2 border border-gray-300 rounded" placeholder="Por favor, comparta sus opiniones sobre la capacitación, incluyendo lo que encontró valioso, lo que podría mejorarse y cualquier capacitación futura en la que estaría interesado."></textarea>
+                    <label for="comments" class="block mb-2">Comments:</label>
+                    <textarea id="comments" name="comments" rows="5" class="w-full p-2 border border-gray-300 rounded" placeholder="Please share your thoughts about the training, including what you found valuable, what could be improved, and any future trainings you would be interested in."></textarea>
                 </div>
                 
                 <div class="mb-4">
-                    <label class="block mb-2">¿Recomendaría esta capacitación a otros?</label>
+                    <label class="block mb-2">Would you recommend this training to others?</label>
                     <div class="recommend-options">
                         <div class="recommend-option">
                             <input type="radio" id="recommend-yes" name="recommend" value="Yes" required>
-                            <label for="recommend-yes" class="text-sm">Sí</label>
+                            <label for="recommend-yes" class="text-sm">Yes</label>
                         </div>
                         <div class="recommend-option">
                             <input type="radio" id="recommend-no" name="recommend" value="No">
@@ -349,21 +349,21 @@
             <div id="submit-message-container"></div>
             
             <div class="text-center">
-                <button type="submit" class="submit-button">ENVIAR EVALUACIÓN</button>
+                <button type="submit" class="submit-button">SUBMIT EVALUATION</button>
             </div>
         </form>
 
         <!-- Submission Confirmation (Hidden by default) -->
         <div id="submissionConfirmation" class="form-container text-center hidden">
-            <h2 class="text-xl font-bold mb-4 text-green-600">¡Gracias por sus comentarios!</h2>
-            <p class="mb-4">Su evaluación ha sido enviada exitosamente.</p>
+            <h2 class="text-xl font-bold mb-4 text-green-600">Thank You for Your Feedback!</h2>
+            <p class="mb-4">Your evaluation has been submitted successfully.</p>
         </div>
         
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-text">
-                <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. Todos los Derechos Reservados.</div>
-                <div class="footer-creator">Creado por Andres Provero</div>
+                <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
+                <div class="footer-creator">Created by Andres Provero</div>
             </div>
             <div class="footer-logo">
                 <a href="https://www.anthropic.com" target="_blank">
