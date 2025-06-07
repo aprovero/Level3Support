@@ -7,8 +7,12 @@
     <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
     <!-- External CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <!-- Your shared styles - ONLY for the frame -->
-    <link href="shared-styles.css" rel="stylesheet">
+
+    <!-- Portal frame styles from your shared CSS -->
+    <link href="css/shared-styles.css" rel="stylesheet">
+
+    <!-- Configurator specific styles -->
+    <link href="css/rej603-configurator.css" rel="stylesheet">
     
     <!-- Essential Portal Frame Styles - Inline to ensure they load -->
     <style>
@@ -675,11 +679,10 @@
             </div>
         </div>
         
-        <!-- Original DIP Switch Configurator Content - EXACTLY as it was -->
-        <div class="configurator-content">
-            <h1 class="configurator-title">REJ603 Relay DIP Switch Configurator</h1>
-            
-            <div class="mode-selector">
+        <!-- Original DIP Switch Configurator Content -->
+        <h1 class="configurator-title">REJ603 Relay DIP Switch Configurator</h1>
+        
+        <div class="mode-selector">
                 <h2>Operation Mode</h2>
                 <div class="mode-buttons">
                     <div class="mode-button active" onclick="setMode('configure')">Configure Settings</div>
@@ -991,9 +994,8 @@
                     <button class="reverse-button configurator-button" onclick="reverseEngineerConfiguration()" style="width: 100%;">🔍 Decode Current DIP Configuration</button>
                 </div>
             </div>
-        </div>
         
-        <!-- Portal Footer - Using shared styles -->
+        <!-- Portal Footer -->
         <footer class="footer">
             <div class="footer-text">
                 <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>

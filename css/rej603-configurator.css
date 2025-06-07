@@ -1,0 +1,494 @@
+/* ==========================================================================
+   REJ603 DIP Switch Configurator - Configurator-Specific Styles Only
+   Portal frame styles come from shared-styles.css
+   ========================================================================== */
+
+/* ==========================================================================
+   Portal Frame Overrides for dual logos
+   ========================================================================== */
+.abb-logo {
+    display: flex;
+    align-items: center;
+}
+
+.abb-logo img {
+    height: 60px;
+    width: auto;
+}
+
+/* Mobile override for ABB logo */
+@media (max-width: 768px) {
+    .abb-logo img {
+        height: 50px;
+    }
+}
+
+/* ==========================================================================
+   Configurator Content Styles - EXACTLY as original
+   ========================================================================== */
+.configurator-title {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: clamp(20px, 5vw, 24px);
+}
+
+.mode-selector {
+    background-color: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 2px solid #1976d2;
+}
+
+.mode-selector h2 {
+    margin: 0 0 10px 0;
+    color: #1976d2;
+    font-size: 18px;
+}
+
+.mode-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.mode-button {
+    padding: 10px 20px;
+    border: 2px solid #1976d2;
+    background-color: white;
+    color: #1976d2;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.mode-button.active {
+    background-color: #1976d2;
+    color: white;
+}
+
+.mode-button:hover {
+    background-color: #1976d2;
+    color: white;
+}
+
+.input-section {
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.input-section h2 {
+    color: #444;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-section label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.input-section input[type="number"], .input-section select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #666;
+    border-radius: 3px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.switch-reference {
+    color: #666;
+    font-size: 12px;
+    font-weight: normal;
+    margin-top: 2px;
+    margin-bottom: 8px;
+    font-style: italic;
+}
+
+.input-section input[type="number"] {
+    max-width: 250px;
+    width: 100%;
+}
+
+.input-section select {
+    max-width: 250px;
+}
+
+.switch-display {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 20px;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.switch-block-container {
+    border: 2px solid #d32f2f;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #666;
+    min-width: 0;
+    width: 100%;
+}
+
+.switch-label {
+    background-color: #d32f2f;
+    color: white;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+}
+
+.switch-info {
+    background-color: #ffffff;
+    padding: 6px;
+    font-size: 15px;
+    color: #333;
+    text-align: left;
+    height: 85px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    line-height: 1.0;
+    overflow-y: auto;
+}
+
+.switch-info strong {
+    color: #d32f2f;
+    font-size: 14px;
+    margin: 0 0 1px 0;
+    display: block;
+    line-height: 1.0;
+}
+
+.switch-info small {
+    color: #666;
+    font-size: 13px;
+    font-style: italic;
+    margin: 0;
+    line-height: 1.0;
+}
+
+.switch-info .section-break {
+    margin: 0;
+    padding: 0;
+}
+
+.switch-info .two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin: 1px 0;
+}
+
+.switch-info .column-item {
+    margin: 0;
+    line-height: 1.0;
+    font-size: 14px;
+}
+
+.switch-info .compact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin: 1px 0;
+}
+
+.switch-info .compact-item {
+    margin: 0;
+    line-height: 0.9;
+    font-size: 13px;
+}
+
+.dip-switch-bank {
+    background-color: #333;
+    padding: 10px 5px 15px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    position: relative;
+    overflow-x: hidden;
+    margin-left: 0;
+}
+
+.dip-switch {
+    width: auto;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 1px;
+    position: relative;
+    margin-bottom: 0;
+}
+
+.switch-number {
+    font-size: 11px;
+    font-weight: bold;
+    width: 10px;
+    color: white;
+    text-align: center;
+    flex-shrink: 0;
+    margin-right: 2px;
+    line-height: 1;
+}
+
+.switch-label-text {
+    font-size: 8px;
+    color: #999;
+    white-space: nowrap;
+    width: 20px;
+    text-align: right;
+    margin-right: 2px;
+    flex-shrink: 0;
+}
+
+.switch-slider {
+    width: 48px;
+    height: 16px;
+    background-color: #666;
+    border: 1px solid #999;
+    border-radius: 2px;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+    margin-left: 1px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.switch-slider:hover {
+    border-color: #fff;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3), 0 0 5px rgba(255,255,255,0.3);
+}
+
+.switch-toggle {
+    position: absolute;
+    width: 22px;
+    height: 12px;
+    background-color: white;
+    border: 1px solid #333;
+    border-radius: 2px;
+    top: 1px;
+    transition: left 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.switch-on .switch-toggle {
+    left: 26px;
+    background-color: #fff;
+}
+
+.switch-off .switch-toggle {
+    left: 1px;
+    background-color: #f0f0f0;
+}
+
+.position-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 60px;
+    font-size: 10px;
+    color: white;
+    margin-top: 2px;
+}
+
+.configurator-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.configurator-button:hover {
+    background-color: #45a049;
+}
+
+.reverse-button {
+    background-color: #ff9800;
+}
+
+.reverse-button:hover {
+    background-color: #f57c00;
+}
+
+.calculated-values {
+    background-color: #fff3cd;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ffeaa7;
+}
+
+.calculated-values h3 {
+    margin-top: 0;
+    color: #856404;
+    font-size: 16px;
+}
+
+.calculated-values p {
+    margin: 5px 0;
+    color: #856404;
+    font-size: 14px;
+}
+
+.unit {
+    color: #666;
+    font-weight: normal;
+}
+
+.mode-description {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.configurator-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    border: 1px solid #f5c6cb;
+}
+
+.configurator-error h3 {
+    margin-top: 0;
+    color: #721c24;
+    font-size: 16px;
+}
+
+/* ==========================================================================
+   Responsive Design for Configurator Only
+   ========================================================================== */
+
+/* Tablet and Desktop */
+@media (min-width: 768px) {
+    .configurator-title {
+        margin-bottom: 30px;
+    }
+    
+    .input-section label {
+        display: inline-block;
+        min-width: 200px;
+    }
+    
+    .input-section input[type="number"], .input-section select {
+        width: auto;
+    }
+    
+    .dip-switch-bank {
+        padding: 15px 8px 15px 15px;
+        gap: 3px;
+    }
+    
+    .dip-switch {
+        height: 20px;
+        padding: 0 5px;
+        margin-bottom: 0;
+    }
+    
+    .switch-number {
+        font-size: 12px;
+        width: 18px;
+        margin-right: 5px;
+    }
+    
+    .switch-label-text {
+        font-size: 10px;
+        width: 28px;
+        margin-right: 5px;
+    }
+    
+    .switch-slider {
+        width: 55px;
+        height: 18px;
+        margin-left: 3px;
+    }
+    
+    .switch-toggle {
+        width: 26px;
+        height: 14px;
+    }
+    
+    .switch-label {
+        padding: 8px;
+        font-size: 16px;
+    }
+    
+    .switch-info {
+        padding: 8px;
+        font-size: 11px;
+        min-height: 50px;
+    }
+    
+    .dip-switch-bank {
+        padding: 15px 10px;
+    }
+    
+    .dip-switch-bank {
+        padding: 15px 10px 15px 60px;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .switch-display {
+        gap: 5px;
+        padding: 5px;
+    }
+    
+    .switch-block-container {
+        border-width: 1px;
+        border-radius: 4px;
+    }
+    
+    .switch-label-text {
+        font-size: 9px;
+        margin-right: 3px;
+    }
+}
+
+@media (min-width: 480px) {
+    .switch-label-text {
+        font-size: 10px;
+        margin-right: 5px;
+    }
+    
+    .switch-slider {
+        width: 55px;
+        height: 18px;
+    }
+    
+    .switch-toggle {
+        width: 26px;
+        height: 14px;
+    }
+}
