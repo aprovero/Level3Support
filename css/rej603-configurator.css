@@ -12,29 +12,73 @@
 }
 
 .abb-logo img {
-    height: 35px;
+    height: 25px; /* Smaller ABB logo for balance */
     width: auto;
 }
 
-/* Mobile override for ABB logo - make it smaller */
+.logo img {
+    height: 35px; /* Consistent Sungrow logo size */
+    width: auto;
+}
+
+/* Keep logos side-by-side on mobile - no stacking */
 @media (max-width: 768px) {
+    .header {
+        flex-direction: row; /* Keep horizontal layout */
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+        gap: 10px;
+    }
+    
     .abb-logo img {
-        height: 35px; /* Much smaller on mobile */
+        height: 25px; /* Same size on mobile */
     }
     
     .logo img {
-        height: 35px; /* Keep Sungrow logo same size */
+        height: 35px; /* Same size on mobile */
     }
 }
 
 /* ==========================================================================
-   Radio Button Alignment Fixes for Mobile
+   Radio Button Alignment Fixes for Mobile AND Web
    ========================================================================== */
 .input-group {
     margin-bottom: 15px;
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+/* Fix radio button layout on web - make them clean and organized */
+@media (min-width: 769px) {
+    .input-group {
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .input-group > div[style*="display: flex"] {
+        display: flex !important;
+        gap: 25px;
+        align-items: center;
+    }
+    
+    .input-group label[style*="min-width: auto"] {
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+        margin: 0 !important;
+        font-size: 14px !important;
+        min-width: auto !important;
+        white-space: nowrap;
+        font-weight: normal !important;
+    }
+    
+    .input-group input[type="radio"] {
+        margin: 0 !important;
+        width: 16px;
+        height: 16px;
+    }
 }
 
 /* ==========================================================================
@@ -342,12 +386,13 @@
     background-color: #45a049;
 }
 
+/* Both buttons should be green */
 .reverse-button {
-    background-color: #ff9800;
+    background-color: #4CAF50; /* Same green as configurator button */
 }
 
 .reverse-button:hover {
-    background-color: #f57c00;
+    background-color: #45a049; /* Same hover color */
 }
 
 .calculated-values {
@@ -471,6 +516,9 @@
         width: 100%;
         font-size: 16px;
         padding: 12px;
+        box-sizing: border-box; /* Ensure consistent sizing */
+        border: 1px solid #666;
+        border-radius: 3px;
     }
 }
 

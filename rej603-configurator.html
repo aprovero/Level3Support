@@ -34,7 +34,7 @@
                 <h2>Operation Mode</h2>
                 <div class="mode-buttons">
                     <div class="mode-button active" onclick="setMode('configure')">Configure Settings</div>
-                    <div class="mode-button" onclick="setMode('reverse')">Reverse Engineer</div>
+                    <div class="mode-button" onclick="setMode('reverse')">Reverse Settings</div>
                 </div>
                 <div class="mode-description" id="modeDescription">
                     Enter your protection requirements and generate DIP switch positions.
@@ -285,7 +285,7 @@
             
             <div id="reverseMode" style="display: none;">
                 <div class="input-section">
-                    <h2>Reverse Engineering Instructions</h2>
+                    <h2>Reverse Settings Instructions</h2>
                     <p>👉 <strong>Click on each DIP switch below to match the physical relay configuration.</strong></p>
                     <p>🔍 The app will automatically decode and display the protection settings.</p>
                     <p>📋 Use this to document existing installations or troubleshoot unexpected behavior.</p>
@@ -339,7 +339,7 @@
                 </div>
                 
                 <div id="reverseDecodeButton" style="display: none; margin-top: 20px;">
-                    <button class="reverse-button configurator-button" onclick="reverseEngineerConfiguration()" style="width: 100%;">🔍 Decode Current DIP Configuration</button>
+                    <button class="reverse-button configurator-button" onclick="reverseEngineerConfiguration()" style="width: 100%;">🔍 Decode Current DIP Settings</button>
                 </div>
             </div>
         
@@ -446,7 +446,7 @@
                 document.getElementById('reverseDecodeButton').style.display = 'block';
                 modeDescription.innerHTML = 'Click DIP switches to match physical relay, then decode to see protection settings.';
                 
-                // Initialize empty switches for reverse engineering
+                // Initialize empty switches for reverse settings
                 resetSwitches();
                 displayEmptySwitches();
             }
@@ -581,7 +581,7 @@
             return bestIndex;
         }
         
-        // REVERSE ENGINEERING FUNCTIONS
+        // REVERSE SETTINGS FUNCTIONS
         function reverseBinaryPattern(pattern) {
             // Convert 4-bit pattern back to position index
             for (let i = 0; i < binaryPatterns.length; i++) {
@@ -615,7 +615,7 @@
                 displayDecodedResults();
                 
             } catch (error) {
-                console.error('Reverse engineering error:', error);
+                console.error('Reverse settings error:', error);
                 alert('Error decoding DIP switch configuration. Please check switch positions and try again.');
             }
         }
@@ -768,7 +768,7 @@
             sliderContainer.className = `switch-slider ${isOn ? 'switch-on' : 'switch-off'}`;
             sliderContainer.style.width = '50px';
             
-            // Add click handler for reverse engineering mode
+            // Add click handler for reverse settings mode
             if (currentMode === 'reverse') {
                 sliderContainer.style.cursor = 'pointer';
                 sliderContainer.onclick = function() {
