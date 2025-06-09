@@ -2,30 +2,13 @@
    Parameter Comparison Tool Specific Styles
    ========================================================================== */
 
-/* Main container */
-#parameter-comparison-container {
-    padding: 16px;
-    max-width: 1536px;
-    margin: 0 auto;
-}
-
-.comparison-tool-wrapper {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 24px;
-}
-
-.comparison-tool-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 24px;
-    color: #1f2937;
-}
-
 /* Upload section */
 .upload-section {
     margin-bottom: 24px;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    padding: 20px;
 }
 
 .upload-title {
@@ -131,6 +114,10 @@
 /* Comparison controls */
 .comparison-controls {
     margin-bottom: 24px;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    padding: 20px;
 }
 
 .controls-row {
@@ -180,7 +167,7 @@
 
 .search-input {
     width: 100%;
-    padding: 8px 32px 8px 8px;
+    padding: 8px 8px 8px 32px;
     font-size: 0.875rem;
     border: 1px solid #d1d5db;
     border-radius: 6px;
@@ -229,6 +216,10 @@
 #comparison-table-container {
     overflow-x: auto;
     margin-bottom: 24px;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    padding: 20px;
 }
 
 .table-wrapper {
@@ -242,6 +233,20 @@
     border: 1px solid #e5e7eb;
     border-radius: 6px;
     overflow: hidden;
+    table-layout: fixed;
+}
+
+.comparison-table th:first-child,
+.comparison-table td:first-child {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+}
+
+.comparison-table th:last-child,
+.comparison-table td:last-child {
+    width: 200px;
+    min-width: 200px;
 }
 
 .comparison-table th {
@@ -289,9 +294,10 @@
 
 /* Instructions */
 .instructions-container {
-    background-color: #f9fafb;
-    border-radius: 6px;
-    padding: 24px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
     margin-bottom: 24px;
 }
 
@@ -322,9 +328,10 @@
 /* Stats section */
 .stats-section {
     margin-top: 24px;
-    background-color: #f9fafb;
-    padding: 16px;
-    border-radius: 6px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
 }
 
 .stats-title {
@@ -370,11 +377,11 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    #parameter-comparison-container {
-        padding: 8px;
-    }
-    
-    .comparison-tool-wrapper {
+    .upload-section,
+    .comparison-controls,
+    #comparison-table-container,
+    .instructions-container,
+    .stats-section {
         padding: 16px;
     }
     
@@ -394,20 +401,25 @@
         font-size: 0.75rem;
     }
     
-    .stats-grid {
-        grid-template-columns: 1fr;
+    .comparison-table th:first-child,
+    .comparison-table td:first-child {
+        width: 200px;
+        min-width: 200px;
+        max-width: 200px;
     }
     
-    .instructions-container {
-        padding: 16px;
+    .comparison-table th:last-child,
+    .comparison-table td:last-child {
+        width: 150px;
+        min-width: 150px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 480px) {
-    .comparison-tool-title {
-        font-size: 1.25rem;
-    }
-    
     .upload-title,
     .instructions-title,
     .stats-title {
@@ -421,5 +433,18 @@
     .comparison-table th,
     .comparison-table td {
         padding: 6px 8px;
+    }
+    
+    .comparison-table th:first-child,
+    .comparison-table td:first-child {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+    }
+    
+    .comparison-table th:last-child,
+    .comparison-table td:last-child {
+        width: 120px;
+        min-width: 120px;
     }
 }
