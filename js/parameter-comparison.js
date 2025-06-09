@@ -29,11 +29,31 @@ let searchTerm = '';
  * ----------------
  */
 document.addEventListener('DOMContentLoaded', function() {
-    initializeParameterComparison();
+    // Add a small delay to ensure all external libraries are loaded
+    setTimeout(initializeParameterComparison, 100);
+});
+
+// Also listen for the window load event as a backup
+window.addEventListener('load', function() {
+    // Only initialize if Papa Parse is available and we haven't initialized yet
+    if (typeof Papa !== 'undefined' && document.getElementById('file-input')) {
+        const fileInput = document.getElementById('file-input');
+        // Check if event listeners are already attached
+        if (!fileInput.hasAttribute('data-initialized')) {
+            initializeParameterComparison();
+        }
+    }
 });
 
 function initializeParameterComparison() {
     console.log('Initializing Parameter Comparison Tool...');
+    
+    // Check if Papa Parse is available
+    if (typeof Papa === 'undefined') {
+        console.error('Papa Parse library is not loaded!');
+        showError('Required libraries are not loaded. Please refresh the page and try again.');
+        return;
+    }
     
     // Get DOM elements
     const fileInput = document.getElementById('file-input');
@@ -41,9 +61,16 @@ function initializeParameterComparison() {
     const searchInput = document.getElementById('search-input');
     const resetButton = document.getElementById('reset-button');
     
+    // Check if already initialized
+    if (fileInput && fileInput.hasAttribute('data-initialized')) {
+        console.log('Already initialized');
+        return;
+    }
+    
     // Add event listeners
     if (fileInput) {
         fileInput.addEventListener('change', handleFileUpload);
+        fileInput.setAttribute('data-initialized', 'true');
     }
     
     if (showDifferencesCheckbox) {
@@ -68,6 +95,12 @@ function initializeParameterComparison() {
 async function handleFileUpload(event) {
     const uploadedFile = event.target.files[0];
     if (!uploadedFile) return;
+    
+    // Check if Papa Parse is available
+    if (typeof Papa === 'undefined') {
+        showError('Papa Parse library is not available. Please refresh the page and try again.');
+        return;
+    }
     
     showLoading(true);
     clearError();
@@ -121,9 +154,14 @@ function processCSVData(fileName, data) {
         // Skip rows that don't have required fields
         if (!row['Parameter Name'] || !row['Current Value']) return;
         
-        paramMap[row['Parameter Name']] = {
-            value: row['Current Value'],
-            illustrate: row['Illustrate'] || ''
+        const paramName = String(row['Parameter Name']).trim();
+        const rawValue = String(row['Current Value']).trim();
+        const illustrate = row['Illustrate'] ? String(row['Illustrate']).trim() : '';
+        
+        paramMap[paramName] = {
+            value: rawValue,                    // Keep original value for display
+            normalizedValue: normalizeValue(rawValue),  // Normalized value for comparison
+            illustrate: illustrate
         };
     });
     
@@ -178,13 +216,28 @@ function generateComparisonData() {
         // Store parameters from each file
         fileNames.forEach(fileName => {
             const file = files[fileName];
-            paramData.values[file.displayName] = file.paramMap[param] || { value: 'N/A', illustrate: '' };
+            const paramInfo = file.paramMap[param];
+            if (paramInfo) {
+                paramData.values[file.displayName] = {
+                    value: paramInfo.value,                    // Original value for display
+                    normalizedValue: paramInfo.normalizedValue, // Normalized for comparison
+                    illustrate: paramInfo.illustrate
+                };
+            } else {
+                paramData.values[file.displayName] = {
+                    value: 'N/A',
+                    normalizedValue: 'N/A',
+                    illustrate: ''
+                };
+            }
         });
         
-        // Check if there are differences in parameter values
-        const uniqueValues = new Set();
-        Object.values(paramData.values).forEach(v => uniqueValues.add(v.value));
-        paramData.hasDifferences = uniqueValues.size > 1;
+        // Check if there are differences using NORMALIZED values
+        const uniqueNormalizedValues = new Set();
+        Object.values(paramData.values).forEach(v => {
+            uniqueNormalizedValues.add(v.normalizedValue);
+        });
+        paramData.hasDifferences = uniqueNormalizedValues.size > 1;
         
         return paramData;
     });
@@ -254,8 +307,13 @@ function generateTableBody(bodyElement, data) {
         
         const valuesHTML = fileDisplayNames.map(displayName => {
             const paramValue = param.values[displayName]?.value || 'N/A';
-            const otherValues = Object.values(param.values).map(v => v.value);
-            const isDifferent = param.hasDifferences && otherValues.some(v => v !== paramValue && v !== 'N/A');
+            const normalizedValue = param.values[displayName]?.normalizedValue || 'N/A';
+            
+            // Check if this specific value is different from others using normalized values
+            const otherNormalizedValues = Object.values(param.values).map(v => v.normalizedValue);
+            const isDifferent = param.hasDifferences && 
+                               normalizedValue !== 'N/A' && 
+                               otherNormalizedValues.some(v => v !== normalizedValue && v !== 'N/A');
             
             let cellClass = '';
             if (paramValue === 'N/A') {
@@ -330,7 +388,7 @@ function updateStats() {
     const totalParams = allParameters.length;
     const differentParams = comparisonData.filter(p => p.hasDifferences).length;
     const missingParams = comparisonData.filter(p => 
-        Object.values(p.values).some(v => v.value === 'N/A')
+        Object.values(p.values).some(v => v.normalizedValue === 'N/A')
     ).length;
     
     // Update display
@@ -431,6 +489,68 @@ function clearError() {
  * 10. Utility Functions
  * --------------------
  */
+
+/**
+ * Normalize a parameter value for comparison
+ * @param {string} value - The raw value to normalize
+ * @returns {string} - The normalized value
+ */
+function normalizeValue(value) {
+    if (!value || value === 'N/A') return value;
+    
+    // Convert to string and trim whitespace
+    let normalized = String(value).trim();
+    
+    // Handle empty values
+    if (normalized === '' || normalized === 'null' || normalized === 'undefined') {
+        return 'N/A';
+    }
+    
+    // Try to normalize as a number
+    const numValue = parseFloat(normalized);
+    if (!isNaN(numValue)) {
+        // If it's a valid number, normalize decimal representation
+        // Remove trailing zeros and unnecessary decimal points
+        if (Number.isInteger(numValue)) {
+            const result = numValue.toString();
+            // Log normalization for debugging (only for different results)
+            if (result !== normalized) {
+                console.log(`Normalized number: "${normalized}" → "${result}"`);
+            }
+            return result;
+        } else {
+            // For decimals, keep reasonable precision and remove trailing zeros
+            const result = parseFloat(numValue.toFixed(10)).toString();
+            if (result !== normalized) {
+                console.log(`Normalized decimal: "${normalized}" → "${result}"`);
+            }
+            return result;
+        }
+    }
+    
+    // Handle boolean-like values
+    const lowerValue = normalized.toLowerCase();
+    if (lowerValue === 'true' || lowerValue === 'yes' || lowerValue === 'on' || lowerValue === '1') {
+        if (normalized !== 'true') {
+            console.log(`Normalized boolean: "${normalized}" → "true"`);
+        }
+        return 'true';
+    }
+    if (lowerValue === 'false' || lowerValue === 'no' || lowerValue === 'off' || lowerValue === '0') {
+        if (normalized !== 'false') {
+            console.log(`Normalized boolean: "${normalized}" → "false"`);
+        }
+        return 'false';
+    }
+    
+    // For other text values, normalize case and whitespace
+    const result = normalized.toLowerCase().replace(/\s+/g, ' ');
+    if (result !== normalized) {
+        console.log(`Normalized text: "${normalized}" → "${result}"`);
+    }
+    return result;
+}
+
 function removeFile(fileName) {
     delete files[fileName];
     updateUploadedFilesList();
