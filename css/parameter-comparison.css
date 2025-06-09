@@ -2,13 +2,30 @@
    Parameter Comparison Tool Specific Styles
    ========================================================================== */
 
+/* Main container */
+#parameter-comparison-container {
+    padding: 16px;
+    max-width: 1536px;
+    margin: 0 auto;
+}
+
+.comparison-tool-wrapper {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+}
+
+.comparison-tool-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 24px;
+    color: #1f2937;
+}
+
 /* Upload section */
 .upload-section {
     margin-bottom: 24px;
-    background-color: white;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    padding: 20px;
 }
 
 .upload-title {
@@ -114,10 +131,6 @@
 /* Comparison controls */
 .comparison-controls {
     margin-bottom: 24px;
-    background-color: white;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    padding: 20px;
 }
 
 .controls-row {
@@ -216,10 +229,6 @@
 #comparison-table-container {
     overflow-x: auto;
     margin-bottom: 24px;
-    background-color: white;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    padding: 20px;
 }
 
 .table-wrapper {
@@ -280,10 +289,9 @@
 
 /* Instructions */
 .instructions-container {
-    background-color: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 20px;
+    background-color: #f9fafb;
+    border-radius: 6px;
+    padding: 24px;
     margin-bottom: 24px;
 }
 
@@ -314,10 +322,9 @@
 /* Stats section */
 .stats-section {
     margin-top: 24px;
-    background-color: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 20px;
+    background-color: #f9fafb;
+    padding: 16px;
+    border-radius: 6px;
 }
 
 .stats-title {
@@ -363,11 +370,11 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .upload-section,
-    .comparison-controls,
-    #comparison-table-container,
-    .instructions-container,
-    .stats-section {
+    #parameter-comparison-container {
+        padding: 8px;
+    }
+    
+    .comparison-tool-wrapper {
         padding: 16px;
     }
     
@@ -390,9 +397,17 @@
     .stats-grid {
         grid-template-columns: 1fr;
     }
+    
+    .instructions-container {
+        padding: 16px;
+    }
 }
 
 @media (max-width: 480px) {
+    .comparison-tool-title {
+        font-size: 1.25rem;
+    }
+    
     .upload-title,
     .instructions-title,
     .stats-title {

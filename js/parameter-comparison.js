@@ -29,18 +29,29 @@ let searchTerm = '';
  * ----------------
  */
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing Parameter Comparison Tool...');
-    initializeParameterComparison();
+    // Add a small delay to ensure all external libraries are loaded
+    setTimeout(initializeParameterComparison, 100);
+});
+
+// Also listen for the window load event as a backup
+window.addEventListener('load', function() {
+    // Only initialize if Papa Parse is available and we haven't initialized yet
+    if (typeof Papa !== 'undefined' && document.getElementById('file-input')) {
+        const fileInput = document.getElementById('file-input');
+        // Check if event listeners are already attached
+        if (!fileInput.hasAttribute('data-initialized')) {
+            initializeParameterComparison();
+        }
+    }
 });
 
 function initializeParameterComparison() {
     console.log('Initializing Parameter Comparison Tool...');
-    console.log('Papa Parse available:', typeof Papa !== 'undefined');
     
     // Check if Papa Parse is available
     if (typeof Papa === 'undefined') {
-        console.error('Papa Parse library is not loaded! Make sure papaparse.min.js is in your /js/ folder.');
-        showError('Papa Parse library not found. Please ensure papaparse.min.js is in your js/ folder.');
+        console.error('Papa Parse library is not loaded!');
+        showError('Required libraries are not loaded. Please refresh the page and try again.');
         return;
     }
     
@@ -50,9 +61,16 @@ function initializeParameterComparison() {
     const searchInput = document.getElementById('search-input');
     const resetButton = document.getElementById('reset-button');
     
+    // Check if already initialized
+    if (fileInput && fileInput.hasAttribute('data-initialized')) {
+        console.log('Already initialized');
+        return;
+    }
+    
     // Add event listeners
     if (fileInput) {
         fileInput.addEventListener('change', handleFileUpload);
+        fileInput.setAttribute('data-initialized', 'true');
     }
     
     if (showDifferencesCheckbox) {
@@ -77,6 +95,12 @@ function initializeParameterComparison() {
 async function handleFileUpload(event) {
     const uploadedFile = event.target.files[0];
     if (!uploadedFile) return;
+    
+    // Check if Papa Parse is available
+    if (typeof Papa === 'undefined') {
+        showError('Papa Parse library is not available. Please refresh the page and try again.');
+        return;
+    }
     
     showLoading(true);
     clearError();
