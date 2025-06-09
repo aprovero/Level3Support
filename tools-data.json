@@ -1,0 +1,52 @@
+{
+  "tools": [
+    {
+      "id": 1,
+      "name": "Power System Calculator",
+      "category": "Calculator",
+      "description": "Calculate power ratings, efficiency, and performance metrics for PV systems",
+      "url": "https://example.com/calculator",
+      "notes": "Most used tool by service team"
+    },
+    {
+      "id": 2,
+      "name": "Error Code Database",
+      "category": "Reference",
+      "description": "Searchable database of all system error codes and troubleshooting steps",
+      "url": "https://support.sungrowpower.com/errorcode",
+      "notes": "Updated weekly with new codes"
+    },
+    {
+      "id": 3,
+      "name": "Service Report Template",
+      "category": "Template",
+      "description": "Standardized service report template for customer documentation",
+      "url": "/downloads/service-report-template.docx",
+      "notes": "Download and fill out for each service call"
+    },
+    {
+      "id": 4,
+      "name": "SUNGROW Resource Center",
+      "category": "External Link",
+      "description": "Official SUNGROW technical documentation and resources",
+      "url": "https://support.sungrowpower.com/home",
+      "notes": "Official support portal"
+    },
+    {
+      "id": 5,
+      "name": "Maintenance Checklist",
+      "category": "Template",
+      "description": "Interactive checklist for routine maintenance procedures",
+      "url": "/checklists/maintenance.html",
+      "notes": "Print or use digitally on tablet"
+    },
+    {
+      "id": 6,
+      "name": "String Configuration Tool",
+      "category": "Calculator",
+      "description": "Optimize string configurations and calculate maximum string lengths",
+      "url": "/tools/string-calculator.html",
+      "notes": "Includes environmental factors"
+    }
+  ]
+}
