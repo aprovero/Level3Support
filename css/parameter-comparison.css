@@ -71,7 +71,7 @@
 
 .uploaded-files-list {
     margin-bottom: 8px;
-    background-color: white;
+    background-color: #f8f9fa;
     border-radius: 8px;
     padding: 12px;
     border: 1px solid #b3e5fc;
@@ -128,7 +128,7 @@
     font-weight: 600;
     text-align: center;
     padding: 12px;
-    background-color: white;
+    background-color: #f8f9fa;
     border-radius: 6px;
     border: 1px solid #b3e5fc;
 }
@@ -147,7 +147,7 @@
 /* Comparison controls */
 .comparison-controls {
     margin-bottom: 24px;
-    background-color: white;
+    background-color: #f8f9fa;
     border-radius: 8px;
     border: 1px solid #e5e7eb;
     padding: 20px;
@@ -249,7 +249,7 @@
 #comparison-table-container {
     overflow-x: auto;
     margin-bottom: 24px;
-    background-color: white;
+    background-color: #f8f9fa;
     border-radius: 8px;
     border: 1px solid #e5e7eb;
     padding: 20px;
@@ -267,19 +267,26 @@
     border-radius: 6px;
     overflow: hidden;
     table-layout: fixed;
+    width: 100%;
 }
 
 .comparison-table th:first-child,
 .comparison-table td:first-child {
-    width: 300px;
-    min-width: 300px;
-    max-width: 300px;
+    width: 350px !important;
+    min-width: 350px !important;
+    max-width: 350px !important;
 }
 
 .comparison-table th:last-child,
 .comparison-table td:last-child {
-    width: 200px;
-    min-width: 200px;
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+}
+
+.comparison-table th,
+.comparison-table td {
+    box-sizing: border-box;
 }
 
 .comparison-table th {
@@ -327,7 +334,7 @@
 
 /* Instructions */
 .instructions-container {
-    background-color: white;
+    background-color: #f8f9fa;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 20px;
@@ -361,7 +368,7 @@
 /* Stats section */
 .stats-section {
     margin-top: 24px;
-    background-color: white;
+    background-color: #f8f9fa;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 20px;
@@ -434,21 +441,28 @@
     
     .comparison-table th,
     .comparison-table td {
-        padding: 8px 12px;
+        padding: 8px 6px;
         font-size: 0.75rem;
     }
     
     .comparison-table th:first-child,
     .comparison-table td:first-child {
-        width: 200px;
-        min-width: 200px;
-        max-width: 200px;
+        width: 250px !important;
+        min-width: 250px !important;
+        max-width: 250px !important;
     }
     
     .comparison-table th:last-child,
     .comparison-table td:last-child {
-        width: 150px;
-        min-width: 150px;
+        width: 120px !important;
+        min-width: 120px !important;
+        max-width: 120px !important;
+    }
+    
+    .parameter-name {
+        width: 250px !important;
+        padding: 8px 6px !important;
+        font-size: 0.75rem;
     }
     
     .stats-grid {
@@ -473,19 +487,26 @@
     
     .comparison-table th,
     .comparison-table td {
-        padding: 6px 8px;
+        padding: 6px 4px;
     }
     
     .comparison-table th:first-child,
     .comparison-table td:first-child {
-        width: 150px;
-        min-width: 150px;
-        max-width: 150px;
+        width: 180px !important;
+        min-width: 180px !important;
+        max-width: 180px !important;
     }
     
     .comparison-table th:last-child,
     .comparison-table td:last-child {
-        width: 120px;
-        min-width: 120px;
+        width: 100px !important;
+        min-width: 100px !important;
+        max-width: 100px !important;
+    }
+    
+    .parameter-name {
+        width: 180px !important;
+        padding: 6px 4px !important;
+        font-size: 0.7rem;
     }
 }
