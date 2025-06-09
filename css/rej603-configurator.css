@@ -32,11 +32,11 @@
     }
     
     .abb-logo img {
-        height: 32px; /* Proportionally smaller on mobile */
+        height: 25px; /* Proportionally smaller on mobile */
     }
     
     .logo img {
-        width: 100px; /* Match mobile size from shared-styles.css */
+        width: 120px; /* Match mobile size from shared-styles.css */
     }
 }
 
