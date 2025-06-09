@@ -1,0 +1,425 @@
+/* ==========================================================================
+   Parameter Comparison Tool Specific Styles
+   ========================================================================== */
+
+/* Main container */
+#parameter-comparison-container {
+    padding: 16px;
+    max-width: 1536px;
+    margin: 0 auto;
+}
+
+.comparison-tool-wrapper {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+}
+
+.comparison-tool-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 24px;
+    color: #1f2937;
+}
+
+/* Upload section */
+.upload-section {
+    margin-bottom: 24px;
+}
+
+.upload-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.upload-input-container {
+    margin-bottom: 16px;
+}
+
+.file-input {
+    display: block;
+    width: 100%;
+    font-size: 0.875rem;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 8px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.file-input::-webkit-file-upload-button {
+    margin-right: 16px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    cursor: pointer;
+}
+
+.file-input::-webkit-file-upload-button:hover {
+    background-color: #dbeafe;
+}
+
+/* Uploaded files section */
+.uploaded-files-section {
+    margin-bottom: 16px;
+}
+
+.uploaded-files-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.uploaded-files-list {
+    margin-bottom: 8px;
+}
+
+.no-files-message {
+    color: #6b7280;
+    font-style: italic;
+    margin: 0;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.file-item-name {
+    margin-right: 8px;
+    color: #374151;
+}
+
+.remove-file-btn {
+    font-size: 0.75rem;
+    color: #dc2626;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.remove-file-btn:hover {
+    color: #b91c1c;
+    text-decoration: underline;
+}
+
+/* Loading and error messages */
+.loading-message {
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.error-message {
+    color: #dc2626;
+    font-weight: 500;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-top: 8px;
+}
+
+/* Comparison controls */
+.comparison-controls {
+    margin-bottom: 24px;
+}
+
+.controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111827;
+}
+
+.differences-checkbox {
+    width: 16px;
+    height: 16px;
+    color: #2563eb;
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    margin: 0;
+    margin-right: 8px;
+}
+
+.differences-checkbox:focus {
+    box-shadow: 0 0 0 2px #93c5fd;
+}
+
+.search-container {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 32px 8px 8px;
+    font-size: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    margin: 0;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px #2563eb;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+    color: #6b7280;
+    pointer-events: none;
+}
+
+.reset-button {
+    padding: 8px 16px;
+    background-color: #e5e7eb;
+    color: #1f2937;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    margin: 0;
+}
+
+.reset-button:hover {
+    background-color: #d1d5db;
+}
+
+.comparison-status {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 8px;
+}
+
+/* Comparison table */
+#comparison-table-container {
+    overflow-x: auto;
+    margin-bottom: 24px;
+}
+
+.table-wrapper {
+    min-width: 100%;
+}
+
+.comparison-table {
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.comparison-table th {
+    padding: 12px 24px;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.comparison-table td {
+    padding: 16px 24px;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.comparison-table tr:last-child td {
+    border-bottom: none;
+}
+
+.parameter-name {
+    font-weight: 500;
+    color: #111827;
+}
+
+.row-different {
+    background-color: #fef3c7;
+}
+
+.value-different {
+    font-weight: bold;
+    color: #dc2626;
+}
+
+.value-na {
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* Instructions */
+.instructions-container {
+    background-color: #f9fafb;
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.instructions-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.instructions-list {
+    margin-left: 20px;
+    margin-bottom: 16px;
+    list-style: decimal;
+}
+
+.instructions-list li {
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.instructions-note {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+/* Stats section */
+.stats-section {
+    margin-top: 24px;
+    background-color: #f9fafb;
+    padding: 16px;
+    border-radius: 6px;
+}
+
+.stats-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.stat-card {
+    background-color: white;
+    padding: 16px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0 0 4px 0;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+    color: #111827;
+}
+
+.stat-different .stat-value {
+    color: #d97706;
+}
+
+.stat-missing .stat-value {
+    color: #dc2626;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #parameter-comparison-container {
+        padding: 8px;
+    }
+    
+    .comparison-tool-wrapper {
+        padding: 16px;
+    }
+    
+    .controls-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    
+    .search-container {
+        max-width: none;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .instructions-container {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .comparison-tool-title {
+        font-size: 1.25rem;
+    }
+    
+    .upload-title,
+    .instructions-title,
+    .stats-title {
+        font-size: 1rem;
+    }
+    
+    .comparison-table {
+        font-size: 0.75rem;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+        padding: 6px 8px;
+    }
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoE Level 3 - Parameter Comparison Tool</title>
+    <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
+    <!-- External CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <!-- Your shared styles -->
+    <link href="css/shared-styles.css" rel="stylesheet">
+    <!-- Parameter Comparison Tool specific styles -->
+    <link href="css/parameter-comparison.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="images/LOGO.png" alt="Logo">
+            </div>
+            <div class="header-icons">
+                <div class="training-icon">
+                    <a href="training.html">
+                        <img src="images/training-icon.png" alt="Training Materials">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <a href="index.html" class="back-link">← Back to the Request Form</a>
+        
+        <!-- Parameter Comparison Tool Container -->
+        <div id="parameter-comparison-container">
+            <div class="comparison-tool-wrapper">
+                <h2 class="comparison-tool-title">Parameter Comparison Tool</h2>
+                
+                <!-- File upload section -->
+                <div class="upload-section">
+                    <h3 class="upload-title">Upload CSV Files (2-3 recommended)</h3>
+                    <div class="upload-input-container">
+                        <input
+                            type="file"
+                            id="file-input"
+                            accept=".csv"
+                            class="file-input"
+                        />
+                    </div>
+                    
+                    <!-- Show uploaded files -->
+                    <div class="uploaded-files-section">
+                        <h4 class="uploaded-files-title">Uploaded Files (<span id="file-count">0</span>):</h4>
+                        <div id="uploaded-files-list" class="uploaded-files-list">
+                            <p class="no-files-message">No files uploaded yet</p>
+                        </div>
+                    </div>
+                    
+                    <div id="loading-message" class="loading-message" style="display: none;">Loading...</div>
+                    <div id="error-message" class="error-message" style="display: none;"></div>
+                </div>
+                
+                <!-- Comparison controls -->
+                <div id="comparison-controls" class="comparison-controls" style="display: none;">
+                    <div class="controls-row">
+                        <div class="checkbox-container">
+                            <label class="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    id="show-differences-only"
+                                    class="differences-checkbox"
+                                />
+                                <span>Show only different parameters</span>
+                            </label>
+                        </div>
+                        
+                        <div class="search-container">
+                            <input
+                                type="text"
+                                id="search-input"
+                                placeholder="Search parameters..."
+                                class="search-input"
+                            />
+                            <div class="search-icon">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <button id="reset-button" class="reset-button">
+                            Reset All
+                        </button>
+                    </div>
+                    
+                    <div id="comparison-status" class="comparison-status">
+                        <span id="parameters-shown">0</span> parameters shown
+                        <span id="differences-note" style="display: none;"> (only showing differences)</span>
+                        <span id="search-note" style="display: none;"></span>
+                    </div>
+                </div>
+                
+                <!-- Comparison table -->
+                <div id="comparison-table-container" style="display: none;">
+                    <div class="table-wrapper">
+                        <table id="comparison-table" class="comparison-table">
+                            <thead id="table-header">
+                                <!-- Dynamic header will be inserted here -->
+                            </thead>
+                            <tbody id="table-body">
+                                <!-- Dynamic rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Instructions -->
+                <div id="instructions" class="instructions-container">
+                    <h3 class="instructions-title">How to Use This Tool</h3>
+                    <ol class="instructions-list">
+                        <li>Upload 2 or 3 CSV files containing system parameters</li>
+                        <li>The tool will automatically compare all parameters across files</li>
+                        <li>Use the checkbox to show only parameters that differ between files</li>
+                        <li>Use the search box to find specific parameters</li>
+                        <li>Parameters with differences will be highlighted</li>
+                    </ol>
+                    <p class="instructions-note">
+                        This tool is designed to help you quickly identify differences in parameter settings across multiple system configuration files.
+                    </p>
+                </div>
+                
+                <!-- Stats section -->
+                <div id="stats-section" class="stats-section" style="display: none;">
+                    <h3 class="stats-title">Summary</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <p class="stat-label">Total Parameters</p>
+                            <p id="total-parameters" class="stat-value">0</p>
+                        </div>
+                        <div class="stat-card stat-different">
+                            <p class="stat-label">Different Parameters</p>
+                            <p id="different-parameters" class="stat-value">0</p>
+                        </div>
+                        <div class="stat-card stat-missing">
+                            <p class="stat-label">Missing Parameters</p>
+                            <p id="missing-parameters" class="stat-value">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-text">
+                <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
+                <div class="footer-creator">Created by Andres Provero</div>
+            </div>
+            <div class="footer-logo">
+                <a href="https://www.anthropic.com" target="_blank">
+                    <img src="images/CLAUDE_LOGO.png" alt="Claude Logo">
+                </a>
+                <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
+            </div>
+        </footer>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/papaparse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    
+    <!-- Your scripts -->
+    <script src="js/common.js"></script>
+    <script src="js/parameter-comparison.js"></script>
+</body>
+</html>
