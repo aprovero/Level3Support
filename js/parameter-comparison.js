@@ -507,6 +507,25 @@ function normalizeValue(value) {
         return 'N/A';
     }
     
+    // Normalize case for text comparison
+    const lowerValue = normalized.toLowerCase();
+    
+    // Handle Enable/Open equivalents
+    if (lowerValue === 'enable' || lowerValue === 'open' || lowerValue === 'enabled' || lowerValue === 'opened') {
+        if (normalized !== 'enable') {
+            console.log(`Normalized enable/open: "${normalized}" → "enable"`);
+        }
+        return 'enable';
+    }
+    
+    // Handle Disable/Close equivalents
+    if (lowerValue === 'disable' || lowerValue === 'close' || lowerValue === 'disabled' || lowerValue === 'closed') {
+        if (normalized !== 'disable') {
+            console.log(`Normalized disable/close: "${normalized}" → "disable"`);
+        }
+        return 'disable';
+    }
+    
     // Try to normalize as a number
     const numValue = parseFloat(normalized);
     if (!isNaN(numValue)) {
@@ -530,7 +549,6 @@ function normalizeValue(value) {
     }
     
     // Handle boolean-like values
-    const lowerValue = normalized.toLowerCase();
     if (lowerValue === 'true' || lowerValue === 'yes' || lowerValue === 'on' || lowerValue === '1') {
         if (normalized !== 'true') {
             console.log(`Normalized boolean: "${normalized}" → "true"`);
@@ -542,6 +560,21 @@ function normalizeValue(value) {
             console.log(`Normalized boolean: "${normalized}" → "false"`);
         }
         return 'false';
+    }
+    
+    // Handle common status equivalents
+    if (lowerValue === 'active' || lowerValue === 'running' || lowerValue === 'start' || lowerValue === 'started') {
+        if (normalized !== 'active') {
+            console.log(`Normalized active status: "${normalized}" → "active"`);
+        }
+        return 'active';
+    }
+    
+    if (lowerValue === 'inactive' || lowerValue === 'stopped' || lowerValue === 'stop' || lowerValue === 'halt' || lowerValue === 'halted') {
+        if (normalized !== 'inactive') {
+            console.log(`Normalized inactive status: "${normalized}" → "inactive"`);
+        }
+        return 'inactive';
     }
     
     // For other text values, normalize case and whitespace
