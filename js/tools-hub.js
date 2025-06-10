@@ -214,9 +214,12 @@ function createToolTile(tool) {
     
     // Add click handler
     if (tool.url) {
-        tile.addEventListener('click', function() {
+        tile.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Tile clicked:', tool.name, 'URL:', tool.url);
+            
             if (isExternal) {
-                window.open(tool.url, '_blank');
+                window.open(tool.url, '_blank', 'noopener,noreferrer');
             } else {
                 window.location.href = tool.url;
             }
@@ -224,21 +227,20 @@ function createToolTile(tool) {
         
         // Add cursor pointer
         tile.style.cursor = 'pointer';
+        
+        // Add subtle hover effect
+        tile.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        tile.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
     } else {
         tile.style.cursor = 'default';
         tile.style.opacity = '0.6';
+        console.log('No URL available for:', tool.name);
     }
-    
-    // Add hover effects
-    tile.addEventListener('mouseenter', function() {
-        if (tool.url) {
-            this.style.borderColor = 'var(--primary-orange)';
-        }
-    });
-    
-    tile.addEventListener('mouseleave', function() {
-        this.style.borderColor = 'rgba(0,0,0,0.1)';
-    });
     
     return tile;
 }
