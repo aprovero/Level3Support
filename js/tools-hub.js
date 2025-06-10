@@ -28,9 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingIndicator: !!loadingIndicator 
     });
     
-    // Initialize admin functionality
-    initializeAdminControls();
-    
     // Load tools data
     loadToolsData();
     
@@ -59,7 +56,6 @@ function loadToolsData() {
             if (data && data.tools && data.tools.length > 0) {
                 allTools = data.tools;
                 renderTools(allTools);
-                updateStats();
             } else {
                 console.warn('No tools data found in JSON file');
                 handleError('No tools data available.');
@@ -116,7 +112,6 @@ function loadFallbackData() {
     ];
     
     renderTools(allTools);
-    updateStats();
 }
 
 /**
@@ -197,16 +192,6 @@ function getCategoryClass(category) {
 }
 
 /**
- * Update statistics display
- */
-function updateStats() {
-    const totalToolsElement = document.getElementById('total-tools');
-    if (totalToolsElement) {
-        totalToolsElement.textContent = allTools.length;
-    }
-}
-
-/**
  * Show or hide loading state
  */
 function showLoadingState(isLoading) {
@@ -235,95 +220,4 @@ function handleError(message) {
     if (emptyState) {
         emptyState.style.display = 'none';
     }
-}
-
-/**
- * Initialize admin controls
- */
-function initializeAdminControls() {
-    const adminButton = document.getElementById('admin-button');
-    const adminFormContainer = document.getElementById('admin-form-container');
-    const cancelButton = document.getElementById('cancel-button');
-    const adminForm = document.getElementById('admin-form');
-    
-    console.log('Admin elements:', { 
-        adminButton: !!adminButton, 
-        adminFormContainer: !!adminFormContainer,
-        cancelButton: !!cancelButton,
-        adminForm: !!adminForm
-    });
-    
-    // Admin button click handler
-    if (adminButton && adminFormContainer) {
-        adminButton.addEventListener('click', function() {
-            console.log('Admin button clicked');
-            adminFormContainer.classList.toggle('visible');
-            
-            // Focus on first input field when form is shown
-            if (adminFormContainer.classList.contains('visible')) {
-                const firstInput = document.getElementById('tool-name');
-                if (firstInput) {
-                    setTimeout(() => firstInput.focus(), 50);
-                }
-            }
-        });
-    }
-    
-    // Cancel button click handler
-    if (cancelButton && adminFormContainer) {
-        cancelButton.addEventListener('click', function() {
-            console.log('Cancel button clicked');
-            adminFormContainer.classList.remove('visible');
-            
-            // Reset form
-            if (adminForm) {
-                adminForm.reset();
-            }
-        });
-    }
-    
-    // Form submission
-    if (adminForm) {
-        adminForm.addEventListener('submit', handleAdminFormSubmit);
-    }
-}
-
-/**
- * Handle admin form submission
- */
-function handleAdminFormSubmit(e) {
-    e.preventDefault();
-    console.log('Admin form submitted');
-    
-    // Get form data
-    const formData = new FormData(e.target);
-    const newTool = {
-        id: allTools.length + 1,
-        name: formData.get('name'),
-        category: formData.get('category'),
-        description: formData.get('description'),
-        url: formData.get('url') || '',
-        notes: formData.get('notes') || ''
-    };
-    
-    // Add to tools data (this will only persist until page reload)
-    allTools.push(newTool);
-    
-    // Re-render tools
-    renderTools(allTools);
-    updateStats();
-    
-    // Reset form and hide it
-    e.target.reset();
-    const adminFormContainer = document.getElementById('admin-form-container');
-    if (adminFormContainer) {
-        adminFormContainer.classList.remove('visible');
-    }
-    
-    // Show success message with instructions
-    const message = `Tool "${newTool.name}" has been added successfully!\n\nNote: To make this permanent, add it to your tools-data.json file:\n${JSON.stringify(newTool, null, 2)}`;
-    alert(message);
-    
-    console.log('New tool added:', newTool);
-    console.log('JSON to add to file:', JSON.stringify(newTool, null, 2));
 }
