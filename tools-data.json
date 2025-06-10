@@ -2,51 +2,67 @@
   "tools": [
     {
       "id": 1,
-      "name": "Power System Calculator",
-      "category": "Calculator",
-      "description": "Calculate power ratings, efficiency, and performance metrics for PV systems",
-      "url": "https://example.com/calculator",
-      "notes": "Most used tool by service team"
+      "name": "CoE Support Request",
+      "category": "Form",
+      "description": "Request form for: Support, RCA, Training and other CoE services",
+      "url": "https://coelatam.onrender.com/support-request.html",
+      "notes": "Use for all CoE-related requests"
     },
     {
       "id": 2,
-      "name": "Error Code Database",
+      "name": "CoE Technical Documentation Database",
       "category": "Reference",
-      "description": "Searchable database of all system error codes and troubleshooting steps",
-      "url": "https://support.sungrowpower.com/errorcode",
-      "notes": "Updated weekly with new codes"
+      "description": "Searchable database of technical documents, manuals, and troubleshooting guides verified by CoE LATAM",
+      "url": "https://coelatam.onrender.com/documentation.html",
+      "notes": "Updated monthly"
     },
     {
       "id": 3,
-      "name": "Service Report Template",
-      "category": "Template",
-      "description": "Standardized service report template for customer documentation",
-      "url": "/downloads/service-report-template.docx",
-      "notes": "Download and fill out for each service call"
+      "name": "CoE LATAM Training Catalog",
+      "category": "Catalog",
+      "description": "Available training courses and resources provided by CoE LATAM",
+      "url": "https://coelatam.onrender.com/training.html",
+      "notes": ""
     },
     {
       "id": 4,
-      "name": "SUNGROW Resource Center",
-      "category": "External Link",
-      "description": "Official SUNGROW technical documentation and resources",
-      "url": "https://support.sungrowpower.com/home",
-      "notes": "Official support portal"
+      "name": "Training Evaluation Form",
+      "category": "Form",
+      "description": "Official CoE LATAM training evaluation form",
+      "url": "https://coelatam.onrender.com/evaluation.html",
+      "notes": "Available in English, Spanish and Portuguese"
     },
     {
       "id": 5,
-      "name": "Maintenance Checklist",
-      "category": "Template",
-      "description": "Interactive checklist for routine maintenance procedures",
-      "url": "/checklists/maintenance.html",
-      "notes": "Print or use digitally on tablet"
+      "name": "ABB REJ603 Relay Configuration Tool",
+      "category": "Tool",
+      "description": "Interactive tool for configuring ABB REJ603 relays",
+      "url": "https://coelatam.onrender.com/rej603-configurator.html",
+      "notes": ""
     },
     {
       "id": 6,
-      "name": "String Configuration Tool",
-      "category": "Calculator",
-      "description": "Optimize string configurations and calculate maximum string lengths",
-      "url": "/tools/string-calculator.html",
-      "notes": "Includes environmental factors"
+      "name": "SG1+x Parameter Comparison Tool",
+      "category": "Tool",
+      "description": "Used for comparing SG1+x parameters between different units",
+      "url": "https://coelatam.onrender.com/parameter-comparison.html",
+      "notes": "Troubleshooting"
+    },
+    {
+      "id": 7,
+      "name": "UMCG Data Analysis Tool",
+      "category": "Tool",
+      "description": "Used for Analyzing data extracted from UMCG devices",
+      "url": "https://coelatam.onrender.com/data-analyzer.html",
+      "notes": "Troubleshooting"
+    },  
+    {
+      "id": 8,
+      "name": "UMCG&SG1+x PDP Module Fault Code Interpreter",
+      "category": "Tool",
+      "description": "Used for decoding PDP fault codes",
+      "url": "https://coelatam.onrender.com/PDP-fault.html",
+      "notes": "Troubleshooting"
     }
   ]
 }
