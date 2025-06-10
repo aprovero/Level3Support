@@ -184,26 +184,25 @@
         .nav-content {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0.75rem 2rem;
-            position: relative;
-            min-height: 70px;
+            padding: 1rem 2rem 0.5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: end;
         }
 
         .banner-section {
-            display: flex;
-            align-items: flex-start;
-            width: 100%;
+            justify-self: start;
         }
 
         .banner-logo {
             height: 60px;
             width: auto;
+            display: block;
         }
 
         .nav-contact {
-            position: absolute;
-            bottom: 0.5rem;
-            right: 2rem;
+            justify-self: end;
+            align-self: end;
         }
 
         .nav-links {
