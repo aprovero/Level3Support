@@ -83,7 +83,110 @@
             
             <!-- Tools Grid -->
             <div id="tools-grid" class="tools-grid">
-                <!-- Tool cards will be dynamically inserted here -->
+                <!-- Sample tool tiles to demonstrate the improved design -->
+                <div class="tool-tile" data-category="form">
+                    <div class="tile-content">
+                        <div class="tile-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="tile-info">
+                            <h3 class="tile-title">CoE Support Request</h3>
+                            <p class="tile-description">Request form for Support, RCA, Training and other CoE services</p>
+                            <div class="tile-category">FORM</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-tile" data-category="reference">
+                    <div class="tile-content">
+                        <div class="tile-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="tile-info">
+                            <h3 class="tile-title">Technical Documentation Database</h3>
+                            <p class="tile-description">Searchable database of technical documents and guides</p>
+                            <div class="tile-category">REFERENCE</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-tile" data-category="catalog">
+                    <div class="tile-content">
+                        <div class="tile-icon">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <div class="tile-info">
+                            <h3 class="tile-title">LATAM Training Catalog</h3>
+                            <p class="tile-description">Available training courses and resources provided by CoE</p>
+                            <div class="tile-category">CATALOG</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-tile" data-category="tool">
+                    <div class="tile-content">
+                        <div class="tile-icon">
+                            <i class="fas fa-wrench"></i>
+                        </div>
+                        <div class="tile-info">
+                            <h3 class="tile-title">ABB REJ603 Relay Config</h3>
+                            <p class="tile-description">Interactive tool for configuring ABB REJ603 relays</p>
+                            <div class="tile-category">TOOL</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-tile" data-category="tool">
+                    <div class="tile-content">
+                        <div class="tile-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="tile-info">
+                            <h3 class="tile-title">Parameter Comparison Tool</h3>
+                            <p class="tile-description">Compare SG1+x parameters between different units</p>
+                            <div class="tile-category">TOOL</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-tile" data-category="tool">
+                    <div class="tile-content">
+                        <div class="tile-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="tile-info">
+                            <h3 class="tile-title">UMCG Data Analysis</h3>
+                            <p class="tile-description">Analyze data extracted from UMCG devices</p>
+                            <div class="tile-category">TOOL</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-tile" data-category="tool">
+                    <div class="tile-content">
+                        <div class="tile-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="tile-info">
+                            <h3 class="tile-title">PDP Fault Code Interpreter</h3>
+                            <p class="tile-description">Decode PDP fault codes for UMCG & SG1+x modules</p>
+                            <div class="tile-category">TOOL</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-tile" data-category="form">
+                    <div class="tile-content">
+                        <div class="tile-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="tile-info">
+                            <h3 class="tile-title">Training Evaluation Form</h3>
+                            <p class="tile-description">Official CoE LATAM training evaluation form</p>
+                            <div class="tile-category">FORM</div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <!-- Empty State -->
@@ -142,17 +245,23 @@
         :root {
             --primary-orange: #ff9500;
             --primary-orange-dark: #e8850f;
-            --primary-orange-light: #ffb347;
             --dark-gray: #2c3e50;
             --medium-gray: #666666;
             --light-gray: #f8f9fa;
             --border-light: #e9ecef;
             --white: #ffffff;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-            --border-radius: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 15px rgba(0,0,0,0.15);
+            --transition: all 0.2s ease;
+            
+            /* Category Colors - Flat & Professional */
+            --color-form: #0078d4;
+            --color-reference: #8764b8;
+            --color-catalog: #00bcf2;
+            --color-tool: #107c10;
+            --color-calculator: #d83b01;
+            --color-template: #881798;
+            --color-external: #5c2e91;
         }
 
         /* Global Styles */
@@ -163,10 +272,10 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
             color: var(--dark-gray);
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: #f3f2f1;
             min-height: 100vh;
         }
 
@@ -189,13 +298,6 @@
         .banner-logo {
             height: 60px;
             width: auto;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
         }
 
         .nav-link {
@@ -207,16 +309,12 @@
             font-weight: 500;
             transition: var(--transition);
             padding: 0.5rem 1rem;
-            border-radius: 8px;
+            border-radius: 4px;
         }
 
         .nav-link:hover {
             color: var(--primary-orange);
             background: var(--light-gray);
-        }
-
-        .nav-link i {
-            font-size: 0.9rem;
         }
 
         /* Filters Section */
@@ -229,7 +327,6 @@
         .filters-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0;
         }
 
         .filters-title {
@@ -269,7 +366,7 @@
             width: 18px;
             background-color: var(--white);
             border: 2px solid var(--border-light);
-            border-radius: 4px;
+            border-radius: 3px;
             margin-right: 0.75rem;
             position: relative;
             transition: var(--transition);
@@ -303,7 +400,7 @@
 
         /* Tools Section */
         .tools-section {
-            padding: 4rem 2rem;
+            padding: 2rem;
             min-height: 60vh;
         }
 
@@ -312,147 +409,189 @@
             margin: 0 auto;
         }
 
+        /* WINDOWS 10 STYLE GRID */
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
             margin-bottom: 3rem;
-            align-items: stretch;
         }
 
-        .tool-card {
+        /* WINDOWS 10 STYLE TILES */
+        .tool-tile {
             background: var(--white);
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-            overflow: hidden;
-            transition: var(--transition);
-            border: 1px solid var(--border-light);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            position: relative;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
-        }
-
-        /* Colorful left borders for categories */
-        .tool-card[data-category="form"] {
-            border-left: 5px solid #667eea;
-        }
-
-        .tool-card[data-category="reference"] {
-            border-left: 5px solid #f093fb;
-        }
-
-        .tool-card[data-category="catalog"] {
-            border-left: 5px solid #4facfe;
-        }
-
-        .tool-card[data-category="tool"] {
-            border-left: 5px solid #43e97b;
-        }
-
-        .tool-card[data-category="calculator"] {
-            border-left: 5px solid #fa709a;
-        }
-
-        .tool-card[data-category="template"] {
-            border-left: 5px solid #a8edea;
-        }
-
-        .tool-card[data-category="external-link"] {
-            border-left: 5px solid #d299c2;
-        }
-
-        .tool-card[data-category="other"] {
-            border-left: 5px solid #89f7fe;
-        }
-
-        .card-header {
-            padding: 1.25rem;
-            flex-grow: 1;
-            min-height: 140px;
-        }
-
-        .card-content {
-            padding: 1.25rem;
-            background: #fafbfc;
-            margin-top: auto;
-        }
-
-        .tool-category {
-            display: inline-block;
-            padding: 0.3rem 0.7rem;
-            border-radius: 6px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-        }
-
-        .category-form { background-color: #e8efff; color: #667eea; }
-        .category-reference { background-color: #fde8ff; color: #f093fb; }
-        .category-catalog { background-color: #e8f7ff; color: #4facfe; }
-        .category-tool { background-color: #e8fff4; color: #43e97b; }
-        .category-calculator { background-color: #ffe8f1; color: #fa709a; }
-        .category-template { background-color: #e8fffe; color: #a8edea; }
-        .category-external-link { background-color: #f4e8ff; color: #d299c2; }
-        .category-other { background-color: #e8fcff; color: #89f7fe; }
-
-        .tool-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            color: var(--dark-gray);
-            line-height: 1.3;
-        }
-
-        .tool-description {
-            color: var(--medium-gray);
-            font-size: 0.9rem;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            min-height: 3.6rem;
-        }
-
-        .access-button {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: var(--primary-orange);
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
+            border: 1px solid rgba(0,0,0,0.1);
             cursor: pointer;
             transition: var(--transition);
-            text-decoration: none;
-            display: block;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            position: relative;
+            height: 140px; /* Fixed square-ish height */
+            overflow: hidden;
         }
 
-        .access-button:hover {
-            background: var(--primary-orange-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 149, 0, 0.3);
+        .tool-tile:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-orange);
         }
 
-        .tool-notes {
-            margin-top: 0.75rem;
-            padding-top: 0.75rem;
-            border-top: 1px solid var(--border-light);
-            font-size: 0.75rem;
+        .tool-tile:active {
+            transform: scale(0.98);
+        }
+
+        /* Category-based left border */
+        .tool-tile[data-category="form"] {
+            border-left: 4px solid var(--color-form);
+        }
+
+        .tool-tile[data-category="reference"] {
+            border-left: 4px solid var(--color-reference);
+        }
+
+        .tool-tile[data-category="catalog"] {
+            border-left: 4px solid var(--color-catalog);
+        }
+
+        .tool-tile[data-category="tool"] {
+            border-left: 4px solid var(--color-tool);
+        }
+
+        .tool-tile[data-category="calculator"] {
+            border-left: 4px solid var(--color-calculator);
+        }
+
+        .tool-tile[data-category="template"] {
+            border-left: 4px solid var(--color-template);
+        }
+
+        .tool-tile[data-category="external-link"] {
+            border-left: 4px solid var(--color-external);
+        }
+
+        /* TILE CONTENT LAYOUT */
+        .tile-content {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            height: 100%;
+            gap: 1rem;
+        }
+
+        /* TILE ICON */
+        .tile-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
             color: var(--medium-gray);
-            font-style: italic;
+        }
+
+        .tool-tile[data-category="form"] .tile-icon {
+            color: var(--color-form);
+        }
+
+        .tool-tile[data-category="reference"] .tile-icon {
+            color: var(--color-reference);
+        }
+
+        .tool-tile[data-category="catalog"] .tile-icon {
+            color: var(--color-catalog);
+        }
+
+        .tool-tile[data-category="tool"] .tile-icon {
+            color: var(--color-tool);
+        }
+
+        .tool-tile[data-category="calculator"] .tile-icon {
+            color: var(--color-calculator);
+        }
+
+        .tool-tile[data-category="template"] .tile-icon {
+            color: var(--color-template);
+        }
+
+        .tool-tile[data-category="external-link"] .tile-icon {
+            color: var(--color-external);
+        }
+
+        /* TILE INFO */
+        .tile-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tile-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 0.25rem;
+            line-height: 1.3;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            margin-right: 3rem; /* Space for category badge */
+        }
+
+        .tile-description {
+            font-size: 0.85rem;
+            color: var(--medium-gray);
+            line-height: 1.3;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        /* CATEGORY BADGE - Top right of entire tile */
+        .tile-category {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        /* Category-specific badge colors matching the left border */
+        .tool-tile[data-category="form"] .tile-category {
+            color: white;
+            background-color: var(--color-form);
+        }
+
+        .tool-tile[data-category="reference"] .tile-category {
+            color: white;
+            background-color: var(--color-reference);
+        }
+
+        .tool-tile[data-category="catalog"] .tile-category {
+            color: white;
+            background-color: var(--color-catalog);
+        }
+
+        .tool-tile[data-category="tool"] .tile-category {
+            color: white;
+            background-color: var(--color-tool);
+        }
+
+        .tool-tile[data-category="calculator"] .tile-category {
+            color: white;
+            background-color: var(--color-calculator);
+        }
+
+        .tool-tile[data-category="template"] .tile-category {
+            color: white;
+            background-color: var(--color-template);
+        }
+
+        .tool-tile[data-category="external-link"] .tile-category {
+            color: white;
+            background-color: var(--color-external);
         }
 
         /* Loading State */
@@ -466,10 +605,10 @@
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--border-light);
-            border-top: 4px solid var(--primary-orange);
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--primary-orange);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 1rem;
@@ -485,32 +624,31 @@
             text-align: center;
             padding: 4rem 2rem;
             background: var(--white);
-            border-radius: var(--border-radius);
+            border-radius: 4px;
             box-shadow: var(--shadow-sm);
         }
 
         .empty-icon {
-            font-size: 4rem;
+            font-size: 3rem;
             color: var(--medium-gray);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .empty-title {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             color: var(--dark-gray);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .empty-text {
             color: var(--medium-gray);
-            font-size: 1rem;
         }
 
-        /* Footer - NEW IMPROVED VERSION */
+        /* Footer */
         .main-footer {
             background: linear-gradient(135deg, #666666 0%, #777777 100%);
             color: var(--white);
-            margin-top: 4rem;
+            margin-top: 3rem;
         }
 
         .footer-container {
@@ -531,8 +669,8 @@
             margin-bottom: 1rem;
             padding: 0.5rem;
             background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            box-shadow: var(--shadow-sm);
         }
 
         .footer-description {
@@ -611,93 +749,68 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .navbar {
-                padding: 0.5rem 0;
-            }
-
-            .banner-and-contact {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-
-            .banner-logo {
-                height: 50px;
-            }
-
-            .nav-link {
-                align-self: flex-end;
-                padding: 0.25rem 0.5rem;
-                font-size: 0.9rem;
-            }
-
-            .filters-section {
-                padding: 1rem;
-            }
-
-            .filter-checkboxes {
-                gap: 1rem;
-            }
-
             .tools-section {
-                padding: 2rem 1rem;
+                padding: 1.5rem 1rem;
             }
 
             .tools-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 1.25rem;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 0.75rem;
             }
 
-            .footer-container {
-                padding: 2rem 1rem 1rem;
+            .tool-tile {
+                height: 120px;
             }
 
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                text-align: center;
+            .tile-content {
+                padding: 0.75rem;
+            }
+
+            .tile-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+
+            .tile-title {
+                font-size: 0.9rem;
+            }
+
+            .tile-description {
+                font-size: 0.8rem;
             }
         }
 
         @media (max-width: 480px) {
-            .banner-logo {
-                height: 45px;
-            }
-
-            .nav-link {
-                font-size: 0.85rem;
-            }
-
-            .filter-checkboxes {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
-
             .tools-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .card-header,
-            .card-content {
-                padding: 1rem;
-            }
-
-            .tool-title {
-                font-size: 1rem;
-                padding-right: 3rem;
-            }
-
-            .tool-category {
-                top: 0.75rem;
-                right: 0.75rem;
-                padding: 0.3rem 0.6rem;
-                font-size: 0.65rem;
             }
         }
     </style>
 
-    <!-- Load external JavaScript file -->
-    <script src="js/tools-hub.js"></script>
+    <script>
+        // Professional tile interaction
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Windows 10 style Tools Hub loaded');
+            
+            // Add click functionality to tiles
+            const tiles = document.querySelectorAll('.tool-tile');
+            tiles.forEach(tile => {
+                tile.addEventListener('click', function() {
+                    // Here you would normally navigate to the tool
+                    console.log('Tile clicked:', this.querySelector('.tile-title').textContent);
+                });
+                
+                // Subtle hover effect
+                tile.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--primary-orange)';
+                });
+                
+                tile.addEventListener('mouseleave', function() {
+                    this.style.borderColor = 'rgba(0,0,0,0.1)';
+                });
+            });
+        });
+    </script>
 </body>
 </html>

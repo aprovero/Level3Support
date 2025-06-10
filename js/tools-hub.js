@@ -1,6 +1,6 @@
 /**
  * CoE Level 3 Support Portal - Tools Hub JavaScript
- * Simple version that loads from JSON file
+ * Updated for Windows 10 style tiles
  */
 
 // Store all tools data
@@ -83,7 +83,7 @@ function loadFallbackData() {
             name: "CoE Support Request",
             category: "Form",
             description: "Request form for: Support, RCA, Training and other CoE services",
-            url: "index.html",
+            url: "https://coelatam.onrender.com/",
             notes: "Use for all CoE-related requests"
         },
         {
@@ -91,7 +91,7 @@ function loadFallbackData() {
             name: "CoE Technical Documentation Database",
             category: "Reference", 
             description: "Searchable database of technical documents, manuals, and troubleshooting guides verified by CoE LATAM",
-            url: "https://support.sungrowpower.com/errorcode",
+            url: "https://coelatam.onrender.com/documentation.html",
             notes: "Updated monthly"
         },
         {
@@ -99,7 +99,7 @@ function loadFallbackData() {
             name: "CoE LATAM Training Catalog",
             category: "Catalog",
             description: "Available training courses and resources provided by CoE LATAM",
-            url: "training.html",
+            url: "https://coelatam.onrender.com/training.html",
             notes: ""
         },
         {
@@ -107,8 +107,40 @@ function loadFallbackData() {
             name: "Training Evaluation Form",
             category: "Form",
             description: "Official CoE LATAM training evaluation form",
-            url: "evaluation.html",
+            url: "https://coelatam.onrender.com/evaluation.html",
             notes: "Available in English, Spanish and Portuguese"
+        },
+        {
+            id: 5,
+            name: "ABB REJ603 Relay Configuration Tool",
+            category: "Tool",
+            description: "Interactive tool for configuring ABB REJ603 relays",
+            url: "https://coelatam.onrender.com/rej603-configurator.html",
+            notes: ""
+        },
+        {
+            id: 6,
+            name: "SG1+x Parameter Comparison Tool",
+            category: "Tool",
+            description: "Used for comparing SG1+x parameters between different units",
+            url: "https://coelatam.onrender.com/parameter-comparison.html",
+            notes: "Troubleshooting"
+        },
+        {
+            id: 7,
+            name: "UMCG Data Analysis Tool",
+            category: "Tool",
+            description: "Used for Analyzing data extracted from UMCG devices",
+            url: "https://coelatam.onrender.com/data-analyzer.html",
+            notes: "Troubleshooting"
+        },  
+        {
+            id: 8,
+            name: "UMCG&SG1+x PDP Module Fault Code Interpreter",
+            category: "Tool",
+            description: "Used for decoding PDP fault codes",
+            url: "https://coelatam.onrender.com/PDP-fault.html",
+            notes: "Troubleshooting"
         }
     ];
     
@@ -117,10 +149,10 @@ function loadFallbackData() {
 }
 
 /**
- * Render tools as cards
+ * Render tools as tiles
  */
 function renderTools(tools) {
-    console.log('Rendering', tools.length, 'tool cards');
+    console.log('Rendering', tools.length, 'tool tiles');
     
     if (!toolsGrid) {
         console.warn('Tools grid element not found');
@@ -144,53 +176,90 @@ function renderTools(tools) {
         toolsGrid.style.display = 'grid';
     }
     
-    // Create card for each tool
+    // Create tile for each tool
     tools.forEach(tool => {
-        const card = createToolCard(tool);
-        toolsGrid.appendChild(card);
+        const tile = createToolTile(tool);
+        toolsGrid.appendChild(tile);
     });
 }
 
 /**
- * Create a tool card element
+ * Create a tool tile element (Windows 10 style)
  */
-function createToolCard(tool) {
-    const card = document.createElement('div');
-    card.className = 'tool-card';
-    card.setAttribute('data-id', tool.id);
+function createToolTile(tool) {
+    const tile = document.createElement('div');
+    tile.className = 'tool-tile';
+    tile.setAttribute('data-id', tool.id);
+    tile.setAttribute('data-category', tool.category.toLowerCase().replace(/\s+/g, '-'));
     
-    // Get appropriate category class
-    const categoryClass = getCategoryClass(tool.category);
+    // Get appropriate icon for category
+    const icon = getCategoryIcon(tool.category);
     
-    // Determine button text and class
+    // Determine if external link
     const isExternal = tool.category === 'External Link' || (tool.url && tool.url.startsWith('http'));
-    const buttonText = isExternal ? 'OPEN LINK' : 'ACCESS TOOL';
-    const buttonClass = isExternal ? 'external-link' : '';
     
-    // Create card HTML
-    card.innerHTML = `
-        <div class="card-header">
-            <div class="tool-category ${categoryClass}">[${tool.category.toUpperCase()}]</div>
-            <div class="tool-title">${tool.name}</div>
-            <div class="tool-description">${tool.description}</div>
-        </div>
-        <div class="card-content">
-            ${tool.url ? 
-                `<a href="${tool.url}" target="${isExternal ? '_blank' : '_self'}" class="access-button ${buttonClass}">${buttonText}</a>` : 
-                '<button class="access-button" disabled style="background-color: #6c757d;">No Link Available</button>'
-            }
-            ${tool.notes ? `<div class="tool-notes">${tool.notes}</div>` : ''}
+    // Create tile HTML
+    tile.innerHTML = `
+        <div class="tile-content">
+            <div class="tile-icon">
+                <i class="${icon}"></i>
+            </div>
+            <div class="tile-info">
+                <h3 class="tile-title">${tool.name}</h3>
+                <p class="tile-description">${tool.description}</p>
+                <div class="tile-category">${tool.category.toUpperCase()}</div>
+            </div>
         </div>
     `;
     
-    return card;
+    // Add click handler
+    if (tool.url) {
+        tile.addEventListener('click', function() {
+            if (isExternal) {
+                window.open(tool.url, '_blank');
+            } else {
+                window.location.href = tool.url;
+            }
+        });
+        
+        // Add cursor pointer
+        tile.style.cursor = 'pointer';
+    } else {
+        tile.style.cursor = 'default';
+        tile.style.opacity = '0.6';
+    }
+    
+    // Add hover effects
+    tile.addEventListener('mouseenter', function() {
+        if (tool.url) {
+            this.style.borderColor = 'var(--primary-orange)';
+        }
+    });
+    
+    tile.addEventListener('mouseleave', function() {
+        this.style.borderColor = 'rgba(0,0,0,0.1)';
+    });
+    
+    return tile;
 }
 
 /**
- * Get CSS class for category
+ * Get FontAwesome icon class for category
  */
-function getCategoryClass(category) {
-    return 'category-' + category.toLowerCase().replace(/\s+/g, '-');
+function getCategoryIcon(category) {
+    const iconMap = {
+        'form': 'fas fa-file-alt',
+        'reference': 'fas fa-book',
+        'catalog': 'fas fa-list',
+        'tool': 'fas fa-wrench',
+        'calculator': 'fas fa-calculator',
+        'template': 'fas fa-file-template',
+        'external link': 'fas fa-external-link-alt',
+        'external-link': 'fas fa-external-link-alt'
+    };
+    
+    const key = category.toLowerCase().replace(/\s+/g, '-');
+    return iconMap[key] || 'fas fa-cog'; // default icon
 }
 
 /**
@@ -271,8 +340,8 @@ function showLoadingState(isLoading) {
  */
 function handleError(message) {
     if (toolsGrid) {
-        toolsGrid.innerHTML = `<div class="error-message">${message}</div>`;
-        toolsGrid.style.display = 'block';
+        toolsGrid.innerHTML = `<div class="error-message" style="grid-column: 1 / -1; text-align: center; padding: 2rem; background: white; border-radius: 4px; border: 1px solid #e9ecef;">${message}</div>`;
+        toolsGrid.style.display = 'grid';
     }
     if (emptyState) {
         emptyState.style.display = 'none';
