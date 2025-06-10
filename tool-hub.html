@@ -103,7 +103,7 @@
             <div class="footer-content">
                 <div class="footer-info">
                     <div class="footer-logo">
-                        <img src="images/COE_LOGO.png" alt="CoE LATAM" style="background: transparent; mix-blend-mode: screen;">
+                        <img src="images/COE_LOGO.png" alt="CoE LATAM">
                     </div>
                     <p class="footer-description">
                         Center of Excellence for Latin America<br>
@@ -125,7 +125,7 @@
                     <div class="powered-by">
                         <span>Powered by</span>
                         <a href="https://www.anthropic.com" target="_blank">
-                            <img src="images/CLAUDE_LOGO.png" alt="Claude" class="claude-logo" style="background: transparent; mix-blend-mode: screen;">
+                            <img src="images/CLAUDE_LOGO.png" alt="Claude" class="claude-logo">
                         </a>
                     </div>
                 </div>
@@ -317,6 +317,7 @@
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 2rem;
             margin-bottom: 3rem;
+            align-items: stretch;
         }
 
         .tool-card {
@@ -326,6 +327,9 @@
             overflow: hidden;
             transition: var(--transition);
             border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .tool-card:hover {
@@ -336,6 +340,12 @@
         .card-header {
             padding: 1.5rem;
             border-bottom: 1px solid var(--border-light);
+            flex-grow: 1;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            margin-top: auto;
         }
 
         .tool-category {
@@ -403,10 +413,6 @@
             line-height: 1.5;
         }
 
-        .card-content {
-            padding: 1.5rem;
-        }
-
         .access-button {
             width: 100%;
             padding: 0.875rem 1.5rem;
@@ -428,14 +434,6 @@
         .access-button:hover {
             background: var(--primary-orange-dark);
             transform: translateY(-2px);
-        }
-
-        .external-link {
-            background: var(--primary-orange);
-        }
-
-        .external-link:hover {
-            background: var(--primary-orange-dark);
         }
 
         .tool-notes {
@@ -498,9 +496,9 @@
             font-size: 1rem;
         }
 
-        /* Footer */
+        /* Footer - NEW IMPROVED VERSION */
         .main-footer {
-            background: #555555;
+            background: linear-gradient(135deg, #666666 0%, #777777 100%);
             color: var(--white);
             margin-top: 4rem;
         }
@@ -521,6 +519,10 @@
         .footer-logo img {
             height: 50px;
             margin-bottom: 1rem;
+            padding: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .footer-description {
@@ -567,17 +569,21 @@
 
         .powered-by span {
             font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
         }
 
         .claude-logo {
             height: 20px;
-            opacity: 0.8;
+            padding: 0.25rem 0.5rem;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 4px;
             transition: var(--transition);
         }
 
         .claude-logo:hover {
-            opacity: 1;
+            background-color: white;
+            transform: scale(1.05);
         }
 
         .footer-bottom {
@@ -595,19 +601,6 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-container {
-                padding: 0 1rem;
-                flex-direction: column;
-                height: auto;
-                padding-top: 1rem;
-                padding-bottom: 1rem;
-            }
-
-            .nav-links {
-                margin-top: 1rem;
-                gap: 1rem;
-            }
-
             .filters-section {
                 padding: 1rem;
             }
