@@ -10,11 +10,11 @@
 <body>
     <!-- Navigation Header -->
     <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
+        <div class="nav-content">
+            <div class="banner-section">
                 <img src="images/tool-hub-banner.png" alt="CoE LATAM Tool Hub" class="banner-logo">
             </div>
-            <div class="nav-links">
+            <div class="nav-contact">
                 <a href="contacts.html" class="nav-link">
                     <i class="fas fa-address-book"></i>
                     Contacts
@@ -181,35 +181,29 @@
             z-index: 1000;
         }
 
-        .nav-container {
+        .nav-content {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0.5rem 2rem 0 2rem;
-            display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
-            min-height: 70px;
+            padding: 0.75rem 2rem;
             position: relative;
+            min-height: 70px;
         }
 
-        .nav-logo {
+        .banner-section {
             display: flex;
-            align-items: center;
-            background: transparent;
-            padding: 0;
-            margin: 0;
-        }
-
-        .nav-links {
-            position: absolute;
-            bottom: 0.5rem;
-            right: 2rem;
+            align-items: flex-start;
+            width: 100%;
         }
 
         .banner-logo {
             height: 60px;
             width: auto;
-            display: block;
+        }
+
+        .nav-contact {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 2rem;
         }
 
         .nav-links {
