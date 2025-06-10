@@ -32,6 +32,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            width: 100%;
         }
 
         .main-section {
@@ -39,12 +41,11 @@
             flex-direction: column;
             align-items: center;
             margin-bottom: 20px;
-            position: relative;
         }
 
         .character-container {
             position: absolute;
-            left: -220px;
+            left: calc(50% - 400px);
             top: 50%;
             transform: translateY(-50%);
         }
@@ -96,17 +97,17 @@
 
         @media (max-width: 1200px) {
             .character-container {
-                left: -170px;
+                left: calc(50% - 350px);
             }
         }
 
         @media (max-width: 900px) {
             .character-container {
-                left: -120px;
+                left: calc(50% - 300px);
             }
             
             .hmm-character {
-                width: 100px;
+                width: 120px;
                 height: auto;
             }
         }
@@ -119,7 +120,7 @@
             }
 
             .hmm-character {
-                width: 100px;
+                width: 120px;
                 height: auto;
             }
 
