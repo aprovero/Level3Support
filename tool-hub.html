@@ -601,6 +601,26 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .navbar {
+                padding: 0.5rem 0;
+            }
+
+            .banner-and-contact {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .banner-logo {
+                height: 50px;
+            }
+
+            .nav-link {
+                align-self: flex-end;
+                padding: 0.25rem 0.5rem;
+                font-size: 0.9rem;
+            }
+
             .filters-section {
                 padding: 1rem;
             }
@@ -632,6 +652,10 @@
         @media (max-width: 480px) {
             .banner-logo {
                 height: 45px;
+            }
+
+            .nav-link {
+                font-size: 0.85rem;
             }
 
             .filter-checkboxes {
