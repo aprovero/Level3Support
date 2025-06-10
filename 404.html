@@ -32,23 +32,21 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+        }
+
+        .character-container {
+            position: absolute;
+            left: -200px;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .main-section {
             display: flex;
-            align-items: center;
-            gap: 30px;
-            margin-bottom: 20px;
-        }
-
-        .text-section {
-            display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        .character-container {
-            flex-shrink: 0;
+            margin-bottom: 20px;
         }
 
         .hmm-character {
@@ -96,10 +94,17 @@
             border-color: #999999;
         }
 
+        @media (max-width: 1200px) {
+            .character-container {
+                left: -150px;
+            }
+        }
+
         @media (max-width: 768px) {
-            .main-section {
-                flex-direction: column;
-                gap: 20px;
+            .character-container {
+                position: static;
+                transform: none;
+                margin-bottom: 20px;
             }
 
             .coe-logo img {
@@ -127,14 +132,12 @@
 </head>
 <body>
     <div class="content">
+        <div class="character-container">
+            <img src="images/hmm-character.png" alt="Hmm?" class="hmm-character">
+        </div>
         <div class="main-section">
-            <div class="character-container">
-                <img src="images/hmm-character.png" alt="Hmm?" class="hmm-character">
-            </div>
-            <div class="text-section">
-                <div class="error-code">404</div>
-                <h1 class="error-title">Page Not Found</h1>
-            </div>
+            <div class="error-code">404</div>
+            <h1 class="error-title">Page Not Found</h1>
         </div>
         <p class="error-description">
             The page you're looking for seems to have wandered off. 

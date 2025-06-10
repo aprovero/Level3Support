@@ -56,7 +56,7 @@ function loadToolsData() {
             if (data && data.tools && data.tools.length > 0) {
                 allTools = data.tools;
                 renderTools(allTools);
-                updateStats();
+                initializeFilters();
             } else {
                 console.warn('No tools data found in JSON file');
                 handleError('No tools data available.');
@@ -80,40 +80,40 @@ function loadFallbackData() {
     allTools = [
         {
             id: 1,
-            name: "Power System Calculator",
-            category: "Calculator",
-            description: "Calculate power ratings, efficiency, and performance metrics for PV systems",
-            url: "https://example.com/calculator",
-            notes: "Most used tool by service team"
+            name: "CoE Support Request",
+            category: "Form",
+            description: "Request form for: Support, RCA, Training and other CoE services",
+            url: "index.html",
+            notes: "Use for all CoE-related requests"
         },
         {
             id: 2,
-            name: "Error Code Database",
+            name: "CoE Technical Documentation Database",
             category: "Reference", 
-            description: "Searchable database of all system error codes and troubleshooting steps",
+            description: "Searchable database of technical documents, manuals, and troubleshooting guides verified by CoE LATAM",
             url: "https://support.sungrowpower.com/errorcode",
-            notes: "Updated weekly with new codes"
+            notes: "Updated monthly"
         },
         {
             id: 3,
-            name: "Service Report Template",
-            category: "Template",
-            description: "Standardized service report template for customer documentation",
-            url: "/downloads/service-report-template.docx",
-            notes: "Download and fill out for each service call"
+            name: "CoE LATAM Training Catalog",
+            category: "Catalog",
+            description: "Available training courses and resources provided by CoE LATAM",
+            url: "training.html",
+            notes: ""
         },
         {
             id: 4,
-            name: "SUNGROW Resource Center",
-            category: "External Link",
-            description: "Official SUNGROW technical documentation and resources",
-            url: "https://support.sungrowpower.com/home",
-            notes: "Official support portal"
+            name: "Training Evaluation Form",
+            category: "Form",
+            description: "Official CoE LATAM training evaluation form",
+            url: "evaluation.html",
+            notes: "Available in English, Spanish and Portuguese"
         }
     ];
     
     renderTools(allTools);
-    updateStats();
+    initializeFilters();
 }
 
 /**
@@ -176,7 +176,7 @@ function createToolCard(tool) {
         </div>
         <div class="card-content">
             ${tool.url ? 
-                `<a href="${tool.url}" target="${isExternal ? '_blank' : '_self'}" class="access-button ${buttonClass}">${buttonText}</a>` : 
+                `<a href="${tool.url}" target="_blank" class="access-button ${buttonClass}">${buttonText}</a>` : 
                 '<button class="access-button" disabled style="background-color: #6c757d;">No Link Available</button>'
             }
             ${tool.notes ? `<div class="tool-notes">${tool.notes}</div>` : ''}
@@ -187,30 +187,65 @@ function createToolCard(tool) {
 }
 
 /**
- * Update statistics display
- */
-function updateStats() {
-    const totalToolsElement = document.getElementById('total-tools');
-    if (totalToolsElement) {
-        totalToolsElement.textContent = allTools.length;
-    }
-}
-
-/**
- * Update statistics display
- */
-function updateStats() {
-    const totalToolsElement = document.getElementById('total-tools');
-    if (totalToolsElement) {
-        totalToolsElement.textContent = allTools.length;
-    }
-}
-
-/**
  * Get CSS class for category
  */
 function getCategoryClass(category) {
     return 'category-' + category.toLowerCase().replace(/\s+/g, '-');
+}
+
+/**
+ * Initialize filter functionality
+ */
+function initializeFilters() {
+    const checkboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', handleFilterChange);
+    });
+}
+
+/**
+ * Handle filter changes
+ */
+function handleFilterChange() {
+    const checkboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]');
+    const allCheckbox = document.querySelector('.filter-checkbox input[value="all"]');
+    const categoryCheckboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]:not([value="all"])');
+    
+    // If "all" checkbox was clicked
+    if (this.value === 'all') {
+        if (this.checked) {
+            // Uncheck all category checkboxes
+            categoryCheckboxes.forEach(cb => cb.checked = false);
+        }
+    } else {
+        // If a category checkbox was clicked, uncheck "all"
+        if (this.checked && allCheckbox) {
+            allCheckbox.checked = false;
+        }
+    }
+    
+    // Get selected filters
+    const selectedFilters = [];
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedFilters.push(checkbox.value);
+        }
+    });
+    
+    // If "all" is selected or no filters, show all tools
+    if (selectedFilters.includes('all') || selectedFilters.length === 0) {
+        renderTools(allTools);
+        return;
+    }
+    
+    // Filter tools based on selected categories
+    const filteredTools = allTools.filter(tool => {
+        const toolCategory = tool.category.toLowerCase().replace(/\s+/g, '-');
+        return selectedFilters.includes(toolCategory);
+    });
+    
+    renderTools(filteredTools);
 }
 
 /**
