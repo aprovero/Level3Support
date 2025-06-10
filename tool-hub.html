@@ -12,17 +12,9 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <img src="images/tool-hub-banner.svg" alt="CoE LATAM Tool Hub" class="banner-logo">
+                <img src="images/tool-hub-banner.png" alt="CoE LATAM Tool Hub" class="banner-logo">
             </div>
             <div class="nav-links">
-                <a href="index.html" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    Request Form
-                </a>
-                <a href="training.html" class="nav-link">
-                    <i class="fas fa-graduation-cap"></i>
-                    Training
-                </a>
                 <a href="contacts.html" class="nav-link">
                     <i class="fas fa-address-book"></i>
                     Contacts
@@ -196,16 +188,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            height: 80px;
         }
 
-        .logo-img {
-            height: 40px;
-            width: auto;
+        .nav-logo {
+            flex: 1;
         }
 
         .banner-logo {
-            height: 50px;
+            height: 60px;
             width: auto;
         }
 
@@ -446,11 +437,11 @@
         }
 
         .external-link {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--primary-orange);
         }
 
         .external-link:hover {
-            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+            background: var(--primary-orange-dark);
         }
 
         .tool-notes {
@@ -515,7 +506,7 @@
 
         /* Footer */
         .main-footer {
-            background: var(--dark-gray);
+            background: #555555;
             color: var(--white);
             margin-top: 4rem;
         }
@@ -653,7 +644,7 @@
 
         @media (max-width: 480px) {
             .banner-logo {
-                height: 40px;
+                height: 45px;
             }
 
             .filter-checkboxes {
