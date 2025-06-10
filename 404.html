@@ -21,9 +21,7 @@
         }
 
         .coe-logo {
-            position: absolute;
-            top: 30px;
-            left: 30px;
+            margin-top: 40px;
         }
 
         .coe-logo img {
@@ -36,8 +34,21 @@
             align-items: center;
         }
 
-        .character-container {
+        .main-section {
+            display: flex;
+            align-items: center;
+            gap: 30px;
             margin-bottom: 20px;
+        }
+
+        .text-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .character-container {
+            flex-shrink: 0;
         }
 
         .hmm-character {
@@ -49,14 +60,14 @@
             font-size: 8rem;
             font-weight: bold;
             color: #666666;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             line-height: 1;
         }
 
         .error-title {
             font-size: 2rem;
             color: #333333;
-            margin-bottom: 20px;
+            margin-bottom: 0;
             font-weight: normal;
         }
 
@@ -86,9 +97,9 @@
         }
 
         @media (max-width: 768px) {
-            .coe-logo {
-                top: 20px;
-                left: 20px;
+            .main-section {
+                flex-direction: column;
+                gap: 20px;
             }
 
             .coe-logo img {
@@ -115,21 +126,24 @@
     </style>
 </head>
 <body>
-    <div class="coe-logo">
-        <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
-    </div>
-
     <div class="content">
-        <div class="character-container">
-            <img src="images/hmm-character.png" alt="Hmm?" class="hmm-character">
+        <div class="main-section">
+            <div class="character-container">
+                <img src="images/hmm-character.png" alt="Hmm?" class="hmm-character">
+            </div>
+            <div class="text-section">
+                <div class="error-code">404</div>
+                <h1 class="error-title">Page Not Found</h1>
+            </div>
         </div>
-        <div class="error-code">404</div>
-        <h1 class="error-title">Page Not Found</h1>
         <p class="error-description">
             The page you're looking for seems to have wandered off. 
             Let's get you back to where you need to be.
         </p>
         <a href="/tools" class="back-button">← Back to the Tools Hub</a>
+        <div class="coe-logo">
+            <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
+        </div>
     </div>
 </body>
 </html>
