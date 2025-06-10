@@ -15,6 +15,7 @@
                 <img src="images/LOGO.png" alt="Logo">
             </div>
         </div>
+
         
         <!-- Banner Image -->
         <div class="banner-container">
@@ -168,142 +169,6 @@
             height: auto;
             border-radius: var(--border-radius-md);
             box-shadow: var(--shadow-md);
-        }
-
-        /* Stats banner */
-        .stats-banner {
-            background: linear-gradient(135deg, var(--primary-color), #ffb347);
-            color: white;
-            padding: 20px;
-            border-radius: var(--border-radius-md);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: bold;
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        /* Admin controls */
-        .admin-controls-section {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-
-        .admin-button {
-            background-color: var(--success-color);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s ease;
-        }
-
-        .admin-button:hover {
-            background-color: #218838;
-            transform: scale(1.1);
-        }
-
-        /* Admin form */
-        .admin-form-container {
-            display: none;
-            background-color: var(--background-light);
-            border-radius: var(--border-radius-md);
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: var(--shadow-md);
-            border: 2px solid var(--primary-color);
-        }
-
-        .admin-form-container.visible {
-            display: block;
-        }
-
-        .admin-form-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: var(--text-color);
-        }
-
-        .admin-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .form-field {
-            margin-bottom: 10px;
-        }
-
-        .form-field:nth-child(3),
-        .form-field:nth-child(5) {
-            grid-column: span 2;
-        }
-
-        .form-field label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .form-field input,
-        .form-field select,
-        .form-field textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .admin-form-actions {
-            grid-column: span 2;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .cancel-button {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 8px 15px;
-            cursor: pointer;
-        }
-
-        .submit-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 8px 15px;
-            cursor: pointer;
-            font-weight: bold;
         }
 
         /* Loading and empty states */
@@ -508,19 +373,6 @@
                 grid-template-columns: 1fr;
             }
 
-            .admin-form {
-                grid-template-columns: 1fr;
-            }
-
-            .form-field:nth-child(3),
-            .form-field:nth-child(5) {
-                grid-column: span 1;
-            }
-
-            .admin-form-actions {
-                grid-column: span 1;
-            }
-
             .footer {
                 flex-direction: column;
                 text-align: center;
@@ -531,239 +383,26 @@
                 margin-bottom: 10px;
             }
         }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 8px auto;
+                padding: 10px;
+                width: calc(100% - 20px);
+                max-width: none;
+            }
+
+            .logo img {
+                width: 120px;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 
-    <script>
-        // Simple tools data - you can edit this directly or load from a JSON file
-        const toolsData = [
-            {
-                id: 1,
-                name: "Power System Calculator",
-                category: "Calculator",
-                description: "Calculate power ratings, efficiency, and performance metrics for PV systems",
-                url: "https://example.com/calculator",
-                notes: "Most used tool by service team"
-            },
-            {
-                id: 2,
-                name: "Error Code Database",
-                category: "Reference",
-                description: "Searchable database of all system error codes and troubleshooting steps",
-                url: "https://support.sungrowpower.com/errorcode",
-                notes: "Updated weekly with new codes"
-            },
-            {
-                id: 3,
-                name: "Service Report Template",
-                category: "Template",
-                description: "Standardized service report template for customer documentation",
-                url: "/downloads/service-report-template.docx",
-                notes: "Download and fill out for each service call"
-            },
-            {
-                id: 4,
-                name: "SUNGROW Resource Center",
-                category: "External Link",
-                description: "Official SUNGROW technical documentation and resources",
-                url: "https://support.sungrowpower.com/home",
-                notes: "Official support portal"
-            }
-        ];
-
-        // DOM elements
-        let toolsGrid;
-        let emptyState;
-        let loadingIndicator;
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Tools hub initialization started');
-            
-            // Cache DOM elements
-            toolsGrid = document.getElementById('tools-grid');
-            emptyState = document.getElementById('empty-state');
-            loadingIndicator = document.getElementById('loading-indicator');
-            
-            // Initialize admin controls
-            initializeAdminControls();
-            
-            // Load tools
-            loadTools();
-            
-            console.log('Tools hub initialization completed');
-        });
-
-        function loadTools() {
-            console.log('Loading tools...');
-            showLoadingState(true);
-            
-            // Simulate loading delay (remove this in real implementation)
-            setTimeout(() => {
-                renderTools(toolsData);
-                updateStats();
-                showLoadingState(false);
-            }, 500);
-        }
-
-        function renderTools(tools) {
-            console.log('Rendering', tools.length, 'tools');
-            
-            if (!toolsGrid) {
-                console.warn('Tools grid element not found');
-                return;
-            }
-            
-            // Clear the grid
-            toolsGrid.innerHTML = '';
-            
-            // Show empty state if no tools
-            if (tools.length === 0) {
-                if (emptyState) {
-                    emptyState.style.display = 'block';
-                }
-                toolsGrid.style.display = 'none';
-                return;
-            } else {
-                if (emptyState) {
-                    emptyState.style.display = 'none';
-                }
-                toolsGrid.style.display = 'grid';
-            }
-            
-            // Create card for each tool
-            tools.forEach(tool => {
-                const card = createToolCard(tool);
-                toolsGrid.appendChild(card);
-            });
-        }
-
-        function createToolCard(tool) {
-            const card = document.createElement('div');
-            card.className = 'tool-card';
-            card.setAttribute('data-id', tool.id);
-            
-            // Get appropriate category class
-            const categoryClass = getCategoryClass(tool.category);
-            
-            // Determine button text and class
-            const isExternal = tool.category === 'External Link' || tool.url?.startsWith('http');
-            const buttonText = isExternal ? 'OPEN LINK' : 'ACCESS TOOL';
-            const buttonClass = isExternal ? 'external-link' : '';
-            
-            // Create card HTML
-            card.innerHTML = `
-                <div class="card-header">
-                    <div class="tool-category ${categoryClass}">[${tool.category.toUpperCase()}]</div>
-                    <div class="tool-title">${tool.name}</div>
-                    <div class="tool-description">${tool.description}</div>
-                </div>
-                <div class="card-content">
-                    ${tool.url ? `<a href="${tool.url}" target="${isExternal ? '_blank' : '_self'}" class="access-button ${buttonClass}">${buttonText}</a>` : '<button class="access-button" disabled>No Link Available</button>'}
-                    ${tool.notes ? `<div class="tool-notes">${tool.notes}</div>` : ''}
-                </div>
-            `;
-            
-            return card;
-        }
-
-        function getCategoryClass(category) {
-            return 'category-' + category.toLowerCase().replace(/\s+/g, '-');
-        }
-
-        function updateStats() {
-            const totalToolsElement = document.getElementById('total-tools');
-            if (totalToolsElement) {
-                totalToolsElement.textContent = toolsData.length;
-            }
-        }
-
-        function showLoadingState(isLoading) {
-            if (!loadingIndicator || !toolsGrid || !emptyState) {
-                return;
-            }
-            
-            if (isLoading) {
-                loadingIndicator.style.display = 'flex';
-                toolsGrid.style.display = 'none';
-                emptyState.style.display = 'none';
-            } else {
-                loadingIndicator.style.display = 'none';
-            }
-        }
-
-        function initializeAdminControls() {
-            const adminButton = document.getElementById('admin-button');
-            const adminFormContainer = document.getElementById('admin-form-container');
-            const cancelButton = document.getElementById('cancel-button');
-            const adminForm = document.getElementById('admin-form');
-            
-            // Admin button click handler
-            if (adminButton && adminFormContainer) {
-                adminButton.addEventListener('click', function() {
-                    console.log('Admin button clicked');
-                    adminFormContainer.classList.toggle('visible');
-                    
-                    if (adminFormContainer.classList.contains('visible')) {
-                        const firstInput = document.getElementById('tool-name');
-                        if (firstInput) {
-                            setTimeout(() => firstInput.focus(), 50);
-                        }
-                    }
-                });
-            }
-            
-            // Cancel button click handler
-            if (cancelButton && adminFormContainer) {
-                cancelButton.addEventListener('click', function() {
-                    console.log('Cancel button clicked');
-                    adminFormContainer.classList.remove('visible');
-                    
-                    if (adminForm) {
-                        adminForm.reset();
-                    }
-                });
-            }
-            
-            // Form submission
-            if (adminForm) {
-                adminForm.addEventListener('submit', handleAdminFormSubmit);
-            }
-        }
-
-        function handleAdminFormSubmit(e) {
-            e.preventDefault();
-            console.log('Admin form submitted');
-            
-            // Get form data
-            const formData = new FormData(e.target);
-            const newTool = {
-                id: toolsData.length + 1,
-                name: formData.get('name'),
-                category: formData.get('category'),
-                description: formData.get('description'),
-                url: formData.get('url') || '',
-                notes: formData.get('notes') || ''
-            };
-            
-            // Add to tools data
-            toolsData.push(newTool);
-            
-            // Re-render tools
-            renderTools(toolsData);
-            updateStats();
-            
-            // Reset form and hide it
-            e.target.reset();
-            const adminFormContainer = document.getElementById('admin-form-container');
-            if (adminFormContainer) {
-                adminFormContainer.classList.remove('visible');
-            }
-            
-            // Show success message
-            alert(`Tool "${newTool.name}" has been added successfully!`);
-            
-            console.log('New tool added:', newTool);
-        }
-    </script>
+    <!-- Load external JavaScript file -->
+    <script src="js/tools-hub.js"></script>
 </body>
 </html>
