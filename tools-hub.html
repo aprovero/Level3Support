@@ -30,10 +30,15 @@
 
         <a href="index.html" class="back-link">← Back to the Request Form</a>
         
-        <h1>Service Tools Hub</h1>
-        <p>Access essential tools and resources for your daily work</p>
+        <!-- Banner Image -->
+        <div class="banner-container">
+            <img src="images/tool-hub-banner.png" alt="Tool Hub - Access essential tools and resources for your daily work" class="banner-image">
+        </div>
         
-        <!-- Quick Stats -->
+        <!-- COMMENTED OUT - STATS BANNER AND ADMIN SECTION
+             Remove these comment tags to re-enable this functionality
+        
+        Quick Stats
         <div class="stats-banner">
             <div class="stats-grid">
                 <div class="stat-item">
@@ -51,12 +56,12 @@
             </div>
         </div>
         
-        <!-- Admin Controls -->
+        Admin Controls
         <div class="admin-controls-section">
             <button id="admin-button" class="admin-button" title="Add new tool">+</button>
         </div>
 
-        <!-- Admin Form Container -->
+        Admin Form Container
         <div id="admin-form-container" class="admin-form-container">
             <div class="admin-form-title">Add New Tool</div>
             <form id="admin-form" class="admin-form">
@@ -94,6 +99,8 @@
                 </div>
             </form>
         </div>
+        
+        END OF COMMENTED SECTION -->
                 
         <!-- Loading Indicator -->
         <div id="loading-indicator" class="loading-state">
@@ -163,6 +170,19 @@
         h1 { text-align: center; color: var(--text-color); margin: 30px 0; font-size: 24px; }
         .back-link { display: inline-block; color: var(--info-color); text-decoration: none; margin-bottom: 20px; font-size: 16px; transition: color 0.3s; }
         .back-link:hover { color: #0056b3; text-decoration: underline; }
+
+        /* Banner */
+        .banner-container {
+            text-align: center;
+            margin: 20px 0 30px 0;
+        }
+
+        .banner-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-md);
+        }
 
         /* Stats banner */
         .stats-banner {
@@ -488,6 +508,14 @@
             .container {
                 margin: 10px;
                 padding: 15px;
+            }
+
+            .banner-container {
+                margin: 15px 0 25px 0;
+            }
+
+            .banner-image {
+                border-radius: 6px;
             }
 
             .tools-grid {
