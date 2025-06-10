@@ -37,7 +37,7 @@
 
         .character-container {
             position: absolute;
-            left: -200px;
+            left: -220px;
             top: 50%;
             transform: translateY(-50%);
         }
@@ -50,8 +50,8 @@
         }
 
         .hmm-character {
-            width: 500px;
-            height: 500px;
+            width: 240px;
+            height: auto;
         }
 
         .error-code {
@@ -96,7 +96,18 @@
 
         @media (max-width: 1200px) {
             .character-container {
-                left: -150px;
+                left: -170px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .character-container {
+                left: -120px;
+            }
+            
+            .hmm-character {
+                width: 120px;
+                height: auto;
             }
         }
 
@@ -107,13 +118,13 @@
                 margin-bottom: 20px;
             }
 
-            .coe-logo img {
-                height: 40px;
+            .hmm-character {
+                width: 120px;
+                height: auto;
             }
 
-            .hmm-character {
-                width: 100px;
-                height: 100px;
+            .coe-logo img {
+                height: 40px;
             }
 
             .error-code {
