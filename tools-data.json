@@ -2,10 +2,10 @@
   "tools": [
     {
       "id": 1,
-      "name": "CoE Support Request from JSON",
+      "name": "CoE Support Request from",
       "category": "Form",
       "description": "Request form for: Support, RCA, Training and other CoE services",
-      "url": "https://coelatam.onrender.com/support-requests.html",
+      "url": "https://coelatam.onrender.com/support-request.html",
       "notes": "Use for all CoE-related requests"
     },
     {
