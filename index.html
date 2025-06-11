@@ -3,199 +3,784 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoE Level 3 - Support Portal</title>
-    <link rel="icon" type="image/png" href="images/SIMPLE_LOGO.png">
-    <link rel="stylesheet" href="css/shared-styles.css">
+    <title>CoE LATAM - Service Tools Hub</title>
+    <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Welcome Modal -->
-    <div id="welcome-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="text-xl font-bold mb-4">When to use this form:</h2>
-            <ol class="list-decimal pl-6 mb-6 space-y-2">
-                <li>For technical issues that are not solved by Tech-support and FSE, those cases can be sent to CoE team for review.</li>
-                <li>For training requests, Internal, 3rd party or customer.</li>
-                <li>For RCA requests.</li>
-                <li>For other issues. (Customer requested reports, Quality issues, etc.)</li>
-            </ol>
-            <p class="mb-6 font-bold">Please make sure to provide all needed information for CoE team to do analysis.</p>
-            <p class="mb-8 font-bold">Note if the request does not have all needed information, processing time will be delayed.</p>
-            <button id="understand-btn" class="modal-button">I UNDERSTAND</button>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="banner-and-contact">
+            <img src="images/tool-hub-banner.png" alt="CoE LATAM Tool Hub" class="banner-logo">
+            <a href="contacts.html" class="nav-link">
+                <i class="fas fa-address-book"></i>
+                Contacts
+            </a>
         </div>
-    </div>
+    </nav>
 
-    <!-- Success Modal -->
-    <div id="success-modal" class="modal-overlay hidden">
-        <div class="modal-content">
-            <h2>Request Submitted</h2>
-            <p>Your support request has been successfully submitted.</p>
-            <p>Request ID: <span id="request-id">COERQYYMM####</span></p>
-            <button class="modal-button" id="success-close-btn">Close</button>
+    <!-- Category Filters Section -->
+    <section class="filters-section">
+        <div class="filters-container">
+            <h3 class="filters-title">Filter by Category:</h3>
+            <div class="filter-checkboxes">
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="all" checked>
+                    <span class="checkmark"></span>
+                    All Tools
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="form">
+                    <span class="checkmark"></span>
+                    Forms
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="reference">
+                    <span class="checkmark"></span>
+                    Reference
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="catalog">
+                    <span class="checkmark"></span>
+                    Catalogs
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="tool">
+                    <span class="checkmark"></span>
+                    Tools
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="calculator">
+                    <span class="checkmark"></span>
+                    Calculators
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="template">
+                    <span class="checkmark"></span>
+                    Templates
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="external-link">
+                    <span class="checkmark"></span>
+                    External Links
+                </label>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="logo">
-                <img src="images/LOGO.png" alt="SUNGROW Logo">
+    <!-- Tools Grid Section -->
+    <section class="tools-section">
+        <div class="section-container">
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading tools...</p>
             </div>
-            <div class="header-icons">
-                <div class="training-icon">
-                    <a href="training.html">
-                        <img src="images/training-icon.png" alt="Training Resources">
-                    </a>
-                </div>
-                <div class="contact-icon">
-                    <a href="contacts.html">
-                        <img src="images/contact-icon.png" alt="Contact Directory">
-                    </a>
-                </div>
+            
+            <!-- Tools Grid -->
+            <div id="tools-grid" class="tools-grid">
+                <!-- Tool cards will be dynamically inserted here -->
             </div>
-        </header>
-
-        <h1>CoE Level 3 Support Request</h1>
-
-        <!-- Main Form -->
-        <div class="form-container">
-            <form id="support-form">
-                <!-- Common Initial Fields -->
-                <div class="form-group">
-                    <label for="requester-name">Requester Name <span class="required-asterisk">*</span></label>
-                    <input type="text" id="requester-name" name="requesterName" placeholder="Enter your name" required>
-
-                    <label for="requester-email">Requester Email <span class="required-asterisk">*</span></label>
-                    <input type="email" id="requester-email" name="requesterEmail" placeholder="Enter your email" required>
-
-                    <label for="request">Type of Request <span class="required-asterisk">*</span></label>
-                    <select id="request" name="request" required>
-                        <option value="">-- Select --</option>
-                        <option value="SUPPORT">SUPPORT</option>
-                        <option value="TRAINING">TRAINING</option>
-                        <option value="RCA">RCA</option>
-                        <option value="OTHER">OTHER</option>
-                    </select>
+            
+            <!-- Empty State -->
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-tools"></i>
                 </div>
+                <h3 class="empty-title">No tools available</h3>
+                <p class="empty-text">Check back soon for new tools and resources.</p>
+            </div>
+        </div>
+    </section>
 
-                <!-- Common Fields for All Forms -->
-                <div id="common-fields" class="form-group" style="display: none;">
-                    <label for="location">Location <span class="required-asterisk">*</span></label>
-                    <select id="location" name="location">
-                        <option value="">-- Select Location --</option>
-                        <option value="MEXICO">MEXICO</option>
-                        <option value="CENTRAL AMERICA">CENTRAL AMERICA</option>
-                        <option value="DOMINICAN REPUBLIC">DOMINICAN REPUBLIC</option>
-                        <option value="COLOMBIA">COLOMBIA</option>
-                        <option value="BRAZIL">BRAZIL</option>
-                        <option value="CHILE">CHILE</option>
-                        <option value="OTHER">OTHER</option>
-                    </select>
-
-                    <label for="project-name">Project Name <span class="required-asterisk">*</span></label>
-                    <input type="text" id="project-name" name="projectName" placeholder="Enter project name">
-
-                    <label for="product-type">TYPE OF PRODUCT <span class="required-asterisk">*</span></label>
-                    <select id="product-type" name="productType">
-                        <option value="">-- Select --</option>
-                        <option value="STRING">STRING</option>
-                        <option value="CENTRAL">CENTRAL</option>
-                        <option value="MVS">MVS</option>
-                        <option value="PVS">PVS</option>
-                        <option value="STORAGE">STORAGE</option>
-                        <option value="COMMUNICATION">COMMUNICATION</option>
-                    </select>
-
-                    <label for="model">Model</label>
-                    <input type="text" id="model" name="model" placeholder="Enter model">
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <img src="images/COE_LOGO.png" alt="CoE LATAM">
+                    </div>
+                    <p class="footer-description">
+                        Center of Excellence for Latin America<br>
+                        Empowering teams with professional tools and resources
+                    </p>
                 </div>
-                <!-- Training Form Fields -->
-                <div id="training-fields" class="form-group" style="display: none;">
-                    <label for="training-description">Description <span class="required-asterisk">*</span></label>
-                    <textarea id="training-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
-
-                    <label for="expected-date">Expected Date <span class="required-asterisk">*</span></label>
-                    <div class="field-note">Minimum 1 month after requested date</div>
-                    <input type="date" id="expected-date" name="expectedDate">
-
-                    <label for="trainees-number">Number of Trainees <span class="required-asterisk">*</span></label>
-                    <input type="number" id="trainees-number" name="traineesNumber" min="1" step="1">
+                <div class="footer-links">
+                    <h4>Quick Access</h4>
+                    <ul>
+                        <li><a href="support-request.html">Service Request Form</a></li>
+                        <li><a href="training.html">Training Catalog</a></li>
+                        <li><a href="contacts.html">Contact Directory</a></li>
+                        <li><a href="https://support.sungrowpower.com" target="_blank">Sungrow Support</a></li>
+                    </ul>
                 </div>
-
-                <!-- Support and RCA Fields -->
-                <div id="support-rca-fields" class="form-group" style="display: none;">
-                    <label for="description">Description <span class="required-asterisk">*</span></label>
-                    <textarea id="description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
-
-                    <label for="gsp-ticket">GSP Ticket</label>
-                    <input type="text" id="gsp-ticket" name="gspTicket" placeholder="Enter GSP ticket number">
-
-                    <label for="serial-numbers">Serial Numbers</label>
-                    <textarea id="serial-numbers" name="serialNumbers" rows="3" placeholder="Enter serial numbers"></textarea>
-
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="esr-completed" name="esrCompleted">
-                        <label for="esr-completed">FIELD REPORT completed?</label>
+                <div class="footer-contact">
+                    <h4>Support</h4>
+                    <p>Available 24/7 for technical assistance</p>
+                    <div class="powered-by">
+                        <span>Powered by</span>
+                        <a href="https://www.anthropic.com" target="_blank">
+                            <img src="images/CLAUDE_LOGO.png" alt="Claude" class="claude-logo">
+                        </a>
                     </div>
                 </div>
-
-                <!-- OTHER Fields -->
-                <div id="other-fields" class="form-group" style="display: none;">
-                    <label for="other-description">Description <span class="required-asterisk">*</span></label>
-                    <textarea id="other-description" name="description" rows="4" placeholder="Enter detailed description"></textarea>
-                </div>
-
-                <!-- File Upload Section -->
-                <div id="file-upload-section" class="form-group" style="display: none;">
-                    <label>ATTACHMENTS<span id="attachment-required" class="text-red-500 hidden"> *</span></label>
-                    <div id="file-upload" class="file-upload">
-                        <div id="upload-text">
-                            Drop files here or click to upload (allowed types: txt, zip, rar, pictures, PDFs, MS Office files)
-                            <input type="file" id="file-input" name="attachments" multiple style="display: none;">
-                        </div>
-                        <div id="file-list" class="file-list"></div>
-                    </div>
-                </div>
-
-                <!-- Message container -->
-                <div id="message-container" class="mb-4"></div>
-
-                <div id="loading-spinner" class="loading-state">
-                    <div class="spinner"></div>
-                    <p>Submitting your request...</p>
-                </div>
-
-                <button type="submit" id="submit-btn" style="display: none;">SUBMIT</button>
-            </form>
-        </div>
-        
-        <!-- Error Modal -->
-        <div id="error-modal" class="modal-overlay hidden">
-            <div class="modal-content">
-                <h2>Error</h2>
-                <p id="error-message">There was an error processing your request.</p>
-                <div id="error-details" class="message-details"></div>
-                <button class="modal-button" id="error-close-btn">Close</button>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</p>
+                <p class="creator-credit">Created by Andres Provero</p>
             </div>
         </div>
-        
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-text">
-                <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
-                <div class="footer-creator">Created by Andres Provero</div>
-            </div>
-            <div class="footer-logo">
-                <a href="https://www.anthropic.com" target="_blank">
-                    <img src="images/CLAUDE_LOGO.png" alt="Claude Logo">
-                </a>
-                <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
-            </div>
-        </footer>
-    </div>
+    </footer>
 
-    <!-- paths -->
-    <link rel="stylesheet" href="css/shared-styles.css">
-    <script src="js/common.js"></script>
-    <script src="js/index.js"></script>
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-orange: #ff9500;
+            --primary-orange-dark: #e8850f;
+            --dark-gray: #2c3e50;
+            --medium-gray: #666666;
+            --light-gray: #f8f9fa;
+            --border-light: #e9ecef;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 15px rgba(0,0,0,0.15);
+            --transition: all 0.2s ease;
+            
+            /* Category Colors - Flat & Professional */
+            --color-form: #0078d4;
+            --color-reference: #8764b8;
+            --color-catalog: #00bcf2;
+            --color-tool: #107c10;
+            --color-calculator: #d83b01;
+            --color-template: #881798;
+            --color-external: #5c2e91;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
+            color: var(--dark-gray);
+            background: #f3f2f1;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .banner-and-contact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .banner-logo {
+            height: 60px;
+            width: auto;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--medium-gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-orange);
+            background: var(--light-gray);
+        }
+
+        /* Filters Section */
+        .filters-section {
+            background: var(--white);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1rem 2rem;
+        }
+
+        .filters-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .filters-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 1rem;
+        }
+
+        .filter-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--medium-gray);
+            transition: var(--transition);
+        }
+
+        .filter-checkbox:hover {
+            color: var(--primary-orange);
+        }
+
+        .filter-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .checkmark {
+            height: 18px;
+            width: 18px;
+            background-color: var(--white);
+            border: 2px solid var(--border-light);
+            border-radius: 3px;
+            margin-right: 0.75rem;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .filter-checkbox:hover .checkmark {
+            border-color: var(--primary-orange);
+        }
+
+        .filter-checkbox input:checked ~ .checkmark {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 5px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .filter-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Tools Section */
+        .tools-section {
+            padding: 2rem;
+            min-height: 60vh;
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* WINDOWS 10 STYLE GRID */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        /* WINDOWS 10 STYLE TILES */
+        .tool-tile {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            height: 140px; /* Fixed square-ish height */
+            overflow: hidden;
+        }
+
+        .tool-tile:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .tool-tile:active {
+            transform: translateY(0);
+        }
+
+        /* Category-based left border */
+        .tool-tile[data-category="form"] {
+            border-left: 4px solid var(--color-form);
+        }
+
+        .tool-tile[data-category="reference"] {
+            border-left: 4px solid var(--color-reference);
+        }
+
+        .tool-tile[data-category="catalog"] {
+            border-left: 4px solid var(--color-catalog);
+        }
+
+        .tool-tile[data-category="tool"] {
+            border-left: 4px solid var(--color-tool);
+        }
+
+        .tool-tile[data-category="calculator"] {
+            border-left: 4px solid var(--color-calculator);
+        }
+
+        .tool-tile[data-category="template"] {
+            border-left: 4px solid var(--color-template);
+        }
+
+        .tool-tile[data-category="external-link"] {
+            border-left: 4px solid var(--color-external);
+        }
+
+        /* TILE CONTENT LAYOUT */
+        .tile-content {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            height: 100%;
+            gap: 1rem;
+        }
+
+        /* TILE ICON */
+        .tile-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--medium-gray);
+        }
+
+        .tool-tile[data-category="form"] .tile-icon {
+            color: var(--color-form);
+        }
+
+        .tool-tile[data-category="reference"] .tile-icon {
+            color: var(--color-reference);
+        }
+
+        .tool-tile[data-category="catalog"] .tile-icon {
+            color: var(--color-catalog);
+        }
+
+        .tool-tile[data-category="tool"] .tile-icon {
+            color: var(--color-tool);
+        }
+
+        .tool-tile[data-category="calculator"] .tile-icon {
+            color: var(--color-calculator);
+        }
+
+        .tool-tile[data-category="template"] .tile-icon {
+            color: var(--color-template);
+        }
+
+        .tool-tile[data-category="external-link"] .tile-icon {
+            color: var(--color-external);
+        }
+
+        /* TILE INFO */
+        .tile-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tile-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 0.25rem;
+            line-height: 1.3;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            margin-right: 3rem; /* Space for category badge */
+        }
+
+        .tile-description {
+            font-size: 0.85rem;
+            color: var(--medium-gray);
+            line-height: 1.3;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        /* CATEGORY BADGE - Top right of entire tile */
+        .tile-category {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        /* Category-specific badge colors matching the left border */
+        .tool-tile[data-category="form"] .tile-category {
+            color: white;
+            background-color: var(--color-form);
+        }
+
+        .tool-tile[data-category="reference"] .tile-category {
+            color: white;
+            background-color: var(--color-reference);
+        }
+
+        .tool-tile[data-category="catalog"] .tile-category {
+            color: white;
+            background-color: var(--color-catalog);
+        }
+
+        .tool-tile[data-category="tool"] .tile-category {
+            color: white;
+            background-color: var(--color-tool);
+        }
+
+        .tool-tile[data-category="calculator"] .tile-category {
+            color: white;
+            background-color: var(--color-calculator);
+        }
+
+        .tool-tile[data-category="template"] .tile-category {
+            color: white;
+            background-color: var(--color-template);
+        }
+
+        .tool-tile[data-category="external-link"] .tile-category {
+            color: white;
+            background-color: var(--color-external);
+        }
+
+        /* Loading State */
+        .loading-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top: 3px solid var(--primary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 4px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            color: var(--medium-gray);
+            margin-bottom: 1rem;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+            color: var(--dark-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-text {
+            color: var(--medium-gray);
+        }
+
+        /* Footer */
+        .main-footer {
+            background: linear-gradient(135deg, #666666 0%, #777777 100%);
+            color: var(--white);
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo img {
+            height: 50px;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 4px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .footer-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .footer-links h4,
+        .footer-contact h4 {
+            margin-bottom: 1rem;
+            color: var(--primary-orange);
+            font-size: 1.1rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-orange);
+        }
+
+        .footer-contact p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+        }
+
+        .powered-by {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .powered-by span {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+
+        .claude-logo {
+            height: 20px;
+            padding: 0.25rem 0.5rem;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .claude-logo:hover {
+            background-color: white;
+            transform: scale(1.05);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .creator-credit {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .banner-and-contact {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .banner-logo {
+                height: 50px;
+            }
+
+            .nav-link {
+                padding: 0.75rem 1.5rem;
+                border-radius: 6px;
+                background: var(--light-gray);
+                border: 1px solid var(--border-light);
+                font-size: 0.9rem;
+            }
+
+            .filters-section {
+                padding: 1rem;
+            }
+
+            .filter-checkboxes {
+                gap: 1rem;
+            }
+
+            .tools-section {
+                padding: 1.5rem 1rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 0.75rem;
+            }
+
+            .tool-tile {
+                height: 120px;
+            }
+
+            .tile-content {
+                padding: 0.75rem;
+            }
+
+            .tile-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+
+            .tile-title {
+                font-size: 0.9rem;
+                margin-right: 3.5rem;
+            }
+
+            .tile-description {
+                font-size: 0.8rem;
+            }
+
+            .tile-category {
+                top: 0.5rem;
+                right: 0.5rem;
+                font-size: 0.6rem;
+                padding: 0.2rem 0.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0.75rem;
+            }
+
+            .banner-logo {
+                height: 45px;
+            }
+
+            .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .filters-section {
+                padding: 0.75rem;
+            }
+
+            .filter-checkboxes {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+
+            .tools-section {
+                padding: 1rem 0.75rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .tool-tile {
+                height: 110px;
+            }
+
+            .tile-content {
+                padding: 0.75rem;
+                gap: 0.75rem;
+            }
+
+            .tile-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+
+            .tile-title {
+                font-size: 0.85rem;
+                margin-right: 3rem;
+                -webkit-line-clamp: 1;
+            }
+
+            .tile-description {
+                font-size: 0.75rem;
+                -webkit-line-clamp: 2;
+            }
+
+            .tile-category {
+                font-size: 0.55rem;
+                padding: 0.15rem 0.3rem;
+            }
+        }
+    </style>
+
+    <!-- Load external JavaScript file -->
+    <script src="js/tools-hub.js"></script>
 </body>
 </html>
