@@ -742,17 +742,21 @@
                 padding: 0.75rem;
             }
 
+            /* CHROME FIX: Explicit override of all flexbox properties */
             .filter-checkboxes {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);  
-                gap: 0.75rem 1rem;                      
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 0.75rem 1rem !important;
+                flex-direction: unset !important;
+                flex-wrap: unset !important;
                 align-items: flex-start;
-                width: 100%;                            
+                width: 100%;
             }
 
             .filter-checkbox {
-                width: 100%;                            
-                justify-self: start;                    
+                width: 100%;
+                justify-self: start;
+                margin: 0;
             }
 
             .tools-section {
@@ -795,6 +799,7 @@
                 padding: 0.15rem 0.3rem;
             }
         }
+        
     </style>
 
     <!-- Load external JavaScript file -->
