@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You're Offline - CoE LATAM</title>
+    <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .coe-logo {
+            margin-top: 40px;
+        }
+
+        .coe-logo img {
+            height: 50px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            width: 100%;
+        }
+
+        .main-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .error-code {
+            margin-bottom: 20px;
+            line-height: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .wink-character {
+            width: 120px;
+            height: auto;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            color: #333333;
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+
+        .error-description {
+            font-size: 1rem;
+            color: #666666;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 400px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #f5f5f5;
+            color: #333333;
+            text-decoration: none;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #e5e5e5;
+            border-color: #999999;
+        }
+
+        @media (max-width: 900px) {
+            .wink-character {
+                width: 100px;
+                height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wink-character {
+                width: 90px;
+                height: auto;
+            }
+
+            .coe-logo img {
+                height: 40px;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+
+            .error-description {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="main-section">
+            <div class="error-code">
+                <img src="images/wink-character.webp" alt="Wink" class="wink-character">
+            </div>
+            <h1 class="error-title">You're Offline</h1>
+        </div>
+        <p class="error-description">
+            It looks like you've lost your internet connection. 
+            Check your network and try again when you're back online.
+        </p>
+        <button class="back-button" onclick="window.location.reload()">🔄 Try Again</button>
+        <div class="coe-logo">
+            <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
+        </div>
+    </div>
+</body>
+</html>
