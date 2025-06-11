@@ -80,7 +80,7 @@ function loadFallbackData() {
     allTools = [
         {
             id: 1,
-            name: "CoE Support Request",
+            name: "CoE Support Request from BU",
             category: "Form",
             description: "Request form for: Support, RCA, Training and other CoE services",
             url: "index.html",
