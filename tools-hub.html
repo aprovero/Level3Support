@@ -10,64 +10,60 @@
 <body>
     <!-- Navigation Header -->
     <nav class="navbar">
-        <div class="filters-container">
-            <div class="banner-and-contact">
-                <img src="images/tool-hub-banner.png" alt="CoE LATAM Tool Hub" class="banner-logo">
-                <a href="contacts.html" class="nav-link">
-                    <i class="fas fa-address-book"></i>
-                    Contacts
-                </a>
-            </div>
+        <div class="banner-and-contact">
+            <img src="images/tool-hub-banner.png" alt="CoE LATAM Tool Hub" class="banner-logo">
+            <a href="contacts.html" class="nav-link">
+                <i class="fas fa-address-book"></i>
+                Contacts
+            </a>
         </div>
     </nav>
 
     <!-- Category Filters Section -->
     <section class="filters-section">
-        <div class="section-container">
-            <div class="filters-container">
-                <h3 class="filters-title">Filter by Category:</h3>
-                <div class="filter-checkboxes">
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="all" checked>
-                        <span class="checkmark"></span>
-                        All Tools
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="form">
-                        <span class="checkmark"></span>
-                        Forms
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="reference">
-                        <span class="checkmark"></span>
-                        Reference
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="catalog">
-                        <span class="checkmark"></span>
-                        Catalogs
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="tool">
-                        <span class="checkmark"></span>
-                        Tools
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="calculator">
-                        <span class="checkmark"></span>
-                        Calculators
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="template">
-                        <span class="checkmark"></span>
-                        Templates
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="external-link">
-                        <span class="checkmark"></span>
-                        External Links
-                    </label>
-                </div>
+        <div class="filters-container">
+            <h3 class="filters-title">Filter by Category:</h3>
+            <div class="filter-checkboxes">
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="all" checked>
+                    <span class="checkmark"></span>
+                    All Tools
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="form">
+                    <span class="checkmark"></span>
+                    Forms
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="reference">
+                    <span class="checkmark"></span>
+                    Reference
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="catalog">
+                    <span class="checkmark"></span>
+                    Catalogs
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="tool">
+                    <span class="checkmark"></span>
+                    Tools
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="calculator">
+                    <span class="checkmark"></span>
+                    Calculators
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="template">
+                    <span class="checkmark"></span>
+                    Templates
+                </label>
+                <label class="filter-checkbox">
+                    <input type="checkbox" value="external-link">
+                    <span class="checkmark"></span>
+                    External Links
+                </label>
             </div>
         </div>
     </section>
@@ -83,110 +79,7 @@
             
             <!-- Tools Grid -->
             <div id="tools-grid" class="tools-grid">
-                <!-- Sample tool tiles to demonstrate the improved design -->
-                <div class="tool-tile" data-category="form">
-                    <div class="tile-content">
-                        <div class="tile-icon">
-                            <i class="fas fa-file-alt"></i>
-                        </div>
-                        <div class="tile-info">
-                            <h3 class="tile-title">CoE Support Request</h3>
-                            <p class="tile-description">Request form for Support, RCA, Training and other CoE services</p>
-                            <div class="tile-category">FORM</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tool-tile" data-category="reference">
-                    <div class="tile-content">
-                        <div class="tile-icon">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <div class="tile-info">
-                            <h3 class="tile-title">Technical Documentation Database</h3>
-                            <p class="tile-description">Searchable database of technical documents and guides</p>
-                            <div class="tile-category">REFERENCE</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tool-tile" data-category="catalog">
-                    <div class="tile-content">
-                        <div class="tile-icon">
-                            <i class="fas fa-list"></i>
-                        </div>
-                        <div class="tile-info">
-                            <h3 class="tile-title">LATAM Training Catalog</h3>
-                            <p class="tile-description">Available training courses and resources provided by CoE</p>
-                            <div class="tile-category">CATALOG</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tool-tile" data-category="tool">
-                    <div class="tile-content">
-                        <div class="tile-icon">
-                            <i class="fas fa-wrench"></i>
-                        </div>
-                        <div class="tile-info">
-                            <h3 class="tile-title">ABB REJ603 Relay Config</h3>
-                            <p class="tile-description">Interactive tool for configuring ABB REJ603 relays</p>
-                            <div class="tile-category">TOOL</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tool-tile" data-category="tool">
-                    <div class="tile-content">
-                        <div class="tile-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="tile-info">
-                            <h3 class="tile-title">Parameter Comparison Tool</h3>
-                            <p class="tile-description">Compare SG1+x parameters between different units</p>
-                            <div class="tile-category">TOOL</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tool-tile" data-category="tool">
-                    <div class="tile-content">
-                        <div class="tile-icon">
-                            <i class="fas fa-chart-bar"></i>
-                        </div>
-                        <div class="tile-info">
-                            <h3 class="tile-title">UMCG Data Analysis</h3>
-                            <p class="tile-description">Analyze data extracted from UMCG devices</p>
-                            <div class="tile-category">TOOL</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tool-tile" data-category="tool">
-                    <div class="tile-content">
-                        <div class="tile-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="tile-info">
-                            <h3 class="tile-title">PDP Fault Code Interpreter</h3>
-                            <p class="tile-description">Decode PDP fault codes for UMCG & SG1+x modules</p>
-                            <div class="tile-category">TOOL</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tool-tile" data-category="form">
-                    <div class="tile-content">
-                        <div class="tile-icon">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="tile-info">
-                            <h3 class="tile-title">Training Evaluation Form</h3>
-                            <p class="tile-description">Official CoE LATAM training evaluation form</p>
-                            <div class="tile-category">FORM</div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Tool cards will be dynamically inserted here -->
             </div>
             
             <!-- Empty State -->
@@ -286,13 +179,15 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            padding: 1rem 0;
+            padding: 1rem 2rem;
         }
 
         .banner-and-contact {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .banner-logo {
@@ -748,6 +643,37 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .banner-and-contact {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .banner-logo {
+                height: 50px;
+            }
+
+            .nav-link {
+                padding: 0.75rem 1.5rem;
+                border-radius: 6px;
+                background: var(--light-gray);
+                border: 1px solid var(--border-light);
+                font-size: 0.9rem;
+            }
+
+            .filters-section {
+                padding: 1rem;
+            }
+
+            .filter-checkboxes {
+                gap: 1rem;
+            }
+
             .tools-section {
                 padding: 1.5rem 1rem;
             }
@@ -773,43 +699,88 @@
 
             .tile-title {
                 font-size: 0.9rem;
+                margin-right: 3.5rem;
             }
 
             .tile-description {
                 font-size: 0.8rem;
             }
+
+            .tile-category {
+                top: 0.5rem;
+                right: 0.5rem;
+                font-size: 0.6rem;
+                padding: 0.2rem 0.4rem;
+            }
         }
 
         @media (max-width: 480px) {
+            .navbar {
+                padding: 0.75rem;
+            }
+
+            .banner-logo {
+                height: 45px;
+            }
+
+            .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .filters-section {
+                padding: 0.75rem;
+            }
+
+            .filter-checkboxes {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+
+            .tools-section {
+                padding: 1rem 0.75rem;
+            }
+
             .tools-grid {
                 grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .tool-tile {
+                height: 110px;
+            }
+
+            .tile-content {
+                padding: 0.75rem;
+                gap: 0.75rem;
+            }
+
+            .tile-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
+            }
+
+            .tile-title {
+                font-size: 0.85rem;
+                margin-right: 3rem;
+                -webkit-line-clamp: 1;
+            }
+
+            .tile-description {
+                font-size: 0.75rem;
+                -webkit-line-clamp: 2;
+            }
+
+            .tile-category {
+                font-size: 0.55rem;
+                padding: 0.15rem 0.3rem;
             }
         }
     </style>
 
-    <script>
-        // Professional tile interaction
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Windows 10 style Tools Hub loaded');
-            
-            // Add click functionality to tiles
-            const tiles = document.querySelectorAll('.tool-tile');
-            tiles.forEach(tile => {
-                tile.addEventListener('click', function() {
-                    // Here you would normally navigate to the tool
-                    console.log('Tile clicked:', this.querySelector('.tile-title').textContent);
-                });
-                
-                // Subtle hover effect
-                tile.addEventListener('mouseenter', function() {
-                    this.style.borderColor = 'var(--primary-orange)';
-                });
-                
-                tile.addEventListener('mouseleave', function() {
-                    this.style.borderColor = 'rgba(0,0,0,0.1)';
-                });
-            });
-        });
-    </script>
+    <!-- Load external JavaScript file -->
+    <script src="js/tools-hub.js"></script>
 </body>
 </html>

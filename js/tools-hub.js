@@ -42,7 +42,7 @@ function loadToolsData() {
     showLoadingState(true);
     
     // Try to load from JSON file
-    fetch('tools-data.json')
+    fetch('./tools-data.json')
         .then(response => {
             console.log('JSON response status:', response.status);
             if (!response.ok) {
@@ -55,6 +55,7 @@ function loadToolsData() {
             
             if (data && data.tools && data.tools.length > 0) {
                 allTools = data.tools;
+                console.log('Using JSON data with', allTools.length, 'tools');
                 renderTools(allTools);
                 initializeFilters();
             } else {
@@ -64,8 +65,7 @@ function loadToolsData() {
         })
         .catch(error => {
             console.error('Error loading tools data:', error);
-            // Fallback to sample data if JSON file is not available
-            console.log('Using fallback sample data');
+            console.log('JSON loading failed, trying fallback data');
             loadFallbackData();
         })
         .finally(() => {
@@ -74,9 +74,10 @@ function loadToolsData() {
 }
 
 /**
- * Fallback data if JSON file is not available
+ * Fallback data if JSON file is not available - using proper URLs
  */
 function loadFallbackData() {
+    console.log('Loading fallback data with proper URLs');
     allTools = [
         {
             id: 1,
@@ -144,6 +145,7 @@ function loadFallbackData() {
         }
     ];
     
+    console.log('Fallback data loaded with', allTools.length, 'tools');
     renderTools(allTools);
     initializeFilters();
 }
@@ -228,14 +230,6 @@ function createToolTile(tool) {
         // Add cursor pointer
         tile.style.cursor = 'pointer';
         
-        // Add subtle hover effect
-        tile.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px)';
-        });
-        
-        tile.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
     } else {
         tile.style.cursor = 'default';
         tile.style.opacity = '0.6';
@@ -304,18 +298,24 @@ function handleFilterChange() {
         }
     });
     
+    console.log('Selected filters:', selectedFilters);
+    
     // If "all" is selected or no filters, show all tools
     if (selectedFilters.includes('all') || selectedFilters.length === 0) {
+        console.log('Showing all tools');
         renderTools(allTools);
         return;
     }
     
     // Filter tools based on selected categories
     const filteredTools = allTools.filter(tool => {
-        const toolCategory = tool.category.toLowerCase().replace(/\s+/g, '-');
-        return selectedFilters.includes(toolCategory);
+        const toolCategory = tool.category.toLowerCase();
+        const isMatch = selectedFilters.includes(toolCategory);
+        console.log(`Tool: ${tool.name}, Category: ${tool.category} (${toolCategory}), Match: ${isMatch}`);
+        return isMatch;
     });
     
+    console.log('Filtered tools:', filteredTools.length, 'out of', allTools.length);
     renderTools(filteredTools);
 }
 
