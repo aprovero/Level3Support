@@ -1,14 +1,63 @@
 const CACHE_NAME = 'toolhub-cache-v1';
 const ASSETS_TO_CACHE = [
-  '/',
+  '/', // Root entry point
   '/index.html',
-  '/style.css',
-  '/script.js',
+  '/404.html',
+  '/contacts.html',
+  '/parameter-comparison.html',
+  '/rej603-configurator.html',
+  '/tools-data.json',
   '/manifest.json',
+
+  // JavaScript files
+  '/js/common.js',
+  '/js/contacts.js',
+  '/js/papaparse.min.js',
+  '/js/parameter-comparison.js',
+  '/js/tools-hub.js',
+
+  // CSS files
+  '/css/parameter-comparison.css',
+  '/css/rej603-configurator.css',
+  '/css/shared-styles.css',
+
+  // PWA Icons
+  '/icons/icon-72.png',
+  '/icons/icon-96.png',
+  '/icons/icon-128.png',
+  '/icons/icon-144.png',
+  '/icons/icon-152.png',
   '/icons/icon-192.png',
+  '/icons/icon-256.png',
+  '/icons/icon-384.png',
   '/icons/icon-512.png',
-  // Add more routes/files as needed
+  '/icons/ToolHUB.ico',
+
+  // Image assets
+  '/images/ABB_LOGO.png',
+  '/images/CLAUDE_LOGO.png',
+  '/images/COE_LOGO.png',
+  '/images/CONTACT_ANDRES.png',
+  '/images/CONTACT_CRISTHIAN.png',
+  '/images/CONTACT_FABIO.png',
+  '/images/CONTACT_FELIPE.png',
+  '/images/CONTACT_GABRIEL.png',
+  '/images/CONTACT_JAVIER.png',
+  '/images/CONTACT_LUCAS.png',
+  '/images/CONTACT_MAURICIO.png',
+  '/images/contact-icon.png',
+  '/images/hmm-character.png',
+  '/images/hmm-character.webp',
+  '/images/LOGO.png',
+  '/images/placeholder.png',
+  '/images/resource-icon.png',
+  '/images/SIMPLE_LOGO.png',
+  '/images/Sungrow-logo.png',
+  '/images/tool-hub-banner.png',
+  '/images/tool-hub-banner.svg',
+  '/images/training-icon.png'
 ];
+
 
 // Install event: pre-cache all static assets
 self.addEventListener('install', event => {
