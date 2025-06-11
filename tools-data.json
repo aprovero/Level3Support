@@ -58,7 +58,7 @@
     },  
     {
       "id": 8,
-      "name": "UMCG&SG1+x PDP Module Fault Code Interpreter",
+      "name": "PDP Module Fault Code Interpreter",
       "category": "Tool",
       "description": "Used for decoding PDP fault codes",
       "url": "https://coelatam.onrender.com/PDP-fault.html",
