@@ -1,7 +1,7 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'toolhub-cache-v7'; // ⬅️ Update this every time you change assets
+const CACHE_NAME = 'toolhub-cache-v8'; // ⬅️ Update this every time you change assets
 
 const ASSETS_TO_CACHE = [
   '/index.html', '/404.html', '/offline.html',
@@ -34,6 +34,8 @@ const ASSETS_TO_CACHE = [
   '/images/wink-character.webp'
 ];
 
+const INDEX_HTML = '/index.html';
+const FALLBACK_HTML = '/offline.html';
 
 // =======================
 // ⚙️ INSTALL EVENT
@@ -70,30 +72,35 @@ self.addEventListener('activate', event => {
 });
 
 // =======================
-// 🌐 FETCH EVENT
+// 🌐 FETCH EVENT (UPDATED)
 // =======================
 self.addEventListener('fetch', (event) => {
   if (event.request.mode === 'navigate') {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
         if (cachedResponse) {
-          return cachedResponse; // ✅ Return cached page if available
+          return cachedResponse; // ✅ Return cached page
         }
 
-        return fetch(event.request).catch(() => {
-          return caches.match('/offline.html'); // ❌ Fallback to offline only if not cached and fetch fails
-        });
-      })
+        const url = new URL(event.request.url);
+        const path = url.pathname;
+
+        if (path === '/' || path === '/index.html') {
+          return caches.match(INDEX_HTML);
+        }
+
+        return caches.match(FALLBACK_HTML);
+      }).catch(() => caches.match(FALLBACK_HTML))
     );
-  } else {
-    // Non-navigation requests (CSS, JS, images, etc.)
-    event.respondWith(
-      caches.match(event.request).then((cached) => {
-        return cached || fetch(event.request);
-      })
-    );
+    return;
   }
+
+  // Non-navigation: CSS, JS, Images, etc.
+  event.respondWith(
+    caches.match(event.request).then((cached) => cached || fetch(event.request))
+  );
 });
+
 
 // =======================
 // 💬 MESSAGE HANDLER
