@@ -6,8 +6,8 @@
     <title>CoE LATAM - Service Tools Hub</title>
 
     <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#0a74da" />
+    <link rel="manifest" href="/manifest.json?v=3">
+    <meta name="theme-color" content="#0a74da">
 
     <!-- Apple Support -->
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
@@ -805,14 +805,30 @@
     <!-- Load external JavaScript file -->
     <script src="js/tools-hub.js"></script>
     <script>
-    window.addEventListener('load', () => {
-        if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')
-            .then(() => console.log('✅ Service Worker registered'))
-            .catch(error => console.error('❌ Service Worker registration failed:', error));
-        }
-    });
+        .then(reg => {
+            console.log('SW registered ✅', reg);
+
+            // Optional: Listen for updates
+            if (reg.waiting) {
+            console.log('Update ready. You can prompt user to refresh');
+            }
+
+            reg.addEventListener('updatefound', () => {
+            const newSW = reg.installing;
+            newSW.addEventListener('statechange', () => {
+                if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+                console.log('New version installed. Notify user.');
+                // optionally show a toast here
+                }
+            });
+            });
+        })
+        .catch(err => console.error('SW registration failed ❌', err));
+    }
     </script>
+
 
 </body>
 </html>
