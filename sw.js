@@ -1,7 +1,7 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'toolhub-cache-v8'; // ⬅️ Update this every time you change assets
+const CACHE_NAME = 'toolhub-cache-v9'; // ⬅️ Update this every time you change assets
 
 const ASSETS_TO_CACHE = [
   '/index.html', '/404.html', '/offline.html',
@@ -35,7 +35,8 @@ const ASSETS_TO_CACHE = [
 ];
 
 const INDEX_HTML = '/index.html';
-const FALLBACK_HTML = '/offline.html';
+const OFFLINE_HTML = '/offline.html';
+const NOT_FOUND_HTML = '/404.html';
 
 // =======================
 // ⚙️ INSTALL EVENT
@@ -75,25 +76,44 @@ self.addEventListener('activate', event => {
 // 🌐 FETCH EVENT (UPDATED)
 // =======================
 self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
+  const req = event.request;
+
+  // 👣 If navigating (HTML page)
+  if (req.mode === 'navigate') {
     event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse; // ✅ Return cached page
-        }
-
-        const url = new URL(event.request.url);
-        const path = url.pathname;
-
-        if (path === '/' || path === '/index.html') {
-          return caches.match(INDEX_HTML);
-        }
-
-        return caches.match(FALLBACK_HTML);
-      }).catch(() => caches.match(FALLBACK_HTML))
+      fetch(req)
+        .then((res) => {
+          // 🟢 If page exists, use network version and optionally cache
+          return res.status === 404
+            ? caches.match(NOT_FOUND_HTML)
+            : res;
+        })
+        .catch(() => {
+          // ❌ If offline, fallback to cached version or offline
+          return caches.match(req.url)
+            .then(match => match || caches.match(INDEX_HTML))
+            .catch(() => caches.match(OFFLINE_HTML));
+        })
     );
     return;
   }
+
+  // 📦 For static assets (JS, CSS, images, fonts, etc.)
+  event.respondWith(
+    caches.match(req).then((cached) => {
+      return cached || fetch(req).catch(() => {
+        // Only fallback to offline page for HTML
+        if (req.headers.get('accept')?.includes('text/html')) {
+          return caches.match(OFFLINE_HTML);
+        }
+
+        // Otherwise just fail silently for images, icons, etc.
+        return new Response('', { status: 404 });
+      });
+    })
+  );
+});
+
 
   // Non-navigation: CSS, JS, Images, etc.
   event.respondWith(
