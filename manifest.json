@@ -1,5 +1,6 @@
 {
   "_changelog": [
+    "v4  Updated theme colors to match new branding",
     "v3  Added top bar theme color, manifest short_name fix, versioning",
     "v2  Initial PWA offline cache, icons, SW improvements",
     "v1  First working PWA setup"
@@ -8,7 +9,7 @@
   "name": "CoE LATAM: Tool HUB",
   "short_name": "Tool HUB",
   "description": "Centralized access to technical tools, dashboards, and support services created by CoE LATAM, to ease Field Work, Troubleshooting and Escalations.",
-  "start_url": "/?v=3&source=pwa",
+  "start_url": "/?v=4&source=pwa",
   "scope": "/",
   "display_override": [
     "standalone",
@@ -17,8 +18,8 @@
     "window-controls-overlay"
   ],
   "display": "standalone",
-  "background_color": "#f3f4f6",         
-  "theme_color": "#0a74da",              
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "orientation": "portrait-primary",
   "lang": "en",
   "dir": "ltr",

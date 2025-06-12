@@ -84,7 +84,7 @@ function loadFallbackData() {
             name: "CoE Support Request",
             category: "Form",
             description: "Request form for: Support, RCA, Training and other CoE services",
-            url: "https://coelatam.onrender.com/",
+            url: "https://coelatam.onrender.com/support-request.html",
             notes: "Use for all CoE-related requests"
         },
         {
@@ -137,7 +137,7 @@ function loadFallbackData() {
         },  
         {
             id: 8,
-            name: "UMCG&SG1+x PDP Module Fault Code Interpreter",
+            name: "PDP Module Fault Code Interpreter",
             category: "Tool",
             description: "Used for decoding PDP fault codes",
             url: "https://coelatam.onrender.com/PDP-fault.html",
@@ -348,4 +348,66 @@ function handleError(message) {
     if (emptyState) {
         emptyState.style.display = 'none';
     }
+}
+
+/**
+ * New Service Worker message handler
+ */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    console.log('[PWA] Service Worker registered:', reg);
+
+    // 🔄 Listen for updates
+    reg.addEventListener('updatefound', () => {
+      const newSW = reg.installing;
+      newSW.addEventListener('statechange', () => {
+        if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+          // Show update banner
+          showUpdateToast(newSW);
+        }
+      });
+    });
+  });
+}
+
+function showUpdateToast(sw) {
+  const toast = document.createElement('div');
+  toast.innerHTML = `
+    <div style="
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: #0a74da;
+      color: white;
+      padding: 1em;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 9999;
+      font-family: sans-serif;
+    ">
+      <span>🔄 New version available</span>
+      <button id="refresh-pwa" style="
+        background: white;
+        color: #0a74da;
+        border: none;
+        padding: 0.5em 1em;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+      ">Refresh</button>
+    </div>
+  `;
+  document.body.appendChild(toast);
+
+  document.getElementById('refresh-pwa').addEventListener('click', () => {
+    sw.postMessage({ type: 'SKIP_WAITING' });
+  });
+
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    window.location.reload();
+  });
 }

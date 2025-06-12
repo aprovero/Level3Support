@@ -1,18 +1,18 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'toolhub-cache-v3'; // ⬅️ Update this whenever you change the SW or assets
+const CACHE_NAME = 'toolhub-cache-v4'; // ⬅️ Update this every time you change assets
 
 const ASSETS_TO_CACHE = [
   '/', '/index.html', '/404.html', '/offline.html',
   '/contacts.html', '/parameter-comparison.html', '/rej603-configurator.html',
   '/tools-data.json', '/manifest.json',
 
-  // JavaScript files
+  // JavaScript
   '/js/common.js', '/js/contacts.js', '/js/papaparse.min.js',
   '/js/parameter-comparison.js', '/js/tools-hub.js',
 
-  // CSS files
+  // CSS
   '/css/parameter-comparison.css', '/css/rej603-configurator.css', '/css/shared-styles.css',
 
   // Icons
@@ -21,50 +21,50 @@ const ASSETS_TO_CACHE = [
   '/icons/icon-256.png', '/icons/icon-384.png', '/icons/icon-512.png',
   '/icons/ToolHUB.ico',
 
-  // Image assets
+  // Images
   '/images/ABB_LOGO.png', '/images/CLAUDE_LOGO.png', '/images/COE_LOGO.png',
-  '/images/CONTACT_ANDRES.png', '/images/CONTACT_CRISTHIAN.png',
-  '/images/CONTACT_FABIO.png', '/images/CONTACT_FELIPE.png',
-  '/images/CONTACT_GABRIEL.png', '/images/CONTACT_JAVIER.png',
-  '/images/CONTACT_LUCAS.png', '/images/CONTACT_MAURICIO.png',
-  '/images/contact-icon.png', '/images/hmm-character.png', '/images/hmm-character.webp',
+  '/images/CONTACT_ANDRES.png', '/images/CONTACT_CRISTHIAN.png', '/images/CONTACT_FABIO.png',
+  '/images/CONTACT_FELIPE.png', '/images/CONTACT_GABRIEL.png', '/images/CONTACT_JAVIER.png',
+  '/images/CONTACT_LUCAS.png', '/images/CONTACT_MAURICIO.png', '/images/contact-icon.png',
+  '/images/hmm-character.png', '/images/hmm-character.webp',
   '/images/LOGO.png', '/images/placeholder.png', '/images/resource-icon.png',
   '/images/SIMPLE_LOGO.png', '/images/Sungrow-logo.png',
-  '/images/tool-hub-banner.png', '/images/tool-hub-banner.svg', '/images/training-icon.png'
+  '/images/tool-hub-banner.png', '/images/tool-hub-banner.svg',
+  '/images/training-icon.png', '/images/wink-character.png', '/images/wink-character.webp',
 ];
 
 // =======================
 // ⚙️ INSTALL EVENT
 // =======================
 self.addEventListener('install', event => {
-  console.log('[ServiceWorker] Installing new service worker...');
+  console.log('[SW] Installing...');
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('[ServiceWorker] Pre-caching offline assets');
+      console.log('[SW] Pre-caching static assets');
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
-  self.skipWaiting(); // Force SW to activate immediately
+  self.skipWaiting(); // Activate immediately
 });
 
 // =======================
 // ♻️ ACTIVATE EVENT
 // =======================
 self.addEventListener('activate', event => {
-  console.log('[ServiceWorker] Activating new service worker...');
+  console.log('[SW] Activating new version...');
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
         keys.map(key => {
           if (key !== CACHE_NAME) {
-            console.log('[ServiceWorker] Deleting old cache:', key);
+            console.log('[SW] Removing old cache:', key);
             return caches.delete(key);
           }
         })
       )
     )
   );
-  self.clients.claim();
+  self.clients.claim(); // Take control immediately
 });
 
 // =======================
@@ -72,28 +72,29 @@ self.addEventListener('activate', event => {
 // =======================
 self.addEventListener('fetch', event => {
   if (event.request.mode === 'navigate') {
-    // Handle navigation requests
     event.respondWith(
-      fetch(event.request).catch(() =>
-        caches.match('/offline.html')
-      )
+      caches.match(event.request).then(cached => {
+        if (cached) return cached;
+        return fetch(event.request).catch(() => caches.match('/offline.html'));
+      })
     );
-  } else {
-    // Handle asset requests
-    event.respondWith(
-      caches.match(event.request).then(response =>
-        response || fetch(event.request)
-      )
-    );
+    return;
   }
+
+  // Fallback for all other assets
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      return cached || fetch(event.request);
+    })
+  );
 });
 
 // =======================
-// 💬 MESSAGE LISTENER (for "skipWaiting" control)
+// 💬 MESSAGE HANDLER
 // =======================
 self.addEventListener('message', event => {
   if (event.data?.type === 'SKIP_WAITING') {
-    console.log('[ServiceWorker] Skipping waiting phase on user command');
+    console.log('[SW] Received SKIP_WAITING command');
     self.skipWaiting();
   }
 });
