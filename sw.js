@@ -3,6 +3,7 @@ const ASSETS_TO_CACHE = [
   '/', // Root entry point
   '/index.html',
   '/404.html',
+  '/offline.html',
   '/contacts.html',
   '/parameter-comparison.html',
   '/rej603-configurator.html',
