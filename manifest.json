@@ -1,4 +1,9 @@
 {
+  "_changelog": [
+    "v3  Added top bar theme color, manifest short_name fix, versioning",
+    "v2  Initial PWA offline cache, icons, SW improvements",
+    "v1  First working PWA setup"
+  ],
   "id": "/",
   "name": "CoE LATAM: Tool HUB",
   "short_name": "Tool HUB",
