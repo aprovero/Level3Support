@@ -1,18 +1,18 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'toolhub-cache-v6'; // ⬅️ Update this every time you change assets
+const CACHE_NAME = 'toolhub-cache-v7'; // ⬅️ Update this every time you change assets
 
 const ASSETS_TO_CACHE = [
-  '/', '/index.html', '/404.html', '/offline.html',
+  '/index.html', '/404.html', '/offline.html',
   '/contacts.html', '/parameter-comparison.html', '/rej603-configurator.html',
   '/tools-data.json', '/manifest.json',
 
-  // JavaScript
+  // JavaScript files
   '/js/common.js', '/js/contacts.js', '/js/papaparse.min.js',
   '/js/parameter-comparison.js', '/js/tools-hub.js',
 
-  // CSS
+  // CSS files
   '/css/parameter-comparison.css', '/css/rej603-configurator.css', '/css/shared-styles.css',
 
   // Icons
@@ -23,15 +23,17 @@ const ASSETS_TO_CACHE = [
 
   // Images
   '/images/ABB_LOGO.png', '/images/CLAUDE_LOGO.png', '/images/COE_LOGO.png',
-  '/images/CONTACT_ANDRES.png', '/images/CONTACT_CRISTHIAN.png', '/images/CONTACT_FABIO.png',
-  '/images/CONTACT_FELIPE.png', '/images/CONTACT_GABRIEL.png', '/images/CONTACT_JAVIER.png',
-  '/images/CONTACT_LUCAS.png', '/images/CONTACT_MAURICIO.png', '/images/contact-icon.png',
-  '/images/hmm-character.png', '/images/hmm-character.webp',
+  '/images/CONTACT_ANDRES.png', '/images/CONTACT_CRISTHIAN.png',
+  '/images/CONTACT_FABIO.png', '/images/CONTACT_FELIPE.png',
+  '/images/CONTACT_GABRIEL.png', '/images/CONTACT_JAVIER.png',
+  '/images/CONTACT_LUCAS.png', '/images/CONTACT_MAURICIO.png',
+  '/images/contact-icon.png', '/images/hmm-character.png', '/images/hmm-character.webp',
   '/images/LOGO.png', '/images/placeholder.png', '/images/resource-icon.png',
   '/images/SIMPLE_LOGO.png', '/images/Sungrow-logo.png',
-  '/images/tool-hub-banner.png', '/images/tool-hub-banner.svg',
-  '/images/training-icon.png', '/images/wink-character.png', '/images/wink-character.webp',
+  '/images/tool-hub-banner.png', '/images/tool-hub-banner.svg', '/images/training-icon.png',
+  '/images/wink-character.webp'
 ];
+
 
 // =======================
 // ⚙️ INSTALL EVENT

@@ -9,7 +9,7 @@
   "name": "CoE LATAM: Tool HUB",
   "short_name": "Tool HUB",
   "description": "Centralized access to technical tools, dashboards, and support services created by CoE LATAM, to ease Field Work, Troubleshooting and Escalations.",
-  "start_url": "/?v=4&source=pwa",
+  "start_url": "/?v=7&source=pwa",
   "scope": "/",
   "display_override": [
     "standalone",
