@@ -1,7 +1,7 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'toolhub-cache-v4'; // ⬅️ Update this every time you change assets
+const CACHE_NAME = 'toolhub-cache-v5'; // ⬅️ Update this every time you change assets
 
 const ASSETS_TO_CACHE = [
   '/', '/index.html', '/404.html', '/offline.html',
