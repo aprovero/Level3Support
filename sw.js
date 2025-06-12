@@ -1,7 +1,7 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'toolhub-cache-v9'; // ⬅️ Update this every time you change assets
+const CACHE_NAME = 'toolhub-cache-v9';
 
 const ASSETS_TO_CACHE = [
   '/index.html', '/404.html', '/offline.html',
@@ -49,7 +49,7 @@ self.addEventListener('install', event => {
       return cache.addAll(ASSETS_TO_CACHE);
     })
   );
-  self.skipWaiting(); // Activate immediately
+  self.skipWaiting();
 });
 
 // =======================
@@ -69,56 +69,42 @@ self.addEventListener('activate', event => {
       )
     )
   );
-  self.clients.claim(); // Take control immediately
+  self.clients.claim();
 });
 
 // =======================
-// 🌐 FETCH EVENT (UPDATED)
+// 🌐 FETCH EVENT
 // =======================
 self.addEventListener('fetch', (event) => {
   const req = event.request;
 
-  // 👣 If navigating (HTML page)
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          // 🟢 If page exists, use network version and optionally cache
           return res.status === 404
             ? caches.match(NOT_FOUND_HTML)
             : res;
         })
         .catch(() => {
-          // ❌ If offline, fallback to cached version or offline
           return caches.match(req.url)
             .then(match => match || caches.match(INDEX_HTML))
             .catch(() => caches.match(OFFLINE_HTML));
         })
     );
-    return;
+  } else {
+    event.respondWith(
+      caches.match(req).then((cached) => {
+        return cached || fetch(req).catch(() => {
+          if (req.headers.get('accept')?.includes('text/html')) {
+            return caches.match(OFFLINE_HTML);
+          }
+          return new Response('', { status: 404 });
+        });
+      })
+    );
   }
-
-  // 📦 For static assets (JS, CSS, images, fonts, etc.)
-  event.respondWith(
-    caches.match(req).then((cached) => {
-      return cached || fetch(req).catch(() => {
-        // Only fallback to offline page for HTML
-        if (req.headers.get('accept')?.includes('text/html')) {
-          return caches.match(OFFLINE_HTML);
-        }
-
-        // Otherwise just fail silently for images, icons, etc.
-        return new Response('', { status: 404 });
-      });
-    })
-  );
 });
-
-
-  // Non-navigation: CSS, JS, Images, etc.
-  event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request))
-  );
 
 // =======================
 // 💬 MESSAGE HANDLER
