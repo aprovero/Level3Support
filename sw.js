@@ -1,7 +1,7 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'toolhub-cache-v5'; // ⬅️ Update this every time you change assets
+const CACHE_NAME = 'toolhub-cache-v4'; // ⬅️ Update this every time you change assets
 
 const ASSETS_TO_CACHE = [
   '/', '/index.html', '/404.html', '/offline.html',
@@ -70,23 +70,27 @@ self.addEventListener('activate', event => {
 // =======================
 // 🌐 FETCH EVENT
 // =======================
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      caches.match(event.request).then(cached => {
-        if (cached) return cached;
-        return fetch(event.request).catch(() => caches.match('/offline.html'));
+      caches.match(event.request).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse; // ✅ Return cached page if available
+        }
+
+        return fetch(event.request).catch(() => {
+          return caches.match('/offline.html'); // ❌ Fallback to offline only if not cached and fetch fails
+        });
       })
     );
-    return;
+  } else {
+    // Non-navigation requests (CSS, JS, images, etc.)
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        return cached || fetch(event.request);
+      })
+    );
   }
-
-  // Fallback for all other assets
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request);
-    })
-  );
 });
 
 // =======================
