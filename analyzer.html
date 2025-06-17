@@ -22,45 +22,46 @@
 
     <!-- Analyzer UI -->
     <div id="sg3125-analyzer-root">
-      <div class="py-6">
-        <!-- Upload Section -->
-        <section class="mb-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="font-medium block mb-2" for="his-upload">Upload HisData CSV:</label>
-              <input type="file" id="his-upload" accept=".csv" class="w-full" />
-            </div>
-            <div>
-              <label class="font-medium block mb-2" for="events-upload">Upload Events CSV:</label>
-              <input type="file" id="events-upload" accept=".csv" class="w-full" />
-            </div>
+      <div class="upload-section">
+        <h3 class="upload-title">Upload CSV Files</h3>
+        <div class="upload-input-container double">
+          <div>
+            <label class="font-medium block mb-2" for="his-upload">Upload HisData CSV:</label>
+            <input type="file" id="his-upload" accept=".csv" class="file-input" />
           </div>
-        </section>
+          <div>
+            <label class="font-medium block mb-2" for="events-upload">Upload Events CSV:</label>
+            <input type="file" id="events-upload" accept=".csv" class="file-input" />
+          </div>
+        </div>
+        <p class="upload-instructions">
+          Load historical inverter data and events to visualize power trends and faults.
+        </p>
+      </div>
 
-        <!-- Parameter Selection -->
-        <section class="mb-6">
-          <h2 class="text-xl font-semibold mb-2">Select Parameters:</h2>
-          <div id="param-container" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
-        </section>
+      <!-- Parameter Selection -->
+      <div class="parameter-selection">
+        <h2 class="section-title">Select Parameters</h2>
+        <div id="param-container" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+      </div>
 
-        <!-- Chart Display -->
-        <section class="mb-6">
-          <div class="flex justify-between items-center mb-2">
-            <h2 class="text-xl font-semibold">Chart</h2>
-            <button id="export-chart" class="bg-blue-600 text-white px-4 py-1 rounded">Export PNG</button>
-          </div>
-          <div id="chart-container" class="bg-white p-4 rounded shadow overflow-x-auto">
-            <canvas id="chart-canvas" width="1000" height="400"></canvas>
-          </div>
-        </section>
+      <!-- Chart Display -->
+      <div class="chart-section">
+        <div class="chart-header">
+          <h2>Chart</h2>
+          <button id="export-chart" class="chart-export">Export PNG</button>
+        </div>
+        <div id="chart-container" class="chart-container">
+          <canvas id="chart-canvas" width="1000" height="400"></canvas>
+        </div>
+      </div>
 
-        <!-- Event Summary -->
-        <section class="mb-6">
-          <h2 class="text-xl font-semibold mb-2">Event Summary</h2>
-          <div id="event-summary" class="bg-white p-4 rounded shadow text-sm text-gray-700">
-            No events loaded yet.
-          </div>
-        </section>
+      <!-- Event Summary -->
+      <div class="event-summary">
+        <h2 class="section-title">Event Summary</h2>
+        <div id="event-summary" class="summary-box">
+          No events loaded yet.
+        </div>
       </div>
     </div>
 
