@@ -20,8 +20,49 @@
 
     <h1 class="text-center">SG3125 Series Data Analyzer</h1>
 
-    <!-- React mount point -->
-    <div id="sg3125-analyzer-root"></div>
+    <!-- Analyzer UI -->
+    <div id="sg3125-analyzer-root">
+      <div class="py-6">
+        <!-- Upload Section -->
+        <section class="mb-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="font-medium block mb-2" for="his-upload">Upload HisData CSV:</label>
+              <input type="file" id="his-upload" accept=".csv" class="w-full" />
+            </div>
+            <div>
+              <label class="font-medium block mb-2" for="events-upload">Upload Events CSV:</label>
+              <input type="file" id="events-upload" accept=".csv" class="w-full" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Parameter Selection -->
+        <section class="mb-6">
+          <h2 class="text-xl font-semibold mb-2">Select Parameters:</h2>
+          <div id="param-container" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+        </section>
+
+        <!-- Chart Display -->
+        <section class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <h2 class="text-xl font-semibold">Chart</h2>
+            <button id="export-chart" class="bg-blue-600 text-white px-4 py-1 rounded">Export PNG</button>
+          </div>
+          <div id="chart-container" class="bg-white p-4 rounded shadow overflow-x-auto">
+            <canvas id="chart-canvas" width="1000" height="400"></canvas>
+          </div>
+        </section>
+
+        <!-- Event Summary -->
+        <section class="mb-6">
+          <h2 class="text-xl font-semibold mb-2">Event Summary</h2>
+          <div id="event-summary" class="bg-white p-4 rounded shadow text-sm text-gray-700">
+            No events loaded yet.
+          </div>
+        </section>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -41,8 +82,6 @@
   <!-- Libraries -->
   <script src="js/papaparse.min.js"></script>
   <script src="js/common.js"></script>
-
-  <!-- React bundle -->
-  <script type="module" src="js/analyze.js"></script>
+  <script type="module" src="js/analyzer.js"></script>
 </body>
 </html>
