@@ -1,0 +1,71 @@
+<!-- fault-interpreter.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CoE Level 3 - Fault Code Interpreter</title>
+  <link rel="icon" type="image/png" href="images/SIMPLE_LOGO.png">
+  <link rel="stylesheet" href="css/shared-styles.css">
+  <link rel="stylesheet" href="css/fault-interpreter.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <img src="images/LOGO.png" alt="Logo" />
+      </div>
+    </div>
+
+    <!-- Tool Title -->
+    <h1>Module/Fan Fault Code Interpreter</h1>
+
+    <!-- Tool Content -->
+    <div id="fault-tool-root" class="form-container">
+      <!-- Inverter series selection -->
+      <label for="inverter-series">Inverter Series</label>
+      <select id="inverter-series">
+        <option value="sg3125">SG3125 Series</option>
+        <option value="onePlusX">1+X Series</option>
+      </select>
+
+      <!-- Fault section selection -->
+      <label for="fault-section">Fault Section</label>
+      <select id="fault-section"></select>
+
+      <!-- Input -->
+      <label for="fault-code">Enter Fault Code</label>
+      <div class="flex items-center">
+        <span id="prefix-label">0x</span>
+        <input type="text" id="fault-code" placeholder="Hex or Dec" />
+        <button id="interpret-btn" class="lookup-btn">Interpret</button>
+      </div>
+
+      <!-- Error Message -->
+      <div id="message-container"></div>
+
+      <!-- Binary Output -->
+      <div id="binary-output" class="form-group" style="display:none;"></div>
+
+      <!-- Fault List -->
+      <div id="fault-result" class="form-group" style="display:none;"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas.</div>
+        <div class="footer-creator">Created by Andres Provero</div>
+      </div>
+      <div class="footer-logo">
+        <img src="images/COE_LOGO.png" alt="CoE LATAM Logo" />
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/common.js"></script>
+  <script src="js/fault-interpreter.js"></script>
+</body>
+</html>
