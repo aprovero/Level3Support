@@ -3,13 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CoE Level 3 - UMCG Analyzer Tool</title>
-  <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
-  <link href="css/shared-styles.css" rel="stylesheet"/>
-  <link href="css/analyzer.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
+  <title>SG3125 Series Data Analyzer</title>
+  <link rel="icon" href="images/SIMPLE_LOGO.png" type="image/png" />
+  <link rel="stylesheet" href="css/shared-styles.css" />
+  <link rel="stylesheet" href="css/analyzer.css" />
 </head>
 <body>
   <div class="container">
@@ -28,11 +25,11 @@
         <h3 class="upload-title">Upload CSV Files</h3>
         <div class="upload-input-container double">
           <div>
-            <label class="font-medium block mb-2" for="his-upload">Upload HisData CSV:</label>
+            <label for="his-upload">Upload HisData CSV:</label>
             <input type="file" id="his-upload" accept=".csv" class="file-input" />
           </div>
           <div>
-            <label class="font-medium block mb-2" for="events-upload">Upload Events CSV:</label>
+            <label for="events-upload">Upload Events CSV:</label>
             <input type="file" id="events-upload" accept=".csv" class="file-input" />
           </div>
         </div>
@@ -45,6 +42,14 @@
       <div class="parameter-selection">
         <h2 class="section-title">Select Parameters</h2>
         <div id="param-container" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+      </div>
+
+      <!-- Y-Axis and State Filtering -->
+      <div class="state-filter">
+        <label for="state-select">Filter by State:</label>
+        <select id="state-select">
+          <option value="">-- All States --</option>
+        </select>
       </div>
 
       <!-- Chart Display -->
@@ -74,17 +79,16 @@
         <div class="footer-creator">Created by Andres Provero</div>
       </div>
       <div class="footer-logo">
-        <a href="https://www.anthropic.com" target="_blank">
-          <img src="images/CLAUDE_LOGO.png" alt="Claude Logo"/>
-        </a>
-        <img src="images/COE_LOGO.png" alt="CoE LATAM Logo"/>
+        <img src="images/COE_LOGO.png" alt="CoE LATAM Logo" />
       </div>
     </footer>
   </div>
 
-  <!-- Libraries -->
-  <script src="js/papaparse.min.js"></script>
+  <!-- JS libraries -->
   <script src="js/common.js"></script>
-  <script type="module" src="js/analyzer.js"></script>
+  <script src="js/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="js/analyzer.js"></script>
 </body>
 </html>
