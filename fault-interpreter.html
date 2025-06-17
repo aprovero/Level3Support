@@ -36,20 +36,10 @@
       <select id="fault-section" class="file-input"></select>
 
       <label for="fault-code">Enter Fault Code</label>
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <div id="prefix-label" style="padding: 10px 12px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 8px 0 0 8px; font-weight: bold; color: #666;">
-          0x
-        </div>
-        <input
-          type="text"
-          id="fault-code"
-          class="file-input"
-          style="flex: 1; border-radius: 0;"
-          placeholder="Hex or Dec"
-        />
-        <button id="interpret-btn" class="file-input" style="white-space: nowrap;">
-          Interpret
-        </button>
+      <div class="input-row">
+        <span id="prefix-label">0x</span>
+        <input type="text" id="fault-code" placeholder="Hex or Dec" />
+        <button id="interpret-btn">Interpret</button>
       </div>
 
       <div id="message-container" style="margin-top: 16px;"></div>
