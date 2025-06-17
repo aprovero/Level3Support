@@ -13,84 +13,75 @@
 </head>
 <!-- SG3125 Analyzer: Upload, Parameter Selection, Chart, and Event Viewer -->
 
-<body class="bg-gray-50 text-gray-900">
-  <div class="min-h-screen flex flex-col">
-    <!-- Header -->
-    <header class="bg-white shadow px-6 py-4 flex items-center justify-between">
-      <div class="logo flex items-center">
-        <img src="images/SIMPLE_LOGO.png" alt="SUNGROW" class="h-8 mr-2">
-        <span class="text-xl font-semibold text-gray-700">SG3125 Series Data Analyzer</span>
+<body>
+  <div class="container">
+    
+    <!-- Upload Section -->
+    <section class="upload-section">
+      <h2 class="upload-title">Upload CSV Files</h2>
+      <div class="upload-input-container double">
+        <div>
+          <label for="hisdata-file">Historical Data (HisData)</label>
+          <input type="file" id="hisdata-file" class="file-input" accept=".csv" />
+        </div>
+        <div>
+          <label for="event-file">Event Log</label>
+          <input type="file" id="event-file" class="file-input" accept=".csv" />
+        </div>
       </div>
-    </header>
+      <p class="upload-instructions">Make sure both files are from the same day for accurate event overlay and analysis.</p>
+    </section>
 
-    <!-- Main Container -->
-    <main class="flex-grow px-4 py-6 max-w-7xl mx-auto">
+    <!-- Parameter Selection Section -->
+    <section class="parameter-selection">
+      <h2 class="section-title">Select Parameters</h2>
+      <div id="param-container"></div>
+    </section>
 
-      <!-- Upload Section -->
-      <section class="upload-section">
-        <h2 class="upload-title">Upload CSV Files</h2>
-        <div class="upload-input-container double">
-          <input type="file" id="hisdata-file" class="file-input" accept=".csv">
-          <input type="file" id="event-file" class="file-input" accept=".csv">
-        </div>
-        <p class="upload-instructions">Upload the HisData file (left) and the Events file (right).</p>
-      </section>
+    <!-- Axis Toggle Section -->
+    <section class="axis-toggle-section">
+      <h2 class="section-title">Y-Axis Assignment</h2>
+      <div id="selected-param-toggles"></div>
+    </section>
 
-      <!-- Parameter Selection -->
-      <section class="parameter-selection">
-        <h2 class="section-title">Select Parameters (Max 6)</h2>
-        <div id="param-container"></div>
-      </section>
+    <!-- Chart Section -->
+    <section class="chart-section">
+      <div class="chart-header">
+        <h2 class="section-title">Chart</h2>
+        <button id="export-chart" class="chart-export">Export Chart</button>
+      </div>
+      <div id="chart-container" class="chart-container">
+        <canvas id="chart-canvas" height="400"></canvas>
+      </div>
+    </section>
 
-      <!-- Axis Assignment -->
-      <section class="axis-toggle-section">
-        <h2 class="section-title">Assign Y Axis</h2>
-        <div id="selected-param-toggles"></div>
-      </section>
+    <!-- State Filter Section -->
+    <section class="state-filter">
+      <label><input type="checkbox" id="filter-fault" checked /> Fault</label>
+      <label><input type="checkbox" id="filter-alarm" checked /> Alarm</label>
+      <label><input type="checkbox" id="filter-prompt" checked /> Prompt</label>
+    </section>
 
-      <!-- Chart Display -->
-      <section class="chart-section">
-        <h2 class="section-title">Power Chart</h2>
-        <div class="chart-container">
-          <canvas id="chart-canvas" width="1200" height="500"></canvas>
-        </div>
-        <div class="mt-4 flex justify-center">
-          <button id="export-chart" class="chart-export">Export as PNG</button>
-        </div>
-      </section>
+    <!-- Event Summary Table -->
+    <section class="event-summary">
+      <h2 class="section-title">Event Summary</h2>
+      <div class="event-log overflow-auto">
+        <table id="event-log">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Device</th>
+              <th>Event</th>
+              <th>Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-      <!-- State Filter -->
-      <section class="state-filter">
-        <label for="state-filter" class="text-sm font-semibold text-blue-900">Filter by Unit 1 State:</label>
-        <select id="state-filter" class="w-full mt-1 p-2 border border-gray-300 rounded">
-          <option>All States</option>
-        </select>
-      </section>
-
-      <!-- Event Table -->
-      <section class="event-summary">
-        <h2 class="section-title">Event Log</h2>
-        <div class="flex items-center gap-6 mb-4">
-          <label><input type="checkbox" id="filter-fault" checked> <strong>Fault</strong></label>
-          <label><input type="checkbox" id="filter-alarm" checked> <strong>Alarm</strong></label>
-          <label><input type="checkbox" id="filter-prompt" checked> <strong>Prompt</strong></label>
-        </div>
-        <div class="event-log overflow-auto">
-          <table id="event-log">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Device</th>
-                <th>Event</th>
-                <th>Level</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-
-    </main>
     <!-- Footer -->
     <footer class="footer">
       <div class="footer-text">

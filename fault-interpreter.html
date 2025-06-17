@@ -1,13 +1,12 @@
-<!-- fault-interpreter.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CoE Level 3 - Fault Code Interpreter</title>
-  <link rel="icon" type="image/png" href="images/SIMPLE_LOGO.png">
-  <link rel="stylesheet" href="css/shared-styles.css">
-  <link rel="stylesheet" href="css/fault-interpreter.css">
+  <link rel="icon" type="image/png" href="images/SIMPLE_LOGO.png" />
+  <link rel="stylesheet" href="css/shared-styles.css" />
+  <link rel="stylesheet" href="css/fault-interpreter.css" />
 </head>
 <body>
   <div class="container">
@@ -18,15 +17,13 @@
       </div>
     </div>
 
-    <!-- Back Link -->
-    <a href="index.html" class="back-link">← Back to the Tool HUB</a>
-
     <!-- Page Title -->
-    <h1>Inverter Fault Code Interpreter</h1>
+    <h1>Module/Fan Fault Code Interpreter</h1>
 
     <!-- Tool Content -->
     <div id="fault-tool-root" class="upload-section">
-      <h3 class="upload-title">Module/Fan Fault Code Interpreter</h3>
+        <p class="upload-instructions">
+            This tool interprets fault codes from Sungrow inverters. Select the inverter series, fault section, and enter the fault code to get detailed information.
 
       <!-- Inverter Series -->
       <label for="inverter-series">Inverter Series</label>
@@ -39,13 +36,28 @@
       <label for="fault-section">Fault Section</label>
       <select id="fault-section" class="file-input"></select>
 
-      <!-- Fault Code Input -->
-        <label for="fault-code" style="display: block; margin: 16px 0 6px; font-weight: 600; color: #0277bd;">Enter Fault Code</label>
+      <!-- Fault Code Input (FINAL FIXED VERSION) -->
+      <label for="fault-code" style="display: block; margin: 16px 0 6px; font-weight: 600; color: #0277bd;">Enter Fault Code</label>
 
-        <div style="display: flex; max-width: 600px; width: 100%; align-items: center; gap: 8px;">
-        <!-- Full-width input group with inline prefix -->
-        <div style="position: relative; flex: 1;">
-            <span style="
+      <div style="display: flex; align-items: center; max-width: 600px; width: 100%; gap: 8px;">
+        <div style="flex: 1; position: relative;">
+          <input
+            type="text"
+            id="fault-code"
+            placeholder="8000"
+            style="
+              width: 100%;
+              height: 44px;
+              padding-left: 40px;
+              padding-right: 12px;
+              border: 1px solid #ccc;
+              border-radius: 8px;
+              font-size: 0.95rem;
+              box-sizing: border-box;
+              outline: none;
+            "
+          />
+          <span style="
             position: absolute;
             top: 50%;
             left: 12px;
@@ -53,28 +65,12 @@
             color: #888;
             font-size: 0.95rem;
             pointer-events: none;
-            ">0x</span>
-            <input
-            type="text"
-            id="fault-code"
-            placeholder="HEX or DECIMAL"
-            style="
-                width: 100%;
-                padding: 10px 12px 10px 36px;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-                font-size: 0.95rem;
-                height: 44px;
-                outline: none;
-                box-sizing: border-box;
-            "
-            />
+          ">0x</span>
         </div>
 
-        <!-- Interpret Button -->
         <button
-            id="interpret-btn"
-            style="
+          id="interpret-btn"
+          style="
             height: 44px;
             padding: 0 20px;
             background-color: #0288d1;
@@ -86,16 +82,14 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
             white-space: nowrap;
-            "
-            onmouseover="this.style.backgroundColor='#0277bd'"
-            onmouseout="this.style.backgroundColor='#0288d1'"
+          "
+          onmouseover="this.style.backgroundColor='#0277bd'"
+          onmouseout="this.style.backgroundColor='#0288d1'"
         >
-            Interpret
+          Interpret
         </button>
-        </div>
+      </div>
 
-
-      <!-- Optional Message Container -->
       <div id="message-container" style="margin-top: 16px;"></div>
     </div>
 
@@ -123,5 +117,4 @@
   <script src="js/common.js"></script>
   <script src="js/fault-interpreter.js"></script>
 </body>
-
 </html>
