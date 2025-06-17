@@ -22,35 +22,44 @@
     <h1>Module/Fan Fault Code Interpreter</h1>
 
     <!-- Tool Content -->
-    <div id="fault-tool-root" class="form-container">
-      <!-- Inverter series selection -->
+    <!-- Upload Section UI -->
+    <div id="fault-tool-root" class="upload-section">
+      <h3 class="upload-title">Module/Fan Fault Code Interpreter</h3>
+
       <label for="inverter-series">Inverter Series</label>
-      <select id="inverter-series">
+      <select id="inverter-series" class="file-input">
         <option value="sg3125">SG3125 Series</option>
         <option value="onePlusX">1+X Series</option>
       </select>
 
-      <!-- Fault section selection -->
       <label for="fault-section">Fault Section</label>
-      <select id="fault-section"></select>
+      <select id="fault-section" class="file-input"></select>
 
-      <!-- Input -->
       <label for="fault-code">Enter Fault Code</label>
-      <div class="flex items-center">
-        <span id="prefix-label">0x</span>
-        <input type="text" id="fault-code" placeholder="Hex or Dec" />
-        <button id="interpret-btn" class="lookup-btn">Interpret</button>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <div id="prefix-label" style="padding: 10px 12px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 8px 0 0 8px; font-weight: bold; color: #666;">
+          0x
+        </div>
+        <input
+          type="text"
+          id="fault-code"
+          class="file-input"
+          style="flex: 1; border-radius: 0;"
+          placeholder="Hex or Dec"
+        />
+        <button id="interpret-btn" class="file-input" style="white-space: nowrap;">
+          Interpret
+        </button>
       </div>
 
-      <!-- Error Message -->
-      <div id="message-container"></div>
-
-      <!-- Binary Output -->
-      <div id="binary-output" class="form-group" style="display:none;"></div>
-
-      <!-- Fault List -->
-      <div id="fault-result" class="form-group" style="display:none;"></div>
+      <div id="message-container" style="margin-top: 16px;"></div>
     </div>
+
+    <!-- Binary Output -->
+    <div id="binary-output" class="form-group" style="display: none;"></div>
+
+    <!-- Fault Description Output -->
+    <div id="fault-result" class="form-group" style="display: none;"></div>
 
     <!-- Footer -->
     <footer class="footer">
