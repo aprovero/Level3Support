@@ -120,6 +120,8 @@
   margin-bottom: 1rem;
 }
 
+
+/* State dropdown */
 .state-filter select {
   border: 1px solid #ccc;
   border-radius: 0.375rem;
@@ -132,6 +134,7 @@
   color: #01579b;
   margin-right: 0.5rem;
 }
+
 /* Grouped parameter container layout */
 #param-container {
   display: grid;
@@ -209,5 +212,173 @@
   border-radius: 3px;
 }
 .param-column::-webkit-scrollbar-track {
+  background-color: #e0e0e0;
+}
+/* analyzer.css — enhanced layout */
+
+/* Upload section and chart layout */
+.upload-section,
+.parameter-selection,
+.chart-section,
+.event-summary,
+.state-filter {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.upload-title,
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #01579b;
+  margin-bottom: 0.75rem;
+}
+
+.upload-input-container.double {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.file-input {
+  background: white;
+  border: 1px solid #b0bec5;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  width: 100%;
+}
+
+.upload-instructions {
+  font-size: 0.875rem;
+  color: #0277bd;
+}
+
+/* 3-column selector layout */
+#param-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.param-group {
+  flex: 1;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  border: 1px solid #cfd8dc;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+}
+
+.param-group .section-title {
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #01579b;
+}
+
+.param-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.param-list label {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  justify-content: space-between;
+}
+
+.param-list input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.param-list span {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 6px;
+}
+
+/* Y-axis toggles for selected params */
+#selected-param-toggles {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.selected-param-toggle {
+  display: flex;
+  align-items: center;
+  background-color: #f1f1f1;
+  border: 1px solid #cfd8dc;
+  border-radius: 0.375rem;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+}
+
+.selected-param-toggle label {
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+
+.selected-param-toggle select {
+  font-size: 0.75rem;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+/* Chart adjustments */
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.chart-container {
+  background-color: #f9f9f9;
+  border: 1px solid #cfd8dc;
+  border-radius: 0.375rem;
+  padding: 1rem;
+}
+
+.chart-export {
+  background-color: #0288d1;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.chart-export:hover {
+  background-color: #0277bd;
+}
+
+/* Scrollbar style */
+.param-group::-webkit-scrollbar {
+  width: 6px;
+}
+.param-group::-webkit-scrollbar-thumb {
+  background-color: #90caf9;
+  border-radius: 3px;
+}
+.param-group::-webkit-scrollbar-track {
   background-color: #e0e0e0;
 }

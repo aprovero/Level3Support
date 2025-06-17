@@ -35,8 +35,8 @@
     <!-- Parameter Selection Section -->
     <section class="parameter-selection">
       <div class="section-title">Select Parameters (Max 6)</div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="param-container">
-        <!-- Parameters will be injected here -->
+      <div id="param-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- JS will populate 3 columns here -->
       </div>
     </section>
 
@@ -50,14 +50,19 @@
 
     <!-- Chart Section -->
     <section class="chart-section">
-      <div class="chart-header">
-        <div class="section-title">Power Chart</div>
-        <button id="export-chart" class="chart-export">Export as PNG</button>
-      </div>
+      <div class="section-title">Power Chart</div>
       <div id="chart-container" class="chart-container">
         <canvas id="chart-canvas" height="300"></canvas>
       </div>
     </section>
+
+    <!-- Export Button Below Chart -->
+    <div class="mt-4 flex justify-center">
+      <button id="export-chart" class="chart-export">Export as PNG</button>
+    </div>
+
+    <!-- Selected Parameters Axis Toggles (JS Injected) -->
+    <!-- <div id="selected-param-toggles"></div> inserted by JS -->
 
     <!-- Event Summary Section -->
     <section class="event-summary">
@@ -80,9 +85,12 @@
     </footer>
   </div>
 
-  <!-- Scripts -->
+  <!-- Libraries and App Script -->
   <script src="js/papaparse.min.js"></script>
   <script src="js/common.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script type="module" src="js/analyzer.js"></script>
 </body>
+
 </html>
