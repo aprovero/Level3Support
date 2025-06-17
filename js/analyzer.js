@@ -1,24 +1,20 @@
-// SG3125 Analyzer — JS logic for CSV upload, parameter selection, charting and events
+// File: SG3125Analyzer.js (Updated Vanilla JS Version)
 
-let hisData = [], eventData = [], filteredEvents = [];
-let selectedParams = new Set();
-let axisMapping = {}; // { paramName: 'left' | 'right' }
-
-const maxSelectable = 6;
-
-const hisInput = document.getElementById('hisdata-file');
-const eventInput = document.getElementById('event-file');
+const chartRef = document.getElementById('chart-canvas');
+const chartContainer = document.getElementById('chart-container');
 const paramContainer = document.getElementById('param-container');
 const toggleContainer = document.getElementById('selected-param-toggles');
-const chartCanvas = document.getElementById('chart-canvas');
-const chartExportBtn = document.getElementById('export-chart');
-const stateFilter = document.getElementById('state-filter');
-const faultCheckbox = document.getElementById('filter-fault');
-const alarmCheckbox = document.getElementById('filter-alarm');
-const promptCheckbox = document.getElementById('filter-prompt');
-const logTableBody = document.querySelector('#event-log tbody');
+const exportBtn = document.getElementById('export-btn');
 
-let chart = null;
+let parsedHisData = [];
+let parsedEventData = [];
+let selectedParams = [];
+let allParams = [];
+let chartInstance = null;
+
+const colorPalette = [
+  '#42a5f5', '#ef5350', '#66bb6a', '#ffa726', '#ab47bc', '#26c6da', '#8d6e63', '#ffca28'
+];
 
 function parseCSV(file, callback) {
   Papa.parse(file, {
@@ -33,206 +29,164 @@ function extractDateFromFilename(filename) {
   return match ? match[0] : null;
 }
 
-function renderParamSelectors() {
-  paramContainer.innerHTML = '';
-  const groups = { General: [], 'Unit 1': [], 'Unit 2': [] };
-  if (hisData.length === 0) return;
-
-  const headers = Object.keys(hisData[0]);
-  headers.forEach(h => {
-    const key = h.toLowerCase();
-    if (key.includes('unit 1')) groups['Unit 1'].push(h);
-    else if (key.includes('unit 2')) groups['Unit 2'].push(h);
-    else groups.General.push(h);
+function groupParams(params) {
+  const general = [];
+  const unit1 = [];
+  const unit2 = [];
+  params.forEach(p => {
+    const lower = p.toLowerCase();
+    if (lower.includes('unit 1')) unit1.push(p);
+    else if (lower.includes('unit 2')) unit2.push(p);
+    else general.push(p);
   });
+  return { general, unit1, unit2 };
+}
 
-  Object.entries(groups).forEach(([groupName, params]) => {
-    const groupDiv = document.createElement('div');
-    groupDiv.className = 'param-group';
+function createCheckbox(label, category) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'param-entry';
 
-    const title = document.createElement('h3');
-    title.className = 'section-title';
-    title.textContent = groupName;
-    groupDiv.appendChild(title);
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.value = label;
+  checkbox.addEventListener('change', handleParamToggle);
 
-    const list = document.createElement('div');
-    list.className = 'param-list';
+  const text = document.createElement('label');
+  text.textContent = label;
 
-    params.forEach(param => {
-      const label = document.createElement('label');
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.dataset.param = param;
-      checkbox.addEventListener('change', handleParamToggle);
-
-      const span = document.createElement('span');
-      span.textContent = param;
-
-      label.appendChild(checkbox);
-      label.appendChild(span);
-      list.appendChild(label);
-    });
-
-    groupDiv.appendChild(list);
-    paramContainer.appendChild(groupDiv);
-  });
+  wrapper.appendChild(checkbox);
+  wrapper.appendChild(text);
+  return wrapper;
 }
 
 function handleParamToggle(e) {
-  const param = e.target.dataset.param;
+  const value = e.target.value;
   if (e.target.checked) {
-    if (selectedParams.size >= maxSelectable) {
+    if (selectedParams.length >= 6) {
       e.target.checked = false;
-      alert(`You can only select up to ${maxSelectable} parameters.`);
+      alert('Maximum of 6 parameters allowed.');
       return;
     }
-    selectedParams.add(param);
-    axisMapping[param] = 'left';
+    selectedParams.push(value);
   } else {
-    selectedParams.delete(param);
-    delete axisMapping[param];
+    selectedParams = selectedParams.filter(p => p !== value);
   }
   renderAxisToggles();
-  updateChart();
+  renderChart();
 }
 
 function renderAxisToggles() {
   toggleContainer.innerHTML = '';
-  [...selectedParams].forEach(param => {
-    const div = document.createElement('div');
-    div.className = 'selected-param-toggle';
+  selectedParams.forEach(param => {
+    const toggleWrapper = document.createElement('div');
+    toggleWrapper.className = 'selected-param-toggle';
 
     const label = document.createElement('label');
     label.textContent = param;
 
-    const switchContainer = document.createElement('label');
-    switchContainer.className = 'toggle-switch';
+    const toggle = document.createElement('input');
+    toggle.type = 'checkbox';
+    toggle.checked = false;
+    toggle.dataset.param = param;
 
-    const input = document.createElement('input');
-    input.type = 'checkbox';
-    input.checked = axisMapping[param] === 'right';
-    input.addEventListener('change', () => {
-      axisMapping[param] = input.checked ? 'right' : 'left';
-      updateChart();
-    });
-
-    const slider = document.createElement('span');
-    slider.className = 'toggle-slider';
-
-    switchContainer.appendChild(input);
-    switchContainer.appendChild(slider);
-    div.appendChild(label);
-    div.appendChild(switchContainer);
-    toggleContainer.appendChild(div);
+    toggleWrapper.appendChild(label);
+    toggleWrapper.appendChild(toggle);
+    toggleContainer.appendChild(toggleWrapper);
   });
 }
 
-function updateChart() {
-  if (!hisData.length || selectedParams.size === 0) return;
+function renderParamSelectors() {
+  const columns = groupParams(allParams);
+  paramContainer.innerHTML = '';
+  ['general', 'unit1', 'unit2'].forEach(section => {
+    const column = document.createElement('div');
+    column.className = 'param-column';
 
-  const labels = hisData.map(row => row['Time']);
-  const datasets = [...selectedParams].map((param, idx) => {
-    const axis = axisMapping[param];
-    return {
+    const title = document.createElement('h3');
+    title.textContent = section === 'unit1' ? 'Unit 1' : section === 'unit2' ? 'Unit 2' : 'General';
+    column.appendChild(title);
+
+    columns[section].forEach(p => column.appendChild(createCheckbox(p, section)));
+    paramContainer.appendChild(column);
+  });
+}
+
+function renderChart() {
+  if (chartInstance) chartInstance.destroy();
+  const labels = parsedHisData.map(row => row.Time);
+  const datasets = [];
+
+  selectedParams.forEach((param, idx) => {
+    const toggle = toggleContainer.querySelector(`input[data-param="${param}"]`);
+    const axis = toggle && toggle.checked ? 'yRight' : 'yLeft';
+    datasets.push({
       label: param,
-      data: hisData.map(row => parseFloat(row[param]) || 0),
-      borderColor: Chart.defaults.color[idx % 10] || '#000',
-      backgroundColor: 'transparent',
-      yAxisID: axis
-    };
+      data: parsedHisData.map(row => parseFloat(row[param] || 0)),
+      yAxisID: axis,
+      borderColor: colorPalette[idx % colorPalette.length],
+      backgroundColor: colorPalette[idx % colorPalette.length],
+      tension: 0.1,
+      pointRadius: 1
+    });
   });
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      left: {
-        type: 'linear',
-        position: 'left',
-        title: { display: true, text: 'Left Y' }
-      },
-      right: {
-        type: 'linear',
-        position: 'right',
-        title: { display: true, text: 'Right Y' },
-        grid: { drawOnChartArea: false }
-      }
-    }
-  };
-
-  if (chart) chart.destroy();
-  chart = new Chart(chartCanvas.getContext('2d'), {
+  chartInstance = new Chart(chartRef, {
     type: 'line',
     data: { labels, datasets },
-    options
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      stacked: false,
+      plugins: {
+        legend: { position: 'top' },
+        title: { display: false },
+      },
+      scales: {
+        yLeft: {
+          type: 'linear',
+          display: true,
+          position: 'left'
+        },
+        yRight: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          grid: { drawOnChartArea: false }
+        }
+      }
+    }
   });
 }
 
-function exportChartAsImage() {
-  const canvas = chartCanvas;
-  const link = document.createElement('a');
-  link.download = 'SG3125_Chart.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-}
-
-function handleStateFilter() {
-  const selectedState = stateFilter.value;
-  renderEventTable(selectedState);
-}
-
-function renderEventTable(filter) {
-  logTableBody.innerHTML = '';
-  const relevant = filter === 'All States'
-    ? eventData
-    : eventData.filter(e => (e.State || '').includes(filter));
-
-  filteredEvents = relevant;
-
-  relevant.forEach(e => {
-    if (!e.Time || !e.Level) return;
-    const row = document.createElement('tr');
-    row.className = `event-row ${e.Level}`;
-
-    ['Time', 'Device', 'Event', 'Level'].forEach(key => {
-      const td = document.createElement('td');
-      td.textContent = e[key] || '';
-      row.appendChild(td);
-    });
-
-    const isVisible = (e.Level === 'Fault' && faultCheckbox.checked) ||
-                      (e.Level === 'Alarm' && alarmCheckbox.checked) ||
-                      (e.Level === 'Prompt' && promptCheckbox.checked);
-    if (isVisible) logTableBody.appendChild(row);
-  });
-}
-
-function refreshAfterUpload() {
-  renderParamSelectors();
-  renderAxisToggles();
-  updateChart();
-  renderEventTable(stateFilter.value);
-}
-
-hisInput.addEventListener('change', e => {
+function handleHisFile(e) {
   const file = e.target.files[0];
+  if (!file) return;
   parseCSV(file, data => {
-    hisData = data;
-    refreshAfterUpload();
+    parsedHisData = data;
+    allParams = Object.keys(data[0]).filter(k => k !== 'Time');
+    renderParamSelectors();
   });
-});
+}
 
-eventInput.addEventListener('change', e => {
+function handleEventsFile(e) {
   const file = e.target.files[0];
+  if (!file) return;
   parseCSV(file, data => {
-    eventData = data;
-    refreshAfterUpload();
+    parsedEventData = data;
+    // TODO: Link events to chart with red X
   });
-});
+}
 
-stateFilter.addEventListener('change', handleStateFilter);
-faultCheckbox.addEventListener('change', handleStateFilter);
-alarmCheckbox.addEventListener('change', handleStateFilter);
-promptCheckbox.addEventListener('change', handleStateFilter);
+function exportChart() {
+  html2canvas(chartContainer, { backgroundColor: '#ffffff' }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'SG3125_Chart.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
 
-chartExportBtn.addEventListener('click', exportChartAsImage);
+document.getElementById('hisfile').addEventListener('change', handleHisFile);
+document.getElementById('eventfile').addEventListener('change', handleEventsFile);
+document.getElementById('export-btn').addEventListener('click', exportChart);

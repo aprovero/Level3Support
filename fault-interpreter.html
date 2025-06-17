@@ -18,10 +18,13 @@
       </div>
     </div>
 
-    <!-- Page Title -->
-    <h1>Module/Fan Fault Code Interpreter</h1>
+    <!-- Back Link -->
+    <a href="index.html" class="back-link">← Back to the Tool HUB</a>
 
-    <!-- Tool Wrapper -->
+    <!-- Page Title -->
+    <h1>Inverter Fault Code Interpreter</h1>
+
+    <!-- Tool Content -->
     <div id="fault-tool-root" class="upload-section">
       <h3 class="upload-title">Module/Fan Fault Code Interpreter</h3>
 
@@ -36,16 +39,55 @@
       <label for="fault-section">Fault Section</label>
       <select id="fault-section" class="file-input"></select>
 
-      <!-- Input + Button -->
-      <label for="fault-code">Enter Fault Code</label>
-      <div class="input-wrapper">
-        <div class="input-with-prefix">
-          <span class="prefix">0x</span>
-          <input type="text" id="fault-code" placeholder="HEX or DECIMAL" />
+      <!-- Fault Code Input -->
+      <label for="fault-code" style="display: block; margin: 16px 0 6px; font-weight: 600; color: #0277bd;">Enter Fault Code</label>
+
+      <div style="display: flex; align-items: center; gap: 8px; max-width: 600px; width: 100%;">
+        <div style="position: relative; flex: 1; display: flex; align-items: center;">
+          <span style="
+            position: absolute;
+            left: 12px;
+            color: #888;
+            font-size: 0.95rem;
+            pointer-events: none;
+          ">0x</span>
+          <input
+            type="text"
+            id="fault-code"
+            placeholder="HEX or DECIMAL"
+            style="
+              width: 100%;
+              padding: 10px 12px 10px 36px;
+              border: 1px solid #ccc;
+              border-radius: 8px;
+              font-size: 0.95rem;
+              height: 44px;
+              outline: none;
+            "
+          />
         </div>
-        <button id="interpret-btn">Interpret</button>
+        <button
+          id="interpret-btn"
+          style="
+            height: 44px;
+            padding: 0 20px;
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+          "
+          onmouseover="this.style.backgroundColor='#0277bd'"
+          onmouseout="this.style.backgroundColor='#0288d1'"
+        >
+          Interpret
+        </button>
       </div>
 
+      <!-- Optional Message Container -->
       <div id="message-container" style="margin-top: 16px;"></div>
     </div>
 
