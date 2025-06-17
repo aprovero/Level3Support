@@ -1,225 +1,238 @@
-// analyzer.js — with grouped columns, chart export below, 6 max selected, axis toggles below chart
+// SG3125 Analyzer — JS logic for CSV upload, parameter selection, charting and events
 
-const chartRef = document.getElementById('chart-canvas');
-const chartContainer = document.getElementById('chart-container');
+let hisData = [], eventData = [], filteredEvents = [];
+let selectedParams = new Set();
+let axisMapping = {}; // { paramName: 'left' | 'right' }
+
+const maxSelectable = 6;
+
+const hisInput = document.getElementById('hisdata-file');
+const eventInput = document.getElementById('event-file');
 const paramContainer = document.getElementById('param-container');
-const exportBtn = document.getElementById('export-chart');
-const hisInput = document.getElementById('his-upload');
-const eventsInput = document.getElementById('events-upload');
-const eventSummary = document.getElementById('event-summary');
-const stateFilter = document.getElementById('state-select');
-const selectedParamToggles = document.createElement('div');
-selectedParamToggles.id = 'selected-param-toggles';
+const toggleContainer = document.getElementById('selected-param-toggles');
+const chartCanvas = document.getElementById('chart-canvas');
+const chartExportBtn = document.getElementById('export-chart');
+const stateFilter = document.getElementById('state-filter');
+const faultCheckbox = document.getElementById('filter-fault');
+const alarmCheckbox = document.getElementById('filter-alarm');
+const promptCheckbox = document.getElementById('filter-prompt');
+const logTableBody = document.querySelector('#event-log tbody');
 
-let hisData = [];
-let eventsData = [];
-let selectedParams = [];
-let axisAssignments = {}; // 'paramName' -> 'left' or 'right'
-let chartInstance = null;
-let selectedState = "";
-let hisFileDate = null;
+let chart = null;
 
-hisInput.addEventListener('change', (e) => handleFileUpload(e.target.files[0], 'his'));
-eventsInput.addEventListener('change', (e) => handleFileUpload(e.target.files[0], 'events'));
-
-function handleFileUpload(file, type) {
-  if (!file) return;
-  if (type === 'his') {
-    const nameMatch = file.name.match(/(\d{4})(\d{2})(\d{2})/);
-    if (nameMatch) {
-      hisFileDate = `${nameMatch[1]}-${nameMatch[2]}-${nameMatch[3]}`;
-    }
-  }
+function parseCSV(file, callback) {
   Papa.parse(file, {
     header: true,
-    dynamicTyping: true,
     skipEmptyLines: true,
-    complete: (results) => {
-      if (type === 'his') {
-        hisData = results.data;
-        selectedParams = [];
-        axisAssignments = {};
-        renderParams();
-        populateStateFilter();
-        renderChart();
-      } else {
-        eventsData = results.data;
-        renderEventSummary();
-        renderChart();
-      }
-    },
-    error: (err) => alert(`Failed to parse ${type} file: ${err.message}`)
+    complete: results => callback(results.data)
   });
 }
 
-function filterHisData() {
-  return selectedState
-    ? hisData.filter(row => row["Working state of unit 1"] === selectedState)
-    : hisData;
+function extractDateFromFilename(filename) {
+  const match = filename.match(/\d{4}-\d{2}-\d{2}/);
+  return match ? match[0] : null;
 }
 
-function resetChart() {
-  if (chartInstance) {
-    chartInstance.destroy();
-    chartInstance = null;
-  }
-}
+function renderParamSelectors() {
+  paramContainer.innerHTML = '';
+  const groups = { General: [], 'Unit 1': [], 'Unit 2': [] };
+  if (hisData.length === 0) return;
 
-function renderChart() {
-  const ctx = chartRef.getContext('2d');
-  const filteredData = filterHisData();
-  if (!filteredData.length || !selectedParams.length) return;
-  resetChart();
+  const headers = Object.keys(hisData[0]);
+  headers.forEach(h => {
+    const key = h.toLowerCase();
+    if (key.includes('unit 1')) groups['Unit 1'].push(h);
+    else if (key.includes('unit 2')) groups['Unit 2'].push(h);
+    else groups.General.push(h);
+  });
 
-  const labels = filteredData.map(row => row.Time);
-  const datasets = selectedParams.map((param, index) => ({
-    label: param,
-    data: filteredData.map(row => row[param]),
-    borderColor: ['#2196F3', '#F44336', '#4CAF50', '#FF9800', '#9C27B0', '#795548', '#607D8B'][index % 7],
-    yAxisID: axisAssignments[param] || 'left',
-    fill: false,
-    tension: 0.1
-  }));
+  Object.entries(groups).forEach(([groupName, params]) => {
+    const groupDiv = document.createElement('div');
+    groupDiv.className = 'param-group';
 
-  // Add red X markers for faults matching the date
-  if (eventsData.length && hisFileDate) {
-    const faultEvents = eventsData.filter(ev => ev["Event Level"] === "Fault" && ev["Generation time"]?.startsWith(hisFileDate));
-    faultEvents.forEach((fault, idx) => {
-      datasets.push({
-        label: `Fault ${idx + 1}`,
-        data: filteredData.map(row => row.Time === fault["Generation time"] ? 0 : null),
-        pointStyle: 'crossRot',
-        pointRadius: 6,
-        pointBackgroundColor: 'red',
-        borderColor: 'rgba(0,0,0,0)',
-        showLine: false,
-        yAxisID: 'left'
-      });
+    const title = document.createElement('h3');
+    title.className = 'section-title';
+    title.textContent = groupName;
+    groupDiv.appendChild(title);
+
+    const list = document.createElement('div');
+    list.className = 'param-list';
+
+    params.forEach(param => {
+      const label = document.createElement('label');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.dataset.param = param;
+      checkbox.addEventListener('change', handleParamToggle);
+
+      const span = document.createElement('span');
+      span.textContent = param;
+
+      label.appendChild(checkbox);
+      label.appendChild(span);
+      list.appendChild(label);
     });
-  }
 
-  chartInstance = new Chart(ctx, {
-    type: 'line',
-    data: { labels, datasets },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'top' },
-        tooltip: { mode: 'index', intersect: false }
+    groupDiv.appendChild(list);
+    paramContainer.appendChild(groupDiv);
+  });
+}
+
+function handleParamToggle(e) {
+  const param = e.target.dataset.param;
+  if (e.target.checked) {
+    if (selectedParams.size >= maxSelectable) {
+      e.target.checked = false;
+      alert(`You can only select up to ${maxSelectable} parameters.`);
+      return;
+    }
+    selectedParams.add(param);
+    axisMapping[param] = 'left';
+  } else {
+    selectedParams.delete(param);
+    delete axisMapping[param];
+  }
+  renderAxisToggles();
+  updateChart();
+}
+
+function renderAxisToggles() {
+  toggleContainer.innerHTML = '';
+  [...selectedParams].forEach(param => {
+    const div = document.createElement('div');
+    div.className = 'selected-param-toggle';
+
+    const label = document.createElement('label');
+    label.textContent = param;
+
+    const switchContainer = document.createElement('label');
+    switchContainer.className = 'toggle-switch';
+
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.checked = axisMapping[param] === 'right';
+    input.addEventListener('change', () => {
+      axisMapping[param] = input.checked ? 'right' : 'left';
+      updateChart();
+    });
+
+    const slider = document.createElement('span');
+    slider.className = 'toggle-slider';
+
+    switchContainer.appendChild(input);
+    switchContainer.appendChild(slider);
+    div.appendChild(label);
+    div.appendChild(switchContainer);
+    toggleContainer.appendChild(div);
+  });
+}
+
+function updateChart() {
+  if (!hisData.length || selectedParams.size === 0) return;
+
+  const labels = hisData.map(row => row['Time']);
+  const datasets = [...selectedParams].map((param, idx) => {
+    const axis = axisMapping[param];
+    return {
+      label: param,
+      data: hisData.map(row => parseFloat(row[param]) || 0),
+      borderColor: Chart.defaults.color[idx % 10] || '#000',
+      backgroundColor: 'transparent',
+      yAxisID: axis
+    };
+  });
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      left: {
+        type: 'linear',
+        position: 'left',
+        title: { display: true, text: 'Left Y' }
       },
-      scales: {
-        left: { type: 'linear', position: 'left', title: { display: true, text: 'Left Y' }, beginAtZero: false },
-        right: { type: 'linear', position: 'right', title: { display: true, text: 'Right Y' }, grid: { drawOnChartArea: false }, beginAtZero: false },
-        x: { title: { display: true, text: 'Time' } }
+      right: {
+        type: 'linear',
+        position: 'right',
+        title: { display: true, text: 'Right Y' },
+        grid: { drawOnChartArea: false }
       }
     }
-  });
-}
-
-function renderParams() {
-  if (!hisData.length) return;
-  const allKeys = Object.keys(hisData[0]).filter(k => typeof hisData[0][k] === 'number');
-  const general = allKeys.filter(k => !k.toLowerCase().includes('unit 1') && !k.toLowerCase().includes('unit 2'));
-  const unit1 = allKeys.filter(k => k.toLowerCase().includes('unit 1'));
-  const unit2 = allKeys.filter(k => k.toLowerCase().includes('unit 2'));
-
-  const createColumn = (title, list) => {
-    const col = document.createElement('div');
-    col.className = 'param-group';
-    const heading = document.createElement('div');
-    heading.className = 'section-title';
-    heading.textContent = title;
-    const inner = document.createElement('div');
-    inner.className = 'param-list';
-    list.forEach(param => {
-      const row = document.createElement('label');
-      row.innerHTML = `
-        <input type="checkbox" value="${param}" />
-        <span>${param}</span>
-      `;
-      const checkbox = row.querySelector('input');
-      checkbox.addEventListener('change', () => {
-        if (checkbox.checked) {
-          if (selectedParams.length >= 6) {
-            checkbox.checked = false;
-            alert("Max 6 parameters allowed.");
-          } else {
-            selectedParams.push(param);
-            axisAssignments[param] = 'left';
-          }
-        } else {
-          selectedParams = selectedParams.filter(p => p !== param);
-          delete axisAssignments[param];
-        }
-        renderToggles();
-        renderChart();
-      });
-      inner.appendChild(row);
-    });
-    col.appendChild(heading);
-    col.appendChild(inner);
-    return col;
   };
 
-  paramContainer.innerHTML = '';
-  paramContainer.appendChild(createColumn('General', general));
-  paramContainer.appendChild(createColumn('Unit 1', unit1));
-  paramContainer.appendChild(createColumn('Unit 2', unit2));
-
-  if (!document.getElementById('selected-param-toggles')) {
-    chartContainer.insertAdjacentElement('afterend', selectedParamToggles);
-  }
+  if (chart) chart.destroy();
+  chart = new Chart(chartCanvas.getContext('2d'), {
+    type: 'line',
+    data: { labels, datasets },
+    options
+  });
 }
 
-function renderToggles() {
-  selectedParamToggles.innerHTML = '';
-  selectedParams.forEach(param => {
-    const toggle = document.createElement('div');
-    toggle.className = 'selected-param-toggle';
-    toggle.innerHTML = `
-      <label>${param}</label>
-      <select>
-        <option value="left" ${axisAssignments[param] === 'left' ? 'selected' : ''}>Left</option>
-        <option value="right" ${axisAssignments[param] === 'right' ? 'selected' : ''}>Right</option>
-      </select>
-    `;
-    toggle.querySelector('select').addEventListener('change', e => {
-      axisAssignments[param] = e.target.value;
-      renderChart();
+function exportChartAsImage() {
+  const canvas = chartCanvas;
+  const link = document.createElement('a');
+  link.download = 'SG3125_Chart.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+function handleStateFilter() {
+  const selectedState = stateFilter.value;
+  renderEventTable(selectedState);
+}
+
+function renderEventTable(filter) {
+  logTableBody.innerHTML = '';
+  const relevant = filter === 'All States'
+    ? eventData
+    : eventData.filter(e => (e.State || '').includes(filter));
+
+  filteredEvents = relevant;
+
+  relevant.forEach(e => {
+    if (!e.Time || !e.Level) return;
+    const row = document.createElement('tr');
+    row.className = `event-row ${e.Level}`;
+
+    ['Time', 'Device', 'Event', 'Level'].forEach(key => {
+      const td = document.createElement('td');
+      td.textContent = e[key] || '';
+      row.appendChild(td);
     });
-    selectedParamToggles.appendChild(toggle);
+
+    const isVisible = (e.Level === 'Fault' && faultCheckbox.checked) ||
+                      (e.Level === 'Alarm' && alarmCheckbox.checked) ||
+                      (e.Level === 'Prompt' && promptCheckbox.checked);
+    if (isVisible) logTableBody.appendChild(row);
   });
 }
 
-function populateStateFilter() {
-  const states = Array.from(new Set(hisData.map(row => row["Working state of unit 1"]))).filter(Boolean);
-  stateFilter.innerHTML = '<option value="">All States</option>' +
-    states.map(s => `<option value="${s}">${s}</option>`).join('');
-  stateFilter.addEventListener('change', (e) => {
-    selectedState = e.target.value;
-    renderChart();
-  });
+function refreshAfterUpload() {
+  renderParamSelectors();
+  renderAxisToggles();
+  updateChart();
+  renderEventTable(stateFilter.value);
 }
 
-function renderEventSummary() {
-  if (!eventsData.length) return;
-  const faultCount = eventsData.filter(e => e["Event Level"] === "Fault").length;
-  const alarmCount = eventsData.filter(e => e["Event Level"] === "Alarm").length;
-  const promptCount = eventsData.filter(e => e["Event Level"] === "Prompt").length;
-  eventSummary.innerHTML = `
-    <div class="summary-box">
-      <div><strong>Faults:</strong> ${faultCount}</div>
-      <div><strong>Alarms:</strong> ${alarmCount}</div>
-      <div><strong>Prompts:</strong> ${promptCount}</div>
-    </div>
-  `;
-}
-
-exportBtn.addEventListener('click', () => {
-  html2canvas(chartContainer).then(canvas => {
-    const link = document.createElement('a');
-    link.download = 'SG3125_Chart.png';
-    link.href = canvas.toDataURL();
-    link.click();
+hisInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  parseCSV(file, data => {
+    hisData = data;
+    refreshAfterUpload();
   });
 });
+
+eventInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  parseCSV(file, data => {
+    eventData = data;
+    refreshAfterUpload();
+  });
+});
+
+stateFilter.addEventListener('change', handleStateFilter);
+faultCheckbox.addEventListener('change', handleStateFilter);
+alarmCheckbox.addEventListener('change', handleStateFilter);
+promptCheckbox.addEventListener('change', handleStateFilter);
+
+chartExportBtn.addEventListener('click', exportChartAsImage);

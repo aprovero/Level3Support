@@ -18,43 +18,49 @@
       </div>
     </div>
 
-    <!-- Tool Title -->
+    <!-- Page Title -->
     <h1>Module/Fan Fault Code Interpreter</h1>
 
-    <!-- Tool Content -->
-    <!-- Upload Section UI -->
+    <!-- Tool Wrapper -->
     <div id="fault-tool-root" class="upload-section">
       <h3 class="upload-title">Module/Fan Fault Code Interpreter</h3>
 
+      <!-- Inverter Series -->
       <label for="inverter-series">Inverter Series</label>
       <select id="inverter-series" class="file-input">
         <option value="sg3125">SG3125 Series</option>
         <option value="onePlusX">1+X Series</option>
       </select>
 
+      <!-- Fault Section -->
       <label for="fault-section">Fault Section</label>
       <select id="fault-section" class="file-input"></select>
 
+      <!-- Input + Button -->
       <label for="fault-code">Enter Fault Code</label>
-      <div class="input-group">
-        <div class="input-prefix">0x</div>
-        <input type="text" id="fault-code" placeholder="Hex or Dec" />
+      <div class="input-wrapper">
+        <div class="input-with-prefix">
+          <span class="prefix">0x</span>
+          <input type="text" id="fault-code" placeholder="HEX or DECIMAL" />
+        </div>
         <button id="interpret-btn">Interpret</button>
       </div>
 
       <div id="message-container" style="margin-top: 16px;"></div>
     </div>
 
-    <!-- Binary Output -->
+    <!-- Binary Display -->
     <div id="binary-output" class="form-group" style="display: none;"></div>
 
-    <!-- Fault Description Output -->
+    <!-- Fault Result -->
     <div id="fault-result" class="form-group" style="display: none;"></div>
 
     <!-- Footer -->
     <footer class="footer">
       <div class="footer-text">
-        <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas.</div>
+        <div class="footer-copyright">
+          © 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.
+        </div>
         <div class="footer-creator">Created by Andres Provero</div>
       </div>
       <div class="footer-logo">
@@ -67,4 +73,5 @@
   <script src="js/common.js"></script>
   <script src="js/fault-interpreter.js"></script>
 </body>
+
 </html>

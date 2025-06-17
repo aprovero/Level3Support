@@ -25,78 +25,71 @@
   color: #0277bd;
 }
 
-/* ===========================
-   Input Group (Prefix + Input + Button)
-   =========================== */
-.input-group {
-  display: flex;
+select.file-input {
+  height: 44px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
   width: 100%;
   max-width: 600px;
-  border: 1px solid #0288d1;
-  border-radius: 8px;
-  overflow: hidden;
+}
+
+/* ===========================
+   Input with Inline Prefix
+   =========================== */
+.input-wrapper {
+  display: flex;
+  gap: 8px;
+  max-width: 600px;
   margin-top: 8px;
 }
 
-.input-prefix {
-  background-color: #e0f7fa;
-  color: #0277bd;
-  font-weight: bold;
-  padding: 0 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 48px;
-  font-size: 1rem;
-}
-
-/* Unified input style */
-#fault-code,
-#interpret-btn {
-  height: 44px;
-  font-size: 1rem;
-  padding: 0 12px;
-  border: none;
-  outline: none;
-}
-
-/* Input field */
-#fault-code {
+.input-with-prefix {
+  position: relative;
   flex: 1;
 }
 
-/* Interpret button */
+.input-with-prefix .prefix {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+#fault-code {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  height: 44px;
+  outline: none;
+}
+
+#fault-code:focus {
+  border-color: #0288d1;
+}
+
+/* Button */
 #interpret-btn {
+  height: 44px;
+  padding: 0 20px;
   background-color: #0288d1;
   color: white;
+  border: none;
+  border-radius: 8px;
   font-weight: bold;
-  padding: 0 20px;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 #interpret-btn:hover {
   background-color: #0277bd;
-}
-
-/* Mobile behavior */
-@media (max-width: 480px) {
-  .input-group {
-    flex-direction: column;
-    border-radius: 8px;
-  }
-
-  .input-prefix,
-  #fault-code,
-  #interpret-btn {
-    width: 100%;
-    border-radius: 0 !important;
-    text-align: center;
-  }
-
-  #interpret-btn {
-    border-top: 1px solid #0288d1;
-  }
 }
 
 /* ===========================
@@ -183,4 +176,22 @@
   border: 1px solid var(--success-border);
   padding: 0.75rem;
   border-radius: 8px;
+}
+
+/* ===========================
+   Responsive Behavior
+   =========================== */
+@media (max-width: 480px) {
+  .input-wrapper {
+    flex-direction: column;
+  }
+
+  .input-with-prefix,
+  #interpret-btn {
+    width: 100%;
+  }
+
+  #interpret-btn {
+    margin-top: 8px;
+  }
 }

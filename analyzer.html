@@ -24,88 +24,77 @@
 
     <!-- Upload Section -->
     <section class="upload-section">
-      <div class="bg-blue-50 p-4 border border-blue-200 rounded">
-        <h2 class="text-lg font-semibold text-blue-900 mb-2">Upload CSV Files</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-          <input type="file" id="his-upload" accept=".csv" class="file-input w-full p-2 border rounded" />
-          <input type="file" id="events-upload" accept=".csv" class="file-input w-full p-2 border rounded" />
-        </div>
-        <p class="text-sm text-blue-700">Upload the HisData file (left) and the Events file (right).</p>
+      <div class="upload-title">Upload CSV Files</div>
+      <div class="upload-input-container double">
+        <input type="file" id="hisdata-file" class="file-input" accept=".csv" />
+        <input type="file" id="event-file" class="file-input" accept=".csv" />
       </div>
+      <p class="upload-instructions">Upload the HisData file (left) and the Events file (right).</p>
     </section>
 
     <!-- Parameter Selection -->
     <section class="parameter-selection">
-      <h2 class="section-title">Select Parameters (Max 6)</h2>
-      <div id="param-container" class="flex gap-4 overflow-x-auto">
-        <!-- Columns injected by JS -->
+      <div class="section-title">Select Parameters (Max 6)</div>
+      <div id="param-container"></div>
+    </section>
+
+    <!-- Axis Toggle -->
+    <section class="axis-toggle-section">
+      <div class="section-title">Assign Y Axis</div>
+      <div id="selected-param-toggles"></div>
+    </section>
+
+    <!-- Chart Section -->
+    <section class="chart-section">
+      <div class="section-title">Power Chart</div>
+      <div id="chart-container">
+        <canvas id="chart-canvas" width="960" height="540"></canvas>
+      </div>
+      <div class="text-center mt-4">
+        <button id="export-chart" class="chart-export">Export as PNG</button>
       </div>
     </section>
 
-    <!-- Axis Toggles -->
-    <section class="axis-toggle-section mt-6">
-      <h2 class="section-title">Assign Axis</h2>
-      <div id="selected-param-toggles" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Toggles injected by JS -->
-      </div>
-    </section>
-
-    <!-- Chart -->
-    <section class="chart-section mt-6">
-      <h2 class="section-title">Power Chart</h2>
-      <div id="chart-container" class="bg-white border p-4 rounded shadow">
-        <canvas id="chart-canvas" height="300"></canvas>
-      </div>
-      <div class="mt-4 flex justify-center">
-        <button id="export-chart" class="chart-export bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded">
-          Export as PNG
-        </button>
-      </div>
-    </section>
-
-    <!-- State Filter -->
-    <section class="state-filter mt-6">
-      <label for="state-select" class="font-medium text-blue-800">Filter by Unit 1 State:</label>
-      <select id="state-select" class="ml-2 p-2 border rounded">
-        <option value="">All States</option>
+    <!-- Filter by State -->
+    <section class="state-filter">
+      <label for="state-filter">Filter by Unit 1 State:</label>
+      <select id="state-filter">
+        <option>All States</option>
       </select>
     </section>
 
-    <!-- Event Table -->
-    <section class="event-log mt-6">
-      <h2 class="section-title">Event Log</h2>
-      <div class="mb-2">
-        <label><input type="checkbox" class="event-filter" value="Fault" checked> Fault</label>
-        <label class="ml-4"><input type="checkbox" class="event-filter" value="Alarm" checked> Alarm</label>
-        <label class="ml-4"><input type="checkbox" class="event-filter" value="Prompt" checked> Prompt</label>
+    <!-- Event Log -->
+    <section class="event-summary">
+      <div class="section-title">Event Log</div>
+      <div class="flex gap-4 mb-2">
+        <label><input type="checkbox" id="filter-fault" checked /> Fault</label>
+        <label><input type="checkbox" id="filter-alarm" checked /> Alarm</label>
+        <label><input type="checkbox" id="filter-prompt" checked /> Prompt</label>
       </div>
-      <div class="overflow-auto max-h-96 border rounded">
-        <table class="min-w-full text-sm border-collapse table-auto">
-          <thead class="bg-gray-100">
+      <div class="event-log overflow-auto">
+        <table>
+          <thead>
             <tr>
-              <th class="p-2 border">Time</th>
-              <th class="p-2 border">Device</th>
-              <th class="p-2 border">Event</th>
-              <th class="p-2 border">Level</th>
+              <th>Time</th>
+              <th>Device</th>
+              <th>Event</th>
+              <th>Level</th>
             </tr>
           </thead>
-          <tbody id="event-table-body">
-            <!-- Rows injected by JS -->
+          <tbody id="event-log">
+            <!-- dynamically filled -->
           </tbody>
         </table>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer mt-10">
+    <footer class="footer">
       <div class="footer-text">
         <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
         <div class="footer-creator">Created by Andres Provero</div>
       </div>
       <div class="footer-logo">
-        <a href="https://www.anthropic.com" target="_blank">
-          <img src="images/CLAUDE_LOGO.png" alt="Claude Logo"/>
-        </a>
         <img src="images/COE_LOGO.png" alt="CoE LATAM Logo"/>
       </div>
     </footer>
@@ -115,7 +104,6 @@
   <script src="js/papaparse.min.js"></script>
   <script src="js/common.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script type="module" src="js/analyzer.js"></script>
+  <script src="js/analyzer.js"></script>
 </body>
 </html>
