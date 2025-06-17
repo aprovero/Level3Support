@@ -1,74 +1,108 @@
-/* analyze.css */
+/* analyzer.css — blue styling to match parameter comparison tool */
+
+.upload-section {
+  background-color: #e3f2fd;
+  border: 1px solid #81d4fa;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.upload-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #01579b;
+  margin-bottom: 0.75rem;
+}
+
+.upload-input-container.double {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.file-input {
+  background: white;
+  border: 1px solid #b0bec5;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  width: 100%;
+}
+
+.upload-instructions {
+  font-size: 0.875rem;
+  color: #0277bd;
+  margin-bottom: 1rem;
+}
+
+.parameter-selection,
+.chart-section,
+.event-summary {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #01579b;
+  margin-bottom: 0.75rem;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.chart-export {
+  background-color: #0288d1;
+  color: white;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+}
+
+.chart-export:hover {
+  background-color: #0277bd;
+}
 
 .chart-container {
-  height: 20rem;
+  overflow-x: auto;
+  background: #fafafa;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 0.375rem;
 }
 
-.param-checkbox {
-  @apply flex items-center text-sm truncate;
+.summary-box {
+  background: #f1f8e9;
+  border: 1px solid #c5e1a5;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+  color: #33691e;
 }
 
-.param-checkbox input {
-  @apply mr-2;
-}
-
-/* analyze.css */
-
-/* === Drag-and-drop Upload Styles === */
-.file-upload {
-  border: 2px dashed var(--border-light);
-  border-radius: var(--border-radius-md);
-  padding: 1.5rem;
-  text-align: center;
-  background-color: #ffffff;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  position: relative;
-}
-
-.file-upload:hover,
-.file-upload.dragover {
-  background-color: var(--info-light);
-  border-color: var(--border-focus);
-}
-
-.file-upload input[type="file"] {
-  position: absolute;
-  opacity: 0;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  cursor: pointer;
-}
-
-/* === Parameter Selector === */
 .param-checkbox {
   display: flex;
   align-items: center;
+  background-color: #f5f5f5;
+  border: 1px solid #cfd8dc;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
   font-size: 0.875rem;
-  background-color: var(--background-light);
-  padding: 6px 10px;
-  border-radius: var(--border-radius-sm);
-  border: 1px solid var(--border-light);
-  transition: background 0.2s ease;
+  color: #37474f;
   cursor: pointer;
 }
 
-.param-checkbox:hover {
-  background-color: #f5f5f5;
-}
-
 .param-checkbox input[type="checkbox"] {
-  margin-right: 8px;
-}
-
-/* === Chart Container === */
-.chart-container {
-  height: 500px;
-  border: 1px solid var(--border-light);
-  border-radius: var(--border-radius-md);
-  background-color: #fff;
-  box-shadow: var(--shadow-sm);
-  padding: 1rem;
+  margin-right: 0.5rem;
 }
