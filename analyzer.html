@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CoE Level 3 - Data Analyzer</title>
-  <link rel="icon" href="images/SIMPLE_LOGO.png" type="image/png" />
-  <link rel="stylesheet" href="css/shared-styles.css" />
-  <link rel="stylesheet" href="css/analyzer.css" />
+  <title>CoE Level 3 - UMCG Analyzer Tool</title>
+  <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
+  <link href="css/shared-styles.css" rel="stylesheet"/>
+  <link href="css/analyzer.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -19,58 +22,48 @@
 
     <h1 class="text-center">SG3125 Series Data Analyzer</h1>
 
-    <!-- Analyzer UI -->
-    <div id="sg3125-analyzer-root">
-      <div class="upload-section">
-        <h3 class="upload-title">Upload CSV Files</h3>
-        <div class="upload-input-container double">
-          <div>
-            <label for="his-upload">Upload HisData CSV:</label>
-            <input type="file" id="his-upload" accept=".csv" class="file-input" />
-          </div>
-          <div>
-            <label for="events-upload">Upload Events CSV:</label>
-            <input type="file" id="events-upload" accept=".csv" class="file-input" />
-          </div>
-        </div>
-        <p class="upload-instructions">
-          Load historical inverter data and events to visualize power trends and faults.
-        </p>
+    <!-- Upload Section -->
+    <section class="upload-section">
+      <div class="upload-title">Upload CSV Files</div>
+      <div class="upload-input-container double">
+        <input type="file" id="his-upload" accept=".csv" class="file-input" />
+        <input type="file" id="events-upload" accept=".csv" class="file-input" />
       </div>
+      <div class="upload-instructions">Upload the HisData file (left) and the Events file (right).</div>
+    </section>
 
-      <!-- Parameter Selection -->
-      <div class="parameter-selection">
-        <h2 class="section-title">Select Parameters</h2>
-        <div id="param-container" class="grid grid-cols-2 md:grid-cols-4 gap-2"></div>
+    <!-- Parameter Selection Section -->
+    <section class="parameter-selection">
+      <div class="section-title">Select Parameters (Max 6)</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="param-container">
+        <!-- Parameters will be injected here -->
       </div>
+    </section>
 
-      <!-- Y-Axis and State Filtering -->
-      <div class="state-filter">
-        <label for="state-select">Filter by State:</label>
-        <select id="state-select">
-          <option value="">-- All States --</option>
-        </select>
-      </div>
+    <!-- State Filter -->
+    <section class="state-filter">
+      <label for="state-select">Filter by Unit 1 State:</label>
+      <select id="state-select">
+        <option value="">All</option>
+      </select>
+    </section>
 
-      <!-- Chart Display -->
-      <div class="chart-section">
-        <div class="chart-header">
-          <h2>Chart</h2>
-          <button id="export-chart" class="chart-export">Export PNG</button>
-        </div>
-        <div id="chart-container" class="chart-container">
-          <canvas id="chart-canvas" width="1000" height="400"></canvas>
-        </div>
+    <!-- Chart Section -->
+    <section class="chart-section">
+      <div class="chart-header">
+        <div class="section-title">Power Chart</div>
+        <button id="export-chart" class="chart-export">Export as PNG</button>
       </div>
+      <div id="chart-container" class="chart-container">
+        <canvas id="chart-canvas" height="300"></canvas>
+      </div>
+    </section>
 
-      <!-- Event Summary -->
-      <div class="event-summary">
-        <h2 class="section-title">Event Summary</h2>
-        <div id="event-summary" class="summary-box">
-          No events loaded yet.
-        </div>
-      </div>
-    </div>
+    <!-- Event Summary Section -->
+    <section class="event-summary">
+      <div class="section-title">Event Summary</div>
+      <div id="event-summary" class="summary-box">No events loaded yet.</div>
+    </section>
 
     <!-- Footer -->
     <footer class="footer">
@@ -79,16 +72,17 @@
         <div class="footer-creator">Created by Andres Provero</div>
       </div>
       <div class="footer-logo">
-        <img src="images/COE_LOGO.png" alt="CoE LATAM Logo" />
+        <a href="https://www.anthropic.com" target="_blank">
+          <img src="images/CLAUDE_LOGO.png" alt="Claude Logo"/>
+        </a>
+        <img src="images/COE_LOGO.png" alt="CoE LATAM Logo"/>
       </div>
     </footer>
   </div>
 
-  <!-- JS libraries -->
-  <script src="js/common.js"></script>
+  <!-- Scripts -->
   <script src="js/papaparse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="js/analyzer.js"></script>
+  <script src="js/common.js"></script>
+  <script type="module" src="js/analyzer.js"></script>
 </body>
 </html>
