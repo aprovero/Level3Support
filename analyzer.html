@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SG3125 Series Analyzer - CoE LATAM</title>
+  <link rel="icon" type="image/png" href="images/SIMPLE_LOGO.png">
+  <link rel="stylesheet" href="css/shared-styles.css">
+  <link rel="stylesheet" href="css/analyzer-styles.css">
+</head>
+<body>
+  <div class="analyzer-page">
+    <!-- Header -->
+    <header class="header analyzer-header">
+      <div class="logo">
+        <img src="images/LOGO.png" alt="SUNGROW Logo">
+      </div>
+      <div class="header-title">SG3125 Series Data Analyzer</div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="analyzer-container">
+      <!-- File Upload -->
+      <section class="upload-panel">
+        <label for="hisDataUpload">Upload HisData CSV:</label>
+        <input type="file" id="hisDataUpload" accept=".csv">
+
+        <label for="eventsUpload">Upload Events CSV:</label>
+        <input type="file" id="eventsUpload" accept=".csv">
+
+        <button onclick="SG3125AnalyzerInstance.handleUpload()">Load Data</button>
+      </section>
+
+      <div id="sg3125-analyzer-root"></div>
+    </main>
+
+    <!-- Fault Modal -->
+    <div id="faultModal" class="analyzer-modal" style="display: none;">
+      <div class="analyzer-modal-content">
+        <h3>Fault Events</h3>
+        <ul id="faultList" class="event-list"></ul>
+        <button class="modal-button" onclick="SG3125AnalyzerInstance.toggleFaultModal()">Close</button>
+      </div>
+    </div>
+
+    <!-- Alarm Modal -->
+    <div id="alarmModal" class="analyzer-modal" style="display: none;">
+      <div class="analyzer-modal-content">
+        <h3>Alarm Events</h3>
+        <ul id="alarmList" class="event-list"></ul>
+        <button class="modal-button" onclick="SG3125AnalyzerInstance.toggleAlarmModal()">Close</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer analyzer-footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
+        <div class="footer-creator">Created by Andres Provero</div>
+      </div>
+      <div class="footer-logo">
+        <a href="https://www.anthropic.com" target="_blank">
+          <img src="images/CLAUDE_LOGO.png" alt="Claude Logo">
+        </a>
+        <img src="images/COE_LOGO.png" alt="CoE LATAM Logo">
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/analyzer-dependencies.js"></script>
+  <script src="js/analyzer.js"></script>
+</body>
+</html>
