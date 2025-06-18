@@ -91,11 +91,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem;
-  background: #f1f1f1;
-  border: 1px solid #cfd8dc;
-  border-radius: 6px;
+  background: #f9fafb;
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.875rem;
 }
+
 .selected-param-toggle label {
   font-weight: 500;
   font-size: 0.85rem;
@@ -199,4 +201,7 @@
 .param-group::-webkit-scrollbar-track,
 .event-log .overflow-auto::-webkit-scrollbar-track {
   background-color: #e0e0e0;
+}
+#chart-container {
+  background-color: white; /* ensures canvas captures white bg */
 }

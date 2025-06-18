@@ -12,75 +12,78 @@
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <!-- SG3125 Analyzer: Upload, Parameter Selection, Chart, and Event Viewer -->
+<body class="bg-gray-50 text-gray-900">
+  <!-- Header -->
+  <header class="bg-white shadow px-6 py-4 flex items-center justify-between">
+    <div class="logo flex items-center">
+      <img src="images/SIMPLE_LOGO.png" alt="Logo" class="h-10 mr-2" />
+      <h1 class="text-xl font-semibold">SG3125 Analyzer</h1>
+    </div>
+  </header>
 
-<body>
-  <div class="container">
-    
-    <!-- Upload Section -->
-    <section class="upload-section">
-      <h2 class="upload-title">Upload CSV Files</h2>
-      <div class="upload-input-container double">
+  <!-- Main Container -->
+  <main class="container mx-auto px-4 py-6">
+    <!-- File Upload Section -->
+    <section class="bg-white p-4 rounded shadow mb-6">
+      <h2 class="text-lg font-semibold mb-2">Upload CSV Files</h2>
+      <div class="flex flex-wrap gap-4 items-center">
         <div>
-          <label for="hisdata-file">Historical Data (HisData)</label>
-          <input type="file" id="hisdata-file" class="file-input" accept=".csv" />
+          <label class="block text-sm font-medium mb-1">HisData File</label>
+          <input type="file" id="hisdata-file" accept=".csv" class="input-file">
         </div>
         <div>
-          <label for="event-file">Event Log</label>
-          <input type="file" id="event-file" class="file-input" accept=".csv" />
+          <label class="block text-sm font-medium mb-1">Event File</label>
+          <input type="file" id="event-file" accept=".csv" class="input-file">
         </div>
       </div>
-      <p class="upload-instructions">Make sure both files are from the same day for accurate event overlay and analysis.</p>
     </section>
 
     <!-- Parameter Selection Section -->
-    <section class="parameter-selection">
-      <h2 class="section-title">Select Parameters</h2>
-      <div id="param-container"></div>
+    <section id="param-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+
+      <!-- JS will populate .param-group columns here -->
     </section>
 
     <!-- Axis Toggle Section -->
-    <section class="axis-toggle-section">
-      <h2 class="section-title">Y-Axis Assignment</h2>
-      <div id="selected-param-toggles"></div>
+    <section id="selected-param-toggles" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <!-- JS will populate axis toggles -->
     </section>
 
-    <!-- Chart Section -->
-    <section class="chart-section">
-      <div class="chart-header">
-        <h2 class="section-title">Chart</h2>
-        <button id="export-chart" class="chart-export">Export Chart</button>
+    <!-- Chart and Export Section -->
+    <section class="bg-white p-4 rounded shadow mb-6">
+      <div id="chart-container" class="h-[500px] relative mb-4">
+        <canvas id="chart-canvas" class="w-full h-full"></canvas>
       </div>
-      <div id="chart-container" class="chart-container">
-        <canvas id="chart-canvas" height="400"></canvas>
+      <div class="text-center">
+        <button id="export-chart" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Export Chart</button>
       </div>
     </section>
 
-    <!-- State Filter Section -->
-    <section class="state-filter">
-      <label><input type="checkbox" id="filter-fault" checked /> Fault</label>
-      <label><input type="checkbox" id="filter-alarm" checked /> Alarm</label>
-      <label><input type="checkbox" id="filter-prompt" checked /> Prompt</label>
-    </section>
-
-    <!-- Event Summary Table -->
-    <section class="event-summary">
-      <h2 class="section-title">Event Summary</h2>
-      <div class="event-log overflow-auto">
-        <table id="event-log">
-          <thead>
+    <!-- Event Log and Filters -->
+    <section class="bg-white p-4 rounded shadow">
+      <h2 class="text-lg font-semibold mb-4">Event Summary</h2>
+      <div class="flex gap-4 mb-4">
+        <label><input type="checkbox" id="filter-fault" checked> Fault</label>
+        <label><input type="checkbox" id="filter-alarm" checked> Alarm</label>
+        <label><input type="checkbox" id="filter-prompt" checked> Prompt</label>
+      </div>
+      <div class="overflow-auto max-h-[400px] border rounded">
+        <table class="min-w-full table-auto text-sm" id="event-log">
+          <thead class="bg-gray-100">
             <tr>
-              <th>Time</th>
-              <th>Device</th>
-              <th>Event</th>
-              <th>Level</th>
+              <th class="px-2 py-1 text-left">Time</th>
+              <th class="px-2 py-1 text-left">Device</th>
+              <th class="px-2 py-1 text-left">Event</th>
+              <th class="px-2 py-1 text-left">Level</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- Populated via JS -->
+          <tbody class="divide-y">
+            <!-- JS will populate rows -->
           </tbody>
         </table>
       </div>
     </section>
+  </main>
 
     <!-- Footer -->
     <footer class="footer">
@@ -92,12 +95,10 @@
         <img src="images/COE_LOGO.png" alt="CoE LATAM Logo"/>
       </div>
     </footer>
-  </div>
 
   <!-- Libraries -->
   <script src="js/papaparse.min.js"></script>
   <script src="js/common.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="js/analyzer.js"></script>
 </body>
 </html>
