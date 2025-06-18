@@ -1,114 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CoE Level 3 - Fault Code Interpreter</title>
-  <link rel="icon" type="image/png" href="images/SIMPLE_LOGO.png" />
-  <link rel="stylesheet" href="css/shared-styles.css" />
-  <link rel="stylesheet" href="css/fault-interpreter.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fault Code Interpreter</title>
+  <link rel="stylesheet" href="css/shared-styles.css">
+  <link rel="stylesheet" href="css/fault-interpreter.css">
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
-    <div class="header">
-      <div class="logo">
-        <img src="images/LOGO.png" alt="Logo" />
-      </div>
-    </div>
-
-    <!-- Page Title -->
-    <h1>Module/Fan Fault Code Interpreter</h1>
-
-    <!-- Tool Content -->
-    <div id="fault-tool-root" class="upload-section">
-      <p class="upload-instructions">
+    <div class="upload-section" id="fault-tool-root">
+      <p class="upload-title">
         This tool interprets fault codes from Sungrow inverters. Select the inverter series, fault section, and enter the fault code to get detailed information.
       </p>
 
-      <!-- Inverter Series (Radio) -->
-      <fieldset style="margin-bottom: 16px;">
-        <legend style="font-weight: 600; color: #0277bd;">Inverter Series</legend>
-        <label style="margin-right: 20px;">
-          <input type="radio" name="inverter-series" value="sg3125" checked />
-          SG3125 Series
-        </label>
-        <label>
-          <input type="radio" name="inverter-series" value="onePlusX" />
-          1+X Series
-        </label>
-      </fieldset>
-
-      <!-- Fault Section (Radio - loaded by JS) -->
-      <fieldset style="margin-bottom: 16px;">
-        <legend style="font-weight: 600; color: #0277bd;">Fault Section</legend>
-        <div id="fault-section-options">
-          <!-- Filled dynamically -->
+      <!-- Inverter Series -->
+      <fieldset class="radio-group">
+        <legend>Inverter Series</legend>
+        <div class="radio-options">
+          <label class="radio-option">
+            <input type="radio" name="inverter-series" value="sg3125" checked>
+            SG3125 Series
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="inverter-series" value="onePlusX">
+            1+X Series
+          </label>
         </div>
       </fieldset>
 
-      <!-- Fault Code Input -->
-      <div style="margin-top: 24px; max-width: 400px;">
-        <label for="fault-code" style="font-weight: 600; color: #0277bd;">Enter Fault Code</label>
-        <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px;">
-          <span id="prefix-0x" style="display: none; font-weight: bold; color: #444;">0x</span>
-          <input
-            type="text"
-            id="fault-code"
-            placeholder="Enter code"
-            style="flex: 1; height: 44px; padding: 0 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 0.95rem; outline: none;"
-          />
+      <!-- Fault Section -->
+      <fieldset class="radio-group">
+        <legend>Fault Section</legend>
+        <div class="radio-options" id="section-options"></div>
+      </fieldset>
+
+      <!-- Code Input -->
+      <label for="fault-code">Enter Fault Code</label>
+      <div class="input-wrapper">
+        <div class="input-with-prefix">
+          <input type="text" id="fault-code" placeholder="Enter code">
         </div>
+        <button id="interpret-btn">Interpret</button>
       </div>
 
-      <!-- Interpret Button -->
-      <div style="margin-top: 16px;">
-        <button
-          id="interpret-btn"
-          style="
-            height: 44px;
-            background-color: #0288d1;
-            color: white;
-            padding: 0 20px;
-            border: none;
-            font-weight: bold;
-            font-size: 0.95rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-          "
-          onmouseover="this.style.backgroundColor='#0277bd'"
-          onmouseout="this.style.backgroundColor='#0288d1'"
-        >
-          Interpret
-        </button>
-      </div>
-
-      <div id="message-container" style="margin-top: 16px;"></div>
+      <div id="message-container"></div>
     </div>
 
-    <!-- Binary Display -->
-    <div id="binary-output" class="form-group" style="display: none;"></div>
-
-    <!-- Fault Result -->
-    <div id="fault-result" class="form-group" style="display: none;"></div>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-text">
-        <div class="footer-copyright">
-          © 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.
-        </div>
-        <div class="footer-creator">Created by Andres Provero</div>
-      </div>
-      <div class="footer-logo">
-        <img src="images/COE_LOGO.png" alt="CoE LATAM Logo" />
-      </div>
-    </footer>
+    <div id="binary-output"></div>
+    <div id="fault-result"></div>
   </div>
 
-  <!-- Scripts -->
-  <script src="js/common.js"></script>
-  <script src="js/fault-interpreter.js"></script>
+  <script>
+    const faultCodeMappings = {
+      sg3125: {
+        pdpFault: {
+          0: "A1-Phase overcurrent", 1: "B1-Phase overcurrent", 2: "C1-Phase overcurrent",
+          3: "A2-Phase overcurrent", 4: "B2-Phase overcurrent", 5: "C2-Phase overcurrent",
+          6: "DC overcurrent", 7: "FA1", 8: "FB1", 9: "FC1",
+          10: "FA2", 11: "FB2", 12: "FC2", 13: "Module 1 Through",
+          14: "Module 2 Through", 15: "Carrier fault"
+        },
+        fanState: { 0: "Phase failure", 1: "Reserved", 2: "Power mod overheated", 15: "Reserved" },
+        fanAlarm: { 0: "I_Limit", 1: "DC-link unstable", 15: "Comm fan PA fail" }
+      },
+      onePlusX: {
+        moduleFault: { 0: "A1-Phase overcurrent", 6: "DC overcurrent", 15: "Carrier fault" },
+        fanStatus: { 0: "Phase failure", 9: "Electronics overheated", 15: "Reserved" },
+        fanAlarm: { 0: "I_limit", 2: "Power limitation", 15: "Reserved" }
+      }
+    };
+
+    const inverterRadios = document.querySelectorAll('input[name="inverter-series"]');
+    const sectionContainer = document.getElementById('section-options');
+    const codeInput = document.getElementById('fault-code');
+    const result = document.getElementById('fault-result');
+    const binary = document.getElementById('binary-output');
+    const interpretBtn = document.getElementById('interpret-btn');
+
+    function updateSections() {
+      const selected = document.querySelector('input[name="inverter-series"]:checked').value;
+      const options = faultCodeMappings[selected];
+      sectionContainer.innerHTML = '';
+
+      Object.keys(options).forEach(key => {
+        const label = document.createElement('label');
+        label.className = 'radio-option';
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'fault-section';
+        radio.value = key;
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(' ' + key.replace(/([a-z])([A-Z])/g, '$1 $2')));
+        sectionContainer.appendChild(label);
+      });
+
+      sectionContainer.querySelector('input')?.setAttribute('checked', 'checked');
+    }
+
+    function interpretCode(e) {
+      e.preventDefault();
+      result.innerHTML = '';
+      binary.innerHTML = '';
+
+      const series = document.querySelector('input[name="inverter-series"]:checked').value;
+      const section = document.querySelector('input[name="fault-section"]:checked')?.value;
+      const raw = codeInput.value.trim();
+      if (!series || !section || !raw) return;
+
+      const isHex = series === 'sg3125';
+      const code = isHex ? parseInt(raw.replace(/^0x/i, ''), 16) : parseInt(raw, 10);
+      if (isNaN(code)) return;
+
+      const binaryStr = code.toString(2).padStart(16, '0');
+      const map = faultCodeMappings[series][section];
+
+      const bitLabels = document.createElement('div');
+      bitLabels.className = 'bit-labels';
+      const bitGrid = document.createElement('div');
+      bitGrid.className = 'bit-grid';
+
+      [...binaryStr].forEach((bit, i) => {
+        const pos = 15 - i;
+        const label = document.createElement('div');
+        label.textContent = pos;
+        bitLabels.appendChild(label);
+
+        const cell = document.createElement('div');
+        cell.textContent = bit;
+        cell.dataset.bit = bit;
+        bitGrid.appendChild(cell);
+      });
+
+      binary.appendChild(bitLabels);
+      binary.appendChild(bitGrid);
+
+      const active = [];
+      [...binaryStr].forEach((bit, i) => {
+        if (bit === '1') {
+          const pos = 15 - i;
+          active.push(`<div><strong>Bit ${pos}</strong>: ${map?.[pos] || 'Unknown'}</div>`);
+        }
+      });
+
+      result.innerHTML = `<h3>Active Faults</h3>` + (active.length ? active.join('') : '<div class="message success">No active faults</div>');
+    }
+
+    inverterRadios.forEach(r => r.addEventListener('change', updateSections));
+    interpretBtn.addEventListener('click', interpretCode);
+    window.addEventListener('DOMContentLoaded', updateSections);
+  </script>
 </body>
 </html>
