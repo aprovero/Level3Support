@@ -18,94 +18,60 @@
   color: #0277bd;
 }
 
+/* 🔷 Labels & Inputs */
 #fault-tool-root label {
   display: block;
-  margin: 12px 0 6px;
+  margin: 16px 0 6px;
   font-weight: 600;
   color: #0277bd;
 }
 
-/* ===========================
-   Radio Buttons Layout (Horizontal)
-   =========================== */
-.radio-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-width: 600px;
-  margin-bottom: 16px;
-}
-
-.radio-group legend {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #0277bd;
-  margin-bottom: 8px;
-}
-
-.radio-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.95rem;
-  color: #0277bd;
-  font-weight: 600;
-}
-
-input[type="radio"] {
-  accent-color: #0288d1;
-}
-
-/* ===========================
-   Input with Internal Prefix
-   =========================== */
-.input-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-width: 600px;
-  margin-top: 8px;
-}
-
-.input-with-prefix input {
-  width: 100%;
-  height: 44px;
-  padding: 10px 12px 10px 36px;
+.file-input,
+input#fault-code,
+select#fault-section,
+select#inverter-series {
+  height: 40px;
+  padding: 0.5rem 0.75rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 0.95rem;
-  outline: none;
-  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' fill='gray' viewBox='0 0 16 16'%3E%3Ctext x='0' y='14' font-size='16'%3E0x%3C/text%3E%3C/svg%3E") no-repeat 10px center;
-  background-size: auto 16px;
 }
 
-#fault-code:focus {
-  border-color: #0288d1;
-}
-
-/* Button */
-#interpret-btn {
-  height: 44px;
-  padding: 0 20px;
-  background-color: #0288d1;
-  color: white;
-  border: none;
-  border-radius: 8px;
+/* Prefix (0x) */
+#prefix-label {
+  background-color: #f5f5f5;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  color: #555;
   font-weight: bold;
-  font-size: 0.95rem;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+/* Input overrides */
+input#fault-code {
+  border-left: none;
+  border-radius: 0;
+  flex-grow: 1;
+}
+
+/* 🔷 Interpret Button */
+#interpret-btn {
+  background-color: #0288d1 !important;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 0 8px 8px 0;
+  font-weight: 600;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin-top: 12px;
+  transition: all 0.2s ease;
 }
 
 #interpret-btn:hover {
-  background-color: #0277bd;
+  background-color: #0277bd !important;
 }
 
 /* ===========================
@@ -187,31 +153,9 @@ input[type="radio"] {
    System Messages
    =========================== */
 .message.success {
-  background-color: #dff0d8;
-  color: #3c763d;
-  border: 1px solid #c3e6cb;
+  background-color: var(--success-light);
+  color: var(--success-text);
+  border: 1px solid var(--success-border);
   padding: 0.75rem;
   border-radius: 8px;
-}
-
-/* ===========================
-   Responsive Behavior
-   =========================== */
-@media (max-width: 480px) {
-  .input-wrapper {
-    flex-direction: column;
-  }
-
-  .input-with-prefix,
-  #interpret-btn {
-    width: 100%;
-  }
-
-  #interpret-btn {
-    margin-top: 8px;
-  }
-
-  .radio-options {
-    flex-direction: column;
-  }
 }
