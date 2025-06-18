@@ -26,74 +26,62 @@
         This tool interprets fault codes from Sungrow inverters. Select the inverter series, fault section, and enter the fault code to get detailed information.
       </p>
 
-      <!-- Inverter Series -->
-      <label for="inverter-series">Inverter Series</label>
-      <select id="inverter-series" class="file-input">
-        <option value="sg3125">SG3125 Series</option>
-        <option value="onePlusX">1+X Series</option>
-      </select>
+      <!-- Inverter Series (Radio) -->
+      <fieldset style="margin-bottom: 16px;">
+        <legend style="font-weight: 600; color: #0277bd;">Inverter Series</legend>
+        <label style="margin-right: 20px;">
+          <input type="radio" name="inverter-series" value="sg3125" checked />
+          SG3125 Series
+        </label>
+        <label>
+          <input type="radio" name="inverter-series" value="onePlusX" />
+          1+X Series
+        </label>
+      </fieldset>
 
-      <!-- Fault Section -->
-      <label for="fault-section">Fault Section</label>
-      <select id="fault-section" class="file-input"></select>
+      <!-- Fault Section (Radio - loaded by JS) -->
+      <fieldset style="margin-bottom: 16px;">
+        <legend style="font-weight: 600; color: #0277bd;">Fault Section</legend>
+        <div id="fault-section-options">
+          <!-- Filled dynamically -->
+        </div>
+      </fieldset>
 
-      <!-- Fault Code Input (Updated Layout) -->
-      <label for="fault-code" style="margin: 16px 0 6px; font-weight: 600; color: #0277bd; display: block;">
-        Enter Fault Code
-      </label>
-
-      <div style="display: flex; flex-direction: column; gap: 8px; max-width: 600px; width: 100%;">
-        <div style="display: flex; align-items: center; width: 100%;">
-          <span style="
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 8px 0 0 8px;
-            padding: 0 12px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            font-size: 0.95rem;
-            color: #666;
-          ">
-            0x
-          </span>
-
+      <!-- Fault Code Input -->
+      <div style="margin-top: 24px; max-width: 400px;">
+        <label for="fault-code" style="font-weight: 600; color: #0277bd;">Enter Fault Code</label>
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 8px;">
+          <span id="prefix-0x" style="display: none; font-weight: bold; color: #444;">0x</span>
           <input
             type="text"
             id="fault-code"
-            placeholder="Enter hex/dec"
-            style="
-              flex: 1;
-              height: 44px;
-              border: 1px solid #ccc;
-              border-left: none;
-              padding: 0 12px;
-              font-size: 0.95rem;
-              border-radius: 0;
-              outline: none;
-            "
+            placeholder="Enter code"
+            style="flex: 1; height: 44px; padding: 0 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 0.95rem; outline: none;"
           />
-
-          <button
-            id="interpret-btn"
-            style="
-              height: 44px;
-              background-color: #0288d1;
-              color: white;
-              padding: 0 20px;
-              border: none;
-              font-weight: bold;
-              font-size: 0.95rem;
-              border-radius: 0 8px 8px 0;
-              cursor: pointer;
-              transition: background-color 0.2s ease;
-            "
-            onmouseover="this.style.backgroundColor='#0277bd'"
-            onmouseout="this.style.backgroundColor='#0288d1'"
-          >
-            Interpret
-          </button>
         </div>
+      </div>
+
+      <!-- Interpret Button -->
+      <div style="margin-top: 16px;">
+        <button
+          id="interpret-btn"
+          style="
+            height: 44px;
+            background-color: #0288d1;
+            color: white;
+            padding: 0 20px;
+            border: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+          "
+          onmouseover="this.style.backgroundColor='#0277bd'"
+          onmouseout="this.style.backgroundColor='#0288d1'"
+        >
+          Interpret
+        </button>
       </div>
 
       <div id="message-container" style="margin-top: 16px;"></div>
