@@ -1,5 +1,3 @@
-// File: SG3125Analyzer.js (Final Fixed Vanilla JS Version)
-
 const chartRef = document.getElementById('chart-canvas');
 const chartContainer = document.getElementById('chart-container');
 const paramContainer = document.getElementById('param-container');
@@ -7,7 +5,6 @@ const toggleContainer = document.getElementById('selected-param-toggles');
 const exportBtn = document.getElementById('export-chart');
 const hisFileInput = document.getElementById('hisdata-file');
 const eventFileInput = document.getElementById('event-file');
-const stateFilter = document.getElementById('state-filter');
 const eventTableBody = document.querySelector('#event-log tbody');
 
 let parsedHisData = [];
@@ -17,8 +14,8 @@ let allParams = [];
 let chartInstance = null;
 
 const colorPalette = [
-  '#42a5f5', '#ef5350', '#66bb6a', '#ffa726', '#ab47bc', '#26c6da', '#8d6e63', '#ffca28',
-  '#5c6bc0', '#ec407a', '#26a69a', '#ff7043', '#7e57c2', '#26c6da', '#9ccc65', '#ffb74d'
+  '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+  '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'
 ];
 
 function parseCSV(file, callback) {
@@ -82,9 +79,20 @@ function renderAxisToggles() {
     const label = document.createElement('label');
     label.textContent = param;
 
-    const toggle = document.createElement('input');
-    toggle.type = 'checkbox';
-    toggle.dataset.param = param;
+    const toggle = document.createElement('label');
+    toggle.className = 'inline-flex relative items-center cursor-pointer ml-auto';
+
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.className = 'sr-only peer';
+    input.dataset.param = param;
+    input.addEventListener('change', renderChart);
+
+    const slider = document.createElement('div');
+    slider.className = 'w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer dark:bg-gray-300 peer-checked:bg-blue-600 after:content-[""] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full';
+
+    toggle.appendChild(input);
+    toggle.appendChild(slider);
 
     toggleWrap.appendChild(label);
     toggleWrap.appendChild(toggle);
@@ -126,8 +134,9 @@ function renderChart() {
       borderColor: colorPalette[idx % colorPalette.length],
       backgroundColor: colorPalette[idx % colorPalette.length],
       yAxisID: axis,
-      tension: 0.1,
-      pointRadius: 1
+      tension: 0.2,
+      pointRadius: 1,
+      borderWidth: 2
     };
   });
 
@@ -137,16 +146,20 @@ function renderChart() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: { position: 'top' },
-        title: { display: false }
+        legend: { position: 'top' }
       },
       scales: {
         yLeft: {
-          type: 'linear', position: 'left', beginAtZero: false
+          type: 'linear',
+          position: 'left',
+          title: { display: true, text: 'Left Y' }
         },
         yRight: {
-          type: 'linear', position: 'right', beginAtZero: false,
+          type: 'linear',
+          position: 'right',
+          title: { display: true, text: 'Right Y' },
           grid: { drawOnChartArea: false }
         }
       }
@@ -161,15 +174,13 @@ function renderEventTable() {
   const showPrompt = document.getElementById('filter-prompt').checked;
 
   parsedEventData.forEach(row => {
-    const level = row.Level.toLowerCase();
+    const level = row.Level?.toLowerCase();
     if ((level === 'fault' && !showFault) ||
         (level === 'alarm' && !showAlarm) ||
         (level === 'prompt' && !showPrompt)) return;
 
     const tr = document.createElement('tr');
-    if (level === 'fault') tr.style.background = '#ffebee';
-    if (level === 'alarm') tr.style.background = '#fff8e1';
-    if (level === 'prompt') tr.style.background = '#f1f8e9';
+    tr.dataset.level = level;
 
     tr.innerHTML = `
       <td>${row.Time}</td>
@@ -183,7 +194,8 @@ function renderEventTable() {
 
 function exportChart() {
   html2canvas(chartContainer, {
-    backgroundColor: '#ffffff', scale: 2
+    backgroundColor: '#ffffff',
+    scale: 2
   }).then(canvas => {
     const link = document.createElement('a');
     link.download = 'SG3125_Chart.png';
@@ -191,6 +203,8 @@ function exportChart() {
     link.click();
   });
 }
+
+// ============ Init ============
 
 hisFileInput.addEventListener('change', e => {
   const file = e.target.files[0];
