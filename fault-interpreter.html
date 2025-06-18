@@ -22,8 +22,9 @@
 
     <!-- Tool Content -->
     <div id="fault-tool-root" class="upload-section">
-        <p class="upload-instructions">
-            This tool interprets fault codes from Sungrow inverters. Select the inverter series, fault section, and enter the fault code to get detailed information.
+      <p class="upload-instructions">
+        This tool interprets fault codes from Sungrow inverters. Select the inverter series, fault section, and enter the fault code to get detailed information.
+      </p>
 
       <!-- Inverter Series -->
       <label for="inverter-series">Inverter Series</label>
@@ -36,58 +37,63 @@
       <label for="fault-section">Fault Section</label>
       <select id="fault-section" class="file-input"></select>
 
-      <!-- Fault Code Input (FINAL FIXED VERSION) -->
-      <label for="fault-code" style="display: block; margin: 16px 0 6px; font-weight: 600; color: #0277bd;">Enter Fault Code</label>
+      <!-- Fault Code Input (Updated Layout) -->
+      <label for="fault-code" style="margin: 16px 0 6px; font-weight: 600; color: #0277bd; display: block;">
+        Enter Fault Code
+      </label>
 
-      <div style="display: flex; align-items: center; max-width: 600px; width: 100%; gap: 8px;">
-        <div style="flex: 1; position: relative;">
+      <div style="display: flex; flex-direction: column; gap: 8px; max-width: 600px; width: 100%;">
+        <div style="display: flex; align-items: center; width: 100%;">
+          <span style="
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 8px 0 0 8px;
+            padding: 0 12px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: #666;
+          ">
+            0x
+          </span>
+
           <input
             type="text"
             id="fault-code"
-            placeholder="8000"
+            placeholder="Enter hex/dec"
             style="
-              width: 100%;
+              flex: 1;
               height: 44px;
-              padding-left: 40px;
-              padding-right: 12px;
               border: 1px solid #ccc;
-              border-radius: 8px;
+              border-left: none;
+              padding: 0 12px;
               font-size: 0.95rem;
-              box-sizing: border-box;
+              border-radius: 0;
               outline: none;
             "
           />
-          <span style="
-            position: absolute;
-            top: 50%;
-            left: 12px;
-            transform: translateY(-50%);
-            color: #888;
-            font-size: 0.95rem;
-            pointer-events: none;
-          ">0x</span>
-        </div>
 
-        <button
-          id="interpret-btn"
-          style="
-            height: 44px;
-            padding: 0 20px;
-            background-color: #0288d1;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            white-space: nowrap;
-          "
-          onmouseover="this.style.backgroundColor='#0277bd'"
-          onmouseout="this.style.backgroundColor='#0288d1'"
-        >
-          Interpret
-        </button>
+          <button
+            id="interpret-btn"
+            style="
+              height: 44px;
+              background-color: #0288d1;
+              color: white;
+              padding: 0 20px;
+              border: none;
+              font-weight: bold;
+              font-size: 0.95rem;
+              border-radius: 0 8px 8px 0;
+              cursor: pointer;
+              transition: background-color 0.2s ease;
+            "
+            onmouseover="this.style.backgroundColor='#0277bd'"
+            onmouseout="this.style.backgroundColor='#0288d1'"
+          >
+            Interpret
+          </button>
+        </div>
       </div>
 
       <div id="message-container" style="margin-top: 16px;"></div>
