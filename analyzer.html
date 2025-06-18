@@ -3,65 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CoE Level 3 - UMCG Analyzer Tool</title>
-  <link rel="icon" type="image/x-icon" href="images/SIMPLE_LOGO.png" />
+  <title>SG3125 Series Data Analyzer</title>
+  <link rel="icon" href="images/SIMPLE_LOGO.png" type="image/x-icon" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
   <link href="css/shared-styles.css" rel="stylesheet"/>
   <link href="css/analyzer.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
-<!-- SG3125 Analyzer: Upload, Parameter Selection, Chart, and Event Viewer -->
 <body class="bg-gray-50 text-gray-900">
+
   <!-- Header -->
   <header class="bg-white shadow px-6 py-4 flex items-center justify-between">
     <div class="logo flex items-center">
-      <img src="images/SIMPLE_LOGO.png" alt="Logo" class="h-10 mr-2" />
-      <h1 class="text-xl font-semibold">SG3125 Analyzer</h1>
+      <img src="images/SIMPLE_LOGO.png" alt="Logo" class="h-10 mr-3" />
+      <h1 class="text-xl font-semibold text-gray-800">SG3125 Analyzer</h1>
     </div>
   </header>
 
   <!-- Main Container -->
   <main class="container mx-auto px-4 py-6">
-    <!-- File Upload Section -->
-    <section class="bg-white p-4 rounded shadow mb-6">
-      <h2 class="text-lg font-semibold mb-2">Upload CSV Files</h2>
-      <div class="flex flex-wrap gap-4 items-center">
+
+    <!-- Upload Section -->
+    <section class="upload-section mb-6">
+      <h2 class="upload-title">Upload CSV Files</h2>
+      <div class="upload-input-container double">
         <div>
-          <label class="block text-sm font-medium mb-1">HisData File</label>
-          <input type="file" id="hisdata-file" accept=".csv" class="input-file">
+          <label for="hisdata-file">HisData File</label>
+          <input type="file" id="hisdata-file" accept=".csv" class="file-input" />
         </div>
         <div>
-          <label class="block text-sm font-medium mb-1">Event File</label>
-          <input type="file" id="event-file" accept=".csv" class="input-file">
+          <label for="event-file">Event File</label>
+          <input type="file" id="event-file" accept=".csv" class="file-input" />
         </div>
       </div>
+      <p class="upload-instructions">
+        Upload the HisData file (left) and the Events file (right).
+      </p>
     </section>
 
-    <!-- Parameter Selection Section -->
-    <section id="param-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-
-      <!-- JS will populate .param-group columns here -->
+    <!-- Parameter Selection -->
+    <section>
+      <h2 class="section-title mb-2">Select Parameters (Max 6)</h2>
+      <div id="param-container" class="flex flex-wrap gap-4 justify-between mb-6">
+        <!-- JS populates .param-group columns here -->
+      </div>
     </section>
 
     <!-- Axis Toggle Section -->
-    <section id="selected-param-toggles" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-    <!-- JS will populate axis toggles -->
+    <section>
+      <h2 class="section-title mb-2">Assign Y Axis</h2>
+      <div id="selected-param-toggles" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+        <!-- JS populates toggles here -->
+      </div>
     </section>
 
-    <!-- Chart and Export Section -->
+    <!-- Chart + Export -->
     <section class="bg-white p-4 rounded shadow mb-6">
+      <h2 class="section-title mb-4">Power Chart</h2>
       <div id="chart-container" class="h-[500px] relative mb-4">
         <canvas id="chart-canvas" class="w-full h-full"></canvas>
       </div>
-      <div class="text-center">
+      <div class="text-right">
         <button id="export-chart" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Export Chart</button>
       </div>
     </section>
 
-    <!-- Event Log and Filters -->
+    <!-- Event Log Section -->
     <section class="bg-white p-4 rounded shadow">
-      <h2 class="text-lg font-semibold mb-4">Event Summary</h2>
+      <h2 class="section-title mb-4">Event Summary</h2>
       <div class="flex gap-4 mb-4">
         <label><input type="checkbox" id="filter-fault" checked> Fault</label>
         <label><input type="checkbox" id="filter-alarm" checked> Alarm</label>
@@ -83,20 +93,21 @@
         </table>
       </div>
     </section>
+
   </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-text">
-        <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
-        <div class="footer-creator">Created by Andres Provero</div>
-      </div>
-      <div class="footer-logo">
-        <img src="images/COE_LOGO.png" alt="CoE LATAM Logo"/>
-      </div>
-    </footer>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-text">
+      <div class="footer-copyright">© 2025 CoE LATAM, Sungrow Americas. All Rights Reserved.</div>
+      <div class="footer-creator">Created by Andres Provero</div>
+    </div>
+    <div class="footer-logo">
+      <img src="images/COE_LOGO.png" alt="CoE LATAM Logo"/>
+    </div>
+  </footer>
 
-  <!-- Libraries -->
+  <!-- Scripts -->
   <script src="js/papaparse.min.js"></script>
   <script src="js/common.js"></script>
   <script src="js/analyzer.js"></script>
