@@ -57,45 +57,45 @@ const faultCodeMappings = {
   }
 };
 
-// Dynamic radio rendering
-function renderFaultSections() {
-  const selectedSeries = getSelectedInverter();
-  const mapping = faultCodeMappings[selectedSeries];
-  sectionContainer.innerHTML = '';
-
-  Object.keys(mapping).forEach((key, idx) => {
-    const id = `section-${key}`;
-    const label = document.createElement('label');
-    label.className = 'radio-option';
-    label.innerHTML = `
-      <input type="radio" name="fault-section" value="${key}" ${idx === 0 ? 'checked' : ''} />
-      ${prettify(key)}
-    `;
-    sectionContainer.appendChild(label);
-  });
-}
-
-// Helpers
+// Utilities
 function getSelectedInverter() {
   return [...inverterRadios].find(r => r.checked)?.value;
 }
 
 function getSelectedSection() {
-  const selected = document.querySelector('input[name="fault-section"]:checked');
-  return selected?.value;
+  return document.querySelector('input[name="fault-section"]:checked')?.value;
 }
 
-function prettify(text) {
-  return text.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, s => s.toUpperCase());
+function prettify(key) {
+  return key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, s => s.toUpperCase());
 }
 
-function showErrorMessage(msg) {
-  resultContainer.innerHTML = `<div class="message error">${msg}</div>`;
-  resultContainer.style.display = 'block';
-  binaryOutput.style.display = 'none';
+// Render section radios
+function renderFaultSections() {
+  const series = getSelectedInverter();
+  const sections = faultCodeMappings[series];
+  sectionContainer.innerHTML = '';
+
+  Object.keys(sections).forEach((key, i) => {
+    const label = document.createElement('label');
+    label.className = 'radio-option';
+    label.innerHTML = `
+      <input type="radio" name="fault-section" value="${key}" ${i === 0 ? 'checked' : ''} />
+      ${prettify(key)}
+    `;
+    sectionContainer.appendChild(label);
+  });
+
+  updatePrefixVisibility();
+  clearOutput();
 }
 
-// Interpret logic
+function updatePrefixVisibility() {
+  const type = getSelectedInverter();
+  inputField.classList.toggle('prefix-0x', type === 'sg3125');
+}
+
+// Main logic
 function interpretCode() {
   const code = inputField.value.trim();
   const series = getSelectedInverter();
@@ -105,51 +105,73 @@ function interpretCode() {
   let value;
   if (type === 'hex') {
     const clean = code.replace(/^0x/i, '');
-    if (!/^[\da-fA-F]+$/.test(clean)) return showErrorMessage('Invalid hexadecimal');
+    if (!/^[\da-fA-F]+$/.test(clean)) return showError('Invalid hexadecimal');
     value = parseInt(clean, 16);
   } else {
-    if (!/^\d+$/.test(code)) return showErrorMessage('Invalid decimal');
+    if (!/^[0-9]+$/.test(code)) return showError('Invalid decimal');
     value = parseInt(code, 10);
   }
 
   const binary = value.toString(2).padStart(16, '0');
-  renderBinary(binary);
-  renderFaults(binary, series, section);
+  showBinary(binary);
+  showFaults(binary, series, section);
 }
 
-function renderBinary(binStr) {
+function showBinary(bin) {
   binaryOutput.innerHTML = `<h3>Binary</h3>`;
   const labels = document.createElement('div');
   labels.className = 'bit-labels';
-  const bits = document.createElement('div');
-  bits.className = 'bit-grid';
+  const grid = document.createElement('div');
+  grid.className = 'bit-grid';
 
-  [...binStr].forEach((bit, i) => {
+  [...bin].forEach((bit, i) => {
     const pos = 15 - i;
     labels.innerHTML += `<div>${pos}</div>`;
-    bits.innerHTML += `<div data-bit="${bit}">${bit}</div>`;
+    grid.innerHTML += `<div data-bit="${bit}">${bit}</div>`;
   });
 
   binaryOutput.appendChild(labels);
-  binaryOutput.appendChild(bits);
+  binaryOutput.appendChild(grid);
   binaryOutput.style.display = 'block';
 }
 
-function renderFaults(binStr, series, section) {
+function showFaults(bin, series, section) {
   const map = faultCodeMappings?.[series]?.[section];
-  if (!map) return showErrorMessage('Invalid fault section');
+  if (!map) return showError('No mapping found for selected options.');
 
-  const faults = [...binStr].map((bit, i) => {
+  const faults = [...bin].map((bit, i) => {
     const pos = 15 - i;
-    if (bit === '1') return `<div><strong>Bit ${pos}</strong>: ${map[pos] || 'Unknown fault'}</div>`;
-    return null;
+    return bit === '1' ? `<div><strong>Bit ${pos}</strong>: ${map[pos] || 'Unknown fault'}</div>` : null;
   }).filter(Boolean);
 
   resultContainer.innerHTML = `<h3>Active Faults</h3>${faults.length ? faults.join('') : `<div class="message success">No active faults</div>`}`;
   resultContainer.style.display = 'block';
 }
 
-// Init
-inverterRadios.forEach(r => r.addEventListener('change', renderFaultSections));
-interpretBtn.addEventListener('click', interpretCode);
+function clearOutput() {
+  binaryOutput.innerHTML = '';
+  binaryOutput.style.display = 'none';
+  resultContainer.innerHTML = '';
+  resultContainer.style.display = 'none';
+}
+
+function showError(msg) {
+  resultContainer.innerHTML = `<div class="message error">${msg}</div>`;
+  resultContainer.style.display = 'block';
+  binaryOutput.style.display = 'none';
+}
+
+// Event listeners
+inverterRadios.forEach(radio => {
+  radio.addEventListener('change', renderFaultSections);
+});
+
+let debounceTimer = null;
+
+inputField.addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    interpretCode();
+  }, 200);
+});
 document.addEventListener('DOMContentLoaded', renderFaultSections);

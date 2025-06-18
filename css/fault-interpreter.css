@@ -18,71 +18,68 @@
   font-size: 1rem;
 }
 
-/* 🔷 Horizontal Radio Group Layout */
+/* 🔷 Horizontal Radio Layout - Side-by-Side */
 .radio-group {
   display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 16px;
-  color: #0277bd;
-  font-size: 0.95rem;
-  font-weight: 600;
 }
 
-.radio-group label {
+.radio-group legend {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0277bd;
+  margin-bottom: 4px;
+}
+
+.radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.radio-option {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-right: 12px;
-  cursor: pointer;
+  font-size: 0.95rem;
+  color: #0277bd;
+  font-weight: 600;
 }
 
-.radio-group input[type="radio"] {
+input[type="radio"] {
   accent-color: #0288d1;
-  transform: scale(1.1);
 }
 
-/* 🔷 Input Field with Internal 0x Prefix */
+/* 🔷 Input Field - Dynamic 0x Handling */
 .input-wrapper {
+  position: relative;
   max-width: 600px;
   margin-top: 16px;
-  position: relative;
 }
 
-.input-wrapper input {
+#fault-code {
   width: 100%;
   height: 44px;
-  padding: 10px 12px 10px 36px;
+  padding: 10px 12px;
+  padding-left: 36px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 0.95rem;
   outline: none;
+  transition: border 0.2s ease;
+}
+
+#fault-code.prefix-0x {
   background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' fill='gray' viewBox='0 0 16 16'%3E%3Ctext x='0' y='14' font-size='16'%3E0x%3C/text%3E%3C/svg%3E") no-repeat 10px center;
   background-size: auto 16px;
 }
 
-.input-wrapper input:focus {
+#fault-code:focus {
   border-color: #0288d1;
 }
 
-/* 🔷 Interpret Button */
-#interpret-btn {
-  height: 44px;
-  margin-top: 12px;
-  padding: 0 20px;
-  background-color: #0288d1;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-#interpret-btn:hover {
-  background-color: #0277bd;
-}
 
 /* ===========================
    Binary Visualization
@@ -159,9 +156,6 @@
   font-size: 0.95rem;
 }
 
-/* ===========================
-   Success Message
-   =========================== */
 .message.success {
   background-color: #dff0d8;
   color: #3c763d;
@@ -170,17 +164,19 @@
   border-radius: 8px;
 }
 
-/* ===========================
-   Responsive Adjustments
-   =========================== */
-@media (max-width: 480px) {
-  .radio-group {
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .radio-options {
     flex-direction: column;
     gap: 12px;
   }
 
-  .input-wrapper input,
+  #fault-code,
   #interpret-btn {
     width: 100%;
+  }
+
+  #interpret-btn {
+    margin-top: 8px;
   }
 }
