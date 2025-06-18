@@ -1,5 +1,3 @@
-// File: SG3125Analyzer.js (Final Fixed Vanilla JS Version)
-
 const chartRef = document.getElementById('chart-canvas');
 const chartContainer = document.getElementById('chart-container');
 const paramContainer = document.getElementById('param-container');
@@ -7,7 +5,6 @@ const toggleContainer = document.getElementById('selected-param-toggles');
 const exportBtn = document.getElementById('export-chart');
 const hisFileInput = document.getElementById('hisdata-file');
 const eventFileInput = document.getElementById('event-file');
-const stateFilter = document.getElementById('state-filter');
 const eventTableBody = document.querySelector('#event-log tbody');
 
 let parsedHisData = [];
@@ -18,7 +15,7 @@ let chartInstance = null;
 
 const colorPalette = [
   '#42a5f5', '#ef5350', '#66bb6a', '#ffa726', '#ab47bc', '#26c6da', '#8d6e63', '#ffca28',
-  '#5c6bc0', '#ec407a', '#26a69a', '#ff7043', '#7e57c2', '#26c6da', '#9ccc65', '#ffb74d'
+  '#5c6bc0', '#ec407a', '#26a69a', '#ff7043', '#7e57c2', '#9ccc65', '#ffb74d'
 ];
 
 function parseCSV(file, callback) {
@@ -82,12 +79,12 @@ function renderAxisToggles() {
     const label = document.createElement('label');
     label.textContent = param;
 
-    const toggle = document.createElement('input');
-    toggle.type = 'checkbox';
-    toggle.dataset.param = param;
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.dataset.param = param;
 
     toggleWrap.appendChild(label);
-    toggleWrap.appendChild(toggle);
+    toggleWrap.appendChild(checkbox);
     toggleContainer.appendChild(toggleWrap);
   });
 }
@@ -156,12 +153,12 @@ function renderChart() {
 
 function renderEventTable() {
   eventTableBody.innerHTML = '';
-  const showFault = document.getElementById('filter-fault').checked;
-  const showAlarm = document.getElementById('filter-alarm').checked;
-  const showPrompt = document.getElementById('filter-prompt').checked;
+  const showFault = document.getElementById('filter-fault')?.checked ?? true;
+  const showAlarm = document.getElementById('filter-alarm')?.checked ?? true;
+  const showPrompt = document.getElementById('filter-prompt')?.checked ?? true;
 
   parsedEventData.forEach(row => {
-    const level = row.Level.toLowerCase();
+    const level = row.Level?.toLowerCase() ?? '';
     if ((level === 'fault' && !showFault) ||
         (level === 'alarm' && !showAlarm) ||
         (level === 'prompt' && !showPrompt)) return;
@@ -192,6 +189,7 @@ function exportChart() {
   });
 }
 
+// Event Listeners
 hisFileInput.addEventListener('change', e => {
   const file = e.target.files[0];
   if (!file) return;
@@ -212,7 +210,7 @@ eventFileInput.addEventListener('change', e => {
 });
 
 ['filter-fault', 'filter-alarm', 'filter-prompt'].forEach(id => {
-  document.getElementById(id).addEventListener('change', renderEventTable);
+  document.getElementById(id)?.addEventListener('change', renderEventTable);
 });
 
 exportBtn.addEventListener('click', exportChart);
