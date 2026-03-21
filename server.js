@@ -1,5 +1,7 @@
 /**
- * CoE Level 3 Support Portal - Server
+ * Level3Support — server.js
+ * Lead Developer: Andres Provero (@aprovero)
+ * © 2026 Level3Support
  * 
  * This file contains the server-side code for handling all API endpoints
  * and interactions with Airtable and other services.
@@ -296,7 +298,7 @@ app.post('/submit', upload.array('attachments', 5), async (req, res) => {
         const locationAbbrev = LOCATION_MAP[location] || 'OTH';
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: 'coe.latam@sungrowamericas.com',
+            to: 'aprovero-lvl3sup@gmail.com',
             cc: requesterEmail,
             subject: `[${issueId}]_[${locationAbbrev}]_NEW ${request} REQUEST`,
             text: `A new ${request} request has been submitted:

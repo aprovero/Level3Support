@@ -1,5 +1,7 @@
 /**
- * CoE Level 3 Support Portal - Common JavaScript Functions
+ * Level3Support — common.js
+ * Lead Developer: Andres Provero (@aprovero)
+ * © 2026 Level3Support
  * 
  * Table of Contents:
  * 1. Configuration and Constants

@@ -6,9 +6,9 @@
     "v1  First working PWA setup"
   ],
   "id": "/",
-  "name": "CoE LATAM: Tool HUB",
-  "short_name": "Tool HUB",
-  "description": "Centralized access to technical tools, dashboards, and support services created by CoE LATAM, to ease Field Work, Troubleshooting and Escalations.",
+  "name": "Level3Support",
+  "short_name": "L3S",
+  "description": "Centralized access to technical tools, dashboards, and support services for Level3Support.",
   "start_url": "/?v=9&source=pwa",
   "scope": "/",
   "display_override": [
@@ -19,7 +19,7 @@
   ],
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "theme_color": "#2563eb",
   "orientation": "portrait-primary",
   "lang": "en",
   "dir": "ltr",

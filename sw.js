@@ -1,15 +1,15 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'toolhub-cache-v9';
+const CACHE_NAME = 'level3support-cache-v11';
 
 const ASSETS_TO_CACHE = [
   '/index.html', '/404.html', '/offline.html',
-  '/contacts.html', '/parameter-comparison.html', '/rej603-configurator.html',
+  '/parameter-comparison.html', '/rej603-configurator.html',
   '/tools-data.json', '/manifest.json',
 
   // JavaScript files
-  '/js/common.js', '/js/contacts.js', '/js/papaparse.min.js',
+  '/js/common.js', '/js/papaparse.min.js',
   '/js/parameter-comparison.js', '/js/tools-hub.js',
 
   // CSS files
@@ -22,15 +22,9 @@ const ASSETS_TO_CACHE = [
   '/icons/ToolHUB.ico',
 
   // Images
-  '/images/ABB_LOGO.png', '/images/CLAUDE_LOGO.png', '/images/COE_LOGO.png',
-  '/images/CONTACT_ANDRES.png', '/images/CONTACT_CRISTHIAN.png',
-  '/images/CONTACT_FABIO.png', '/images/CONTACT_FELIPE.png',
-  '/images/CONTACT_GABRIEL.png', '/images/CONTACT_JAVIER.png',
-  '/images/CONTACT_LUCAS.png', '/images/CONTACT_MAURICIO.png',
-  '/images/contact-icon.png', '/images/hmm-character.png', '/images/hmm-character.webp',
-  '/images/LOGO.png', '/images/placeholder.png', '/images/resource-icon.png',
-  '/images/SIMPLE_LOGO.png', '/images/Sungrow-logo.png',
-  '/images/tool-hub-banner.png', '/images/tool-hub-banner.svg', '/images/training-icon.png',
+  '/images/ABB_LOGO.png', '/images/APROVERO_LOGO.png', '/images/L3S_ICON.png',
+  '/images/hmm-character.png', '/images/hmm-character.webp',
+  '/images/L3S_HEADER_LOGO.png', '/images/placeholder.png',
   '/images/wink-character.webp'
 ];
 

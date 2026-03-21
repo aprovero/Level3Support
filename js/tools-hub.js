@@ -1,6 +1,7 @@
 /**
- * CoE Level 3 Support Portal - Tools Hub JavaScript
- * Updated for Windows 10 style tiles
+ * Level3Support — tools-hub.js
+ * Lead Developer: Andres Provero (@aprovero)
+ * © 2026 Level3Support
  */
 
 // Store all tools data
@@ -81,25 +82,25 @@ function loadFallbackData() {
     allTools = [
         {
             id: 1,
-            name: "CoE Support Request",
+            name: "Level3Support Request",
             category: "Form",
-            description: "Request form for: Support, RCA, Training and other CoE services",
+            description: "Request form for: Support, RCA, Training and other Level3Support services",
             url: "https://coelatam.onrender.com/support-request.html",
             notes: "Use for all CoE-related requests"
         },
         {
             id: 2,
-            name: "CoE Technical Documentation Database",
+            name: "Technical Documentation Database",
             category: "Reference", 
-            description: "Searchable database of technical documents, manuals, and troubleshooting guides verified by CoE LATAM",
+            description: "Searchable database of technical documents, manuals, and troubleshooting guides",
             url: "https://coelatam.onrender.com/documentation.html",
             notes: "Updated monthly"
         },
         {
             id: 3,
-            name: "CoE LATAM Training Catalog",
+            name: "Training Catalog",
             category: "Catalog",
-            description: "Available training courses and resources provided by CoE LATAM",
+            description: "Available training courses and resources provided by Level3Support",
             url: "https://coelatam.onrender.com/training.html",
             notes: ""
         },
@@ -107,7 +108,7 @@ function loadFallbackData() {
             id: 4,
             name: "Training Evaluation Form",
             category: "Form",
-            description: "Official CoE LATAM training evaluation form",
+            description: "Official Level3Support training evaluation form",
             url: "https://coelatam.onrender.com/evaluation.html",
             notes: "Available in English, Spanish and Portuguese"
         },

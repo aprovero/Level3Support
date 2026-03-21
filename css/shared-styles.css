@@ -1,16 +1,19 @@
-/* ==========================================================================
-   CoE Level 3 - Shared Styles
-   
-   Table of Contents:
-   1. CSS Reset & Normalizing
-   2. Variables
-   3. Base Styles
-   4. Layout Components
-   5. Typography 
+/**
+ * Level3Support — shared-styles.css
+ * Lead Developer: Andres Provero (@aprovero)
+ * © 2026 Level3Support
+ *
+ * Design System: Slate / White / Electric Blue
+ * Table of Contents:
+ * 1. CSS Reset & Normalizing
+ * 2. Variables
+ * 3. Base Styles
+ * 4. Layout Components
+ * 5. Typography
+ */
 
-
-   18. 1+X Parameter Comparisson Tool styles
-   ========================================================================== */
+/* Google Fonts: Inter (body) + Outfit (headings) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
 
 /* ==========================================================================
    1. CSS Reset & Normalizing
@@ -48,44 +51,44 @@ input, button, textarea, select {
    2. Variables
    ========================================================================== */
 :root {
-    /* Color Palette */
-    --primary-color: #ff9500;
-    --primary-hover: #b36b00;
-    --primary-light: #fff3cd;
-    --primary-border: #ffeeba;
+    /* Color Palette — Slate / White / Electric Blue */
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #dbeafe;
+    --primary-border: #93c5fd;
     
-    --text-color: #333333;
-    --text-secondary: #666666;
-    --text-light: #999999;
+    --text-color: #1e293b;
+    --text-secondary: #475569;
+    --text-light: #94a3b8;
     
-    --background-color: #f9f9f9;
+    --background-color: #f8fafc;
     --background-light: #ffffff;
-    --background-dark: #f0f0f0;
+    --background-dark: #f1f5f9;
     
-    --border-color: #eee;
-    --border-light: #ddd;
-    --border-focus: #007bff;
+    --border-color: #e2e8f0;
+    --border-light: #cbd5e1;
+    --border-focus: #2563eb;
     
     /* Status Colors */
-    --success-color: #28a745;
-    --success-light: #d4edda;
-    --success-border: #c3e6cb;
-    --success-text: #155724;
+    --success-color: #16a34a;
+    --success-light: #dcfce7;
+    --success-border: #bbf7d0;
+    --success-text: #166534;
     
-    --error-color: #dc3545;
-    --error-light: #f8d7da;
-    --error-border: #f5c6cb;
-    --error-text: #721c24;
+    --error-color: #dc2626;
+    --error-light: #fee2e2;
+    --error-border: #fecaca;
+    --error-text: #991b1b;
     
-    --info-color: #0066cc;
-    --info-light: #e1f5fe;
-    --info-border: #b3e5fc;
-    --info-text: #014361;
+    --info-color: #2563eb;
+    --info-light: #dbeafe;
+    --info-border: #93c5fd;
+    --info-text: #1e40af;
     
-    --warning-color: #ffc107;
-    --warning-light: #fff3cd;
-    --warning-border: #ffeeba;
-    --warning-text: #856404;
+    --warning-color: #d97706;
+    --warning-light: #fef3c7;
+    --warning-border: #fde68a;
+    --warning-text: #92400e;
     
     /* System Types */
     --system-pv-bg: #e8f4f8;
@@ -123,13 +126,15 @@ input, button, textarea, select {
    3. Base Styles
    ========================================================================== */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background-color: var(--background-color);
     margin: 0;
     padding: 0;
     color: var(--text-color);
-    line-height: 1.5;
+    line-height: 1.6;
     font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
@@ -175,7 +180,7 @@ body {
 }
 
 .logo img {
-    width: 150px;
+    width: 250px;
     height: auto;
 }
 
@@ -249,8 +254,8 @@ body {
     width: auto;
 }
   
-/* Keep the CoE LATAM Logo at original size */
-.footer-logo img[alt="CoE LATAM Logo"] {
+/* Keep the Level3Support Logo at original size */
+.footer-logo img[alt="Level3Support"] {
     height: 40px;
 }
 
@@ -272,6 +277,12 @@ body {
 /* ==========================================================================
    5. Typography
    ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
 h1 {
     text-align: center;
     color: var(--text-color);
@@ -280,21 +291,21 @@ h1 {
 }
 
 h2 {
-    color: #444444;
+    color: var(--text-color);
     font-size: 20px;
     margin-bottom: 15px;
 }
 
 h3 {
-    color: #555555;
+    color: var(--text-color);
     font-size: 18px;
     margin-bottom: 10px;
 }
 
 h4 {
-    color: #666666;
+    color: var(--text-secondary);
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 600;
     margin-bottom: 5px;
 }
 
@@ -303,12 +314,12 @@ p {
 }
 
 a {
-    color: var(--info-color);
+    color: var(--primary-color);
     transition: var(--transition-quick);
 }
 
 a:hover {
-    color: #0056b3;
+    color: var(--primary-hover);
 }
 
 .text-center {
@@ -508,10 +519,13 @@ textarea {
    ========================================================================== */
 button, .submit-button {
     width: 100%;
+    min-height: 44px;
     padding: 12px;
     background-color: var(--primary-color);
     color: white;
-    font-weight: bold;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
     border: none;
     border-radius: var(--border-radius-sm);
     cursor: pointer;
@@ -524,17 +538,19 @@ button:hover, .submit-button:hover {
 }
 
 button:disabled, .submit-button:disabled {
-    background-color: #cccccc;
+    background-color: var(--text-light);
     cursor: not-allowed;
+    opacity: 0.7;
 }
 
 .button-secondary {
-    background-color: #6c757d;
+    background-color: var(--text-secondary);
     color: white;
+    min-height: 44px;
 }
 
 .button-secondary:hover {
-    background-color: #5a6268;
+    background-color: var(--text-color);
 }
 
 /* Lookup button styling */
@@ -585,7 +601,8 @@ button:disabled, .submit-button:disabled {
 }
 
 #success-modal .modal-button:hover {
-    background-color: #218838;
+    background-color: var(--success-color);
+    filter: brightness(0.9);
 }
 
 /* Filter controls buttons */
@@ -1429,7 +1446,7 @@ button:disabled, .submit-button:disabled {
     }
 
     .logo img {
-        width: 120px;
+        width: 200px;
     }
     
     input, select, textarea {
@@ -1525,7 +1542,7 @@ button:disabled, .submit-button:disabled {
     }
 
     .logo img {
-        width: 120px;
+        width: 200px;
     }
 
     .contact-card {

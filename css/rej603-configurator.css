@@ -12,12 +12,12 @@
 }
 
 .abb-logo img {
-    height: 20px; /* ABB logo size to balance with standard Sungrow logo */
+    height: 20px; /* ABB logo size to balance with standard Level3Support logo */
     width: auto;
 }
 
 .logo img {
-    width: 150px; /* Match the standard logo size from shared-styles.css */
+    width: 250px; /* Match the standard logo size from shared-styles.css */
     height: auto;
 }
 
@@ -36,7 +36,7 @@
     }
     
     .logo img {
-        width: 100px; /* Match mobile size from shared-styles.css */
+        width: 180px; /* Match mobile size from shared-styles.css */
     }
 }
 
