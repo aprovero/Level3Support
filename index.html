@@ -36,14 +36,6 @@
         <!-- Category Filters Section -->
         <section class="filters-section" style="margin-top: 2rem;">
             <div class="filters-container">
-                <!-- Top Search Section -->
-                <div class="search-wrapper-outer">
-                    <div class="search-container">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="search-input" class="search-input" placeholder="Search PV/BESS tools, relays, tags...">
-                    </div>
-                </div>
-
                 <!-- Bottom Filters Section -->
                 <div class="filter-section-wrapper">
                     <h3 class="filters-title">Filter by Category:</h3>
@@ -98,6 +90,12 @@
                             <span class="checkmark"></span>
                             Legacy / Archive
                         </label>
+
+                        <!-- Moved Search Section to align with second row of filters -->
+                        <div class="search-container" style="margin-left: auto; flex: 1 1 300px; max-width: 400px; position: relative;">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="search-input" class="search-input" placeholder="Search PV/BESS tools, relays, tags...">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -258,20 +256,8 @@
             gap: 1.25rem;
         }
 
-        .search-wrapper-outer {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            border-bottom: 1px solid #f1f5f9;
-            padding-bottom: 1.25rem;
-            margin-bottom: 0.25rem;
-        }
-
         .search-container {
             position: relative;
-            width: 100%;
-            max-width: 640px;
-            margin: 0 auto !important;
         }
 
         .search-input {
@@ -540,8 +526,10 @@
                 padding: 1.25rem;
                 gap: 1rem;
             }
-            .search-wrapper-outer {
-                padding-bottom: 1rem;
+            .search-container {
+                margin-left: 0 !important;
+                flex: 1 1 100% !important;
+                max-width: 100% !important;
             }
             .search-input {
                 height: 42px !important;

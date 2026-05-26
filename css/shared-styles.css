@@ -1748,7 +1748,7 @@ button:disabled, .submit-button:disabled {
 .tool-tile[data-category="legacy-archive"]::before { background-color: var(--color-legacy-archive); }
 
 .tile-content {
-    padding: 0.95rem 1.25rem 0.95rem 1.25rem;
+    padding: 0.75rem 1.25rem 1.25rem 1.25rem;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -1760,6 +1760,25 @@ button:disabled, .submit-button:disabled {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.75rem;
+}
+
+.tool-settings-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.2rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tool-settings-btn:hover {
+    color: #475569;
+    background: #f1f5f9;
 }
 
 .tile-category {
