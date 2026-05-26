@@ -23,8 +23,7 @@
         <!-- Desktop Sidebar Navigation -->
         <aside class="desktop-sidebar">
             <div class="sidebar-brand">
-                <img src="images/L3S_ICON.png" alt="Logo Icon" class="sidebar-brand-icon">
-                <div class="sidebar-brand-text">Level3Support</div>
+                <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support Logo" class="sidebar-brand-full">
             </div>
             <nav class="sidebar-nav">
                 <a href="#home" class="nav-item active" data-view="home">
@@ -413,9 +412,9 @@
             position: fixed;
             top: 0;
             left: 0;
-            background: #0f172a;
-            color: #f8fafc;
-            border-right: 1px solid #1e293b;
+            background: #ffffff;
+            color: #1e293b;
+            border-right: 1px solid #cbd5e1;
             display: flex;
             flex-direction: column;
             z-index: 100;
@@ -423,26 +422,21 @@
         }
 
         .sidebar-brand {
-            padding: 1.75rem 1.5rem;
+            padding: 1.5rem 1.25rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            border-bottom: 1px solid #1e293b;
+            justify-content: center;
+            border-bottom: 1px solid #cbd5e1;
+            background: #ffffff;
+            height: 80px;
+            box-sizing: border-box;
         }
 
-        .sidebar-brand-icon {
-            height: 32px;
-            width: auto;
-        }
-
-        .sidebar-brand-text {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, #60a5fa, #2563eb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .sidebar-brand-full {
+            height: auto;
+            max-height: 48px;
+            width: 100%;
+            object-fit: contain;
         }
 
         .sidebar-nav {
@@ -459,42 +453,65 @@
             align-items: center;
             gap: 1rem;
             padding: 0.8rem 1.25rem;
-            color: #94a3b8;
+            color: #475569;
             font-weight: 500;
             font-size: 0.95rem;
             border-radius: 8px;
             text-decoration: none;
             transition: all 0.2s ease;
+            position: relative;
         }
 
         .nav-item i {
             font-size: 1.1rem;
             width: 20px;
             text-align: center;
+            color: #64748b;
+            transition: all 0.2s ease;
         }
 
         .nav-item:hover {
-            color: #ffffff;
-            background: #1e293b;
+            color: #0f172a;
+            background: #f1f5f9;
+        }
+
+        .nav-item:hover i {
+            color: #0f172a;
         }
 
         .nav-item.active {
-            color: #ffffff;
-            background: #2563eb;
+            color: #2563eb;
+            background: #eff6ff;
             font-weight: 600;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .nav-item.active i {
+            color: #2563eb;
+        }
+
+        /* Active highlight bar on left side */
+        .nav-item.active::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 20%;
+            height: 60%;
+            width: 4px;
+            background-color: #2563eb;
+            border-radius: 0 4px 4px 0;
         }
 
         .sidebar-footer {
             padding: 1rem;
-            border-top: 1px solid #1e293b;
+            border-top: 1px solid #cbd5e1;
             text-align: center;
+            background: #f8fafc;
         }
 
         .version-tag {
             font-size: 0.75rem;
-            color: #475569;
-            background: #1e293b;
+            color: #64748b;
+            background: #e2e8f0;
             padding: 0.2rem 0.5rem;
             border-radius: 4px;
             display: inline-block;
