@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Electrical Test Forms — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    /* Additional styling for the SPA wrapper */
+    .form-container { max-width: 900px; margin: 20px auto; background: var(--background-light); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); padding: 24px; }
+    .print-header { display: none; text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+    .print-footer { display: none; text-align: center; margin-top: 20px; font-size: 0.8rem; color: var(--text-secondary); }
+    @media print { .print-header { display: block !important; } .print-footer { display: block !important; } .form-section, .btn-row, .back-link, .warning-box, .assumptions-box, .print-hide { display: none !important; } }
+  </style>
+
+</head>
+<body>
+  <div class="form-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+    <div class="print-footer">Powered by aprovero</div>
+    <script>
+      // Draft handling: save to localStorage on change, load on init
+      function loadDraft(tool) {
+        const saved = localStorage.getItem('draft_' + tool);
+        if (!saved) return;
+        try {
+          const data = JSON.parse(saved);
+          const form = document.querySelector('#form-root form');
+          if (!form) return;
+          Object.entries(data).forEach(([id, value]) => {
+            const el = form.querySelector('#' + id);
+            if (el) el.value = value;
+          });
+        } catch (e) { console.error('Failed to load draft', e); }
+      }
+      function saveDraft(tool) {
+        const form = document.querySelector('#form-root form');
+        if (!form) return;
+        const data = {};
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(el => { data[el.id] = el.value; });
+        localStorage.setItem('draft_' + tool, JSON.stringify(data));
+      }
+      // After form is built, initialize draft
+      if (tool) {
+        loadDraft(tool);
+        const form = document.querySelector('#form-root form');
+        if (form) {
+          form.addEventListener('input', () => saveDraft(tool));
+        }
+      }
+    </script>
+  </div>
+  <script src="js/form-components.js"></script>
+  <script>
+    // Utility to read query param
+    function getQueryParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+    const tool = getQueryParam('tool');
+    const titleMap = {
+      'insulation-resistance': 'Insulation Resistance Test Form',
+      'transformer-test': 'Transformer Test Results Form',
+      'grounding-continuity': 'Grounding Continuity Test Form',
+      'ct-pt-ratio': 'CT/PT Ratio Verification Tool',
+      'relay-checklist': 'Relay Settings Checklist'
+    };
+    // Set title
+    document.getElementById('form-title').textContent = titleMap[tool] || 'Electrical Test Form';
+    // Build form
+    if (typeof window[tool + 'FormBuilder'] === 'function') {
+      window[tool + 'FormBuilder']();
+    } else {
+      document.getElementById('form-root').innerHTML = '<p>Form builder not found.</p>';
+    }
+    // Button handlers (common)
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      const form = document.querySelector('form');
+      if (form) form.reset();
+    });
+    document.getElementById('export-csv-btn').addEventListener('click', () => {
+      if (typeof exportFormToCSV === 'function') exportFormToCSV();
+    });
+    document.getElementById('print-btn').addEventListener('click', () => {
+      window.print();
+    });
+  </script>
+</body>
+</html>

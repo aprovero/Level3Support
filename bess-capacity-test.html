@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BESS Capacity / Energy Test Form — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .input-row-three {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      .input-row, .input-row-three {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      flex: 1;
+    }
+    .input-unit-select {
+      width: 90px;
+      height: 42px;
+      margin: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      background: var(--background-dark);
+      border-left: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .status-warning { background: #fef3c7; color: #b45309; }
+    .status-critical { background: #fee2e2; color: #b91c1c; }
+
+    /* Print styling overrides */
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+      .calc-container {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+      }
+      .form-section, .btn-row, .back-link, .warning-box, .assumptions-box, .print-hide {
+        display: none !important;
+      }
+      .result-panel {
+        display: block !important;
+        border: 1px solid #000 !important;
+        background: white !important;
+        color: black !important;
+        padding: 20px !important;
+      }
+      .result-header {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        border-bottom: 2px solid #0f172a !important;
+      }
+      .print-header {
+        display: block !important;
+      }
+    }
+    .print-header {
+      display: none;
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header print-hide" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">🔋 BESS FIELD TOOL</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box print-hide" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer & Commissioning Notice</div>
+        This form logs energy and capacity test data. Final acceptance parameters must follow the approved project commissioning procedure, power purchase agreement (PPA) rules, and manufacturer documentation.
+      </div>
+    </div>
+
+    <!-- Printable Header Banner -->
+    <div class="print-header">
+      <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 60px; width: auto; margin-bottom: 10px;" />
+      <h2 style="margin: 0; font-family: 'Outfit';">BESS CAPACITY / ENERGY TEST REPORT</h2>
+      <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: #475569;">Utility-Scale Commissioning & Performance Verification</p>
+    </div>
+
+    <h1 class="print-hide" style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">BESS Capacity / Energy Test Form</h1>
+    <p class="print-hide" style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Record energy charge/discharge metrics, compute actual performance vs. rated energy capacities, and determine round-trip efficiency (RTE).
+    </p>
+
+    <!-- Form Sections -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      
+      <!-- Section 1: Site Metadata -->
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; color: var(--primary-color);">
+        <i class="fas fa-map-marker-alt"></i> Site & Project Details
+      </h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="site-name">Site / Substation <span class="required">*</span></label>
+          <input type="text" id="site-name" placeholder="e.g. Desert Sunrise BESS">
+        </div>
+        <div class="input-group">
+          <label for="project-name">Project Name <span class="required">*</span></label>
+          <input type="text" id="project-name" placeholder="e.g. Phase 2 Commissioning">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="bess-block">BESS Block / Container <span class="required">*</span></label>
+          <input type="text" id="bess-block" placeholder="e.g. Block 04 / Container A">
+        </div>
+        <div class="input-group">
+          <label for="equip-id">Equipment ID <span class="required">*</span></label>
+          <input type="text" id="equip-id" placeholder="e.g. PCS-04-INV1">
+        </div>
+      </div>
+
+      <!-- Section 2: Equipment Ratings -->
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; color: var(--primary-color);">
+        <i class="fas fa-bolt"></i> Equipment Ratings
+      </h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="rated-energy">Rated Energy Capacity <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="rated-energy" placeholder="e.g. 4000" step="any">
+            <select id="rated-energy-unit" class="input-unit-select">
+              <option value="kWh">kWh</option>
+              <option value="MWh">MWh</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="rated-power">Rated Power Capacity <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="rated-power" placeholder="e.g. 1000" step="any">
+            <select id="rated-power-unit" class="input-unit-select">
+              <option value="kW">kW</option>
+              <option value="MW">MW</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Test Configuration -->
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; color: var(--primary-color);">
+        <i class="fas fa-cog"></i> Test Parameters & Run Times
+      </h3>
+      <div class="input-row-three">
+        <div class="input-group">
+          <label for="test-mode">Test Mode <span class="required">*</span></label>
+          <select id="test-mode" style="height: 42px;">
+            <option value="Discharge">Discharge Capacity</option>
+            <option value="Charge">Charge Capacity</option>
+            <option value="RoundTrip">Round Trip (Charge & Discharge)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="start-soc">Start SOC (%) <span class="required">*</span></label>
+          <input type="number" id="start-soc" value="100" min="0" max="100" step="any">
+        </div>
+        <div class="input-group">
+          <label for="end-soc">End SOC (%) <span class="required">*</span></label>
+          <input type="number" id="end-soc" value="0" min="0" max="100" step="any">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="start-time">Test Start Time <span class="required">*</span></label>
+          <input type="datetime-local" id="start-time" style="height: 42px;">
+        </div>
+        <div class="input-group">
+          <label for="end-time">Test End Time <span class="required">*</span></label>
+          <input type="datetime-local" id="end-time" style="height: 42px;">
+        </div>
+      </div>
+
+      <!-- Section 4: Operational Data -->
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; color: var(--primary-color);">
+        <i class="fas fa-chart-line"></i> Field Measured Operational Metrics
+      </h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="measured-charged">Measured Charged Energy (Optional)</label>
+          <div class="input-with-unit">
+            <input type="number" id="measured-charged" placeholder="e.g. 4200" step="any">
+            <select id="measured-charged-unit" class="input-unit-select">
+              <option value="kWh">kWh</option>
+              <option value="MWh">MWh</option>
+            </select>
+          </div>
+          <div class="field-note">Direct BMS/PCS charge value if available.</div>
+        </div>
+        <div class="input-group">
+          <label for="measured-discharged">Measured Discharged Energy (Optional)</label>
+          <div class="input-with-unit">
+            <input type="number" id="measured-discharged" placeholder="e.g. 3850" step="any">
+            <select id="measured-discharged-unit" class="input-unit-select">
+              <option value="kWh">kWh</option>
+              <option value="MWh">MWh</option>
+            </select>
+          </div>
+          <div class="field-note">Direct BMS/PCS discharge value if available.</div>
+        </div>
+      </div>
+
+      <div class="input-row-three">
+        <div class="input-group">
+          <label for="avg-power">Avg Test Power <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="avg-power" placeholder="e.g. 980" step="any">
+            <select id="avg-power-unit" class="input-unit-select">
+              <option value="kW">kW</option>
+              <option value="MW">MW</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="pcs-limit">PCS Power Limit</label>
+          <div class="input-with-unit">
+            <input type="number" id="pcs-limit" placeholder="e.g. 1000" step="any">
+            <select id="pcs-limit-unit" class="input-unit-select">
+              <option value="kW">kW</option>
+              <option value="MW">MW</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="aux-load">Auxiliary Load</label>
+          <div class="input-with-unit">
+            <input type="number" id="aux-load" placeholder="e.g. 24" step="any">
+            <select id="aux-load-unit" class="input-unit-select">
+              <option value="kW">kW</option>
+              <option value="MW">MW</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row-three">
+        <div class="input-group">
+          <label for="temp-ambient">Avg Ambient Temp (°C)</label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-ambient" placeholder="e.g. 28.5" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="temp-battery-avg">Avg Battery Temp (°C)</label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-battery-avg" placeholder="e.g. 31.2" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="temp-battery-max">Max Battery Temp (°C)</label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-battery-max" placeholder="e.g. 34.8" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="interruptions">Test Interruptions / Transient Events</label>
+        <textarea id="interruptions" placeholder="Detail any grid limits, frequency responses, or unexpected stops..." style="height: 60px;"></textarea>
+      </div>
+
+      <div class="input-group">
+        <label for="notes">General Observations / Comments</label>
+        <textarea id="notes" placeholder="e.g. Test carried out at nominal C-rate..." style="height: 60px;"></textarea>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset Form</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Calculate Performance</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none; margin-top: 24px;">
+      <div class="result-header">
+        <span><i class="fas fa-poll"></i> Performance Capacity Assessment</span>
+        <span id="res-status-badge" class="status-badge-inline status-normal">N/A</span>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+        <div>
+          <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px;">Site / Block</div>
+          <div id="res-meta-site" style="font-size: 1.05rem; font-weight: 700; color: var(--text-color);">--</div>
+          <div id="res-meta-equip" style="font-size: 0.9rem; color: var(--text-secondary);">--</div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px;">Date of Report</div>
+          <div id="res-meta-date" style="font-size: 1.05rem; font-weight: 700; color: var(--text-color);">--</div>
+        </div>
+      </div>
+
+      <div class="result-row">
+        <span>Rated BESS Energy:</span>
+        <span id="res-rated-energy" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Test Duration:</span>
+        <span id="res-duration" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Delivered Energy:</span>
+        <span id="res-delivered-energy" style="font-weight: 600; color: var(--primary-color);">--</span>
+      </div>
+      <div class="result-row" style="background: var(--background-dark); border-radius: 6px; padding: 10px;">
+        <span style="font-size: 1.1rem; font-weight: 600;">Energy Performance Ratio (Actual vs. Rated):</span>
+        <span id="res-capacity-pct" class="result-value" style="font-size: 1.25rem;">--</span>
+      </div>
+      
+      <div id="res-rte-row" class="result-row" style="display: none;">
+        <span style="font-size: 1.1rem; font-weight: 600; color: #166534;">BESS Round-Trip Efficiency (RTE):</span>
+        <span id="res-rte" class="result-value" style="color: #166534; font-size: 1.25rem;">--</span>
+      </div>
+
+      <div class="result-row">
+        <span>Average Power during Test:</span>
+        <span id="res-avg-power" style="font-weight: 600;">--</span>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; border-top: 1px dashed var(--border-color); padding-top: 16px;" class="print-hide">
+        <div class="input-group" style="margin-bottom: 0;">
+          <label for="manual-verdict" style="font-size: 0.85rem; font-weight: 600;">Field Commissioning Verdict <span class="required">*</span></label>
+          <select id="manual-verdict" style="height: 38px; padding: 4px 8px; margin-top: 4px;">
+            <option value="PASS">PASS — Meets Standards</option>
+            <option value="FAIL">FAIL — Out of Bounds</option>
+            <option value="INCOMPLETE">INCOMPLETE — Rerun Needed</option>
+          </select>
+        </div>
+        <div style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;">
+          <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px 12px; font-size: 0.85rem; min-height: auto; height: 38px;"><i class="fas fa-copy"></i> Copy Text</button>
+          <button id="print-btn" class="button-secondary" style="margin-top: 0; padding: 8px 12px; font-size: 0.85rem; min-height: auto; height: 38px;"><i class="fas fa-print"></i> Print Report</button>
+          <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px 12px; font-size: 0.85rem; min-height: auto; height: 38px;"><i class="fas fa-file-export"></i> Export JSON</button>
+        </div>
+      </div>
+
+      <!-- Printable Signature block -->
+      <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; border-top: 1px solid #94a3b8; padding-top: 20px;" class="print-show-only">
+        <div>
+          <div style="border-bottom: 1px solid #000; height: 40px;"></div>
+          <p style="font-size: 0.75rem; text-align: center; margin: 5px 0 0 0; font-weight: 600;">Commissioning Engineer Signature & Date</p>
+        </div>
+        <div>
+          <div style="border-bottom: 1px solid #000; height: 40px;"></div>
+          <p style="font-size: 0.75rem; text-align: center; margin: 5px 0 0 0; font-weight: 600;">Client/Supervisor Acceptance Signature & Date</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box print-hide">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Technical Assumptions & Formulas</div>
+      <ul class="assumptions-list">
+        <li><strong>Duration</strong> is calculated as: <code>End Date/Time - Start Date/Time</code>.</li>
+        <li><strong>Delivered Energy</strong>: If the user provides a measured energy value, it is used directly. Otherwise, it defaults to: <code>Average Test Power &times; Duration (Hours)</code>.</li>
+        <li><strong>Energy Capacity Performance Ratio</strong>: <code>(Delivered Energy / Rated Energy Capacity) &times; 100</code>.</li>
+        <li><strong>Round-Trip Efficiency (RTE)</strong>: <code>(Discharged Energy / Charged Energy) &times; 100</code>. Only calculated when both values are supplied.</li>
+        <li>Capacity calculations are cross-referenced with IEEE 2813 / IEC 62933 energy storage testing frameworks.</li>
+      </ul>
+    </div>
+
+    <footer class="footer print-hide">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/bess-capacity-test.js"></script>
+</body>
+</html>

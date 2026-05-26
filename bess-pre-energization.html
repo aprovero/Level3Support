@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BESS Pre-Energization Checklist — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .progress-bar-container {
+      background: #e2e8f0;
+      border-radius: 999px;
+      height: 14px;
+      margin: 16px 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .progress-bar-fill {
+      background: #dc2626; /* Warning red color for energization safety */
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .checklist-section {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .checklist-row {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 0;
+      gap: 12px;
+    }
+    .checklist-row:last-child {
+      border-bottom: none;
+    }
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .item-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+    .checklist-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .check-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      min-height: auto;
+      width: auto;
+      margin: 0;
+      transition: all 0.2s ease;
+    }
+    .check-btn:hover {
+      background: #f8fafc;
+    }
+    .check-btn.pass.active {
+      background: #22c55e !important;
+      border-color: #22c55e !important;
+      color: #ffffff !important;
+    }
+    .check-btn.fail.active {
+      background: #dc2626 !important;
+      border-color: #dc2626 !important;
+      color: #ffffff !important;
+    }
+    .check-btn.na.active {
+      background: #64748b !important;
+      border-color: #64748b !important;
+      color: #ffffff !important;
+    }
+    .item-note-input {
+      width: 100%;
+      height: 38px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      margin: 0;
+    }
+    .item-note-input:focus {
+      border-color: var(--primary-color);
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .status-warning { background: #fef3c7; color: #b45309; }
+    .status-critical { background: #fee2e2; color: #b91c1c; }
+
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+      .calc-container {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+      }
+      .checklist-section, .btn-row, .back-link, .warning-box, .print-hide, .progress-container-meta {
+        display: none !important;
+      }
+      .result-panel {
+        display: block !important;
+        border: 1px solid #000 !important;
+        background: white !important;
+        color: black !important;
+        padding: 20px !important;
+      }
+      .result-header {
+        background: #fee2e2 !important;
+        color: #991b1b !important;
+        border-bottom: 2px solid #991b1b !important;
+      }
+      .print-header {
+        display: block !important;
+      }
+      .print-safety-warning {
+        display: block !important;
+        margin-bottom: 20px;
+      }
+    }
+    .print-header {
+      display: none;
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+    .print-safety-warning {
+      display: none;
+      background: #fef2f2;
+      border: 2px solid #f87171;
+      padding: 12px;
+      border-radius: 6px;
+      color: #991b1b;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header print-hide" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">🔋 BESS FIELD TOOL</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box print-hide" style="margin-top: 0; margin-bottom: 24px; border-left: 4px solid #ef4444; background: #fff5f5;">
+      <i class="fas fa-radiation" style="color: #ef4444;"></i>
+      <div>
+        <div class="warning-title" style="color: #991b1b;">⚠️ CRITICAL SAFETY NOTICE</div>
+        This checklist does not authorize energization. Energization must follow the approved project procedure, manufacturer instructions, local grid codes, and site-specific safety/HSE permits.
+      </div>
+    </div>
+
+    <!-- Printable Header Banner -->
+    <div class="print-header">
+      <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 60px; width: auto; margin-bottom: 10px;" />
+      <h2 style="margin: 0; font-family: 'Outfit'; color: #991b1b;">BESS PRE-ENERGIZATION CHECKLIST REPORT</h2>
+      <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: #475569;">High Voltage Isolation & System Startup Handoff Audit</p>
+    </div>
+
+    <!-- Printable Safety Warning Banner -->
+    <div class="print-safety-warning">
+      CRITICAL WARNING: This checklist confirms checklist readiness but DOES NOT constitute authorization to energize. All energizations require signed site management authorizations and local electrical utility clearance.
+    </div>
+
+    <h1 class="print-hide" style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">BESS Pre-Energization Checklist</h1>
+    <p class="print-hide" style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Audit and sign off on isolation integrity, grounding bonds, auxiliary system status, communications, and LOTO state prior to introducing utility or DC bus voltage.
+    </p>
+
+    <!-- Site Metadata Inputs -->
+    <div class="checklist-section print-hide" style="padding: 16px; margin-bottom: 16px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="input-group" style="margin-bottom: 0;">
+          <label for="energize-site">Site / Substation <span class="required">*</span></label>
+          <input type="text" id="energize-site" placeholder="e.g. Desert Sunrise BESS" style="height: 38px;">
+        </div>
+        <div class="input-group" style="margin-bottom: 0;">
+          <label for="energize-block">BESS Block / Container ID <span class="required">*</span></label>
+          <input type="text" id="energize-block" placeholder="e.g. Block 04 - Unit A" style="height: 38px;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Progress Bar -->
+    <div class="checklist-section progress-container-meta print-hide" style="padding: 16px; margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; font-weight: 600; color: #475569;">
+        <span>Safety Review Integrity</span>
+        <span id="energize-progress-text">0% (0 / 15 Checked)</span>
+      </div>
+      <div class="progress-bar-container">
+        <div id="energize-progress-fill" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- The Checklist Grid -->
+    <div class="checklist-section print-hide" style="margin-bottom: 16px;">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit'; color: #991b1b; border-bottom: 1px solid #fee2e2; padding-bottom: 8px;">
+        <i class="fas fa-shield-virus"></i> Critical Pre-Startup Controls
+      </h3>
+      <div id="checklist-items-container">
+        <!-- Checklist items will be injected by JavaScript -->
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="energize-reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset Walkdown</button>
+        <button id="energize-calc-btn" style="background: #dc2626;"><i class="fas fa-radiation"></i> Generate Safety Report</button>
+      </div>
+    </div>
+
+    <!-- Result Summary Panel -->
+    <div id="result-panel" class="result-panel" style="display: none; margin-top: 24px; border-left: 6px solid #ef4444;">
+      <div class="result-header" style="background: #fef2f2; color: #991b1b;">
+        <span><i class="fas fa-shield-alt"></i> Safety Verification Audit</span>
+        <span id="energize-status-badge" class="status-badge-inline status-critical">N/A</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+        <div>
+          <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px;">Location / Unit</div>
+          <div id="res-meta-site" style="font-size: 1.05rem; font-weight: 700; color: var(--text-color);">--</div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px;">Inspection Date</div>
+          <div id="res-meta-date" style="font-size: 1.05rem; font-weight: 700; color: var(--text-color);">--</div>
+        </div>
+      </div>
+
+      <div class="result-row">
+        <span>Prerequisite Checks Completion:</span>
+        <span id="res-energize-completion" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Safety Checks Passed:</span>
+        <span id="res-energize-passed" style="font-weight: 600; color: #166534;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Failed Safety Controls:</span>
+        <span id="res-energize-failed" style="font-weight: 600; color: #dc2626;">--</span>
+      </div>
+      <div class="result-row">
+        <span>N/A Safety Controls:</span>
+        <span id="res-energize-na" style="font-weight: 600; color: #475569;">--</span>
+      </div>
+
+      <!-- Highlighted Failed Conditions -->
+      <div id="failed-conditions-panel" style="margin-top: 16px; display: none;">
+        <div style="font-weight: 700; font-size: 0.9rem; color: #dc2626; margin-bottom: 8px;"><i class="fas fa-exclamation-triangle"></i> CRITICAL SYSTEM FAILURES (Startup Blocked):</div>
+        <ul id="failed-conditions-list" style="margin: 0; padding-left: 20px; font-size: 0.88rem; color: #7f1d1d; line-height: 1.5;">
+          <!-- Injected failed items -->
+        </ul>
+      </div>
+
+      <!-- Complete Checklist Result Table for Print -->
+      <div class="print-show-only" style="margin-top: 24px;">
+        <h4 style="margin: 0 0 10px 0; font-family: 'Outfit'; color: #991b1b;">Detailed Pre-Energization Safety Verification Audit Checklist:</h4>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+          <thead>
+            <tr style="background: #f8fafc; text-align: left; border-bottom: 2px solid #cbd5e1;">
+              <th style="padding: 6px; border: 1px solid #cbd5e1;">Safety Control Requirement</th>
+              <th style="padding: 6px; border: 1px solid #cbd5e1; width: 80px;">Audit Status</th>
+              <th style="padding: 6px; border: 1px solid #cbd5e1;">Field Signoff Notes & Observations</th>
+            </tr>
+          </thead>
+          <tbody id="print-checklist-table-body">
+            <!-- Injected rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 20px;" class="print-hide">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px 12px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Summary</button>
+        <button id="print-btn" class="button-secondary" style="margin-top: 0; padding: 8px 12px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-print"></i> Print Report</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px 12px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+
+      <!-- Printable Signature block -->
+      <div style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; border-top: 1px solid #94a3b8; padding-top: 20px;" class="print-show-only">
+        <div>
+          <div style="border-bottom: 1px solid #000; height: 40px;"></div>
+          <p style="font-size: 0.75rem; text-align: center; margin: 5px 0 0 0; font-weight: 600;">Auditing Commissioning Lead Signature & Date</p>
+        </div>
+        <div>
+          <div style="border-bottom: 1px solid #000; height: 40px;"></div>
+          <p style="font-size: 0.75rem; text-align: center; margin: 5px 0 0 0; font-weight: 600;">Site Representative/Safety Officer Signature & Date</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box print-hide">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering & Safety Criteria</div>
+      <ul class="assumptions-list">
+        <li>All 15 checklist items represent critical safety check parameters (NFPA 855 / IEEE standard).</li>
+        <li><strong>ALL ITEMS must achieve PASS or N/A</strong> for the system to be verified as "READY TO ENERGIZE".</li>
+        <li>If even <strong>one single item</strong> is rated as <strong>FAIL</strong>, system startup is immediately designated as <strong>BLOCKED</strong>, and the Lockout/Tagout (LOTO) key keys must remain in the safety lockbox.</li>
+      </ul>
+    </div>
+
+    <footer class="footer print-hide">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/bess-pre-energization.js"></script>
+</body>
+</html>

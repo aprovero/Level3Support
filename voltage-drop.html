@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voltage Drop Calculator — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-pass { background: #dcfce7; color: #15803d; }
+    .status-fail { background: #fee2e2; color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ CALCULATOR</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Voltage Drop Calculator</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Calculate voltage drop and power loss for DC, single-phase AC, and three-phase AC feeder cables in utility-scale PV/BESS circuits.
+    </p>
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Circuit Mode & Voltages</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="circuit-mode">Circuit Mode</label>
+          <select id="circuit-mode" style="width: 100%; height: 42px; border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); padding: 10px;">
+            <option value="dc">DC Circuit</option>
+            <option value="ac-1">Single-Phase AC</option>
+            <option value="ac-3" selected>Three-Phase AC</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="system-voltage">System nominal voltage <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="system-voltage" placeholder="e.g. 480" step="any">
+            <div class="input-unit">Volts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="circuit-current">Load Current (I) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="circuit-current" placeholder="e.g. 200" step="any">
+            <div class="input-unit">Amps</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="allowed-drop">Allowed Voltage Drop</label>
+          <div class="input-with-unit">
+            <input type="number" id="allowed-drop" value="3.0" step="any">
+            <div class="input-unit">%</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Cable & Feeder Specs</h3>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="cable-length">One-way Feeder Length <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="cable-length" placeholder="e.g. 350" step="any">
+            <div class="input-unit">
+              <select id="length-unit" style="border: none; background: transparent; font-weight: 600; color: var(--text-secondary);">
+                <option value="m">meters</option>
+                <option value="ft">feet</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="cable-material">Cable Conductor Material</label>
+          <select id="cable-material" style="width: 100%; height: 42px; border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); padding: 10px;">
+            <option value="copper">Copper (Cu)</option>
+            <option value="aluminum">Aluminum (Al)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="cable-resistance">Conductor AC/DC Resistance <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="cable-resistance" placeholder="e.g. 0.25" step="any">
+            <div id="res-unit-label" class="input-unit">Ohms/km</div>
+          </div>
+          <div class="field-note">Conductor resistance per unit length (Ohms/km or Ohms/1k ft).</div>
+        </div>
+
+        <div class="input-group" id="pf-group">
+          <label for="power-factor">Power Factor (cos &phi;)</label>
+          <div class="input-with-unit">
+            <input type="number" id="power-factor" value="0.90" min="0.0" max="1.0" step="any">
+            <div class="input-unit">PF</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Reactance Section -->
+      <div id="reactance-group" class="input-row">
+        <div class="input-group">
+          <label for="cable-reactance">Reactance (X) (Optional)</label>
+          <div class="input-with-unit">
+            <input type="number" id="cable-reactance" value="0.15" step="any">
+            <div id="react-unit-label" class="input-unit">Ohms/km</div>
+          </div>
+          <div class="field-note">Prepopulated, change if needed. Set 0 for simple formula.</div>
+        </div>
+        <div class="input-group"></div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Calculate Drop</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none;">
+      <div class="result-header">
+        <span>Drop Performance</span>
+        <span id="vd-status-badge" class="status-badge-inline status-pass">Pass</span>
+      </div>
+      
+      <div class="result-row">
+        <span>Voltage Drop in Volts:</span>
+        <span id="res-vd-volts" style="font-weight: 700;">-- V</span>
+      </div>
+      <div class="result-row">
+        <span>Voltage Drop Percentage:</span>
+        <span id="res-vd-pct" style="font-weight: 700;">--%</span>
+      </div>
+      <div class="result-row">
+        <span>Estimated Active Power Loss:</span>
+        <span id="res-power-loss" style="font-weight: 600;">-- W</span>
+      </div>
+      <div class="result-row">
+        <span>Available voltage at load:</span>
+        <span id="res-load-voltage" style="font-weight: 600;">-- V</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Results</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions</div>
+      <ul class="assumptions-list">
+        <li>DC / Single-phase formula: <strong>V<sub>Drop</sub> = 2 &times; I &times; R<sub>total</sub> &times; L</strong>.</li>
+        <li>Three-phase AC simple formula: <strong>V<sub>Drop</sub> = &radic;3 &times; I &times; R<sub>total</sub> &times; L</strong>.</li>
+        <li>Three-phase AC advanced formula (uses PF &amp; Reactance): <strong>V<sub>Drop</sub> = &radic;3 &times; I &times; L &times; (R cos&phi; + X sin&phi;)</strong>.</li>
+        <li>sin&phi; is automatically calculated as: <strong>&radic;(1 - cos<sup>2</sup>&phi;)</strong>.</li>
+        <li>Pass criteria is determined if <strong>V<sub>Drop</sub> % &le; Allowed Voltage Drop %</strong>.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/voltage-drop.js"></script>
+</body>
+</html>

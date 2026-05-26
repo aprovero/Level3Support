@@ -3,81 +3,121 @@
    =========================== */
 
 .upload-section {
-  background-color: #e1f5fe;
-  border: 2px solid #0288d1;
+  background-color: var(--background-light);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 24px;
   margin-top: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.upload-section label {
-  font-weight: 600;
-  color: #0277bd;
+.upload-section > label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
   display: block;
-  margin: 16px 0 8px;
-  font-size: 1rem;
+  margin: 0;
+  font-weight: 600;
 }
 
-/* 🔷 Horizontal Radio Layout - Side-by-Side */
+/* 🔷 Premium Segmented Controls Layout */
 .radio-group {
+  border: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 16px;
 }
 
 .radio-group legend {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #0277bd;
-  margin-bottom: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+  padding: 0;
 }
 
 .radio-options {
   display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
+  background-color: var(--background-dark);
+  padding: 4px;
+  border-radius: 8px;
+  gap: 4px;
+  border: 1px solid var(--border-color);
+  width: fit-content;
 }
 
 .radio-option {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.95rem;
-  color: #0277bd;
-  font-weight: 600;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-quick);
+  user-select: none;
 }
 
-input[type="radio"] {
-  accent-color: #0288d1;
+.radio-option:hover {
+  color: var(--text-color);
+}
+
+/* Hide default radio input circle but keep functional */
+.radio-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+/* Active segmented style */
+.radio-option:has(input[type="radio"]:checked) {
+  background-color: var(--background-light);
+  color: var(--primary-color);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
 }
 
 /* 🔷 Input Field - Dynamic 0x Handling */
 .input-wrapper {
   position: relative;
-  max-width: 600px;
-  margin-top: 16px;
+  max-width: 100%;
 }
 
 #fault-code {
   width: 100%;
   height: 44px;
-  padding: 10px 12px;
+  padding: 10px 16px;
   padding-left: 36px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  font-size: 0.95rem;
+  font-size: 1rem;
   outline: none;
-  transition: border 0.2s ease;
+  background-color: var(--background-light);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  color: var(--text-color);
 }
 
 #fault-code.prefix-0x {
-  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' fill='gray' viewBox='0 0 16 16'%3E%3Ctext x='0' y='14' font-size='16'%3E0x%3C/text%3E%3C/svg%3E") no-repeat 10px center;
+  background: var(--background-light) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Ctext x='0' y='14' font-family='monospace' font-weight='600' font-size='15'%3E0x%3C/text%3E%3C/svg%3E") no-repeat 12px center;
   background-size: auto 16px;
 }
 
 #fault-code:focus {
-  border-color: #0288d1;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HVAC Delta-T Calculator — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 850px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .status-warning { background: #fef3c7; color: #b45309; }
+    .status-critical { background: #fee2e2; color: #b91c1c; }
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+    }
+    .hvac-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      min-width: 600px;
+    }
+    .hvac-table th {
+      background: var(--background-dark);
+      padding: 10px;
+      font-weight: 600;
+      text-align: left;
+      border-bottom: 2px solid var(--border-color);
+    }
+    .hvac-table td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .unit-toggle-btn {
+      width: auto;
+      min-height: auto;
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      background: var(--background-dark);
+      color: var(--text-color);
+      border: 1px solid var(--border-light);
+      margin: 0;
+      border-radius: 4px;
+    }
+    .unit-toggle-btn.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button id="deg-c-btn" class="unit-toggle-btn active">°C</button>
+        <button id="deg-f-btn" class="unit-toggle-btn">°F</button>
+        <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px; margin-left: 8px;">🔋 BESS FIELD TOOL</span>
+      </div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">HVAC Delta-T Calculator</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Measure and verify temperature differentials (Delta-T) across BESS container HVAC air ducts to diagnose refrigeration cycle efficiency and cooling anomalies.
+    </p>
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Air Temperature Inputs</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="return-temp">Return Air Temp (T<sub>Return</sub>) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="return-temp" placeholder="e.g. 26.5" step="any">
+            <div class="input-unit temp-unit-label">°C</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="supply-temp">Supply Air Temp (T<sub>Supply</sub>) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="supply-temp" placeholder="e.g. 14.2" step="any">
+            <div class="input-unit temp-unit-label">°C</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="ambient-temp">Ambient Temperature</label>
+          <div class="input-with-unit">
+            <input type="number" id="ambient-temp" placeholder="e.g. 35.0" step="any">
+            <div class="input-unit temp-unit-label">°C</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="internal-temp">Container Internal Temp</label>
+          <div class="input-with-unit">
+            <input type="number" id="internal-temp" placeholder="e.g. 24.5" step="any">
+            <div class="input-unit temp-unit-label">°C</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row" style="border-top: 1px dashed var(--border-color); padding-top: 16px; margin-top: 8px;">
+        <div class="input-group">
+          <label for="hvac-mode">HVAC Operating Mode</label>
+          <select id="hvac-mode" style="width: 100%; height: 42px; border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); padding: 10px;">
+            <option value="cooling" selected>Cooling Mode</option>
+            <option value="heating">Heating Mode</option>
+            <option value="vent">Ventilation / Fan Only</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="hvac-unit-id">HVAC Unit / Tag ID</label>
+          <input type="text" id="hvac-unit-id" placeholder="e.g. HVAC-01" value="HVAC-01" style="height: 42px;">
+        </div>
+      </div>
+
+      <div class="toggle-container" style="margin-top: 8px;">
+        <span style="font-weight: 600; font-size: 0.95rem; color: var(--text-color); margin-right: 8px;">Active System Alarm Present?</span>
+        <label class="switch">
+          <input type="checkbox" id="hvac-alarm-toggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary" style="flex: 1;"><i class="fas fa-undo"></i> Reset</button>
+        <button id="log-reading-btn" class="button-secondary" style="flex: 1; background: var(--background-dark); color: var(--text-color); border: 1px solid var(--border-light);"><i class="fas fa-plus"></i> Add Log Row</button>
+        <button id="calculate-btn" style="flex: 2; margin-top: 0;"><i class="fas fa-calculator"></i> Calculate Delta-T</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none;">
+      <div class="result-header">
+        <span>HVAC Health Analysis</span>
+        <span id="hvac-status-badge" class="status-badge-inline status-normal">Normal</span>
+      </div>
+      
+      <div class="result-row">
+        <span>Unit Tag ID:</span>
+        <span id="res-unit-id" style="font-weight: 600;">HVAC-01</span>
+      </div>
+      <div class="result-row">
+        <span>Mode / Alarm State:</span>
+        <span id="res-mode-alarm" style="font-weight: 600;">Cooling / NO ALARMS</span>
+      </div>
+      <div class="result-row" style="border-top: 1px dashed #bbf7d0; margin-top: 8px; padding-top: 8px;">
+        <span style="font-size: 1.1rem; font-weight: 600;">Calculated Delta-T (&Delta;T):</span>
+        <span id="res-delta-t" class="result-value">--</span>
+      </div>
+      <div class="result-row">
+        <span>Performance Assessment:</span>
+        <span id="res-assessment" style="font-weight: 600;">--</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Results</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Multi-Reading Log Table -->
+    <div class="form-section" style="margin-top: 24px; padding: 20px;">
+      <h3 style="margin-top: 0; margin-bottom: 8px; font-family: 'Outfit';">BESS HVAC Multi-Unit Log Table</h3>
+      <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 12px;">Add multiple HVAC measurements sequentially to compile a container cooling evaluation report.</p>
+      
+      <div class="table-container">
+        <table class="hvac-table" id="hvac-log-table">
+          <thead>
+            <tr>
+              <th>Unit ID</th>
+              <th>Mode</th>
+              <th>T<sub>Return</sub></th>
+              <th>T<sub>Supply</sub></th>
+              <th>&Delta;T</th>
+              <th>Status</th>
+              <th>Alarm</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="table-log-body">
+            <!-- Dynamically populated rows -->
+            <tr id="empty-table-row">
+              <td colspan="8" style="text-align: center; color: var(--text-light); padding: 20px;">No custom logs added yet. Use the 'Add Log Row' button to build a list.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions & Boundaries</div>
+      <ul class="assumptions-list">
+        <li>Delta-T is calculated as: <strong>T<sub>Return</sub> - T<sub>Supply</sub></strong>.</li>
+        <li><strong>Cooling Mode Normal Delta-T</strong>: <strong>8 to 12 °C (15 to 22 °F)</strong> is standard.</li>
+        <li><strong>Cooling Mode Low Capacity Warning</strong>: <strong>Delta-T &lt; 8 °C (15 °F)</strong> indicates weak compressor charge or clogged air filters.</li>
+        <li><strong>Cooling Mode Critical Error</strong>: <strong>Delta-T &le; 0 °C (0 °F)</strong> indicates complete failure (supplying heat or compressor bypass).</li>
+        <li><strong>Heating Mode Normal Delta-T</strong>: <strong>10 to 20 °C (18 to 36 °F)</strong> return-supply difference (supply should be warmer than return, giving a negative Delta-T in this standard formula).</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/hvac-delta-t.js"></script>
+</body>
+</html>

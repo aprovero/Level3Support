@@ -69,7 +69,7 @@
       "url": "analyzer.html",
       "tags": ["UMCG", "Data", "Diagnostics"],
       "notes": "Development in progress."
-    },  
+    },
     {
       "id": 8,
       "name": "PDP Module Fault Code Interpreter",
@@ -169,6 +169,106 @@
       "url": "tool-placeholder.html?tool=daily-progress",
       "tags": ["Report", "Commissioning", "SCADA"],
       "notes": "Planned for Agent 6"
+    },
+    {
+      "id": 18,
+      "name": "String Current Imbalance Calculator",
+      "category": "PV Field Tools",
+      "status": "Active",
+      "description": "Compare solar string currents against the average and flag abnormal strings above a configurable deviation threshold.",
+      "url": "string-imbalance.html",
+      "tags": ["PV", "Testing", "Commissioning", "Field"],
+      "notes": "Agent 3 — Mobile-first, CSV export."
+    },
+    {
+      "id": 19,
+      "name": "DC Voltage Sanity Check Tool",
+      "category": "PV Field Tools",
+      "status": "Active",
+      "description": "Check if measured string voltage matches expected module count and temperature-corrected Voc or Vmp values.",
+      "url": "dc-voltage-sanity.html",
+      "tags": ["PV", "Testing", "Commissioning", "Field"],
+      "notes": "Agent 3 — Includes issue hint diagnostics."
+    },
+    {
+      "id": 20,
+      "name": "Inverter Start-Up Checklist",
+      "category": "PV Field Tools",
+      "status": "Active",
+      "description": "Structured digital commissioning checklist covering visual inspection, DC/AC checks, grounding, comms, firmware, and first energization.",
+      "url": "inverter-startup.html",
+      "tags": ["PV", "Commissioning", "Checklist", "Field"],
+      "notes": "Agent 3 — Print and JSON export."
+    },
+    {
+      "id": 21,
+      "name": "IV Curve Test Result Log",
+      "category": "PV Field Tools",
+      "status": "Active",
+      "description": "Record and categorize IV curve test results consistently across field teams. Supports defect classification and CSV export.",
+      "url": "iv-curve-log.html",
+      "tags": ["PV", "Testing", "Report", "Field"],
+      "notes": "Agent 3 — Multi-record log with status summary."
+    },
+    {
+      "id": 22,
+      "name": "Firmware Version Tracker",
+      "category": "PV Field Tools",
+      "status": "Active",
+      "description": "Track firmware versions across inverters, dataloggers, routers, and other field equipment. Flags devices requiring updates.",
+      "url": "firmware-tracker.html",
+      "tags": ["PV", "BESS", "Commissioning", "Report"],
+      "notes": "Agent 3 — Auto-derives update required status."
+    },
+    {
+        "id": 23,
+        "name": "Insulation Resistance Test Form",
+        "category": "Electrical Test Forms",
+        "status": "Active",
+        "description": "Record insulation resistance test results for PV, BESS, AC, DC, and transformer circuits.",
+        "url": "electrical-test-forms.html?tool=insulation-resistance",
+        "tags": ["Testing","Electrical","PV","BESS"],
+        "notes": "Agent 5 — Sample min resistance 5 MΩ."
+    },
+    {
+        "id": 24,
+        "name": "Transformer Test Results Form",
+        "category": "Electrical Test Forms",
+        "status": "Active",
+        "description": "Create a structured transformer test report covering nameplate, visual, IR, winding resistance, turns ratio, vector group, and tap changer.",
+        "url": "electrical-test-forms.html?tool=transformer-test",
+        "tags": ["Testing","Electrical","Transformer"],
+        "notes": "Agent 5 — Sample rated power 10 MVA."
+    },
+    {
+        "id": 25,
+        "name": "Grounding Continuity Test Form",
+        "category": "Electrical Test Forms",
+        "status": "Active",
+        "description": "Record grounding and bonding continuity tests with multiple points.",
+        "url": "electrical-test-forms.html?tool=grounding-continuity",
+        "tags": ["Testing","Electrical","Grounding"],
+        "notes": "Agent 5 — Sample max allowed resistance 0.5 Ω."
+    },
+    {
+        "id": 26,
+        "name": "CT/PT Ratio Verification Tool",
+        "category": "Electrical Test Forms",
+        "status": "Active",
+        "description": "Verify CT and PT ratios against measured values and relay configuration.",
+        "url": "electrical-test-forms.html?tool=ct-pt-ratio",
+        "tags": ["Testing","Electrical","CT","PT"],
+        "notes": "Agent 5 — Sample allowable error 5%."
+    },
+    {
+        "id": 27,
+        "name": "Relay Settings Checklist",
+        "category": "Electrical Test Forms",
+        "status": "Active",
+        "description": "Checklist to confirm relay settings were loaded and verified.",
+        "url": "electrical-test-forms.html?tool=relay-checklist",
+        "tags": ["Testing","Electrical","Relay","Checklist"],
+        "notes": "Agent 5 — Sample manufacturer data pre‑filled."
     }
-  ]
+]
 }

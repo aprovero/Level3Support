@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cable Ampacity & Max Current Calculator — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-pass { background: #dcfce7; color: #15803d; }
+    .status-fail { background: #fee2e2; color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ CALCULATOR</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Cable Ampacity / Max Current Calculator</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Evaluate cable ampacity adjustments for temperature derating and conductor bundling configurations in utility-scale PV/BESS circuits.
+    </p>
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Conductor Settings</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="cable-material">Conductor Material</label>
+          <select id="cable-material" style="width: 100%; height: 42px; border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); padding: 10px;">
+            <option value="copper">Copper (Cu)</option>
+            <option value="aluminum">Aluminum / Copper-Clad Al (Al)</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="insulation-rating">Insulation Temp Rating</label>
+          <select id="insulation-rating" style="width: 100%; height: 42px; border: 1px solid var(--border-light); border-radius: var(--border-radius-sm); padding: 10px;">
+            <option value="90">90 °C (e.g. RHW-2, THHN, XHHW-2)</option>
+            <option value="75">75 °C (e.g. THWN, RHW)</option>
+            <option value="60">60 °C (e.g. TW, UF)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="base-ampacity">Base Ampacity (Table reference) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="base-ampacity" placeholder="e.g. 310" step="any">
+            <div class="input-unit">Amps</div>
+          </div>
+          <div class="field-note">Directly lookup or input the initial NEC/IEC base ampacity.</div>
+        </div>
+
+        <div class="input-group">
+          <label for="load-current">Design Load Current <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="load-current" placeholder="e.g. 240" step="any">
+            <div class="input-unit">Amps</div>
+          </div>
+          <div class="field-note">Max continuous + non-continuous design current.</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Derating & Adjustment Factors</h3>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="ambient-temp">Ambient Temperature</label>
+          <div class="input-with-unit">
+            <input type="number" id="ambient-temp" value="40" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="temp-factor-override">Temp Correction Factor (C<sub>t</sub>)</label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-factor-override" placeholder="e.g. 0.91" step="any">
+            <div class="input-unit">Override</div>
+          </div>
+          <div class="field-note">Auto-calculated if blank (Standard NEC reference table).</div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="conductor-count">Current-Carrying Conductors</label>
+          <div class="input-with-unit">
+            <input type="number" id="conductor-count" value="3" min="1" step="1">
+            <div class="input-unit">Conductors</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="bundling-factor-override">Conductor Adjustment Factor (C<sub>a</sub>)</label>
+          <div class="input-with-unit">
+            <input type="number" id="bundling-factor-override" placeholder="e.g. 0.80" step="any">
+            <div class="input-unit">Override</div>
+          </div>
+          <div class="field-note">Auto-calculated based on conductor count if blank.</div>
+        </div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Calculate Ampacity</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none;">
+      <div class="result-header">
+        <span>Sizing Evaluation</span>
+        <span id="amp-status-badge" class="status-badge-inline status-pass">Pass</span>
+      </div>
+      
+      <div class="result-row">
+        <span>Base Ampacity:</span>
+        <span id="res-base-amp" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Temperature Derating Factor (C<sub>t</sub>):</span>
+        <span id="res-temp-factor" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Conductor Adjustment Factor (C<sub>a</sub>):</span>
+        <span id="res-bundling-factor" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="border-top: 1px dashed #bbf7d0; margin-top: 8px; padding-top: 8px;">
+        <span style="font-size: 1.1rem; font-weight: 600;">Corrected Ampacity:</span>
+        <span id="res-corrected-amp" class="result-value">--</span>
+      </div>
+      <div class="result-row">
+        <span>Load Utilization Percentage:</span>
+        <span id="res-load-pct" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Ampacity Margin:</span>
+        <span id="res-margin" style="font-weight: 600;">--</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Results</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Warning / Limitations Panel -->
+    <div class="warning-box" style="background: #fef2f2; border-left-color: #ef4444; color: #991b1b;">
+      <i class="fas fa-exclamation-circle" style="color: #ef4444;"></i>
+      <div>
+        <div class="warning-title" style="color: #991b1b;">Important Sizing Limitation Warning</div>
+        Final cable sizing must be checked against the applicable national or local electrical codes (e.g. NEC Article 310, IEC 60364) and site-specific project documents. Ambient temperature correction calculations herein reflect standard NEC tables for 30 °C reference baselines.
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions</div>
+      <ul class="assumptions-list">
+        <li>Base Reference Ambient temperature is 30 °C.</li>
+        <li>Automatic temperature derating factor matches standard NEC Table 310.15(B)(1) [or equivalent Table 310.16 correction tables].</li>
+        <li>Automatic Conductor adjustment factors: <strong>1-3 conductors</strong> = 1.0, <strong>4-6</strong> = 0.80, <strong>7-9</strong> = 0.70, <strong>10-20</strong> = 0.50, <strong>21-30</strong> = 0.45, <strong>31-40</strong> = 0.40, <strong>>40</strong> = 0.35.</li>
+        <li>Pass threshold requires: <strong>Design Load Current &le; Corrected Ampacity</strong>.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/cable-ampacity.js"></script>
+</body>
+</html>

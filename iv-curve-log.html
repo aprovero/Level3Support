@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IV Curve Test Result Log — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 960px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .input-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    .input-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; }
+    .input-group  { margin-bottom: 14px; }
+    .input-with-unit { display: flex; align-items: center; }
+    .input-with-unit input {
+      border-top-right-radius: 0; border-bottom-right-radius: 0;
+      margin-bottom: 0; height: 40px;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 10px;
+      height: 40px;
+      display: flex; align-items: center;
+      font-size: 0.82rem; color: var(--text-secondary); font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+
+    /* Status toggle pills */
+    .status-toggle { display: flex; gap: 8px; }
+    .status-pill {
+      flex: 1; padding: 9px 12px; border-radius: 8px;
+      border: 2px solid var(--border-light); background: #fff;
+      color: var(--text-secondary); font-weight: 600; font-size: 0.88rem;
+      cursor: pointer; text-align: center; transition: all 0.15s;
+      min-height: unset; margin: 0; display: flex;
+      align-items: center; justify-content: center; gap: 5px;
+    }
+    .status-pill:hover { border-color: var(--primary-color); color: var(--primary-color); }
+    .status-pill.active-pass { border-color: var(--success-color); background: var(--success-light); color: var(--success-text); }
+    .status-pill.active-warn { border-color: #d97706; background: #fef3c7; color: #92400e; }
+    .status-pill.active-fail { border-color: var(--error-color); background: var(--error-light); color: var(--error-text); }
+
+    /* Summary stats */
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: var(--background-dark);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 14px;
+      text-align: center;
+    }
+    .stat-value { font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 700; }
+    .stat-label { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
+    .stat-pass .stat-value { color: var(--success-color); }
+    .stat-warn .stat-value { color: #d97706; }
+    .stat-fail .stat-value { color: var(--error-color); }
+    .stat-total .stat-value { color: var(--primary-color); }
+
+    /* Records table */
+    .records-table-wrapper {
+      overflow-x: auto;
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+    .records-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      min-width: 900px;
+    }
+    .records-table th {
+      background: var(--background-dark);
+      padding: 9px 10px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    .records-table td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .records-table tr:last-child td { border-bottom: none; }
+    .records-table tr.row-pass { background: #f0fdf4; }
+    .records-table tr.row-warn { background: #fffbeb; }
+    .records-table tr.row-fail { background: #fff5f5; }
+
+    /* Status badges */
+    .badge {
+      display: inline-block; padding: 3px 9px;
+      border-radius: 999px; font-size: 0.72rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .badge-pass { background: var(--success-light); color: var(--success-text); }
+    .badge-warn { background: #fef3c7; color: #92400e; }
+    .badge-fail { background: var(--error-light); color: var(--error-text); }
+
+    .btn-delete {
+      background: var(--error-light); color: var(--error-text);
+      border: 1px solid var(--error-border); border-radius: var(--border-radius-sm);
+      padding: 4px 9px; font-size: 0.78rem; cursor: pointer;
+      min-height: unset; width: auto; margin: 0; transition: all 0.15s;
+    }
+    .btn-delete:hover { background: var(--error-color); color: #fff; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center; padding: 40px 20px;
+      color: var(--text-secondary); font-style: italic; font-size: 0.9rem;
+    }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 12px; display: block; color: var(--border-light); }
+
+    /* Notes in table — truncated */
+    .notes-cell {
+      max-width: 160px; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+      color: var(--text-secondary); font-size: 0.8rem;
+    }
+
+    /* Photo placeholder */
+    .photo-placeholder {
+      background: var(--background-dark); border: 1px dashed var(--border-light);
+      border-radius: var(--border-radius-md); padding: 12px 16px;
+      color: var(--text-secondary); font-size: 0.85rem; text-align: center;
+      margin-top: 10px;
+    }
+
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+
+    /* Card view for mobile */
+    @media (max-width: 700px) {
+      .input-row-2, .input-row-3, .input-row-4, .summary-stats { grid-template-columns: 1fr 1fr; }
+      .btn-row { grid-template-columns: 1fr; }
+      .records-table { min-width: 600px; }
+    }
+    @media (max-width: 480px) {
+      .input-row-2, .input-row-3, .input-row-4, .summary-stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">☀ PV FIELD TOOLS</div>
+    </div>
+
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 20px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This log is an aid for field teams. Results depend on field conditions at the time of measurement. All IV curve data must be reviewed by a qualified engineer. This tool does not replace the approved test procedure or manufacturer specifications.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 6px 0; font-size: 1.7rem;">IV Curve Test Result Log</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px;">
+      Record and categorize IV curve diagnostic results across multiple strings. Tracks Voc, Isc, Vmp, Imp, Pmax, irradiance, temperature, and defect classification.
+    </p>
+
+    <!-- Session Info -->
+    <div class="form-section" style="padding: 16px 20px; background: #fff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); margin-bottom: 16px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit';">Session Information</h3>
+      <div class="input-row-2">
+        <div class="input-group">
+          <label for="site-name">Site Name</label>
+          <input type="text" id="site-name" placeholder="e.g. Solar Farm Alpha">
+        </div>
+        <div class="input-group">
+          <label for="test-date">Test Date</label>
+          <input type="date" id="test-date">
+        </div>
+        <div class="input-group">
+          <label for="engineer">Engineer Name</label>
+          <input type="text" id="engineer" placeholder="Full name">
+        </div>
+        <div class="input-group">
+          <label for="tracer-model">IV Tracer / Equipment Model</label>
+          <input type="text" id="tracer-model" placeholder="e.g. Solmetric PVA-1500HE">
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Record Form -->
+    <div class="form-section" style="padding: 16px 20px; background: #fff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); margin-bottom: 16px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit';"><i class="fas fa-plus-circle" style="color:var(--primary-color);"></i> Add String Measurement</h3>
+
+      <div class="input-row-3">
+        <div class="input-group">
+          <label for="f-inv">Inverter ID <span class="required">*</span></label>
+          <input type="text" id="f-inv" placeholder="e.g. INV-01">
+        </div>
+        <div class="input-group">
+          <label for="f-mppt">MPPT ID <span class="required">*</span></label>
+          <input type="text" id="f-mppt" placeholder="e.g. MPPT-A">
+        </div>
+        <div class="input-group">
+          <label for="f-string">String ID <span class="required">*</span></label>
+          <input type="text" id="f-string" placeholder="e.g. STR-01">
+        </div>
+      </div>
+
+      <div class="input-row-4">
+        <div class="input-group">
+          <label for="f-voc">Voc <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="f-voc" placeholder="e.g. 682" step="any" min="0">
+            <div class="input-unit">V</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="f-isc">Isc <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="f-isc" placeholder="e.g. 10.2" step="any" min="0">
+            <div class="input-unit">A</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="f-vmp">Vmp</label>
+          <div class="input-with-unit">
+            <input type="number" id="f-vmp" placeholder="e.g. 560" step="any" min="0">
+            <div class="input-unit">V</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="f-imp">Imp</label>
+          <div class="input-with-unit">
+            <input type="number" id="f-imp" placeholder="e.g. 9.7" step="any" min="0">
+            <div class="input-unit">A</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row-3">
+        <div class="input-group">
+          <label for="f-pmax">Pmax</label>
+          <div class="input-with-unit">
+            <input type="number" id="f-pmax" placeholder="e.g. 5432" step="any" min="0">
+            <div class="input-unit">W</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="f-irr">Irradiance</label>
+          <div class="input-with-unit">
+            <input type="number" id="f-irr" placeholder="e.g. 870" step="any" min="0">
+            <div class="input-unit">W/m²</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="f-temp">Module Temp</label>
+          <div class="input-with-unit">
+            <input type="number" id="f-temp" placeholder="e.g. 48" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; display: block;">
+          Curve Status <span class="required">*</span>
+        </label>
+        <div class="status-toggle">
+          <button class="status-pill" id="pill-pass" onclick="setCurveStatus('pass')"><i class="fas fa-check-circle"></i> Pass</button>
+          <button class="status-pill" id="pill-warn" onclick="setCurveStatus('warn')"><i class="fas fa-exclamation-circle"></i> Warning</button>
+          <button class="status-pill" id="pill-fail" onclick="setCurveStatus('fail')"><i class="fas fa-times-circle"></i> Fail</button>
+        </div>
+      </div>
+
+      <div class="input-row-2">
+        <div class="input-group">
+          <label for="f-defect">Defect Type</label>
+          <select id="f-defect" style="height: 40px; margin-bottom: 0;">
+            <option value="None">None</option>
+            <option value="Shading">Shading</option>
+            <option value="Soiling">Soiling</option>
+            <option value="Module mismatch">Module mismatch</option>
+            <option value="Open circuit">Open circuit</option>
+            <option value="Short circuit">Short circuit</option>
+            <option value="High resistance">High resistance</option>
+            <option value="Degraded module">Degraded module</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="f-notes">Notes</label>
+          <input type="text" id="f-notes" placeholder="Optional field observations..." style="height: 40px; margin-bottom: 0;">
+        </div>
+      </div>
+
+      <div class="photo-placeholder">
+        <i class="fas fa-camera" style="margin-right: 6px; opacity: 0.5;"></i>
+        Photo / file attachment: <em>planned for future release</em>
+      </div>
+
+      <div id="form-error" style="color: var(--error-color); font-weight: 600; font-size: 0.88rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button class="button-secondary" id="clear-form-btn"><i class="fas fa-eraser"></i> Clear Form</button>
+        <button id="add-record-btn"><i class="fas fa-plus"></i> Add Record</button>
+      </div>
+    </div>
+
+    <!-- Summary Dashboard -->
+    <div class="summary-stats">
+      <div class="stat-card stat-total">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total Strings</div>
+      </div>
+      <div class="stat-card stat-pass">
+        <div class="stat-value" id="stat-pass">0</div>
+        <div class="stat-label">Pass</div>
+      </div>
+      <div class="stat-card stat-warn">
+        <div class="stat-value" id="stat-warn">0</div>
+        <div class="stat-label">Warning</div>
+      </div>
+      <div class="stat-card stat-fail">
+        <div class="stat-value" id="stat-fail">0</div>
+        <div class="stat-label">Fail</div>
+      </div>
+    </div>
+
+    <!-- Records Table -->
+    <div class="records-table-wrapper">
+      <table class="records-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Inverter</th>
+            <th>MPPT</th>
+            <th>String</th>
+            <th>Voc (V)</th>
+            <th>Isc (A)</th>
+            <th>Vmp (V)</th>
+            <th>Imp (A)</th>
+            <th>Pmax (W)</th>
+            <th>Irr. (W/m²)</th>
+            <th>Temp (°C)</th>
+            <th>Status</th>
+            <th>Defect</th>
+            <th>Notes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="records-tbody">
+          <tr id="empty-row">
+            <td colspan="15">
+              <div class="empty-state">
+                <i class="fas fa-chart-line"></i>
+                No records yet. Use the form above to add a string measurement.
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button id="export-csv-btn" style="margin-top: 0; opacity: 0.5; cursor: not-allowed;" disabled>
+      <i class="fas fa-file-csv"></i> Export CSV
+    </button>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px;">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions & Notes</div>
+      <ul class="assumptions-list">
+        <li>All measurements are recorded as measured in the field. No automatic correction to STC (1000 W/m², 25°C) is applied.</li>
+        <li>Irradiance and module temperature are recorded for reference. STC correction requires additional calculation if needed.</li>
+        <li>Curve status classification (Pass / Warning / Fail) is entered by the engineer based on tracer output and visual inspection.</li>
+        <li>Defect types are descriptive categories. Definitive defect diagnosis requires expert review and may require additional testing.</li>
+        <li>Photo attachment support is planned for a future release.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    window.curveStatus = '';
+    window.setCurveStatus = function(status) {
+      window.curveStatus = status;
+      ['pass','warn','fail'].forEach(s => {
+        const pill = document.getElementById(`pill-${s}`);
+        pill.className = 'status-pill';
+        if (s === status) pill.classList.add(`active-${s}`);
+      });
+    };
+  </script>
+  <script src="js/iv-curve-log.js"></script>
+</body>
+</html>

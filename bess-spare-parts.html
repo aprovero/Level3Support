@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BESS Spare Parts Reference — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 1200px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .filters-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+      background: #ffffff;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+    }
+    @media (max-width: 768px) {
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .parts-grid-container {
+      margin-top: 20px;
+    }
+    .parts-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+    }
+    .parts-table th, .parts-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .parts-table th {
+      background: var(--background-dark);
+      font-weight: 700;
+      color: var(--text-color);
+      font-family: 'Outfit';
+    }
+    .parts-table tr:hover {
+      background: #f8fafc;
+    }
+    
+    /* Responsive Mobile Cards for parts */
+    .parts-cards-container {
+      display: none;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .part-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 16px;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    .part-card-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+    .part-card-detail {
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+    .part-card-detail strong {
+      color: var(--text-color);
+    }
+    .part-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 12px;
+      border-top: 1px dashed var(--border-color);
+      padding-top: 12px;
+    }
+    
+    @media (max-width: 900px) {
+      .parts-table-wrapper {
+        display: none;
+      }
+      .parts-cards-container {
+        display: grid;
+      }
+    }
+    
+    .criticality-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .crit-critical { background: #fee2e2; color: #b91c1c; }
+    .crit-high { background: #ffedd5; color: #c2410c; }
+    .crit-medium { background: #fef9c3; color: #a16207; }
+    .crit-low { background: #f0fdf4; color: #166534; }
+    
+    /* Modal overlays */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 16px;
+    }
+    .modal-content {
+      background: #ffffff;
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      width: 100%;
+      max-width: 650px;
+      box-shadow: var(--shadow-lg);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .modal-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .hidden {
+      display: none !important;
+    }
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .file-input-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-color);
+      cursor: pointer;
+    }
+    .file-input-raw {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">🔋 BESS FIELD TOOL</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Local Parts database Disclaimer</div>
+        Compatibility list represents site spare parts planning. Never hot-swap, substitute, or utilize alternative components without written engineering clearance from the equipment manufacturer (BMS/PCS supplier).
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 24px;">
+      <div>
+        <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">BESS Spare Parts Cross-Reference</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0;">
+          Search compatible parts, review stock levels, filter criticality levels, and import/export CSV parts directories.
+        </p>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button id="add-part-btn" style="margin: 0; padding: 8px 16px; font-size: 0.85rem; min-height: auto;"><i class="fas fa-plus"></i> Add Spare Part</button>
+        
+        <div class="file-input-wrapper">
+          <button class="file-input-btn"><i class="fas fa-file-import"></i> Import CSV</button>
+          <input type="file" id="csv-import-file" class="file-input-raw" accept=".csv">
+        </div>
+        
+        <button id="csv-export-btn" class="button-secondary" style="margin: 0; padding: 8px 16px; font-size: 0.85rem; min-height: auto;"><i class="fas fa-file-csv"></i> Export CSV</button>
+      </div>
+    </div>
+
+    <!-- Filters Panel -->
+    <div class="filters-grid">
+      <div class="input-group" style="margin-bottom: 0; position: relative;">
+        <label for="search-parts" style="font-size: 0.8rem; font-weight: 700; color: #475569;">Search Parts</label>
+        <input type="text" id="search-parts" placeholder="Search part #, description, manufacturer, model..." style="height: 38px;">
+      </div>
+      <div class="input-group" style="margin-bottom: 0;">
+        <label for="filter-type" style="font-size: 0.8rem; font-weight: 700; color: #475569;">Equipment Type</label>
+        <select id="filter-type" style="height: 38px; padding: 4px 8px; margin: 0;">
+          <option value="ALL">All Types</option>
+          <option value="Battery Module">Battery Module</option>
+          <option value="BMS Controller">BMS Controller</option>
+          <option value="HVAC">HVAC / Cooling</option>
+          <option value="Fire Suppression">Fire Suppression</option>
+          <option value="PCS">PCS / Inverter</option>
+          <option value="Switchgear">Switchgear / Breaker</option>
+          <option value="Fuses">Fuses</option>
+          <option value="Cable/Connector">Cable / Connector</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="input-group" style="margin-bottom: 0;">
+        <label for="filter-criticality" style="font-size: 0.8rem; font-weight: 700; color: #475569;">Criticality</label>
+        <select id="filter-criticality" style="height: 38px; padding: 4px 8px; margin: 0;">
+          <option value="ALL">All Criticalities</option>
+          <option value="Critical">Critical</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Empty State for Search -->
+    <div id="parts-empty" style="display: none; text-align: center; padding: 40px 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <i class="fas fa-cubes" style="font-size: 2.5rem; color: #94a3b8; margin-bottom: 12px;"></i>
+      <h3 style="margin: 0 0 6px 0; font-family: 'Outfit';">No matching parts found</h3>
+      <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Try adjusting your filters or search keywords.</p>
+    </div>
+
+    <!-- Parts Grid / Responsive Container -->
+    <div class="parts-grid-container" id="parts-display-container">
+      
+      <!-- Desktop Table wrapper -->
+      <div class="parts-table-wrapper">
+        <table class="parts-table" id="desktop-parts-table">
+          <thead>
+            <tr>
+              <th>Part Number</th>
+              <th>Description</th>
+              <th>Type</th>
+              <th>Manufacturer</th>
+              <th>Compatible Model</th>
+              <th>Stock (Min)</th>
+              <th>Criticality</th>
+              <th style="width: 110px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="desktop-parts-tbody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Cards wrapper -->
+      <div class="parts-cards-container" id="mobile-parts-cards">
+        <!-- Dynamic cards -->
+      </div>
+    </div>
+
+    <!-- Assumptions / Information box -->
+    <div class="assumptions-box" style="margin-top: 24px;">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Spare Parts Planning Assumptions</div>
+      <ul class="assumptions-list">
+        <li><strong>Critical parts</strong> (e.g. BMS Master Controllers, Main fuses) represent high-priority stock items requiring zero lead-time tolerance.</li>
+        <li>Database uses <code>localStorage</code>, allowing persistent edits and custom parts lists locally on this device.</li>
+        <li>CSV imports will append new records to your local list, merging them securely based on Part Number.</li>
+      </ul>
+    </div>
+
+    <!-- Add/Edit Part Dialog Modal -->
+    <div id="part-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <h3 id="modal-title" style="font-family:'Outfit'; font-size: 1.25rem; font-weight:700; margin-top:0; margin-bottom:20px; color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+          <i class="fas fa-cube" style="color:var(--primary-color);"></i> Add Spare Part
+        </h3>
+        
+        <input type="hidden" id="form-edit-index">
+
+        <div class="modal-form-grid">
+          <div class="input-group">
+            <label for="form-part-num">Part Number <span class="required">*</span></label>
+            <input type="text" id="form-part-num" placeholder="e.g. BMS-M-CTRL-V2" style="height: 38px;">
+          </div>
+          <div class="input-group">
+            <label for="form-desc">Description <span class="required">*</span></label>
+            <input type="text" id="form-desc" placeholder="e.g. BMS Master Controller Card" style="height: 38px;">
+          </div>
+        </div>
+
+        <div class="modal-form-grid">
+          <div class="input-group">
+            <label for="form-type">Equipment Type <span class="required">*</span></label>
+            <select id="form-type" style="height: 38px; padding: 4px 8px; margin: 0;">
+              <option value="Battery Module">Battery Module</option>
+              <option value="BMS Controller">BMS Controller</option>
+              <option value="HVAC">HVAC / Cooling</option>
+              <option value="Fire Suppression">Fire Suppression</option>
+              <option value="PCS">PCS / Inverter</option>
+              <option value="Switchgear">Switchgear / Breaker</option>
+              <option value="Fuses">Fuses</option>
+              <option value="Cable/Connector">Cable / Connector</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="form-manufacturer">Manufacturer <span class="required">*</span></label>
+            <input type="text" id="form-manufacturer" placeholder="e.g. CATL" style="height: 38px;">
+          </div>
+        </div>
+
+        <div class="modal-form-grid">
+          <div class="input-group">
+            <label for="form-compat-model">Compatible Model <span class="required">*</span></label>
+            <input type="text" id="form-compat-model" placeholder="e.g. EnerOne 372kWh" style="height: 38px;">
+          </div>
+          <div class="input-group">
+            <label for="form-alt-part">Alternative Part Number</label>
+            <input type="text" id="form-alt-part" placeholder="e.g. Alt BMS-V2.1" style="height: 38px;">
+          </div>
+        </div>
+
+        <div class="modal-form-grid">
+          <div class="input-group">
+            <label for="form-criticality">Criticality <span class="required">*</span></label>
+            <select id="form-criticality" style="height: 38px; padding: 4px 8px; margin: 0;">
+              <option value="Critical">Critical</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="form-min-stock">Recommended Min Stock <span class="required">*</span></label>
+            <input type="number" id="form-min-stock" placeholder="e.g. 2" min="0" style="height: 38px;">
+          </div>
+        </div>
+
+        <div class="modal-form-grid">
+          <div class="input-group">
+            <label for="form-supplier">Supplier</label>
+            <input type="text" id="form-supplier" placeholder="e.g. PowerParts Co." style="height: 38px;">
+          </div>
+          <div class="input-group">
+            <label for="form-lead-time">Lead Time (Weeks)</label>
+            <input type="number" id="form-lead-time" placeholder="e.g. 4" min="0" style="height: 38px;">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="form-notes">Technical / Compatibility Notes</label>
+          <textarea id="form-notes" placeholder="e.g. Must flash firmware version 3.1.2 before installation..." style="height: 60px;"></textarea>
+        </div>
+
+        <div id="modal-validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; margin-bottom: 10px; display: none;"></div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+          <button id="modal-cancel-btn" class="button-secondary" style="margin:0; padding:8px 16px; font-size:0.85rem; min-height:auto;">Cancel</button>
+          <button id="modal-save-btn" style="margin:0; padding:8px 16px; font-size:0.85rem; min-height:auto;">Save Part</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- PapaParse CSV Library -->
+  <script src="js/papaparse.min.js"></script>
+  <script src="js/bess-spare-parts.js"></script>
+</body>
+</html>

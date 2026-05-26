@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DC String Voltage Sanity Check — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .input-group { margin-bottom: 14px; }
+    .input-with-unit { display: flex; align-items: center; }
+    .input-with-unit input { border-top-right-radius: 0; border-bottom-right-radius: 0; margin-bottom: 0; height: 42px; }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+
+    /* Measurement type toggle */
+    .type-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .type-pill {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 2px solid var(--border-light);
+      background: #fff;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+      min-height: unset;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .type-pill:hover { border-color: var(--primary-color); color: var(--primary-color); }
+    .type-pill.active { border-color: var(--primary-color); background: var(--primary-color); color: #fff; }
+
+    /* Result rows */
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.92rem;
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-value { font-weight: 700; font-size: 1rem; }
+
+    /* Status badges */
+    .status-badge-inline {
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+    }
+    .status-pass { background: var(--success-light); color: var(--success-text); }
+    .status-warn { background: #fef3c7; color: #92400e; }
+    .status-fail { background: var(--error-light); color: var(--error-text); }
+
+    /* Hints Panel */
+    .hints-panel {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: var(--border-radius-md);
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+    .hints-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      color: #92400e;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hint-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 7px;
+      font-size: 0.88rem;
+      color: #78350f;
+    }
+    .hint-item i { margin-top: 2px; flex-shrink: 0; }
+
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 600px) {
+      .input-row, .btn-row { grid-template-columns: 1fr; }
+      .type-toggle { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">☀ PV FIELD TOOLS</div>
+    </div>
+
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 20px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This tool assists field engineers but does not replace approved project documents or manufacturer datasheets. Always verify with calibrated instruments. DC voltages are hazardous — follow site LOTO and PPE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 6px 0; font-size: 1.7rem;">DC String Voltage Sanity Check</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px;">
+      Verify measured string voltage against expected temperature-corrected Voc or Vmp. Identifies possible faults and module count mismatches.
+    </p>
+
+    <!-- Module Parameters -->
+    <div class="form-section" style="padding: 16px 20px; background: #fff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); margin-bottom: 16px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit';">Module Parameters (STC)</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="mod-voc">Module Voc at STC <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="mod-voc" placeholder="e.g. 46.5" step="any" min="0">
+            <div class="input-unit">V</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="mod-vmp">Module Vmp at STC <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="mod-vmp" placeholder="e.g. 38.2" step="any" min="0">
+            <div class="input-unit">V</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="tc-voc">Voc Temp Coefficient <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="tc-voc" placeholder="e.g. -0.30" step="any">
+            <div class="input-unit">%/°C</div>
+          </div>
+          <div class="field-note">Negative for most silicon modules (e.g. −0.30)</div>
+        </div>
+        <div class="input-group">
+          <label for="tc-vmp">Vmp Temp Coefficient <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="tc-vmp" placeholder="e.g. -0.45" step="any">
+            <div class="input-unit">%/°C</div>
+          </div>
+          <div class="field-note">Enter as %/°C — tool converts to decimal automatically.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Field Conditions -->
+    <div class="form-section" style="padding: 16px 20px; background: #fff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); margin-bottom: 16px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit';">Field Conditions</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="num-modules">Modules in Series <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="num-modules" placeholder="e.g. 20" min="1" step="1">
+            <div class="input-unit">modules</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="mod-temp">Module Temperature <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="mod-temp" placeholder="e.g. 50" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+          <div class="field-note">Use back-of-module IR temperature or estimate from ambient + 25°C.</div>
+        </div>
+      </div>
+
+      <label style="font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; display: block;">
+        Measurement Type <span class="required">*</span>
+      </label>
+      <div class="type-toggle">
+        <button class="type-pill active" id="pill-voc" onclick="setType('voc')">
+          <i class="fas fa-plug"></i> Voc (Open Circuit)
+        </button>
+        <button class="type-pill" id="pill-vmp" onclick="setType('vmp')">
+          <i class="fas fa-solar-panel"></i> Vmp (Peak Power)
+        </button>
+      </div>
+
+      <div class="input-group" style="margin-bottom: 0;">
+        <label for="measured-v">Measured String Voltage <span class="required">*</span></label>
+        <div class="input-with-unit">
+          <input type="number" id="measured-v" placeholder="e.g. 860" step="any">
+          <div class="input-unit">V</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.88rem; margin-bottom: 12px; display: none;"></div>
+
+    <div class="btn-row">
+      <button class="button-secondary" id="reset-btn"><i class="fas fa-undo"></i> Reset</button>
+      <button id="check-btn"><i class="fas fa-search"></i> Check Voltage</button>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display:none; margin-top:20px; border:1px solid var(--border-color); border-radius:var(--border-radius-md); overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 18px; background:var(--background-dark); border-bottom:1px solid var(--border-color);">
+        <span style="font-family:'Outfit'; font-weight:600;">Voltage Check Result</span>
+        <span id="status-badge" class="status-badge-inline status-pass">PASS</span>
+      </div>
+      <div style="padding: 18px;">
+        <div class="result-row">
+          <span>Expected Voltage at Temperature:</span>
+          <span class="result-value" id="res-expected">— V</span>
+        </div>
+        <div class="result-row">
+          <span>Acceptable Range (±2.5%):</span>
+          <span class="result-value" id="res-range">— V to — V</span>
+        </div>
+        <div class="result-row">
+          <span>Measured Voltage:</span>
+          <span class="result-value" id="res-measured">— V</span>
+        </div>
+        <div class="result-row">
+          <span>Difference:</span>
+          <span class="result-value" id="res-diff-v">— V</span>
+        </div>
+        <div class="result-row">
+          <span>Difference %:</span>
+          <span class="result-value" id="res-diff-pct">—%</span>
+        </div>
+
+        <!-- Hints -->
+        <div id="hints-panel" class="hints-panel" style="display: none;">
+          <div class="hints-title"><i class="fas fa-lightbulb"></i> Possible Issue Hints</div>
+          <div id="hints-list"></div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+          <button id="export-json-btn" class="button-secondary" style="margin-top:0; min-height:unset; padding:8px 16px; font-size:0.88rem; flex:1;">
+            <i class="fas fa-file-export"></i> Export JSON
+          </button>
+          <button id="copy-btn" class="button-secondary" style="margin-top:0; min-height:unset; padding:8px 16px; font-size:0.88rem; flex:1;">
+            <i class="fas fa-copy"></i> Copy Results
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px;">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions</div>
+      <ul class="assumptions-list">
+        <li><strong>Expected Voltage</strong> = V<sub>base</sub> × N<sub>series</sub> × [1 + (TC%/°C ÷ 100) × (T<sub>module</sub> − 25)]</li>
+        <li>Temperature coefficient entered as %/°C is automatically converted to decimal per °C.</li>
+        <li>STC reference temperature is 25°C.</li>
+        <li>Acceptable range is ±2.5% of expected. Status WARN if measured within ±10%; FAIL outside ±10%.</li>
+        <li>Issue hints are informational only. Always verify with additional measurements and approved procedures.</li>
+        <li>Vmp under field conditions may differ significantly from Vmp at STC due to loading and partial shading effects.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    window.selectedType = 'voc';
+    window.setType = function(type) {
+      window.selectedType = type;
+      document.getElementById('pill-voc').classList.toggle('active', type === 'voc');
+      document.getElementById('pill-vmp').classList.toggle('active', type === 'vmp');
+    };
+  </script>
+  <script src="js/dc-voltage-sanity.js"></script>
+</body>
+</html>

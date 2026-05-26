@@ -256,6 +256,96 @@ function loadFallbackData() {
             "url": "tool-placeholder.html?tool=daily-progress",
             "tags": ["Report", "Commissioning", "SCADA"],
             "notes": "Planned for Agent 6"
+        },
+        {
+            "id": 18,
+            "name": "String Current Imbalance Calculator",
+            "category": "PV Field Tools",
+            "status": "Active",
+            "description": "Compare solar string currents against the average and flag abnormal strings above a configurable deviation threshold.",
+            "url": "string-imbalance.html",
+            "tags": ["PV", "Testing", "Commissioning", "Field"],
+            "notes": "Agent 3 — Mobile-first, CSV export."
+        },
+        {
+            "id": 19,
+            "name": "DC Voltage Sanity Check Tool",
+            "category": "PV Field Tools",
+            "status": "Active",
+            "description": "Check if measured string voltage matches expected module count and temperature-corrected Voc or Vmp values.",
+            "url": "dc-voltage-sanity.html",
+            "tags": ["PV", "Testing", "Commissioning", "Field"],
+            "notes": "Agent 3 — Includes issue hint diagnostics."
+        },
+        {
+            "id": 20,
+            "name": "Inverter Start-Up Checklist",
+            "category": "PV Field Tools",
+            "status": "Active",
+            "description": "Structured digital commissioning checklist covering visual inspection, DC/AC checks, grounding, comms, firmware, and first energization.",
+            "url": "inverter-startup.html",
+            "tags": ["PV", "Commissioning", "Checklist", "Field"],
+            "notes": "Agent 3 — Print and JSON export."
+        },
+        {
+            "id": 21,
+            "name": "IV Curve Test Result Log",
+            "category": "PV Field Tools",
+            "status": "Active",
+            "description": "Record and categorize IV curve test results consistently across field teams. Supports defect classification and CSV export.",
+            "url": "iv-curve-log.html",
+            "tags": ["PV", "Testing", "Report", "Field"],
+            "notes": "Agent 3 — Multi-record log with status summary."
+        },
+        {
+            "id": 22,
+            "name": "Firmware Version Tracker",
+            "category": "PV Field Tools",
+            "status": "Active",
+            "description": "Track firmware versions across inverters, dataloggers, routers, and other field equipment. Flags devices requiring updates.",
+            "url": "firmware-tracker.html",
+            "tags": ["PV", "BESS", "Commissioning", "Report"],
+            "notes": "Agent 3 — Auto-derives update required status."
+        },
+        {
+            "id": 18,
+            "name": "BESS Capacity / Energy Test Form",
+            "category": "BESS Field Tools",
+            "status": "Active",
+            "description": "Record utility-scale BESS charge and discharge tests, and calculate duration, delivered energy, and round-trip efficiency.",
+            "url": "bess-capacity-test.html",
+            "tags": ["BESS", "Testing", "Commissioning", "Report"],
+            "notes": "Fully functional energy test logger."
+        },
+        {
+            "id": 19,
+            "name": "Battery Rack / Container Inspection Checklist",
+            "category": "BESS Field Tools",
+            "status": "Active",
+            "description": "Structured digital inspection checklist for container seals, HVAC, fire suppression, grounding, and cell temperature spread.",
+            "url": "bess-rack-inspection.html",
+            "tags": ["BESS", "Commissioning", "Testing"],
+            "notes": "Mobile-ready inspection tool with failed highlights."
+        },
+        {
+            "id": 20,
+            "name": "BESS Pre-Energization Checklist",
+            "category": "BESS Field Tools",
+            "status": "Active",
+            "description": "Comprehensive pre-energization safety checklist tracking isolation, grounding, communications, and safety signage.",
+            "url": "bess-pre-energization.html",
+            "tags": ["BESS", "Commissioning", "Safety"],
+            "notes": "Ensures all prerequisite tests are complete before powering up."
+        },
+        {
+            "id": 21,
+            "name": "Spare Parts Cross-Reference Tool",
+            "category": "BESS Field Tools",
+            "status": "Active",
+            "description": "Searchable local registry of BESS spare parts compatibility, criticality, stock requirements, and lead times.",
+            "url": "bess-spare-parts.html",
+            "tags": ["BESS", "Reference", "Database"],
+            "notes": "Supports adding/editing entries and CSV import/export."
         }
     ];
     

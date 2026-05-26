@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inverter Start-Up Checklist — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 860px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+
+    /* Progress Bar */
+    .progress-wrapper {
+      background: var(--background-dark);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .progress-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-color);
+    }
+    .progress-pct {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--primary-color);
+    }
+    .progress-bar-bg {
+      background: var(--border-color);
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary-color), #60a5fa);
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    .stat-chips {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chip-pass   { background: var(--success-light); color: var(--success-text); }
+    .chip-fail   { background: var(--error-light);   color: var(--error-text); }
+    .chip-na     { background: var(--background-dark); color: var(--text-secondary); border: 1px solid var(--border-color); }
+    .chip-total  { background: #dbeafe; color: #1e40af; }
+
+    /* Checklist Sections */
+    .checklist-section {
+      margin-bottom: 18px;
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--background-dark);
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      user-select: none;
+    }
+    .section-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-color);
+      flex: 1;
+    }
+    .section-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .section-chevron {
+      color: var(--text-secondary);
+      transition: transform 0.2s;
+    }
+    .section-collapsed .section-chevron { transform: rotate(-90deg); }
+    .section-body { padding: 4px 0; }
+
+    /* Checklist Item Rows */
+    .checklist-item {
+      padding: 10px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.15s;
+    }
+    .checklist-item:last-child { border-bottom: none; }
+    .item-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .item-text {
+      flex: 1;
+      font-size: 0.9rem;
+      color: var(--text-color);
+      line-height: 1.4;
+      padding-top: 4px;
+    }
+    .item-toggles {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .toggle-btn {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1.5px solid var(--border-light);
+      background: #fff;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+      min-height: unset;
+      width: auto;
+      margin-top: 0;
+    }
+    .toggle-btn:hover { border-color: var(--primary-color); color: var(--primary-color); }
+    .toggle-btn.active-pass { background: var(--success-light); color: var(--success-text); border-color: var(--success-color); }
+    .toggle-btn.active-fail { background: var(--error-light);   color: var(--error-text);   border-color: var(--error-color); }
+    .toggle-btn.active-na   { background: var(--background-dark); color: var(--text-secondary); border-color: var(--border-light); }
+
+    /* Row highlight by status */
+    .checklist-item.row-pass { background: #f0fdf4; }
+    .checklist-item.row-fail { background: #fff5f5; }
+    .checklist-item.row-na   { background: #f8fafc; }
+
+    /* Notes textarea */
+    .item-notes {
+      display: none;
+      margin-top: 8px;
+      width: 100%;
+      font-size: 0.85rem;
+      padding: 7px 10px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--border-radius-sm);
+      resize: vertical;
+      min-height: 50px;
+      color: var(--text-color);
+    }
+    .item-notes.visible { display: block; }
+
+    /* Header Info Grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 20px;
+      margin-bottom: 20px;
+    }
+    .info-group label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+      display: block;
+    }
+    .info-group input, .info-group select {
+      margin-bottom: 0;
+      height: 38px;
+      font-size: 0.9rem;
+    }
+
+    /* Summary Panels */
+    .summary-section {
+      margin-top: 20px;
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    .summary-header {
+      padding: 10px 16px;
+      background: var(--background-dark);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .summary-body { padding: 12px 16px; font-size: 0.88rem; }
+    .summary-item {
+      padding: 6px 0;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .summary-item:last-child { border-bottom: none; }
+    .summary-item-label { font-weight: 600; color: var(--text-color); }
+    .summary-item-notes { color: var(--text-secondary); font-style: italic; font-size: 0.83rem; }
+    .summary-empty { color: var(--text-secondary); font-style: italic; }
+
+    /* Action Buttons Row */
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    /* Print */
+    @media print {
+      .back-link, .no-print, .item-toggles, .btn-row, .warning-box .no-print { display: none !important; }
+      .calc-container { box-shadow: none; max-width: 100%; margin: 0; padding: 10px; }
+      .item-notes { display: block !important; border: none; padding: 2px 0; background: transparent; resize: none; }
+      .checklist-item.row-pass { background: #f0fdf4 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .checklist-item.row-fail { background: #fff5f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    @media (max-width: 600px) {
+      .info-grid { grid-template-columns: 1fr; }
+      .item-row { flex-direction: column; }
+      .item-toggles { margin-top: 4px; }
+      .btn-row { grid-template-columns: 1fr; }
+      .stat-chips { gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">☀ PV FIELD TOOLS</div>
+    </div>
+
+    <!-- Critical Safety Disclaimer -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 20px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Critical Safety Disclaimer</div>
+        This checklist is an aid to field engineers. It does <strong>NOT</strong> replace the approved manufacturer commissioning procedure or site-specific commissioning plan. Verify all steps against the project documentation before energizing any equipment. All work must comply with local electrical codes and site HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 6px 0; font-size: 1.7rem;">Inverter Start-Up Checklist</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px;">
+      Structured commissioning checklist for solar inverters. Mark each item Pass, Fail, or N/A and add notes as required.
+    </p>
+
+    <!-- Header Info -->
+    <div class="form-section" style="padding: 16px 20px; background: #fff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); margin-bottom: 20px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit';">Session Information</h3>
+      <div class="info-grid">
+        <div class="info-group">
+          <label for="site-name">Site Name</label>
+          <input type="text" id="site-name" placeholder="e.g. Solar Farm Alpha">
+        </div>
+        <div class="info-group">
+          <label for="inv-id">Inverter ID / Tag</label>
+          <input type="text" id="inv-id" placeholder="e.g. INV-03">
+        </div>
+        <div class="info-group">
+          <label for="inv-model">Inverter Make / Model</label>
+          <input type="text" id="inv-model" placeholder="e.g. SMA STP 110-10">
+        </div>
+        <div class="info-group">
+          <label for="engineer">Commissioning Engineer</label>
+          <input type="text" id="engineer" placeholder="Full name">
+        </div>
+        <div class="info-group">
+          <label for="check-date">Date</label>
+          <input type="date" id="check-date">
+        </div>
+        <div class="info-group">
+          <label for="weather">Weather Conditions</label>
+          <input type="text" id="weather" placeholder="e.g. Clear, 28°C, 850 W/m²">
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-wrapper">
+      <div class="progress-header">
+        <span class="progress-title"><i class="fas fa-tasks"></i> Completion Progress</span>
+        <span class="progress-pct" id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <div class="stat-chips">
+        <span class="stat-chip chip-total"><i class="fas fa-list"></i> <span id="chip-total">0</span> Total</span>
+        <span class="stat-chip chip-pass"><i class="fas fa-check"></i> <span id="chip-pass">0</span> Pass</span>
+        <span class="stat-chip chip-fail"><i class="fas fa-times"></i> <span id="chip-fail">0</span> Fail</span>
+        <span class="stat-chip chip-na"><i class="fas fa-minus"></i> <span id="chip-na">0</span> N/A</span>
+      </div>
+    </div>
+
+    <!-- Checklist Sections rendered by JS -->
+    <div id="checklist-container"></div>
+
+    <!-- Failed Items Summary -->
+    <div class="summary-section no-print" id="failed-summary">
+      <div class="summary-header" onclick="toggleSummary('failed-body')">
+        <span><i class="fas fa-times-circle" style="color:var(--error-color);"></i> Failed Items</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="summary-body" id="failed-body">
+        <p class="summary-empty">No failed items.</p>
+      </div>
+    </div>
+
+    <!-- N/A Items Summary -->
+    <div class="summary-section no-print" id="na-summary" style="margin-top: 10px;">
+      <div class="summary-header" onclick="toggleSummary('na-body')">
+        <span><i class="fas fa-minus-circle" style="color:var(--text-secondary);"></i> Not Applicable Items</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="summary-body" id="na-body">
+        <p class="summary-empty">No N/A items.</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="btn-row no-print">
+      <button class="button-secondary" onclick="window.print()"><i class="fas fa-print"></i> Print Summary</button>
+      <button onclick="exportJSON()"><i class="fas fa-file-export"></i> Export JSON</button>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px;">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions & Notes</div>
+      <ul class="assumptions-list">
+        <li>This checklist covers common commissioning steps but may not include every requirement for your specific inverter model.</li>
+        <li>Always use the approved manufacturer commissioning procedure as the primary reference document.</li>
+        <li>Items marked N/A should be documented with justification in the notes field.</li>
+        <li>Completion % includes Pass + Fail + N/A items as "addressed". A 100% completion with all Pass is the target.</li>
+        <li>All safety-critical steps (grounding, interlocks, first energization) must be witnessed by a qualified supervisor.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/inverter-startup.js"></script>
+</body>
+</html>

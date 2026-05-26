@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BESS Availability Calculator — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .status-warning { background: #fef3c7; color: #b45309; }
+    .status-critical { background: #fee2e2; color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">🔋 BESS FIELD TOOL</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">BESS Availability Calculator</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Evaluate availability percentages, equivalent outage hours, and contract-adjusted availability parameters for utility-scale battery energy storage systems (BESS).
+    </p>
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Reporting Period & Hours</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="period-start">Reporting Period Start</label>
+          <input type="date" id="period-start" style="height: 42px;">
+        </div>
+
+        <div class="input-group">
+          <label for="period-end">Reporting Period End</label>
+          <input type="date" id="period-end" style="height: 42px;">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="total-period-hours">Total Period Hours <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="total-period-hours" placeholder="e.g. 744" step="any">
+            <div class="input-unit">Hours</div>
+          </div>
+          <div class="field-note">Auto-calculated from dates, or edit manually.</div>
+        </div>
+
+        <div class="input-group">
+          <label for="period-label">Period Label</label>
+          <input type="text" id="period-label" placeholder="e.g. Monthly Performance Run" value="May 2026 Run">
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Outage & Derating Logs</h3>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="forced-outage">Forced Outage Hours (FOH)</label>
+          <div class="input-with-unit">
+            <input type="number" id="forced-outage" value="4.5" step="any">
+            <div class="input-unit">Hours</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="planned-outage">Planned Outage Hours (POH)</label>
+          <div class="input-with-unit">
+            <input type="number" id="planned-outage" value="8.0" step="any">
+            <div class="input-unit">Hours</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="excluded-outage">Excluded Outage Hours (EOH)</label>
+          <div class="input-with-unit">
+            <input type="number" id="excluded-outage" value="12.0" step="any">
+            <div class="input-unit">Hours</div>
+          </div>
+          <div class="field-note">Outages excluded under the PPA (e.g. grid down).</div>
+        </div>
+
+        <div class="input-group"></div>
+      </div>
+
+      <div class="input-row" style="border-top: 1px dashed var(--border-color); padding-top: 16px; margin-top: 8px;">
+        <div class="input-group">
+          <label for="derated-hours">Equivalent Derated Hours (EDH)</label>
+          <div class="input-with-unit">
+            <input type="number" id="derated-hours" value="24.0" step="any">
+            <div class="input-unit">Hours</div>
+          </div>
+          <div class="field-note">Hours system operated in a derated state.</div>
+        </div>
+
+        <div class="input-group">
+          <label for="derated-capacity-pct">Derated System Capacity</label>
+          <div class="input-with-unit">
+            <input type="number" id="derated-capacity-pct" value="50.0" min="0" max="100" step="any">
+            <div class="input-unit">% capacity</div>
+          </div>
+          <div class="field-note">Available capacity during derate (e.g. 50%).</div>
+        </div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Calculate Availability</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none;">
+      <div class="result-header">
+        <span>BESS Performance Sizing</span>
+        <span id="avail-status-badge" class="status-badge-inline status-normal">Normal</span>
+      </div>
+      
+      <div class="result-row">
+        <span>Reporting Period:</span>
+        <span id="res-period" style="font-weight: 600;">May 2026 Run</span>
+      </div>
+      <div class="result-row">
+        <span>Total Period Hours:</span>
+        <span id="res-total-hours" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Counted Downtime (FOH + POH):</span>
+        <span id="res-counted-downtime" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Equivalent Derated Outage Hours:</span>
+        <span id="res-equivalent-derated" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="border-top: 1px dashed #bbf7d0; margin-top: 8px; padding-top: 8px;">
+        <span style="font-size: 1.1rem; font-weight: 600;">Simple Availability (contractual):</span>
+        <span id="res-simple-avail" class="result-value">--</span>
+      </div>
+      <div class="result-row">
+        <span style="font-size: 1.1rem; font-weight: 600; color: #166534;">Exclusion-Adjusted Availability:</span>
+        <span id="res-adjusted-avail" class="result-value" style="color: #166534;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Total Equivalent Outage Hours:</span>
+        <span id="res-total-equivalent" style="font-weight: 600;">--</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Results</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions</div>
+      <ul class="assumptions-list">
+        <li>Simple Availability is computed as: <strong>(Total Hours - Counted Downtime) / Total Hours &times; 100</strong>.</li>
+        <li>Counted Downtime includes forced (FOH) and planned (POH) outages.</li>
+        <li>Exclusion-Adjusted Availability accounts for exclusions (EOH): <strong>(Total Hours - Counted Downtime) / (Total Hours - EOH) &times; 100</strong>.</li>
+        <li>Equivalent Derated Outage Hours computes derates as fractional outages: <strong>Derated Hours &times; (1 - Derated Capacity % / 100)</strong>.</li>
+        <li>Total Equivalent Outage Hours combines Outages + Derated fractional outages.</li>
+        <li>Status boundaries: <strong>Availability &ge; 98.0%</strong> is Normal, <strong>95.0% &le; Avail < 98.0%</strong> is Watch, <strong>Avail < 95.0%</strong> is Critical.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/bess-availability.js"></script>
+</body>
+</html>
