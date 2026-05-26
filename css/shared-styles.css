@@ -2071,4 +2071,14 @@ button:disabled, .submit-button:disabled {
     transform: rotate(360deg);
 }
 
+/* ==========================================================================
+   Mobile overrides for Tool Tiles to prevent clipping
+   ========================================================================== */
+@media (max-width: 768px) {
+    .tool-tile {
+        height: auto !important;
+        min-height: 185px;
+    }
+}
+
 

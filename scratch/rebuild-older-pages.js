@@ -167,10 +167,12 @@ function rebuildRej603() {
                 </div>
 
                 <!-- Input Panel -->
-                <div id="configureMode" class="card-panel">
-                    <div class="card-title"><i class="fas fa-edit"></i> Basic Settings</div>
+                <div id="configureMode">
+                    <!-- Basic Settings Section -->
+                    <div class="card-panel">
+                        <div class="card-title"><i class="fas fa-edit"></i> Basic Settings</div>
                     
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Transformer Current (Is):</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW1 (1-4)</div>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -179,7 +181,7 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Earth Fault Measurement (Io>):</label>
                         <div style="display: flex; gap: 15px; align-items: center;">
                             <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
@@ -191,7 +193,7 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">HMI:</label>
                         <div style="display: flex; gap: 15px; align-items: center;">
                             <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
@@ -203,7 +205,7 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Frequency (Fn):</label>
                         <div style="display: flex; gap: 15px; align-items: center;">
                             <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
@@ -215,7 +217,7 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Failsafe (Fs):</label>
                         <div style="display: flex; gap: 15px; align-items: center;">
                             <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
@@ -227,9 +229,13 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="card-title" style="margin-top: 2rem;"><i class="fas fa-wave-square"></i> Phase Overcurrent Protection (50/51)</div>
+                    </div>
+
+                    <!-- Phase Overcurrent Section -->
+                    <div class="card-panel">
+                        <div class="card-title"><i class="fas fa-wave-square"></i> Phase Overcurrent Protection (50/51)</div>
                     
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51 - Pickup Current (I>):</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW3 (1-5)</div>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -238,7 +244,7 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51 - Curve Type:</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW3 (6-8)</div>
                         <select id="phaseCurve51" style="width: 100%; max-width: 320px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #ffffff;">
@@ -253,7 +259,7 @@ function rebuildRej603() {
                         </select>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51 - Time Constant (t>):</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW2 (1-4)</div>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -262,7 +268,7 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 50 - Pickup Current (I>>):</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW5 (1-4)</div>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -271,7 +277,7 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 50 - Definite Time (t>>):</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW5 (5-8)</div>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -280,9 +286,13 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="card-title" style="margin-top: 2rem;"><i class="fas fa-globe"></i> Earth Fault Protection (50N/51N)</div>
+                    </div>
+
+                    <!-- Earth Fault Section -->
+                    <div class="card-panel">
+                        <div class="card-title"><i class="fas fa-globe"></i> Earth Fault Protection (50N/51N)</div>
                     
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51N - Pickup Current (Io>):</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW4 (1-5)</div>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -291,7 +301,7 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51N - Curve Type:</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW4 (6-8)</div>
                         <select id="earthCurve51N" style="width: 100%; max-width: 320px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #ffffff;">
@@ -306,7 +316,7 @@ function rebuildRej603() {
                         </select>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51N - Time Constant (to>):</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW2 (5-8)</div>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -315,7 +325,7 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 50N - Pickup Current (Io>>):</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW6 (1-4)</div>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -324,7 +334,7 @@ function rebuildRej603() {
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 50N - Definite Time (to>>):</label>
                         <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW6 (5-8)</div>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -334,6 +344,7 @@ function rebuildRej603() {
                     </div>
 
                     <button class="configurator-button" onclick="calculateDipSwitches()" style="margin-top: 1rem; width: 100%; background-color: var(--primary-color); color: #ffffff; padding: 12px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 1rem; transition: background-color 0.2s;"><i class="fas fa-calculator"></i> Calculate DIP Switch Configuration</button>
+                    </div>
                 </div>
 
                 <!-- Reverse Mode Panel -->
