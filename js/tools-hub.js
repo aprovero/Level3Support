@@ -292,8 +292,17 @@ function renderTools(tools) {
         toolsGrid.style.display = 'grid';
     }
     
+    // Sort tools so that legacy tools always go last
+    const sortedTools = [...tools].sort((a, b) => {
+        const aLegacy = (a.status || '').toLowerCase() === 'legacy';
+        const bLegacy = (b.status || '').toLowerCase() === 'legacy';
+        if (aLegacy && !bLegacy) return 1;
+        if (!aLegacy && bLegacy) return -1;
+        return 0;
+    });
+    
     // Create card for each tool
-    tools.forEach(tool => {
+    sortedTools.forEach(tool => {
         const card = createToolCard(tool);
         toolsGrid.appendChild(card);
     });

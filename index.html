@@ -231,6 +231,12 @@
             border-radius: 16px;
             padding: 1.5rem;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03);
+            
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            grid-template-rows: auto auto;
+            gap: 0 1.5rem;
+            align-items: end;
         }
 
         .filters-title {
@@ -238,10 +244,22 @@
             font-size: 1rem;
             font-weight: 600;
             color: var(--text-color);
-            margin: 1.25rem 0 0.75rem 0;
+            margin: 0 0 0.75rem 0;
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .search-container {
+            grid-column: 2;
+            grid-row: 2;
+            margin: 0 !important;
+            width: 100%;
+            max-width: 100%;
         }
 
         .filter-checkboxes {
+            grid-column: 1;
+            grid-row: 2;
             display: flex;
             flex-wrap: wrap;
             gap: 0.75rem;
@@ -460,9 +478,30 @@
                 font-size: 0.9rem;
             }
 
-            .filters-section { padding: 1rem; }
-            .filter-checkboxes { gap: 1rem; }
-            .tools-section { padding: 1.5rem 1rem; }
+            .filters-section { padding: 0; }
+            .filters-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 1rem 0;
+                padding: 1.25rem;
+            }
+            .filters-title {
+                grid-column: 1;
+                grid-row: 1;
+                margin: 0 0 0.25rem 0;
+            }
+            .filter-checkboxes {
+                grid-column: 1;
+                grid-row: 2;
+                gap: 0.5rem;
+            }
+            .search-container {
+                grid-column: 1;
+                grid-row: 3;
+                max-width: 100%;
+                margin-top: 0.5rem !important;
+            }
+            .tools-section { padding: 1.5rem 0; }
 
             .tools-grid {
                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
