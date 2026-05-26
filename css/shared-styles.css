@@ -1753,6 +1753,7 @@ button:disabled, .submit-button:disabled {
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    flex: 1;
 }
 
 .tile-header {
