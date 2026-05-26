@@ -18,6 +18,12 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Top Announcement Disclaimer Bar -->
+    <div class="top-disclaimer-bar">
+        <span class="disclaimer-badge">DISCLAIMER</span>
+        <span class="disclaimer-text">This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.</span>
+    </div>
+
     <!-- Navigation Header -->
     <nav class="navbar">
         <div class="banner-and-contact">
@@ -26,75 +32,73 @@
     </nav>
 
     <div class="main-content-wrapper">
-        <!-- Global Safety Disclaimer -->
-        <div class="global-disclaimer-banner" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
-            <i class="fas fa-exclamation-triangle"></i>
-            <div>
-                <strong>Disclaimer:</strong> This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
-            </div>
-        </div>
 
         <!-- Category Filters Section -->
-        <section class="filters-section">
+        <section class="filters-section" style="margin-top: 2rem;">
             <div class="filters-container">
-                <!-- Search Bar Component -->
-                <div class="search-container">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="search-input" class="search-input" placeholder="Search PV/BESS tools, relays, tags...">
+                <!-- Top Search Section -->
+                <div class="search-wrapper-outer">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="search-input" class="search-input" placeholder="Search PV/BESS tools, relays, tags...">
+                    </div>
                 </div>
 
-                <h3 class="filters-title">Filter by Category:</h3>
-                <div class="filter-checkboxes">
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="all" checked>
-                        <span class="checkmark"></span>
-                        All Tools
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="calculators">
-                        <span class="checkmark"></span>
-                        Calculators
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="pv-field-tools">
-                        <span class="checkmark"></span>
-                        PV Field Tools
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="bess-field-tools">
-                        <span class="checkmark"></span>
-                        BESS Field Tools
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="electrical-test-forms">
-                        <span class="checkmark"></span>
-                        Electrical Test Forms
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="scada-diagnostics">
-                        <span class="checkmark"></span>
-                        SCADA & Diagnostics
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="reports-templates">
-                        <span class="checkmark"></span>
-                        Reports & Templates
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="reference-guides">
-                        <span class="checkmark"></span>
-                        Reference Guides
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="hse">
-                        <span class="checkmark"></span>
-                        HSE
-                    </label>
-                    <label class="filter-checkbox">
-                        <input type="checkbox" value="legacy-archive">
-                        <span class="checkmark"></span>
-                        Legacy / Archive
-                    </label>
+                <!-- Bottom Filters Section -->
+                <div class="filter-section-wrapper">
+                    <h3 class="filters-title">Filter by Category:</h3>
+                    <div class="filter-checkboxes">
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="all" checked>
+                            <span class="checkmark"></span>
+                            All Tools
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="calculators">
+                            <span class="checkmark"></span>
+                            Calculators
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="pv-field-tools">
+                            <span class="checkmark"></span>
+                            PV Field Tools
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="bess-field-tools">
+                            <span class="checkmark"></span>
+                            BESS Field Tools
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="electrical-test-forms">
+                            <span class="checkmark"></span>
+                            Electrical Test Forms
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="scada-diagnostics">
+                            <span class="checkmark"></span>
+                            SCADA & Diagnostics
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="reports-templates">
+                            <span class="checkmark"></span>
+                            Reports & Templates
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="reference-guides">
+                            <span class="checkmark"></span>
+                            Reference Guides
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="hse">
+                            <span class="checkmark"></span>
+                            HSE
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" value="legacy-archive">
+                            <span class="checkmark"></span>
+                            Legacy / Archive
+                        </label>
+                    </div>
                 </div>
             </div>
         </section>
@@ -126,37 +130,20 @@
     </div>
 
     <!-- Footer -->
-    <footer class="main-footer">
-        <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-info">
-                    <p class="footer-description">
-                        Level3Support — Centralized access to technical tools, dashboards, and support services.
-                    </p>
-                </div>
-                <div class="footer-links">
-                    <h4>Quick Access</h4>
-                    <ul>
-                        <li><a href="support-request.html">Service Request Form</a></li>
-                        <li><a href="training.html">Training Catalog</a></li>
-                    </ul>
-                </div>
-                <div class="footer-contact">
-                    <h4>Support</h4>
-                    <p>Available 24/7 for technical assistance</p>
-                </div>
-            </div>
-            <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1e293b; padding-top: 1.5rem; flex-wrap: wrap; gap: 1rem; width: 100%;">
-                <p style="margin: 0; color: #64748b; font-size: 0.85rem;">&copy; 2026 LEVEL3SUPPORT &amp; COR SOLUTIONS. ALL RIGHTS RESERVED.</p>
-                <div class="powered-by-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
-                    <span style="font-style: italic; font-weight: 400; color: #64748b; font-size: 0.85rem; font-family: 'Inter', sans-serif;">Powered by</span>
-                    <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 28px; width: auto; opacity: 0.75; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.75';">
-                </div>
+    <footer class="main-footer" style="background: #0f172a; padding: 1.5rem 2rem; border-top: 1px solid #1e293b; margin-top: 4rem;">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; width: 100%;">
+            <p style="margin: 0; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span>&copy; 2026 LEVEL3SUPPORT &amp; COR SOLUTIONS. ALL RIGHTS RESERVED.</span>
+                <span style="padding: 0.15rem 0.4rem; background: #1e293b; border-radius: 4px; color: #94a3b8; font-size: 0.72rem; font-weight: 600; border: 1px solid #334155; letter-spacing: 0.5px;">v1.2.0</span>
+            </p>
+            <div class="powered-by-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-style: italic; font-weight: 400; color: #64748b; font-size: 0.85rem; font-family: 'Inter', sans-serif;">Powered by</span>
+                <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 28px; width: auto; opacity: 0.75; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.75';">
             </div>
         </div>
     </footer>
 
-    <link href="css/shared-styles.css?v=14" rel="stylesheet">
+    <link href="css/shared-styles.css?v=15" rel="stylesheet">
     <style>
         /* ── index.html page-specific overrides ── */
         /* Inherits all tokens from shared-styles.css :root */
@@ -221,6 +208,36 @@
             padding: 0 1.5rem;
         }
 
+        /* ── Top Announcement Disclaimer Ribbon ── */
+        .top-disclaimer-bar {
+            background: #fef2f2;
+            border-bottom: 1px solid #fecaca;
+            color: #991b1b;
+            font-size: 0.78rem;
+            font-weight: 500;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 1001;
+            position: relative;
+        }
+        .disclaimer-badge {
+            background: #ef4444;
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+        .disclaimer-text {
+            line-height: 1.4;
+        }
+
         /* ── Filters Card ── */
         .filters-section {
             background: transparent;
@@ -233,53 +250,76 @@
             background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.75rem;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03);
             
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            grid-template-rows: auto auto;
-            gap: 0 1.5rem;
-            align-items: end;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .search-wrapper-outer {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto !important;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1.25rem 0.75rem 3rem !important;
+            font-size: 0.95rem !important;
+            border-radius: 9999px !important;
+            height: 46px !important;
+            border: 1px solid #cbd5e1 !important;
+            background: #f8fafc !important;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        .search-input:focus {
+            background: #ffffff !important;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12) !important;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            color: #94a3b8;
+            font-size: 1.1rem !important;
+        }
+
+        .filter-section-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
 
         .filters-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: var(--text-color);
-            margin: 0 0 0.75rem 0;
-            grid-column: 1;
-            grid-row: 1;
-        }
-
-        .search-container {
-            grid-column: 2;
-            grid-row: 2;
-            margin: 0 !important;
-            width: 100%;
-            max-width: 100%;
-            align-self: end;
-        }
-
-        .search-input {
-            padding: 0.45rem 1rem 0.45rem 2.5rem !important;
-            font-size: 0.85rem !important;
-            border-radius: 9999px !important;
-            height: 38px !important;
-        }
-
-        .search-icon {
-            top: 50% !important;
-            transform: translateY(-50%) !important;
+            color: #475569;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .filter-checkboxes {
-            grid-column: 1;
-            grid-row: 2;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.75rem;
+            gap: 0.6rem;
         }
 
         /* Premium Selectable Pills */
@@ -497,26 +537,15 @@
 
             .filters-section { padding: 0; }
             .filters-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto auto;
-                gap: 1rem 0;
                 padding: 1.25rem;
+                gap: 1rem;
             }
-            .filters-title {
-                grid-column: 1;
-                grid-row: 1;
-                margin: 0 0 0.25rem 0;
+            .search-wrapper-outer {
+                padding-bottom: 1rem;
             }
-            .filter-checkboxes {
-                grid-column: 1;
-                grid-row: 2;
-                gap: 0.5rem;
-            }
-            .search-container {
-                grid-column: 1;
-                grid-row: 3;
-                max-width: 100%;
-                margin-top: 0.5rem !important;
+            .search-input {
+                height: 42px !important;
+                font-size: 0.9rem !important;
             }
             .tools-section { padding: 1.5rem 0; }
 
