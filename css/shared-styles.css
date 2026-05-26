@@ -2024,4 +2024,25 @@ button:disabled, .submit-button:disabled {
     font-size: 0.95rem;
 }
 
+/* Gear Settings Button inside tool card */
+.tool-settings-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.2rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tool-settings-btn:hover {
+    color: var(--primary-color);
+    background: #f1f5f9;
+    transform: rotate(45deg);
+}
+
 

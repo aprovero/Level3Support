@@ -337,7 +337,12 @@ function createToolCard(tool) {
         <div class="tile-content">
             <div class="tile-header">
                 <span class="status-badge status-${cleanStatus}">${statusText}</span>
-                <span class="tile-category">${tool.category}</span>
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;">
+                    <span class="tile-category">${tool.category}</span>
+                    <button class="tool-settings-btn" title="Configure Tool Settings" onclick="event.stopPropagation(); openToolSettings(${tool.id})">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
             </div>
             <div class="tile-main">
                 <div class="tile-icon-wrapper">
@@ -493,4 +498,139 @@ if ('serviceWorker' in navigator) {
   }).catch(err => {
     console.warn('[PWA] SW registration failed:', err);
   });
+}
+
+/**
+ * Dynamic Tool Settings Modal configuration
+ */
+let selectedToolIdForSettings = null;
+
+function openToolSettings(toolId) {
+    selectedToolIdForSettings = toolId;
+    const tool = allTools.find(t => t.id === toolId);
+    if (!tool) return;
+    
+    // Check if modal container already exists in DOM, if not create it
+    let modal = document.getElementById('tool-settings-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'tool-settings-modal';
+        modal.className = 'modal-overlay hidden';
+        document.body.appendChild(modal);
+    }
+    
+    // Categories options
+    const categories = [
+        "Calculators",
+        "PV Field Tools",
+        "BESS Field Tools",
+        "Electrical Test Forms",
+        "SCADA & Diagnostics",
+        "Reports & Templates",
+        "Reference Guides",
+        "HSE",
+        "Legacy / Archive"
+    ];
+    
+    const catOptions = categories
+        .map(cat => `<option value="${cat}" ${tool.category === cat ? 'selected' : ''}>${cat}</option>`)
+        .join('');
+        
+    // Status options
+    const statuses = ["Active", "In Progress", "Legacy", "Disabled", "Admin Only"];
+    const statOptions = statuses
+        .map(status => `<option value="${status}" ${tool.status === status ? 'selected' : ''}>${status}</option>`)
+        .join('');
+        
+    modal.innerHTML = `
+        <div class="modal-content fade-in" style="background:#ffffff; color:#1e293b; padding:2rem; border-radius:16px; border:1px solid #e2e8f0; max-width:550px; text-align:left;">
+            <h3 style="font-family:'Outfit',sans-serif; font-size:1.3rem; font-weight:700; margin-top:0; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem; color:#0f172a; text-align:left;">
+                <i class="fas fa-cog" style="color:var(--primary-color);"></i> Configure Tool: ${tool.name}
+            </h3>
+            
+            <div class="form-group" style="margin-bottom:1rem; border:none; padding:0;">
+                <label style="font-weight:600; font-size:0.9rem; margin-bottom:0.4rem; display:block; color:#475569;">Tool Name</label>
+                <input type="text" id="settings-tool-name" value="${tool.name}" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.9rem; margin:0;">
+            </div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                <div class="form-group" style="margin:0; border:none; padding:0;">
+                    <label style="font-weight:600; font-size:0.9rem; margin-bottom:0.4rem; display:block; color:#475569;">Category</label>
+                    <select id="settings-tool-category" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.9rem; margin:0; height:40px;">
+                        ${catOptions}
+                    </select>
+                </div>
+                <div class="form-group" style="margin:0; border:none; padding:0;">
+                    <label style="font-weight:600; font-size:0.9rem; margin-bottom:0.4rem; display:block; color:#475569;">Status</label>
+                    <select id="settings-tool-status" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.9rem; margin:0; height:40px;">
+                        ${statOptions}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom:1rem; border:none; padding:0;">
+                <label style="font-weight:600; font-size:0.9rem; margin-bottom:0.4rem; display:block; color:#475569;">Tags (comma-separated)</label>
+                <input type="text" id="settings-tool-tags" value="${(tool.tags || []).join(', ')}" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.9rem; margin:0;">
+            </div>
+            
+            <div class="form-group" style="margin-bottom:1.5rem; border:none; padding:0;">
+                <label style="font-weight:600; font-size:0.9rem; margin-bottom:0.4rem; display:block; color:#475569;">Description</label>
+                <textarea id="settings-tool-desc" style="width:100%; padding:0.6rem; border:1px solid #cbd5e1; border-radius:6px; font-size:0.9rem; min-height:80px; margin:0;">${tool.description}</textarea>
+            </div>
+            
+            <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
+                <button onclick="closeToolSettings()" style="width:auto; min-height:auto; padding:0.5rem 1.25rem; background:#cbd5e1; color:#334155; border-radius:6px; margin:0;" class="button-secondary">Cancel</button>
+                <button onclick="saveToolSettings()" style="width:auto; min-height:auto; padding:0.5rem 1.25rem; background:var(--primary-color); color:white; border-radius:6px; margin:0;">Save Settings</button>
+            </div>
+        </div>
+    `;
+    
+    modal.classList.remove('hidden');
+}
+
+function closeToolSettings() {
+    const modal = document.getElementById('tool-settings-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+function saveToolSettings() {
+    if (selectedToolIdForSettings === null) return;
+    
+    const tool = allTools.find(t => t.id === selectedToolIdForSettings);
+    if (!tool) return;
+    
+    // Read input values
+    const newName = document.getElementById('settings-tool-name').value.trim();
+    const newCat = document.getElementById('settings-tool-category').value;
+    const newStatus = document.getElementById('settings-tool-status').value;
+    const newTagsStr = document.getElementById('settings-tool-tags').value;
+    const newDesc = document.getElementById('settings-tool-desc').value.trim();
+    
+    if (!newName) {
+        alert('Tool Name is required.');
+        return;
+    }
+    
+    // Parse tags array
+    const newTags = newTagsStr
+        .split(',')
+        .map(tag => tag.trim())
+        .filter(Boolean);
+        
+    // Update local registry
+    tool.name = newName;
+    tool.category = newCat;
+    tool.status = newStatus;
+    tool.tags = newTags;
+    tool.description = newDesc;
+    
+    console.log('Updated tool settings for:', tool.name);
+    
+    // Close modal
+    closeToolSettings();
+    
+    // Re-render tools grid to show the fresh settings immediately!
+    handleFilterChange();
 }
