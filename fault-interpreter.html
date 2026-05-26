@@ -1,85 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Module/Fan Fault Code Interpreter — Level3Support</title>
-  <link rel="stylesheet" href="css/shared-styles.css" />
-  <link rel="stylesheet" href="css/fault-interpreter.css" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module/Fan Fault Code Interpreter — Level3Support</title>
+    <link rel="icon" type="image/x-icon" href="images/L3S_ICON.png">
+    
+    <!-- External CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Portal styles -->
+    <link href="css/shared-styles.css?v=19" rel="stylesheet">
+    <link href="css/fault-interpreter.css?v=19" rel="stylesheet">
+
+    <style>
+        .placeholder-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .tool-header-section {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .tool-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0rem;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease;
+        }
+        .btn-back:hover {
+            transform: translateX(-4px);
+            color: var(--primary-hover);
+        }
+        .tool-body-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .tool-body-grid {
+                grid-template-columns: 3fr 2fr;
+            }
+        }
+        .card-panel {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+        }
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 650;
+            font-size: 1.15rem;
+            color: #0f172a;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
 </head>
 <body>
-  <div class="page-container">
-    <a href="index.html" class="btn-back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
-    
-    <!-- Header Card -->
-    <div class="tool-header-card">
-        <div class="tool-header-flex" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
-            <div class="logo">
-                <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+    <nav class="navbar" style="background:#ffffff; box-shadow:0 1px 3px rgba(0,0,0,0.06); padding:1rem 2rem;">
+        <div style="max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center;">
+            <a href="index.html">
+                <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height:60px; width:auto;">
+            </a>
+        </div>
+    </nav>
+
+    <div class="placeholder-container">
+        <!-- Back Link -->
+        <a href="index.html" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back to ToolHub
+        </a>
+
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif;">Module/Fan Fault Code Interpreter</h1>
+                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+                        Decode binary status words and hexadecimal codes for cooling fan or power module diagnostic systems.
+                    </p>
+                </div>
+                <div class="tool-meta" style="margin-top:0.75rem;">
+                    <span class="tile-category category-scada-diagnostics" style="background:#fdf2f8; color:#9d174d; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">⚡ SCADA & DIAGNOSTICS</span>
+                    <span class="status-badge status-active" style="background:#dcfce7; color:#15803d; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Active</span>
+                </div>
             </div>
         </div>
-        <div style="margin-top: 1rem;">
-            <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem; font-family: 'Outfit', sans-serif;">Module/Fan Fault Code Interpreter</h1>
-            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 16px;">
-                Decode binary status words and hexadecimal codes for cooling fan or power module diagnostic systems.
-            </p>
-            <div style="display: flex; gap: 8px; align-items: center;">
-                <span style="font-size: 0.75rem; font-weight: 600; color: #0369a1; background: #e0f2fe; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">⚡ DIAGNOSTICS</span>
-                <span style="font-size: 0.75rem; font-weight: 600; color: #15803d; background: #dcfce7; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">ACTIVE</span>
+
+        <!-- Global Safety Disclaimer -->
+        <div class="warning-box" style="margin-top:0; margin-bottom:2rem;">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+                <div class="warning-title">Safety & Professional Use Disclaimer</div>
+                This ToolHub assists field engineers but does not replace official project documents, local electrical codes, manufacturer manuals, approved commissioning procedures, or site-specific HSE procedures. Any safety-critical work must involve direct reference verification.
+            </div>
+        </div>
+
+        <!-- Grid Body -->
+        <div class="tool-body-grid">
+            <!-- Left Column: Inputs & Outputs -->
+            <div>
+                <!-- Upload/Inputs Card -->
+                <div class="card-panel">
+                    <div class="card-title"><i class="fas fa-edit"></i> Interpreter Configurator Inputs</div>
+                    <div class="upload-section" style="border:none; padding:0; background:transparent;">
+                        <!-- Inverter Series -->
+                        <fieldset class="radio-group" style="border:1px solid #cbd5e1; border-radius:8px; padding:12px; margin-bottom:16px;">
+                            <legend style="font-weight:600; color:#334155; padding:0 6px; font-size:0.85rem;">Inverter Series</legend>
+                            <div class="radio-options" style="display:flex; gap:16px;">
+                                <label class="radio-option" style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                                    <input type="radio" name="inverter" value="sg3125" checked style="accent-color:var(--primary-color);"> SG3125 Series
+                                </label>
+                                <label class="radio-option" style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                                    <input type="radio" name="inverter" value="onePlusX" style="accent-color:var(--primary-color);"> 1+X Series
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <!-- Fault Section -->
+                        <fieldset class="radio-group" style="border:1px solid #cbd5e1; border-radius:8px; padding:12px; margin-bottom:16px;">
+                            <legend style="font-weight:600; color:#334155; padding:0 6px; font-size:0.85rem;">Fault Section</legend>
+                            <div class="radio-options" id="section-options" style="display:flex; gap:16px; flex-wrap:wrap;">
+                                <!-- dynamically filled -->
+                            </div>
+                        </fieldset>
+
+                        <!-- Fault Code Input -->
+                        <div class="form-group">
+                            <label for="fault-code" style="display:block; font-weight:600; color:#334155; margin-bottom:8px; font-size:0.9rem;">Enter Fault Code</label>
+                            <div class="input-wrapper" style="position:relative;">
+                                <div class="input-with-prefix">
+                                    <input type="text" id="fault-code" placeholder="e.g. 0A1B or 123" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px; box-sizing:border-box;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="message-container" style="margin-top: 16px; font-size:0.85rem; font-weight:550;"></div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Outputs Panels -->
+                <div id="binary-output" class="card-panel" style="display: none;"></div>
+                <div id="fault-result" class="card-panel" style="display: none;"></div>
+            </div>
+
+            <!-- Right Column: Safety & Assumptions -->
+            <div>
+                <!-- Assumptions Panel -->
+                <div class="assumptions-box">
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>Fault registers match SG3125 and 1+X cooling system specifications.</li>
+                        <li>Supports hexadecimal or decimal fault codes.</li>
+                        <li>Safety limits auto-flag critical alerts based on decoded bit registers.</li>
+                    </ul>
+                </div>
+
+                <div class="card-panel" style="border-top:4px solid var(--primary-color); margin-top:1.5rem;">
+                    <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
+                    <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+                        This module decodes register arrays for fan and cooling diagnostics.
+                    </p>
+                    <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
+                        <strong>Target Hardware:</strong> Sungrow Central Inverters<br>
+                        <strong>API Hook:</strong> Client-Side JS logic<br>
+                        <strong>Status:</strong> Active
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="card-panel-wrapper"><div class="card-panel-wrapper"><div class="upload-section">
-      <!-- Inverter Series -->
-      <fieldset class="radio-group">
-        <legend>Inverter Series</legend>
-        <div class="radio-options">
-          <label class="radio-option">
-            <input type="radio" name="inverter" value="sg3125" checked /> SG3125 Series
-          </label>
-          <label class="radio-option">
-            <input type="radio" name="inverter" value="onePlusX" /> 1+X Series
-          </label>
-        </div>
-      </fieldset>
-
-      <!-- Fault Section -->
-      <fieldset class="radio-group">
-        <legend>Fault Section</legend>
-        <div class="radio-options" id="section-options">
-          <!-- dynamically filled -->
-        </div>
-      </fieldset>
-
-      <!-- Fault Code Input -->
-      <label for="fault-code">Enter Fault Code</label>
-      <div class="input-wrapper">
-        <div class="input-with-prefix">
-          <input type="text" id="fault-code" placeholder="e.g. 0A1B or 123" />
-        </div>
-      </div>
-
-      <div id="message-container" style="margin-top: 16px;"></div>
-    </div></div></div>
-
-    <div id="binary-output" class="form-group card-panel-wrapper" style="display: none;"></div>
-    <div id="fault-result" class="form-group card-panel-wrapper" style="display: none;"></div>
-
-    <footer class="footer">
-        <div class="footer-text">
-            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
-        </div>
-        <div class="footer-logo">
-            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
-            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+    <!-- Footer -->
+    <footer class="main-footer" style="background: #0f172a; padding: 1.5rem 2rem; border-top: 1px solid #1e293b; margin-top: 4rem;">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; width: 100%;">
+            <p style="margin: 0; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span>&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</span>
+            </p>
+            <div class="powered-by-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-style: italic; font-weight: 400; color: #64748b; font-size: 0.85rem; font-family: 'Inter', sans-serif;">Powered by</span>
+                <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 28px; width: auto; opacity: 0.75; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.75';">
+            </div>
         </div>
     </footer>
-  </div>
 
-  <script src="js/fault-interpreter.js"></script>
-    </div>
-    </div>
+    <!-- App Scripts -->
+    <script src="js/fault-interpreter.js"></script>
 </body>
 </html>

@@ -1,102 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SG3125 Series Data Analyzer — Level3Support</title>
-  <link rel="icon" type="image/x-icon" href="images/L3S_ICON.png" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <link href="css/shared-styles.css" rel="stylesheet"/>
-  <link href="css/analyzer.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SG3125 Series Data Analyzer — Level3Support</title>
+    <link rel="icon" type="image/x-icon" href="images/L3S_ICON.png">
+    
+    <!-- External CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Portal styles -->
+    <link href="css/shared-styles.css?v=19" rel="stylesheet">
+    <link href="css/analyzer.css?v=19" rel="stylesheet">
+
+    <style>
+        .placeholder-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .tool-header-section {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .tool-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0rem;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease;
+        }
+        .btn-back:hover {
+            transform: translateX(-4px);
+            color: var(--primary-hover);
+        }
+        .tool-body-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .tool-body-grid {
+                grid-template-columns: 3fr 2fr;
+            }
+        }
+        .card-panel {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+        }
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 650;
+            font-size: 1.15rem;
+            color: #0f172a;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
 </head>
 <body>
-  <div class="page-container">
-    <a href="index.html" class="btn-back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
-    
-    <!-- Header Card -->
-    <div class="tool-header-card">
-        <div class="tool-header-flex" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
-            <div class="logo">
-                <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+    <nav class="navbar" style="background:#ffffff; box-shadow:0 1px 3px rgba(0,0,0,0.06); padding:1rem 2rem;">
+        <div style="max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center;">
+            <a href="index.html">
+                <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height:60px; width:auto;">
+            </a>
+        </div>
+    </nav>
+
+    <div class="placeholder-container">
+        <!-- Back Link -->
+        <a href="index.html" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back to ToolHub
+        </a>
+
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif;">SG3125 Series Data Analyzer</h1>
+                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+                        Load history files and event logs to construct visual operational charts and performance diagnostics.
+                    </p>
+                </div>
+                <div class="tool-meta" style="margin-top:0.75rem;">
+                    <span class="tile-category category-scada-diagnostics" style="background:#fdf2f8; color:#9d174d; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">⚡ SCADA & DIAGNOSTICS</span>
+                    <span class="status-badge status-active" style="background:#dcfce7; color:#15803d; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Active</span>
+                </div>
             </div>
         </div>
-        <div style="margin-top: 1rem;">
-            <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem; font-family: 'Outfit', sans-serif;">SG3125 Series Data Analyzer</h1>
-            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 16px;">
-                Load history files and event logs to construct visual operational charts and performance diagnostics.
-            </p>
-            <div style="display: flex; gap: 8px; align-items: center;">
-                <span style="font-size: 0.75rem; font-weight: 600; color: #0369a1; background: #e0f2fe; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">⚡ ANALYZER</span>
-                <span style="font-size: 0.75rem; font-weight: 600; color: #15803d; background: #dcfce7; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">ACTIVE</span>
+
+        <!-- Global Safety Disclaimer -->
+        <div class="warning-box" style="margin-top:0; margin-bottom:2rem;">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+                <div class="warning-title">Safety & Professional Use Disclaimer</div>
+                This ToolHub assists field engineers but does not replace official project documents, local electrical codes, manufacturer manuals, approved commissioning procedures, or site-specific HSE procedures. Any safety-critical work must involve direct reference verification.
+            </div>
+        </div>
+
+        <!-- Grid Body -->
+        <div class="tool-body-grid">
+            <!-- Left Column: Inputs & Tables/Charts -->
+            <div>
+                <!-- CSV Upload Card -->
+                <div class="card-panel">
+                    <div class="card-title"><i class="fas fa-cloud-upload-alt"></i> Upload CSV Files</div>
+                    <section class="upload-section" style="margin:0; padding:0; border:none; box-shadow:none; background:transparent;">
+                        <div class="upload-input-container double" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:12px;">
+                            <input type="file" id="his-upload" accept=".csv" class="file-input" style="width:100%;" />
+                            <input type="file" id="events-upload" accept=".csv" class="file-input" style="width:100%;" />
+                        </div>
+                        <div class="upload-instructions" style="font-size:0.8rem; color:#64748b; font-style:italic;">Upload the HisData file (left) and the Events file (right).</div>
+                    </section>
+                </div>
+
+                <!-- Parameters Selection Card -->
+                <div class="card-panel">
+                    <div class="card-title"><i class="fas fa-tasks"></i> Parameter Selection & State Filters</div>
+                    
+                    <section class="parameter-selection" style="margin:0 0 1.5rem 0; padding:0; border:none; box-shadow:none;">
+                        <div class="section-title" style="font-weight:600; font-size:0.85rem; color:#334155; margin-bottom:10px;">Select Parameters (Max 6)</div>
+                        <div id="param-container" class="grid grid-cols-1 md:grid-cols-3 gap-4" style="font-size:0.85rem;">
+                            <!-- JS will populate 3 columns here -->
+                        </div>
+                    </section>
+                    
+                    <section class="state-filter" style="margin:0; padding:12px 0 0 0; border-top:1px dashed #cbd5e1; box-shadow:none;">
+                        <label for="state-select" style="display:block; font-weight:600; font-size:0.85rem; color:#334155; margin-bottom:6px;">Filter by Unit 1 State:</label>
+                        <select id="state-select" style="width:100%; max-width:300px; padding:8px; border:1px solid #cbd5e1; border-radius:6px; font-size:14px; background:#ffffff;">
+                            <option value="">All</option>
+                        </select>
+                    </section>
+                </div>
+
+                <!-- Chart Card -->
+                <div class="card-panel">
+                    <div class="card-title"><i class="fas fa-chart-line"></i> Power Chart</div>
+                    <section class="chart-section" style="margin:0; padding:0; border:none; box-shadow:none;">
+                        <div id="chart-container" class="chart-container" style="position:relative; height:320px; width:100%;">
+                            <canvas id="chart-canvas" height="300"></canvas>
+                        </div>
+                    </section>
+                    
+                    <!-- Export Button Below Chart -->
+                    <div class="mt-4 flex justify-center">
+                        <button id="export-chart" class="chart-export" style="background:var(--primary-color); color:white; padding:8px 16px; border-radius:6px; font-weight:600; cursor:pointer; font-size:0.9rem; transition:background 0.2s;"><i class="fas fa-file-image"></i> Export as PNG</button>
+                    </div>
+                </div>
+
+                <!-- Events Card -->
+                <div class="card-panel">
+                    <div class="card-title"><i class="fas fa-list-ul"></i> Event Log Timelines</div>
+                    <section class="event-summary" style="margin:0; padding:0; border:none; box-shadow:none;">
+                        <div id="event-summary" class="summary-box" style="background:#f8fafc; border:1px solid #cbd5e1; padding:12px; border-radius:8px; font-size:0.85rem; font-style:italic; color:#64748b;">No events loaded yet.</div>
+                    </section>
+                </div>
+                
+                <!-- Dynamic Results Diagnostics Panels -->
+                <div id="diagnostics-results" class="card-panel" style="display: none;">
+                    <div class="card-title"><i class="fas fa-stethoscope"></i> Central Inverter Diagnostics</div>
+                    <div class="results-content">
+                        <!-- Filled dynamically by analyzer.js -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Safety & Assumptions -->
+            <div>
+                <!-- Assumptions Panel -->
+                <div class="assumptions-box">
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Engineering Reference</div>
+                    <ul class="assumptions-list">
+                        <li>Visual charts map history files for active power, reactive power, and cell temperatures.</li>
+                        <li>Supports central inverter Sungrow CSV structures.</li>
+                        <li>Identifies outliers and schedules event logs chronologically.</li>
+                    </ul>
+                </div>
+
+                <div class="card-panel" style="border-top:4px solid var(--primary-color); margin-top:1.5rem;">
+                    <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
+                    <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+                        This module analyzes Central Inverter SCADA outputs and logs.
+                    </p>
+                    <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
+                        <strong>Target Hardware:</strong> Sungrow Central Inverters<br>
+                        <strong>API Hook:</strong> Client-Side JS logic<br>
+                        <strong>Status:</strong> Active
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Upload Section -->
-    <div class="card-panel-wrapper"><section class="upload-section" style="margin: 0; padding: 0; border: none; box-shadow: none;">
-      <div class="upload-title">Upload CSV Files</div>
-      <div class="upload-input-container double">
-        <input type="file" id="his-upload" accept=".csv" class="file-input" />
-        <input type="file" id="events-upload" accept=".csv" class="file-input" />
-      </div>
-      <div class="upload-instructions">Upload the HisData file (left) and the Events file (right).</div>
-    </section></div></div>
-
-    <!-- Parameter Selection Section -->
-    <div class="card-panel-wrapper"><section class="parameter-selection" style="margin: 0 0 1.5rem 0; padding: 0; border: none; box-shadow: none;">
-      <div class="section-title">Select Parameters (Max 6)</div>
-      <div id="param-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- JS will populate 3 columns here -->
-      </div>
-    </section></div></div>
-
-    <!-- State Filter -->
-    <section class="state-filter">
-      <label for="state-select">Filter by Unit 1 State:</label>
-      <select id="state-select">
-        <option value="">All</option>
-      </select>
-    </section></div></div>
-
-    <!-- Chart Section -->
-    <div class="card-panel-wrapper"><section class="chart-section" style="margin: 0; padding: 0; border: none; box-shadow: none;">
-      <div class="section-title">Power Chart</div>
-      <div id="chart-container" class="chart-container">
-        <canvas id="chart-canvas" height="300"></canvas>
-      </div>
-    </section></div></div>
-
-    <!-- Export Button Below Chart -->
-    <div class="mt-4 flex justify-center">
-      <button id="export-chart" class="chart-export">Export as PNG</button>
-    </div>
-
-    <!-- Event Summary Section -->
-    <section class="event-summary">
-      <div class="section-title">Event Summary</div>
-      <div id="event-summary" class="summary-box">No events loaded yet.</div>
-    </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-text">
-            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
-        </div>
-        <div class="footer-logo">
-            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
-            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+    <footer class="main-footer" style="background: #0f172a; padding: 1.5rem 2rem; border-top: 1px solid #1e293b; margin-top: 4rem;">
+        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; width: 100%;">
+            <p style="margin: 0; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; gap: 0.75rem;">
+                <span>&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</span>
+            </p>
+            <div class="powered-by-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-style: italic; font-weight: 400; color: #64748b; font-size: 0.85rem; font-family: 'Inter', sans-serif;">Powered by</span>
+                <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 28px; width: auto; opacity: 0.75; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.75';">
+            </div>
         </div>
     </footer>
-  </div>
 
-  <!-- Libraries and App Script -->
-  <script src="js/papaparse.min.js"></script>
-  <script src="js/common.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script type="module" src="js/analyzer.js"></script>
-    </div>
-    </div>
+    <!-- Libraries and App Scripts -->
+    <script src="js/papaparse.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script type="module" src="js/analyzer.js"></script>
 </body>
 </html>
