@@ -1712,7 +1712,7 @@ button:disabled, .submit-button:disabled {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 240px; /* Enhanced height for rich content */
+    min-height: 200px; /* Allow natural expansion while keeping a minimum size */
 }
 
 .tool-tile::before {
@@ -1748,7 +1748,7 @@ button:disabled, .submit-button:disabled {
 .tool-tile[data-category="legacy-archive"]::before { background-color: var(--color-legacy-archive); }
 
 .tile-content {
-    padding: 0.75rem 1.25rem 1.25rem 1.25rem;
+    padding: 1.15rem 1.25rem 1.5rem 1.25rem;
     display: flex;
     flex-direction: column;
     height: 100%;
