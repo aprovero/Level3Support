@@ -1,7 +1,7 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'level3support-cache-v19';
+const CACHE_NAME = 'level3support-cache-v20';
 
 const ASSETS_TO_CACHE = [
   '/index.html', '/404.html', '/offline.html',
@@ -11,6 +11,30 @@ const ASSETS_TO_CACHE = [
   // JavaScript files
   '/js/common.js', '/js/papaparse.min.js',
   '/js/parameter-comparison.js', '/js/tools-hub.js',
+  '/js/clipping-curtailment-check.js',
+  '/js/irradiance-sensor-check.js',
+  '/js/tracker-angle-qaqc.js',
+  '/js/capa-tracker.js',
+  '/js/inverter-derating-analyzer.js',
+  '/js/power-triangle.js',
+  '/js/inverter-capability-curve-check.js',
+  '/js/grid-event-excursion-log.js',
+  '/js/battery-soc-imbalance-analyzer.js',
+  '/js/battery-temperature-spread.js',
+  '/js/number-base-converter.js',
+
+  // HTML files for new tools
+  '/clipping-curtailment-check.html',
+  '/irradiance-sensor-check.html',
+  '/tracker-angle-qaqc.html',
+  '/capa-tracker.html',
+  '/inverter-derating-analyzer.html',
+  '/power-triangle.html',
+  '/inverter-capability-curve-check.html',
+  '/grid-event-excursion-log.html',
+  '/battery-soc-imbalance-analyzer.html',
+  '/battery-temperature-spread.html',
+  '/number-base-converter.html',
 
   // CSS files
   '/css/parameter-comparison.css', '/css/rej603-configurator.css', '/css/shared-styles.css',

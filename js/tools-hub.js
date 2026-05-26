@@ -233,12 +233,152 @@ function runToolHub() {
  * Fallback Data in case JSON file fails
  */
 function loadFallbackData() {
-    // Basic subset to prevent crash
+    // Fully populated robust offline fallback data to bypass browser CORS constraints under file:/// protocol
     allTools = [
-        { id: 1, name: "Level3Support Request Form", category: "Legacy / Archive", status: "Legacy", description: "Legacy request form.", url: "support-request.html", tags: ["Support"] },
-        { id: 5, name: "ABB REJ603 Relay Configuration Tool", category: "SCADA & Diagnostics", status: "Active", description: "Interactive configuration.", url: "rej603-configurator.html", tags: ["Relay"] },
-        { id: 6, name: "SG1+x Parameter Comparison Tool", category: "SCADA & Diagnostics", status: "Active", description: "Compare settings.", url: "parameter-comparison.html", tags: ["Inverter"] },
-        { id: 8, name: "PDP Module Fault Code Interpreter", category: "SCADA & Diagnostics", status: "Active", description: "Decode codes.", url: "fault-interpreter.html", tags: ["PDP"] }
+        {
+            "id": 44,
+            "name": "Inverter Clipping / Curtailment Check Tool",
+            "category": "Advanced Field Diagnostics",
+            "status": "Active",
+            "description": "Help determine whether reduced inverter output is consistent with inverter clipping or curtailment.",
+            "url": "clipping-curtailment-check.html",
+            "tags": ["PV", "Inverter", "Clipping", "Curtailment", "Diagnostics"]
+        },
+        {
+            id: 45,
+            name: "Irradiance Sensor Cross-Check Tool",
+            category: "Advanced Field Diagnostics",
+            status: "Active",
+            description: "Compare irradiance sensors, reference cells, and nearby inverter behavior to detect dirty, misaligned, drifting, or unreliable measurements.",
+            url: "irradiance-sensor-check.html",
+            tags: ["PV", "Irradiance", "Sensor", "Calibration", "Diagnostics"]
+        },
+        {
+            id: 46,
+            name: "Tracker Angle / Backtracking QA Checklist",
+            category: "Advanced Field Diagnostics",
+            status: "Active",
+            description: "Validate tracker angle behavior, backtracking, mechanical alignment, and wind stow during commissioning or troubleshooting.",
+            url: "tracker-angle-qaqc.html",
+            tags: ["PV", "Tracker", "Backtracking", "Checklist", "Diagnostics"]
+        },
+        {
+            id: 47,
+            name: "Corrective Action Tracker / CAPA Log",
+            category: "Reports & Templates",
+            status: "Active",
+            description: "Track corrective and preventive actions from punchlists, RCAs, inspections, HSE forms, and commissioning findings.",
+            url: "capa-tracker.html",
+            tags: ["RCA", "CAPA", "Safety", "Punchlist", "Log"]
+        },
+        {
+            "id": 48,
+            "name": "Inverter Derating Cause Analyzer",
+            "category": "Advanced Field Diagnostics",
+            "status": "Active",
+            "description": "Identify whether an inverter is limiting power due to temperature, grid voltage, frequency, reactive power, or protection.",
+            "url": "inverter-derating-analyzer.html",
+            "tags": ["PV", "Inverter", "Derating", "Temperature", "Grid", "Diagnostics"]
+        },
+        {
+            "id": 49,
+            "name": "Interactive Power Triangle Tool",
+            "category": "Grid & Controls",
+            "status": "Active",
+            "description": "Interactive visual tool showing the relationship between active power P, reactive power Q, apparent power S, power factor, and phase angle.",
+            "url": "power-triangle.html",
+            "tags": ["Electrical", "Power", "Grid", "Controls", "Visual"]
+        },
+        {
+            "id": 50,
+            "name": "Inverter Capability Curve Check",
+            "category": "Grid & Controls",
+            "status": "Active",
+            "description": "Check whether a requested active/reactive power operating point is within inverter apparent power limits.",
+            "url": "inverter-capability-curve-check.html",
+            "tags": ["PV", "Inverter", "Capability", "Power Factor", "Grid"]
+        },
+        {
+            "id": 51,
+            "name": "Grid Event Voltage/Frequency Excursion Log",
+            "category": "Grid & Controls",
+            "status": "Active",
+            "description": "Log grid voltage/frequency excursions, calculate deviations, and create structured RCA-ready event timelines.",
+            "url": "grid-event-excursion-log.html",
+            "tags": ["Grid", "Event", "Voltage", "Frequency", "RCA", "Log"]
+        },
+        {
+            "id": 52,
+            "name": "Battery SOC Imbalance Analyzer",
+            "category": "BESS Field Tools",
+            "status": "Active",
+            "description": "Analyze SOC spread and balancing status across battery racks, strings, containers, or clusters.",
+            "url": "battery-soc-imbalance-analyzer.html",
+            "tags": ["BESS", "Battery", "SOC", "Imbalance", "Diagnostics"]
+        },
+        {
+            "id": 53,
+            "name": "Battery Temperature Spread Analyzer",
+            "category": "BESS Field Tools",
+            "status": "Active",
+            "description": "Analyze battery temperature variation across racks, modules, or clusters to detect HVAC or fan issues.",
+            "url": "battery-temperature-spread.html",
+            "tags": ["BESS", "Battery", "Thermal", "HVAC", "Spread"]
+        },
+        {
+            "id": 54,
+            "name": "Number Base Converter",
+            "category": "SCADA & Diagnostics",
+            "status": "Active",
+            "description": "Convert values between binary, decimal, hex, and octal with bit-width, byte-order swaps, and manual register bit viewer.",
+            "url": "number-base-converter.html",
+            "tags": ["SCADA", "MODBUS", "Relay", "Binary", "Converter"]
+        },
+        {
+            "id": 55,
+            "name": "Soiling Loss Estimator",
+            "category": "Soiling & PV Performance",
+            "status": "Active",
+            "description": "Estimate PV system energy loss due to soiling based on site conditions.",
+            "url": "soiling-loss-estimator.html",
+            "tags": ["PV", "Soiling", "Performance", "O&M", "Field Check"]
+        },
+        {
+            "id": 56,
+            "name": "Clean vs. Soiled String Comparison Tool",
+            "category": "Soiling & PV Performance",
+            "status": "Active",
+            "description": "Compare electrical output between clean and soiled strings to quantify performance impact.",
+            "url": "clean-vs-soiled-strings.html",
+            "tags": ["PV", "Soiling", "Performance", "O&M", "Field Check"]
+        },
+        {
+            "id": 57,
+            "name": "Cleaning ROI Calculator",
+            "category": "Soiling & PV Performance",
+            "status": "Active",
+            "description": "Calculate the return on investment for PV array cleaning based on performance gain vs. cleaning costs.",
+            "url": "cleaning-roi.html",
+            "tags": ["PV", "Soiling", "Performance", "O&M", "Cleaning"]
+        },
+        {
+            "id": 58,
+            "name": "Lost Energy from Soiling Calculator",
+            "category": "Soiling & PV Performance",
+            "status": "Active",
+            "description": "Quantify total lost energy (kWh) attributed to soiling over a specific time period.",
+            "url": "soiling-lost-energy.html",
+            "tags": ["PV", "Soiling", "Performance", "O&M", "Reporting"]
+        },
+        {
+            "id": 59,
+            "name": "Soiling Customer Report Generator",
+            "category": "Soiling & PV Performance",
+            "status": "Active",
+            "description": "Generate a customer-facing report detailing soiling impacts and recommended cleaning actions.",
+            "url": "soiling-customer-report.html",
+            "tags": ["PV", "Soiling", "Performance", "O&M", "Reporting"]
+        }
     ];
 }
 
@@ -601,6 +741,7 @@ function renderLibraryChips() {
     // Unique list of active categories
     const categories = [
         { label: "All Tools", value: "all" },
+        { label: "Advanced Diagnostics", value: "advanced-field-diagnostics" },
         { label: "Solar PV", value: "pv-field-tools" },
         { label: "BESS", value: "bess-field-tools" },
         { label: "SCADA & Comms", value: "scada-diagnostics" },
