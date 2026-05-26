@@ -1801,6 +1801,7 @@ button:disabled, .submit-button:disabled {
 /* Main layout of tile content */
 .tile-main {
     display: flex;
+    align-items: center;
     gap: 1rem;
     flex: 1;
 }
