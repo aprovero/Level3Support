@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inverter Derating Cause Analyzer — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .status-warning { background: #fef3c7; color: #b45309; }
+    .status-critical { background: #fee2e2; color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ ADVANCED FIELD DIAGNOSTICS</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Inverter Derating Cause Analyzer</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Help a field engineer identify whether an inverter is limiting power due to temperature, grid voltage, frequency, reactive power demand, DC input, command limits, or internal protection.
+    </p>
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">General Metadata</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="site-name">Site / Project Name</label>
+          <input type="text" id="site-name" placeholder="e.g. Solar Field Alpha">
+        </div>
+        <div class="input-group">
+          <label for="timestamp">Timestamp</label>
+          <input type="datetime-local" id="timestamp">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="inverter-id">Inverter ID <span class="required">*</span></label>
+          <input type="text" id="inverter-id" placeholder="e.g. INV-01A" value="INV-02">
+        </div>
+        <div class="input-group">
+          <label for="rated-ac">Inverter Rated AC Power <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="rated-ac" placeholder="e.g. 3200" step="any" value="3200">
+            <div class="input-unit">kW ac</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Electrical & Temperature Telemetry</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="current-ac">Current AC Power Output <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="current-ac" placeholder="e.g. 2100" step="any">
+            <div class="input-unit">kW ac</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="available-dc">Available DC Power (Expected)</label>
+          <div class="input-with-unit">
+            <input type="number" id="available-dc" placeholder="e.g. 3300" step="any">
+            <div class="input-unit">kW dc</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="dc-voltage">DC Voltage (Measured)</label>
+          <div class="input-with-unit">
+            <input type="number" id="dc-voltage" placeholder="e.g. 960" step="any">
+            <div class="input-unit">V dc</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="dc-current">DC Current (Measured)</label>
+          <div class="input-with-unit">
+            <input type="number" id="dc-current" placeholder="e.g. 2250" step="any">
+            <div class="input-unit">A dc</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="ac-voltage">AC Voltage (Grid) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="ac-voltage" placeholder="e.g. 630" step="any" value="630">
+            <div class="input-unit">V ac</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="ac-frequency">AC Grid Frequency <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="ac-frequency" placeholder="e.g. 60.05" step="any" value="60.05">
+            <div class="input-unit">Hz</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="power-factor">Power Factor (Cos phi)</label>
+          <input type="number" id="power-factor" placeholder="e.g. 0.95" step="any" value="0.95">
+        </div>
+        <div class="input-group">
+          <label for="reactive-power">Reactive Power (Q)</label>
+          <div class="input-with-unit">
+            <input type="number" id="reactive-power" placeholder="e.g. 650" step="any" value="650">
+            <div class="input-unit">kvar</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="ambient-temp">Ambient Temperature</label>
+          <div class="input-with-unit">
+            <input type="number" id="ambient-temp" placeholder="e.g. 43" step="any" value="43">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="internal-temp">Internal Inverter Temp (IGBT/Module)</label>
+          <div class="input-with-unit">
+            <input type="number" id="internal-temp" placeholder="e.g. 88" step="any" value="88">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">SCADA Commands & Alarms</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="ppc-limit-active">PPC / SCADA Limit Active?</label>
+          <select id="ppc-limit-active">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="ppc-limit-val">PPC Active Power Limit</label>
+          <div class="input-with-unit">
+            <input type="number" id="ppc-limit-val" placeholder="e.g. 2200" step="any">
+            <div class="input-unit">kW ac</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="active-alarms">Active Inverter Alarms / Fault Codes</label>
+        <input type="text" id="active-alarms" placeholder="e.g. W042 IGBT Overtemp, E012 Grid Overvoltage" value="W042 IGBT Overtemp">
+      </div>
+      <div class="input-group">
+        <label for="notes">Notes / Observations</label>
+        <textarea id="notes" placeholder="Enter notes..."></textarea>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Analyze Derate Cause</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none; margin-top: 24px; padding: 20px; border-radius: var(--border-radius-md); background: #f8fafc; border: 1px solid var(--border-color);">
+      <div class="result-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+        <span style="font-weight: bold; font-size: 1.1rem; color: var(--text-color);">Analysis Results</span>
+        <span id="diagnostic-status" class="status-badge-inline status-normal">INVESTIGATE</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Output vs. Rated Capacity:</span>
+        <span id="res-output-pct" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>DC Input Availability:</span>
+        <span id="res-dc-avail" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Grid Voltage / Freq Check:</span>
+        <span id="res-grid-check" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Reactive / Power Factor Priority:</span>
+        <span id="res-pf-check" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between; border-top: 1px dashed var(--border-color); padding-top: 8px; margin-top: 8px;">
+        <span style="font-weight: bold;">Suspected Derating Category:</span>
+        <span id="res-category" style="font-weight: bold; color: var(--primary-color);">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; flex-direction: column; gap: 4px; margin-top: 8px;">
+        <span style="font-weight: bold;">Diagnostic Explanation:</span>
+        <span id="res-explanation" style="font-size: 0.85rem; color: var(--text-secondary);">--</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Summary</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px; background: #f1f5f9; border-radius: var(--border-radius-md); padding: 16px; border: 1px solid var(--border-color);">
+      <div class="assumptions-title" style="font-weight: bold; margin-bottom: 8px;"><i class="fas fa-info-circle"></i> Derating Analysis Assumptions & Limitations</div>
+      <ul class="assumptions-list" style="margin-left: 20px; font-size: 0.85rem; color: var(--text-secondary);">
+        <li>Thermal Derating is flagged if internal IGBT temperature is high (&ge; 85°C) or ambient is high (&ge; 40°C).</li>
+        <li>Grid Voltage/Frequency Derating occurs if grid frequency is outside nominal range (e.g. &ge; 60.05 Hz for overfrequency power curtailment or voltage is &ge; 108% of nominal).</li>
+        <li>Reactive Power / Power Factor Limitation happens if PF is &le; 0.95, forcing the inverter to dedicate power capacity to kvar instead of active kW.</li>
+        <li>This tool assists in screening potential causes but is an estimation aid. Actual inverter firmware logic, temperature sensors, grid ride-through setups, and SCADA commands override these generic rules.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+  </div>
+
+  <script src="js/inverter-derating-analyzer.js"></script>
+</body>
+</html>

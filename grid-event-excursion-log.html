@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid Event Voltage/Frequency Excursion Log — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .event-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 0.85rem;
+    }
+    .event-table th, .event-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      text-align: left;
+    }
+    .event-table th {
+      background: var(--background-dark);
+      font-family: 'Outfit';
+      font-weight: bold;
+    }
+    .event-table tr:hover {
+      background: #f8fafc;
+    }
+    .trip-alert {
+      border-left: 4px solid var(--error-color) !important;
+      background: #fef2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ GRID & CONTROLS</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Grid Event Voltage/Frequency Excursion Log</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Log grid voltage and frequency excursions, calculate precise deviations, and create structured RCA-ready event timelines.
+    </p>
+
+    <!-- Excursion Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Log Event Entry</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="site-name">Site / Project Name <span class="required">*</span></label>
+          <input type="text" id="site-name" placeholder="e.g. Solar Field Alpha" value="Solar Field Alpha">
+        </div>
+        <div class="input-group">
+          <label for="event-time">Event Timestamp <span class="required">*</span></label>
+          <input type="datetime-local" id="event-time">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="poi-voltage">Measured POI Voltage <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="poi-voltage" placeholder="e.g. 35.2" step="any">
+            <div class="input-unit">kV</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="nominal-voltage">Nominal POI Voltage <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="nominal-voltage" placeholder="e.g. 34.5" step="any" value="34.5">
+            <div class="input-unit">kV</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="measured-freq">Measured Grid Frequency <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="measured-freq" placeholder="e.g. 60.15" step="any">
+            <div class="input-unit">Hz</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="nominal-freq">Nominal Frequency <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="nominal-freq" placeholder="e.g. 60.00" step="any" value="60.00">
+            <div class="input-unit">Hz</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="duration">Event Duration</label>
+          <div class="input-with-unit">
+            <input type="number" id="duration" placeholder="e.g. 240" step="any">
+            <div class="input-unit">ms</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="trip-occurred">Trip Occurred?</label>
+          <select id="trip-occurred">
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="equipment-response">Equipment Response / Alarms</label>
+        <input type="text" id="equipment-response" placeholder="e.g. Inverters entered FRT (Ride-through) mode, none tripped.">
+      </div>
+      <div class="input-group">
+        <label for="notes">Notes / Observations</label>
+        <textarea id="notes" placeholder="Enter notes..."></textarea>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <button id="add-btn"><i class="fas fa-plus"></i> Save Event Entry</button>
+    </div>
+
+    <!-- Active Events Table -->
+    <h3 style="margin-top: 24px; font-family: 'Outfit';">Logged Excursion Events</h3>
+    <div style="overflow-x: auto;">
+      <table class="event-table" id="event-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>V deviation %</th>
+            <th>F deviation</th>
+            <th>Duration</th>
+            <th>Trip?</th>
+            <th>Equipment Response</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="event-tbody">
+          <!-- Dynamically populated rows -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Summary Box & Export -->
+    <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <button id="copy-summary-btn" class="button-secondary" style="width: auto; margin-top: 0;"><i class="fas fa-copy"></i> Copy RCA Timeline Summary</button>
+      <button id="export-json-btn" class="button-secondary" style="width: auto; margin-top: 0;"><i class="fas fa-file-export"></i> Export JSON</button>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+  </div>
+
+  <script src="js/grid-event-excursion-log.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Base Converter — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .bit-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 0.85rem;
+    }
+    .bit-table th, .bit-table td {
+      border: 1px solid var(--border-color);
+      padding: 6px 10px;
+      text-align: left;
+    }
+    .bit-table th {
+      background: var(--background-dark);
+      font-family: 'Outfit';
+      font-weight: bold;
+    }
+    .bit-active {
+      background: #e8f8e8;
+      font-weight: bold;
+      color: #166534;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ SCADA & DIAGNOSTICS</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Number Base Converter</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Convert values between number systems used in SCADA, MODBUS registers, protection relay configurations, and binary alarm bit-masks.
+    </p>
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <div class="input-row">
+        <div class="input-group">
+          <label for="input-val">Input Value <span class="required">*</span></label>
+          <input type="text" id="input-val" placeholder="e.g. 5" value="5">
+        </div>
+        <div class="input-group">
+          <label for="input-base">Input Base</label>
+          <select id="input-base">
+            <option value="10" selected>Decimal</option>
+            <option value="2">Binary</option>
+            <option value="16">Hexadecimal</option>
+            <option value="8">Octal</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="bit-width">Bit Width</label>
+          <select id="bit-width">
+            <option value="8">8-bit</option>
+            <option value="16" selected>16-bit (Modbus standard)</option>
+            <option value="32">32-bit</option>
+            <option value="64">64-bit</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="signed-type">Interpretation</label>
+          <select id="signed-type">
+            <option value="unsigned">Unsigned (standard)</option>
+            <option value="signed">Signed (2's Complement)</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="byte-order">Byte Order</label>
+          <select id="byte-order">
+            <option value="big">Big Endian (Standard)</option>
+            <option value="little">Little Endian</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="word-order">Word Swap (32-bit only)</label>
+          <select id="word-order">
+            <option value="abcd">AB CD (Standard)</option>
+            <option value="cdab">CD AB (Swapped)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: block; margin-top: 24px; padding: 20px; border-radius: var(--border-radius-md); background: #f8fafc; border: 1px solid var(--border-color);">
+      <div class="result-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+        <span style="font-weight: bold; font-size: 1.1rem; color: var(--text-color);">Conversion Outputs</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Decimal Representation:</span>
+        <span id="res-dec" style="font-weight: 600;">5</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Hexadecimal (0x prefix):</span>
+        <span id="res-hex" style="font-weight: 600;">0x0005</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Binary (grouped in nibbles):</span>
+        <span id="res-bin" style="font-weight: 600; font-family: monospace;">0000 0000 0000 0101</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Octal Representation:</span>
+        <span id="res-oct" style="font-weight: 600;">5</span>
+      </div>
+    </div>
+
+    <!-- Dynamic Bit Viewer Table -->
+    <h3 style="margin-top: 24px; font-family: 'Outfit';">Bit Viewer Table (Editable Meanings)</h3>
+    <div style="overflow-x: auto;">
+      <table class="bit-table" id="bit-table">
+        <thead>
+          <tr>
+            <th style="width: 80px;">Bit Index</th>
+            <th style="width: 80px;">Value</th>
+            <th>Register Map Meaning (Click to type)</th>
+          </tr>
+        </thead>
+        <tbody id="bit-tbody">
+          <!-- Dynamically populated rows based on bit width -->
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+  </div>
+
+  <script src="js/number-base-converter.js"></script>
+</body>
+</html>

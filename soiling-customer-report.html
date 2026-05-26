@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soiling Customer Report Generator — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=19" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .input-row-three {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      .input-row, .input-row-three {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .report-section {
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 20px;
+      background: #ffffff;
+      margin-bottom: 24px;
+    }
+    .section-title {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-family: 'Outfit';
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 8px;
+      color: var(--primary-color);
+    }
+    #generated-report-view {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 24px;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #334155;
+      text-align: left;
+    }
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+      .calc-container {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+      }
+      .back-link, .warning-box, .form-section, .btn-row, .footer, .assumptions-box, button, h1, p {
+        display: none !important;
+      }
+      #result-panel {
+        display: block !important;
+        border: none !important;
+        background: white !important;
+        padding: 0 !important;
+        margin-top: 0 !important;
+      }
+      #generated-report-view {
+        border: none !important;
+        background: white !important;
+        padding: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">☀️ SOILING & PERFORMANCE</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Soiling Customer Report Generator</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Generate a professional, structured customer-facing soiling report outlining inspection scope, field observations, calculated performance impacts, and prioritized O&M cleaning recommendations.
+    </p>
+
+    <!-- Multi-step Form Sections -->
+    <div class="form-section">
+      
+      <!-- Section 1: Report Meta -->
+      <div class="report-section">
+        <h3 class="section-title"><i class="fas fa-file-alt"></i> 1. Report Information</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="project-name">Site / Project Name <span class="required">*</span></label>
+            <input type="text" id="project-name" placeholder="e.g. Desert Star Solar" style="height: 42px;">
+          </div>
+          <div class="input-group">
+            <label for="customer-name">Customer <span class="required">*</span></label>
+            <input type="text" id="customer-name" placeholder="e.g. Apex Energy Partners" style="height: 42px;">
+          </div>
+        </div>
+        <div class="input-row-three">
+          <div class="input-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" placeholder="e.g. Mojave Desert, CA" style="height: 42px;">
+          </div>
+          <div class="input-group">
+            <label for="inspection-date">Date of Inspection</label>
+            <input type="date" id="inspection-date" style="height: 42px;">
+          </div>
+          <div class="input-group">
+            <label for="prepared-by">Prepared By <span class="required">*</span></label>
+            <input type="text" id="prepared-by" placeholder="e.g. J. Doe, Field Engineer" style="height: 42px;">
+          </div>
+        </div>
+        <div class="input-group" style="margin-bottom: 0;">
+          <label for="report-type">Report Type</label>
+          <select id="report-type" style="height: 42px;">
+            <option value="Field Observation">Field Observation Report</option>
+            <option value="Performance Impact Estimate">Performance Impact Estimate</option>
+            <option value="Cleaning Recommendation">Cleaning Recommendation</option>
+            <option value="Post-Cleaning Verification">Post-Cleaning Verification</option>
+            <option value="Other">Other Assessment</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Section 2: Inspection Scope -->
+      <div class="report-section">
+        <h3 class="section-title"><i class="fas fa-search"></i> 2. Inspection Scope</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="areas-inspected">Areas Inspected</label>
+            <input type="text" id="areas-inspected" placeholder="e.g. Blocks 01 through 08, Substation perimeter rows" style="height: 42px;">
+          </div>
+          <div class="input-group">
+            <label for="equipment-inspected">Inverters/Blocks/Rows Inspected</label>
+            <input type="text" id="equipment-inspected" placeholder="e.g. INV-01, INV-02 and surrounding tracker rows" style="height: 42px;">
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="inspection-method">Inspection Method</label>
+            <select id="inspection-method" style="height: 42px;">
+              <option value="Visual Inspection">Visual Inspection & Photography</option>
+              <option value="Clean vs Soiled String Comparison">Clean vs. Soiled String Comparison</option>
+              <option value="Soiling Station Data">Soiling Station Sensor Logging</option>
+              <option value="String Current Comparison">SCADA String Current Comparison</option>
+              <option value="IV Curve Data">IV Curve Diagnosis Logs</option>
+              <option value="Other">Multi-criteria Assessment</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="scope-limitations">Limitations of Assessment</label>
+            <input type="text" id="scope-limitations" placeholder="e.g. Assessment restricted to ground-level array visual access only" style="height: 42px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Observations -->
+      <div class="report-section">
+        <h3 class="section-title"><i class="fas fa-eye"></i> 3. Soiling Conditions Observed</h3>
+        <div class="input-row-three">
+          <div class="input-group">
+            <label for="soiling-type">Soiling Dust Type</label>
+            <select id="soiling-type" style="height: 42px;">
+              <option value="Uniform Dust">Uniform Dust / Fine Silt</option>
+              <option value="Edge Buildup">Edge Buildup / Bottom Row Cementation</option>
+              <option value="Bird Droppings">Bird Droppings (Spot Shading)</option>
+              <option value="Pollen">Pollen Coating</option>
+              <option value="Mud Splash">Mud Splash / Rainfall Spotting</option>
+              <option value="Construction Dust">Construction Dust / Soil Disturbances</option>
+              <option value="Salt Residue">Salt Residue / Marine Enclosure Buildup</option>
+              <option value="Cementitious Residue">Cementitious Residue / Chemical Crust</option>
+              <option value="Other">Organic Film / Mixed Soiling</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="severity">Observed Severity</label>
+            <select id="severity" style="height: 42px;">
+              <option value="Low">Low (Negligible Film)</option>
+              <option value="Moderate">Moderate (Visible haze, light dust)</option>
+              <option value="High">High (Heavily covered modules)</option>
+              <option value="Severe">Severe (Thick soil, heavy spotting)</option>
+            </select>
+          </div>
+          <div class="input-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 0;">
+            <div class="input-group" style="margin-bottom: 0;">
+              <label style="margin-top: 0;">Affected Area %</label>
+              <input type="number" id="affected-area-pct" value="100" style="height: 42px;">
+            </div>
+            <div class="input-group" style="margin-bottom: 0;">
+              <label style="margin-top: 0;">Affected Cap %</label>
+              <input type="number" id="affected-cap-pct" value="100" style="height: 42px;">
+            </div>
+          </div>
+        </div>
+        <div class="input-group" style="margin-bottom: 0; margin-top: 16px;">
+          <label for="observation-notes">Observation Details</label>
+          <input type="text" id="observation-notes" placeholder="e.g. Heavy agricultural dusting observed on primary face of panels." style="height: 42px;">
+        </div>
+      </div>
+
+      <!-- Section 4: Optional Measurement Details -->
+      <div class="report-section">
+        <h3 class="section-title"><i class="fas fa-chart-line"></i> 4. Measurement & Impact Summary</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="clean-val">Clean / Reference Value</label>
+            <input type="number" id="clean-val" placeholder="e.g. 10.0" step="any" style="height: 42px;">
+          </div>
+          <div class="input-group">
+            <label for="soiled-val">Soiled / Measured Value</label>
+            <input type="number" id="soiled-val" placeholder="e.g. 9.5" step="any" style="height: 42px;">
+          </div>
+        </div>
+        <div class="input-row-three">
+          <div class="input-group">
+            <label for="soiling-loss-pct">Soiling Loss (%)</label>
+            <input type="number" id="soiling-loss-pct" placeholder="e.g. 5.00" step="any" style="height: 42px;">
+          </div>
+          <div class="input-group">
+            <label for="expected-gen">Expected Gen Baseline</label>
+            <input type="number" id="expected-gen" placeholder="e.g. 350 MWh" step="any" style="height: 42px;">
+          </div>
+          <div class="input-group">
+            <label for="lost-revenue">Lost Revenue (Optional)</label>
+            <input type="number" id="lost-revenue" placeholder="e.g. 2400 USD" step="any" style="height: 42px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Photos Placeholders -->
+      <div class="report-section">
+        <h3 class="section-title"><i class="fas fa-images"></i> 5. Photos & Visual Evidence Placeholders</h3>
+        <div class="input-row-three">
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Photo Reference ID</label>
+            <input type="text" id="photo-ref-id" placeholder="e.g. IMG_001" style="height: 42px;">
+          </div>
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Location / String</label>
+            <input type="text" id="photo-location" placeholder="e.g. Row 1 Tracker A" style="height: 42px;">
+          </div>
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Evidence Description</label>
+            <input type="text" id="photo-desc" placeholder="e.g. Close-up of heavy edge cementation buildup" style="height: 42px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Recommendations -->
+      <div class="report-section">
+        <h3 class="section-title"><i class="fas fa-tools"></i> 6. Action & Recommendation</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="rec-action">Recommended Action</label>
+            <select id="rec-action" style="height: 42px;">
+              <option value="Full Cleaning">Full Campaign Cleaning Recommended</option>
+              <option value="Targeted Cleaning">Targeted Cleaning (Specific rows/blocks only)</option>
+              <option value="Monitor">Monitor (Continue tracking without cleaning action)</option>
+              <option value="No Action">No Action required (Soiling within safe tolerance bounds)</option>
+              <option value="Post-Cleaning Verification">Conduct post-cleaning quality verification runs</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="rec-priority">Priority</label>
+            <select id="rec-priority" style="height: 42px;">
+              <option value="Medium">Medium Priority</option>
+              <option value="Low">Low Priority</option>
+              <option value="High">High Priority</option>
+              <option value="Immediate">Immediate Priority (Severe Loss Danger)</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="rec-next-step">Recommended Next Step</label>
+            <input type="text" id="rec-next-step" placeholder="e.g. Request O&M washing crew quotes immediately." style="height: 42px;">
+          </div>
+          <div class="input-group">
+            <label for="rec-safety">Safety & Operational Considerations</label>
+            <input type="text" id="rec-safety" placeholder="e.g. Maintain array clearance. Avoid water spray during high ambient irradiance." style="height: 42px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: Limitations & Assumptions -->
+      <div class="report-section">
+        <h3 class="section-title"><i class="fas fa-sticky-note"></i> 7. Limitations & Assumptions</h3>
+        <div class="input-group" style="margin-bottom: 0;">
+          <label for="report-assumptions">Assessment Scope Limitations Statement</label>
+          <textarea id="report-assumptions" style="min-height: 100px; margin-bottom: 0;">This report is based on field observations and data provided at the time of inspection. Estimated soiling impact does not separate soiling from other possible contributors such as shading, equipment outages, curtailment, clipping, sensor error, degradation, or tracker misalignment unless specifically evaluated.</textarea>
+        </div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset Form</button>
+        <button id="calculate-btn"><i class="fas fa-file-invoice"></i> Generate Report</button>
+      </div>
+    </div>
+
+    <!-- Result / Printable Panel -->
+    <div id="result-panel" class="result-panel" style="display: none; margin-top: 24px;">
+      <h3 style="font-family:'Outfit'; margin-bottom: 12px; text-align: left;">Generated Report View</h3>
+      
+      <!-- Preview Wrapper -->
+      <div id="generated-report-view">
+        <!-- Content will be injected here -->
+      </div>
+
+      <div class="btn-row" style="display: flex; gap: 8px; margin-top: 20px;">
+        <button id="print-btn" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-print"></i> Print / Save PDF</button>
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Text</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85;">
+        </div>
+    </footer>
+  </div>
+
+  <script src="js/soiling-customer-report.js"></script>
+</body>
+</html>

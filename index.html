@@ -18,203 +18,517 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Top Announcement Disclaimer Bar -->
-    <div class="top-disclaimer-bar">
-        <span class="disclaimer-badge">DISCLAIMER</span>
-        <span class="disclaimer-text">This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.</span>
-    </div>
+    <!-- App layout container -->
+    <div class="app-layout">
+        <!-- Desktop Sidebar Navigation -->
+        <aside class="desktop-sidebar">
+            <div class="sidebar-brand">
+                <img src="images/L3S_ICON.png" alt="Logo Icon" class="sidebar-brand-icon">
+                <div class="sidebar-brand-text">Level3Support</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#home" class="nav-item active" data-view="home">
+                    <i class="fas fa-home"></i> <span>Home</span>
+                </a>
+                <a href="#tools" class="nav-item" data-view="tools">
+                    <i class="fas fa-tools"></i> <span>Tool Library</span>
+                </a>
+                <a href="#workflows" class="nav-item" data-view="workflows">
+                    <i class="fas fa-project-diagram"></i> <span>Workflows</span>
+                </a>
+                <a href="#reference" class="nav-item" data-view="reference">
+                    <i class="fas fa-book-open"></i> <span>Reference</span>
+                </a>
+                <a href="#reports" class="nav-item" data-view="reports">
+                    <i class="fas fa-file-invoice"></i> <span>Reports & Forms</span>
+                </a>
+                <a href="#legacy" class="nav-item" data-view="legacy">
+                    <i class="fas fa-archive"></i> <span>Legacy / Admin</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="version-tag">v1.3.0</div>
+            </div>
+        </aside>
 
-    <!-- Navigation Header -->
-    <nav class="navbar">
-        <div class="banner-and-contact">
-            <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" class="banner-logo">
-        </div>
-    </nav>
+        <!-- Main Content Area -->
+        <div class="main-content-area">
+            <!-- Top Announcement Disclaimer Bar -->
+            <div class="top-disclaimer-bar">
+                <span class="disclaimer-badge">DISCLAIMER</span>
+                <span class="disclaimer-text">This ToolHub assists field engineers but does not replace approved project documents, manuals, local codes, or site-specific HSE.</span>
+            </div>
 
-    <div class="main-content-wrapper">
+            <!-- Mobile Navbar Header -->
+            <nav class="mobile-navbar">
+                <div class="mobile-navbar-brand">
+                    <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" class="mobile-logo">
+                </div>
+            </nav>
 
-        <!-- Category Filters & Search Section -->
-        <section class="filters-section" style="margin-top: 2rem;">
-            <div class="filters-container">
-                <div class="filter-search-wrapper" style="display: flex; gap: 1.5rem; align-items: center; width: 100%; flex-wrap: wrap;">
-                    <div class="dropdown-label" style="font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; margin-bottom: 0;">Filter by Category:</div>
-                    <div class="custom-multiselect" id="category-multiselect" style="position: relative; width: 250px; z-index: 100;">
-                        <button type="button" class="multiselect-trigger" id="dropdown-trigger" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.25rem; font-size: 0.95rem; border-radius: 9999px; height: 46px; border: 1px solid #cbd5e1; background: #f8fafc; cursor: pointer; font-weight: 550; color: #475569; transition: all 0.2s ease; box-sizing: border-box; margin: 0;">
-                            <span id="dropdown-label-text" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: 170px; text-align: left; flex: 1;">All Categories</span>
-                            <i class="fas fa-chevron-down" style="color: #94a3b8; font-size: 0.85rem; transition: transform 0.2s ease;" id="dropdown-chevron"></i>
-                        </button>
-                        <div class="multiselect-dropdown hidden" id="dropdown-menu" style="position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.03); padding: 4px; display: flex; flex-direction: column; gap: 2px; max-height: 280px; overflow-y: auto; z-index: 1000; box-sizing: border-box;">
-                            <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                                <input type="checkbox" value="all" checked style="width: 14px; height: 14px; accent-color: var(--primary-color); cursor: pointer; margin: 0;">
-                                <span style="font-size: 0.85rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif; line-height: 1;">All Categories</span>
-                            </label>
-                            <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                                <input type="checkbox" value="calculators" style="width: 14px; height: 14px; accent-color: var(--primary-color); cursor: pointer; margin: 0;">
-                                <span style="font-size: 0.85rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif; line-height: 1;">Calculators</span>
-                            </label>
-                            <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                                <input type="checkbox" value="pv-field-tools" style="width: 14px; height: 14px; accent-color: var(--primary-color); cursor: pointer; margin: 0;">
-                                <span style="font-size: 0.85rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif; line-height: 1;">PV Field Tools</span>
-                            </label>
-                            <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                                <input type="checkbox" value="bess-field-tools" style="width: 14px; height: 14px; accent-color: var(--primary-color); cursor: pointer; margin: 0;">
-                                <span style="font-size: 0.85rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif; line-height: 1;">BESS Field Tools</span>
-                            </label>
-                            <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                                <input type="checkbox" value="electrical-test-forms" style="width: 14px; height: 14px; accent-color: var(--primary-color); cursor: pointer; margin: 0;">
-                                <span style="font-size: 0.85rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif; line-height: 1;">Electrical Test Forms</span>
-                            </label>
-                            <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                                <input type="checkbox" value="scada-diagnostics" style="width: 14px; height: 14px; accent-color: var(--primary-color); cursor: pointer; margin: 0;">
-                                <span style="font-size: 0.85rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif; line-height: 1;">SCADA & Diagnostics</span>
-                            </label>
-                            <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                                <input type="checkbox" value="reports-templates" style="width: 14px; height: 14px; accent-color: var(--primary-color); cursor: pointer; margin: 0;">
-                                <span style="font-size: 0.85rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif; line-height: 1;">Reports & Templates</span>
-                            </label>
-                            <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                                <input type="checkbox" value="reference-guides" style="width: 14px; height: 14px; accent-color: var(--primary-color); cursor: pointer; margin: 0;">
-                                <span style="font-size: 0.85rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif; line-height: 1;">Reference Guides</span>
-                            </label>
-                            <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                                <input type="checkbox" value="hse" style="width: 14px; height: 14px; accent-color: var(--primary-color); cursor: pointer; margin: 0;">
-                                <span style="font-size: 0.85rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif; line-height: 1;">HSE</span>
-                            </label>
-                            <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
-                                <input type="checkbox" value="legacy-archive" style="width: 14px; height: 14px; accent-color: var(--primary-color); cursor: pointer; margin: 0;">
-                                <span style="font-size: 0.85rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif; line-height: 1;">Legacy / Archive</span>
-                            </label>
+            <!-- Dynamic Views Container -->
+            <main class="views-container">
+                
+                <!-- 1. HOME VIEW -->
+                <section id="view-home" class="view-section active">
+                    <div class="view-header">
+                        <h1 class="view-title">Level3Support ToolHub</h1>
+                        <p class="view-subtitle">Solar PV, BESS, Grid, SCADA, and field engineering operating system</p>
+                    </div>
+
+                    <!-- Global Search -->
+                    <div class="global-search-container">
+                        <div class="global-search-wrapper">
+                            <i class="fas fa-search global-search-icon"></i>
+                            <input type="text" id="global-search-input" class="global-search-input" placeholder="Search 50+ tools, workflows, tags, or aliases (e.g., megger, hex, reactive)...">
                         </div>
                     </div>
-                    <div class="search-container" style="flex: 1 1 300px; max-width: 350px; position: relative;">
-                        <i class="fas fa-search search-icon" style="top: 50% !important; transform: translateY(-50%) !important;"></i>
-                        <input type="text" id="search-input" class="search-input" placeholder="Search PV/BESS tools, relays, tags..." style="box-sizing: border-box; margin: 0;">
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Tools Grid Section -->
-        <section class="tools-section">
-            <div class="section-container">
-                <!-- Loading Indicator -->
-                <div id="loading-indicator" class="loading-state">
-                    <div class="spinner"></div>
-                    <p>Loading tools...</p>
-                </div>
-                
-                <!-- Tools Grid -->
-                <div id="tools-grid" class="tools-grid">
-                    <!-- Tool cards will be dynamically inserted here -->
-                </div>
-                
-                <!-- Empty State -->
-                <div id="empty-state" class="empty-state" style="display: none;">
-                    <div class="empty-icon">
-                        <i class="fas fa-tools"></i>
+                    <!-- Favorites Section -->
+                    <div class="home-section" id="favorites-section">
+                        <h2 class="home-section-title"><i class="fas fa-star text-warning"></i> My Starred Tools</h2>
+                        <div id="favorites-grid" class="tools-grid">
+                            <!-- Starred tools injected dynamically -->
+                        </div>
+                        <div id="favorites-empty-state" class="empty-state-card">
+                            <i class="far fa-star"></i>
+                            <p>No favorites yet. Star tools to pin them here for rapid field access.</p>
+                        </div>
                     </div>
-                    <h3 class="empty-title">No tools available</h3>
-                    <p class="empty-text">Check back soon for new tools and resources.</p>
+
+                    <!-- Recently Used Section -->
+                    <div class="home-section" id="recent-section" style="display: none;">
+                        <h2 class="home-section-title"><i class="fas fa-history text-primary"></i> Recently Used</h2>
+                        <div id="recent-grid" class="tools-grid">
+                            <!-- Recently used tools injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Recommended Workflows -->
+                    <div class="home-section">
+                        <div class="section-header-flex">
+                            <h2 class="home-section-title"><i class="fas fa-route text-success"></i> Core Workflows</h2>
+                            <a href="#workflows" class="view-all-link">View All Workflows <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div id="recommended-workflows-grid" class="workflows-home-grid">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Featured / Common Field Tools -->
+                    <div class="home-section">
+                        <h2 class="home-section-title"><i class="fas fa-fire text-danger"></i> Essential Field Tools</h2>
+                        <div id="featured-grid" class="tools-grid">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. TOOLS VIEW -->
+                <section id="view-tools" class="view-section">
+                    <div class="view-header">
+                        <h1 class="view-title">Tool Library</h1>
+                        <p class="view-subtitle">Search, filter, and access all active solar, battery, SCADA, and grid tools.</p>
+                    </div>
+
+                    <div class="library-filter-panel">
+                        <div class="library-search-row">
+                            <div class="search-container" style="flex: 1; position: relative;">
+                                <i class="fas fa-search search-icon"></i>
+                                <input type="text" id="library-search-input" class="search-input" placeholder="Search tool name, description, alias, or tags...">
+                            </div>
+                            
+                            <!-- Toggle Advanced Filters -->
+                            <button id="toggle-adv-filters" class="filter-toggle-btn">
+                                <i class="fas fa-sliders-h"></i> <span>Filters</span>
+                            </button>
+                        </div>
+
+                        <!-- Category Scrolling Chips -->
+                        <div class="category-chips-scroller">
+                            <div class="chips-container" id="category-chips-container">
+                                <!-- Generated Dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Advanced Filters Drawer -->
+                        <div id="advanced-filters-drawer" class="filters-drawer hidden">
+                            <div class="drawer-grid">
+                                <div class="filter-group">
+                                    <label>Discipline / Field</label>
+                                    <select id="filter-discipline">
+                                        <option value="all">All Disciplines</option>
+                                        <option value="PV">Solar PV</option>
+                                        <option value="BESS">BESS / Battery</option>
+                                        <option value="Grid">Grid & Controls</option>
+                                        <option value="SCADA">SCADA & Comms</option>
+                                        <option value="Electrical">Electrical Testing</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Tool Type</label>
+                                    <select id="filter-tool-type">
+                                        <option value="all">All Types</option>
+                                        <option value="Calculator">Calculators</option>
+                                        <option value="Checklist">Checklists</option>
+                                        <option value="Form">Test Forms</option>
+                                        <option value="Tool">Diagnostic Tools</option>
+                                        <option value="Reference">Reference Guides</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Development Status</label>
+                                    <select id="filter-status">
+                                        <option value="active-only">Active / In Progress (Default)</option>
+                                        <option value="all">Show All</option>
+                                        <option value="Active">Active Only</option>
+                                        <option value="In Progress">In Progress Only</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Library Grid -->
+                    <div id="library-grid" class="tools-grid">
+                        <!-- Tools list injected dynamically -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="library-empty-state" class="empty-state" style="display: none;">
+                        <div class="empty-icon"><i class="fas fa-search"></i></div>
+                        <h3 class="empty-title">No tools match your query</h3>
+                        <p class="empty-text">Try adjusting your filters, search term, or select "All Categories".</p>
+                    </div>
+                </section>
+
+                <!-- 3. WORKFLOWS VIEW -->
+                <section id="view-workflows" class="view-section">
+                    <div class="view-header">
+                        <h1 class="view-title">Field Workflow Packs</h1>
+                        <p class="view-subtitle">Organized checklist sequences combining multiple calculator, report, and diagnostic tools to complete field milestones.</p>
+                    </div>
+
+                    <!-- Workflows Main Grid -->
+                    <div id="workflows-grid" class="workflows-main-grid">
+                        <!-- Injected dynamically -->
+                    </div>
+
+                    <!-- Workflow Detail Overlay (Rendered as beautiful slider panel) -->
+                    <div id="workflow-detail-panel" class="workflow-detail-panel hidden">
+                        <div class="panel-overlay" onclick="closeWorkflowDetail()"></div>
+                        <div class="panel-content">
+                            <button class="panel-close-btn" onclick="closeWorkflowDetail()"><i class="fas fa-times"></i></button>
+                            <div id="workflow-detail-body">
+                                <!-- Generated Dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. REFERENCE VIEW -->
+                <section id="view-reference" class="view-section">
+                    <div class="view-header">
+                        <h1 class="view-title">Reference Guides & Converters</h1>
+                        <p class="view-subtitle">Quick lookup tools, torque tables, protocol analyzers, base converters, and training material lists.</p>
+                    </div>
+
+                    <div class="library-filter-panel">
+                        <div class="search-container" style="position: relative; margin-bottom: 1rem;">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="reference-search-input" class="search-input" placeholder="Search reference tools (e.g. torque, base converter, MODBUS)...">
+                        </div>
+                        <div class="category-chips-scroller">
+                            <div class="chips-container" id="reference-chips-container">
+                                <!-- Chips for reference sub-categories -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="reference-grid" class="tools-grid">
+                        <!-- Reference tools injected dynamically -->
+                    </div>
+                </section>
+
+                <!-- 5. REPORTS VIEW -->
+                <section id="view-reports" class="view-section">
+                    <div class="view-header">
+                        <h1 class="view-title">Field Reports & Forms</h1>
+                        <p class="view-subtitle">Standardized testing templates, site reports, JHA builders, punchlist makers, and CAPA trackers.</p>
+                    </div>
+
+                    <div class="library-filter-panel">
+                        <div class="search-container" style="position: relative; margin-bottom: 1rem;">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="reports-search-input" class="search-input" placeholder="Search reports & forms (e.g. site visit, TTR, LOTO, JHA)...">
+                        </div>
+                        <div class="category-chips-scroller">
+                            <div class="chips-container" id="reports-chips-container">
+                                <!-- Chips for reports filters -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="reports-grid" class="tools-grid">
+                        <!-- Reports tools injected dynamically -->
+                    </div>
+                </section>
+
+                <!-- 6. LEGACY / ADMIN VIEW -->
+                <section id="view-legacy" class="view-section">
+                    <div class="view-header">
+                        <h1 class="view-title">Legacy / Admin Center</h1>
+                        <p class="view-subtitle">Historical support requests, training logs, and active tool registry auditing tools.</p>
+                    </div>
+
+                    <!-- Warning Alert Banner -->
+                    <div class="warning-banner">
+                        <div class="warning-banner-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="warning-banner-content">
+                            <h4 style="margin: 0 0 0.25rem 0; color: #7f1d1d; font-weight: 700;">Preserved Legacy Environment</h4>
+                            <p style="margin: 0; color: #991b1b; font-size: 0.85rem;">These modules are kept for historical support, database inquiries, and archived compliance. They are not active field tools.</p>
+                        </div>
+                    </div>
+
+                    <!-- Audit Dashboard Component -->
+                    <div class="audit-dashboard-card">
+                        <h3 class="audit-card-title"><i class="fas fa-server"></i> Central ToolHub Audit Dashboard</h3>
+                        <div class="audit-stats-grid">
+                            <div class="audit-stat-item">
+                                <div class="audit-stat-number" id="audit-active-count">0</div>
+                                <div class="audit-stat-label">Active Field Modules</div>
+                            </div>
+                            <div class="audit-stat-item">
+                                <div class="audit-stat-number" id="audit-inprogress-count">0</div>
+                                <div class="audit-stat-label">In Progress Modules</div>
+                            </div>
+                            <div class="audit-stat-item">
+                                <div class="audit-stat-number" id="audit-legacy-count">0</div>
+                                <div class="audit-stat-label">Legacy Modules</div>
+                            </div>
+                            <div class="audit-stat-item">
+                                <div class="audit-stat-number" id="audit-total-count">0</div>
+                                <div class="audit-stat-label">Total Registered Modules</div>
+                            </div>
+                        </div>
+                        
+                        <div class="audit-details-section">
+                            <h4 style="margin: 1.5rem 0 0.5rem 0; color: #0f172a;"><i class="fas fa-stethoscope"></i> Registry Compliance & Diagnostics</h4>
+                            <div class="audit-log-box" id="audit-log-box">
+                                Loading registry audit details...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Legacy Tools List -->
+                    <div class="home-section" style="margin-top: 2rem;">
+                        <h2 class="home-section-title"><i class="fas fa-archive"></i> Legacy Support & Course Materials</h2>
+                        <div id="legacy-grid" class="tools-grid">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Desktop Footer -->
+            <footer class="main-footer">
+                <div class="footer-container-inner">
+                    <p class="footer-copy-text">
+                        <span>&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</span>
+                        <span class="footer-version-tag">v1.3.0</span>
+                    </p>
+                    <div class="powered-by-wrapper">
+                        <span class="powered-by-label">Powered by</span>
+                        <img src="images/APROVERO_LOGO.png" alt="aprovero" class="footer-partner-logo">
+                    </div>
                 </div>
-            </div>
-        </section>
+            </footer>
+        </div>
+
+        <!-- Mobile Bottom Icon Navigation -->
+        <nav class="mobile-bottom-nav">
+            <a href="#home" class="bottom-nav-item active" data-view="home">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#tools" class="bottom-nav-item" data-view="tools">
+                <i class="fas fa-tools"></i>
+                <span>Tools</span>
+            </a>
+            <a href="#workflows" class="bottom-nav-item" data-view="workflows">
+                <i class="fas fa-project-diagram"></i>
+                <span>Workflows</span>
+            </a>
+            <a href="#reference" class="bottom-nav-item" data-view="reference">
+                <i class="fas fa-book-open"></i>
+                <span>Reference</span>
+            </a>
+            <a href="#reports" class="bottom-nav-item" data-view="reports">
+                <i class="fas fa-file-invoice"></i>
+                <span>Reports</span>
+            </a>
+        </nav>
     </div>
 
-    <!-- Footer -->
-    <footer class="main-footer" style="background: #0f172a; padding: 1.5rem 2rem; border-top: 1px solid #1e293b; margin-top: 4rem;">
-        <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; width: 100%;">
-            <p style="margin: 0; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; gap: 0.75rem;">
-                <span>&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</span>
-                <span style="padding: 0.15rem 0.4rem; background: #1e293b; border-radius: 4px; color: #94a3b8; font-size: 0.72rem; font-weight: 600; border: 1px solid #334155; letter-spacing: 0.5px;">v1.2.5</span>
-            </p>
-            <div class="powered-by-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
-                <span style="font-style: italic; font-weight: 400; color: #64748b; font-size: 0.85rem; font-family: 'Inter', sans-serif;">Powered by</span>
-                <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 42px; width: auto; opacity: 0.75; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.75';">
-            </div>
-        </div>
-    </footer>
-
-    <link href="css/shared-styles.css?v=19" rel="stylesheet">
+    <!-- Embed Font & Styling and Router CSS -->
+    <link href="css/shared-styles.css?v=20" rel="stylesheet">
     <style>
-        /* ── index.html page-specific overrides ── */
-        /* Inherits all tokens from shared-styles.css :root */
+        /* ── Unified OS-Style ToolHub Layout CSS ── */
         :root {
-            /* Category accent colors */
-            --color-form: #2563eb;
-            --color-reference: #7c3aed;
-            --color-catalog: #0891b2;
-            --color-electrical-test-forms: #d97706;
-            --color-calculator: #dc2626;
-            --color-template: #9333ea;
-            --color-external: #4f46e5;
-
-            --shadow-hover: 0 8px 25px rgba(37, 99, 235, 0.12);
-            --transition: all 0.2s ease;
+            --sidebar-width: 260px;
+            --mobile-nav-height: 60px;
+            --bottom-nav-height: 65px;
+            
+            /* Category specific colors */
+            --color-calculators: #ef4444;
+            --color-pv-field-tools: #f59e0b;
+            --color-bess-field-tools: #10b981;
+            --color-electrical-test-forms: #ec4899;
+            --color-scada-diagnostics: #8b5cf6;
+            --color-reports-templates: #06b6d4;
+            --color-reference-guides: #64748b;
+            --color-hse: #ef4444;
+            --color-soiling-pv-performance: #0284c7;
+            --color-legacy-archive: #94a3b8;
         }
 
-        /* ── Navigation ── */
-        .navbar {
-            background: #ffffff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 1rem 2rem;
+        body {
+            background-color: #f1f5f9;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
         }
 
-        .banner-and-contact {
+        /* Container layout */
+        .app-layout {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
+            min-height: 100vh;
+            width: 100vw;
+            position: relative;
         }
 
-        .banner-logo {
-            height: 120px;
+        /* ── Desktop Sidebar ── */
+        .desktop-sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #0f172a;
+            color: #f8fafc;
+            border-right: 1px solid #1e293b;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            padding: 1.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .sidebar-brand-icon {
+            height: 32px;
             width: auto;
         }
 
-        .nav-link {
+        .sidebar-brand-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #60a5fa, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1.5rem 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            overflow-y: auto;
+        }
+
+        .nav-item {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            text-decoration: none;
+            gap: 1rem;
+            padding: 0.8rem 1.25rem;
+            color: #94a3b8;
             font-weight: 500;
-            transition: var(--transition);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
         }
 
-        .nav-link:hover {
-            color: var(--primary-color);
-            background: var(--background-dark);
+        .nav-item i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
         }
 
-        /* ── Main Layout Wrapper ── */
-        .main-content-wrapper {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
+        .nav-item:hover {
+            color: #ffffff;
+            background: #1e293b;
         }
 
-        /* ── Top Announcement Disclaimer Ribbon ── */
+        .nav-item.active {
+            color: #ffffff;
+            background: #2563eb;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid #1e293b;
+            text-align: center;
+        }
+
+        .version-tag {
+            font-size: 0.75rem;
+            color: #475569;
+            background: #1e293b;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* ── Main Content Area ── */
+        .main-content-area {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: calc(100% - var(--sidebar-width));
+            background: #f8fafc;
+            position: relative;
+        }
+
+        /* Disclaimer bar */
         .top-disclaimer-bar {
             background: #fef2f2;
             border-bottom: 1px solid #fecaca;
             color: #991b1b;
             font-size: 0.78rem;
-            font-weight: 500;
+            font-weight: 550;
             text-align: center;
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 0.5rem;
-            z-index: 1001;
-            position: relative;
+            z-index: 90;
         }
+
         .disclaimer-badge {
             background: #ef4444;
             color: #ffffff;
@@ -223,87 +537,250 @@
             padding: 0.15rem 0.4rem;
             border-radius: 4px;
             letter-spacing: 0.5px;
-            flex-shrink: 0;
-        }
-        .disclaimer-text {
-            line-height: 1.4;
         }
 
-        /* ── Filters Card ── */
-        .filters-section {
-            background: transparent;
-            border-bottom: none;
-            padding: 0;
-            margin-bottom: 1.5rem;
-        }
-
-        .filters-container {
+        /* Mobile Top Navbar */
+        .mobile-navbar {
+            display: none;
+            height: var(--mobile-nav-height);
             background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1rem 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03);
-            
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
+            border-bottom: 1px solid #cbd5e1;
+            align-items: center;
+            padding: 0 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 95;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        .search-container {
-            position: relative;
-            margin-bottom: 0 !important;
+        .mobile-logo {
+            height: 38px;
+            width: auto;
         }
 
-        .search-input {
+        /* Views Container */
+        .views-container {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            max-width: 1400px;
             width: 100%;
-            padding: 0.75rem 1.25rem 0.75rem 3rem !important;
-            font-size: 0.95rem !important;
-            border-radius: 9999px !important;
-            height: 46px !important;
-            border: 1px solid #cbd5e1 !important;
-            background: #f8fafc !important;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            margin: 0 auto;
+            box-sizing: border-box;
         }
 
-        .search-input:focus {
-            background: #ffffff !important;
-            border-color: var(--primary-color) !important;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12) !important;
+        /* ── View Sections ── */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.25s ease;
         }
 
-        .search-icon {
-            position: absolute;
-            left: 1.25rem;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            color: #94a3b8;
-            font-size: 1.1rem !important;
+        .view-section.active {
+            display: block;
         }
 
-        .filter-section-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .filters-title {
+        .view-header {
+            margin-bottom: 2rem;
+        }
+
+        .view-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 0.5rem 0;
+            text-align: left;
+        }
+
+        .view-subtitle {
+            font-size: 1.1rem;
             color: #475569;
             margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            line-height: 1.5;
         }
 
-        .filter-checkboxes {
+        /* ── Global Search Home ── */
+        .global-search-container {
+            margin-bottom: 2.5rem;
+        }
+
+        .global-search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .global-search-input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3.5rem !important;
+            font-size: 1.1rem !important;
+            font-family: 'Inter', sans-serif;
+            border-radius: 9999px !important;
+            height: 58px !important;
+            border: 1px solid #cbd5e1 !important;
+            background: #ffffff !important;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-sizing: border-box;
+        }
+
+        .global-search-input:focus {
+            outline: none !important;
+            border-color: #2563eb !important;
+            box-shadow: 0 4px 24px rgba(37, 99, 235, 0.15), 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+        }
+
+        .global-search-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.3rem;
+        }
+
+        /* ── Home Page Sections ── */
+        .home-section {
+            margin-bottom: 3rem;
+        }
+
+        .home-section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 1.25rem 0;
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
             gap: 0.6rem;
+            text-transform: none;
+            letter-spacing: normal;
         }
 
-        /* Premium Selectable Pills */
-        .filter-checkbox {
+        .section-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-header-flex .home-section-title {
+            margin: 0;
+        }
+
+        .view-all-link {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            transition: var(--transition-quick);
+        }
+
+        .view-all-link:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        /* ── Starred empty state ── */
+        .empty-state-card {
+            background: #ffffff;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 2.5rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .empty-state-card i {
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .empty-state-card p {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* ── Tool Library Filters ── */
+        .library-filter-panel {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .library-search-row {
+            display: flex;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .filter-toggle-btn {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            border-radius: 9999px;
+            padding: 0 1.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            height: 46px;
+            margin-top: 0;
+            width: auto;
+            min-height: auto;
+        }
+
+        .filter-toggle-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .filter-toggle-btn.active {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+
+        /* Category chips */
+        .category-chips-scroller {
+            overflow-x: auto;
+            width: 100%;
+            scrollbar-width: none; /* Hide standard Firefox scrollbar */
+            -ms-overflow-style: none; /* Hide IE scrollbar */
+            padding: 2px 0;
+        }
+
+        .category-chips-scroller::-webkit-scrollbar {
+            display: none; /* Hide Chrome/Safari scrollbars */
+        }
+
+        .chips-container {
+            display: flex;
+            gap: 0.5rem;
+            white-space: nowrap;
+            width: max-content;
+        }
+
+        .category-chip {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -312,337 +789,803 @@
             border-radius: 9999px;
             padding: 0.4rem 1.1rem;
             font-size: 0.85rem;
-            font-weight: 550;
+            font-weight: 600;
             color: #475569;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             user-select: none;
-            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
 
-        .filter-checkbox:hover {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
+        .category-chip:hover {
+            color: #2563eb;
+            border-color: #2563eb;
             background: #f8fafc;
         }
 
-        /* Raw input hiding */
-        .filter-checkbox input[type="checkbox"] {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-            margin: 0;
-            pointer-events: none;
-        }
-
-        .checkmark {
-            display: none !important;
-        }
-
-        /* Active styling using :has() selector */
-        .filter-checkbox:has(input:checked) {
-            background-color: var(--primary-color) !important;
+        .category-chip.active {
+            background-color: #2563eb !important;
             color: #ffffff !important;
-            border-color: var(--primary-color) !important;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2), 0 2px 4px -1px rgba(37, 99, 235, 0.1);
+            border-color: #2563eb !important;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
         }
 
-        /* Specific checked color matching tools-hub themes */
-        .filter-checkbox:has(input[value="calculators"]:checked) { background-color: var(--color-calculators) !important; border-color: var(--color-calculators) !important; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2); }
-        .filter-checkbox:has(input[value="pv-field-tools"]:checked) { background-color: var(--color-pv-field-tools) !important; border-color: var(--color-pv-field-tools) !important; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2); }
-        .filter-checkbox:has(input[value="bess-field-tools"]:checked) { background-color: var(--color-bess-field-tools) !important; border-color: var(--color-bess-field-tools) !important; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2); }
-        .filter-checkbox:has(input[value="electrical-test-forms"]:checked) { background-color: var(--color-electrical-test-forms) !important; border-color: var(--color-electrical-test-forms) !important; box-shadow: 0 4px 6px -1px rgba(236, 72, 153, 0.2); }
-        .filter-checkbox:has(input[value="scada-diagnostics"]:checked) { background-color: var(--color-scada-diagnostics) !important; border-color: var(--color-scada-diagnostics) !important; box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.2); }
-        .filter-checkbox:has(input[value="reports-templates"]:checked) { background-color: var(--color-reports-templates) !important; border-color: var(--color-reports-templates) !important; box-shadow: 0 4px 6px -1px rgba(6, 182, 212, 0.2); }
-        .filter-checkbox:has(input[value="reference-guides"]:checked) { background-color: var(--color-reference-guides) !important; border-color: var(--color-reference-guides) !important; box-shadow: 0 4px 6px -1px rgba(100, 116, 139, 0.2); }
-        .filter-checkbox:has(input[value="hse"]:checked) { background-color: var(--color-hse) !important; border-color: var(--color-hse) !important; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2); }
-        .filter-checkbox:has(input[value="legacy-archive"]:checked) { background-color: var(--color-legacy-archive) !important; border-color: var(--color-legacy-archive) !important; box-shadow: 0 4px 6px -1px rgba(148, 163, 184, 0.2); }
-
-        /* ── Tools Grid ── */
-        .tools-section {
-            padding: 0;
-            min-height: 50vh;
-            margin-bottom: 3rem;
+        /* Advanced Drawer */
+        .filters-drawer {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1rem;
+            margin-top: 0.25rem;
+            transition: all 0.3s ease;
         }
 
-        .section-container {
-            max-width: 1400px;
-            margin: 0 auto;
+        .filters-drawer.hidden {
+            display: none;
         }
 
+        .drawer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .filter-group label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .filter-group select {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0 0.75rem;
+            font-size: 0.9rem;
+            background-color: #f8fafc;
+            color: #1e293b;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        /* ── Tools Grid Premium styling ── */
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 3rem;
+            margin-bottom: 1.5rem;
         }
 
-
-
-        /* ── Loading & Empty States ── */
-        .loading-state {
-            display: none;
+        .tool-tile {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.03);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
             flex-direction: column;
+        }
+
+        .tool-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.03);
+            border-color: #cbd5e1;
+        }
+
+        .tile-content {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            flex: 1;
+            box-sizing: border-box;
+            gap: 0;
+        }
+
+        .tile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .status-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .status-active { background: #dcfce7; color: #15803d; }
+        .status-in-progress { background: #fef3c7; color: #b45309; }
+        .status-legacy { background: #f1f5f9; color: #475569; }
+        .status-disabled { background: #fee2e2; color: #b91c1c; }
+        .status-admin-only { background: #f3e8ff; color: #6b21a8; }
+
+        .tile-category {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #f1f5f9;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            position: static;
+        }
+
+        .favorite-btn {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: auto;
+            min-height: auto;
+            padding: 0;
+            margin: 0;
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 4rem 0;
-            text-align: center;
         }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border-color);
-            border-top: 3px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
+        .favorite-btn:hover {
+            transform: scale(1.15);
+            color: #f59e0b;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .favorite-btn.active {
+            color: #f59e0b;
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: #ffffff;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
+        .tile-main {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            margin-bottom: 1.25rem;
+            flex: 1;
         }
 
-        .empty-icon {
-            font-size: 3rem;
-            color: var(--text-light);
-            margin-bottom: 1rem;
+        .tile-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
         }
 
-        .empty-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
-            color: var(--text-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-text {
-            color: var(--text-secondary);
-        }
-
-        /* ── Footer ── */
-        .main-footer {
-            background: #0f172a;
+        .tool-tile:hover .tile-icon-wrapper {
+            transform: scale(1.05);
+            background: #2563eb;
             color: #ffffff;
-            margin-top: 3rem;
         }
 
-        .footer-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 3rem 2rem 1rem;
+        .tile-info {
+            flex: 1;
+            text-align: left;
         }
 
-        .footer-content {
+        .tile-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 0.35rem 0;
+            line-height: 1.3;
+            text-align: left;
+        }
+
+        .tile-description {
+            font-size: 0.82rem;
+            color: #475569;
+            margin: 0;
+            line-height: 1.45;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tile-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 0.85rem;
+            margin-top: auto;
+        }
+
+        .tile-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            max-width: 80%;
+        }
+
+        .tag-badge {
+            font-size: 0.65rem;
+            font-weight: 550;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            background: #f8fafc;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tile-action-indicator {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .tool-tile:hover .tile-action-indicator {
+            transform: translateX(3px);
+            color: #2563eb;
+        }
+
+        /* ── Workflows Grid Premium ── */
+        .workflows-main-grid, .workflows-home-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
-        .footer-description {
-            color: #94a3b8;
-            line-height: 1.6;
+        .workflows-home-grid {
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
         }
 
-        .footer-links h4,
-        .footer-contact h4 {
-            font-family: 'Outfit', sans-serif;
-            margin-bottom: 1rem;
-            color: #60a5fa;
-            font-size: 1.1rem;
+        .workflow-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            box-sizing: border-box;
         }
 
-        .footer-links ul {
-            list-style: none;
+        .workflow-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(16, 185, 129, 0.06), 0 4px 12px rgba(16, 185, 129, 0.02);
+            border-color: #a7f3d0;
         }
 
-        .footer-links li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-links a {
-            color: #94a3b8;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: #60a5fa;
-        }
-
-        .footer-contact p {
-            color: #94a3b8;
+        .workflow-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 1rem;
         }
 
-        .footer-bottom {
-            border-top: 1px solid #1e293b;
-            padding-top: 2rem;
-            text-align: center;
+        .workflow-badge {
+            background: #e6f7f0;
+            color: #10b981;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .workflow-step-count {
+            font-size: 0.75rem;
+            font-weight: 600;
             color: #64748b;
-            font-size: 0.9rem;
+            background: #f1f5f9;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
         }
 
-        /* ── Responsive ── */
-        @media (max-width: 768px) {
-            .navbar { padding: 1rem; }
+        .workflow-card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.3;
+        }
 
-            .banner-and-contact {
-                flex-direction: column;
-                align-items: center;
+        .workflow-card-desc {
+            font-size: 0.82rem;
+            color: #475569;
+            margin: 0 0 1.25rem 0;
+            line-height: 1.45;
+        }
+
+        .workflow-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 0.85rem;
+            margin-top: auto;
+        }
+
+        .workflow-tags {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .workflow-tag {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .workflow-action-btn {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* ── Workflow Detail Panel Slider ── */
+        .workflow-detail-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+            transition: all 0.3s ease;
+        }
+
+        .workflow-detail-panel.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .panel-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px);
+        }
+
+        .panel-content {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 100%;
+            background: #ffffff;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            animation: slideLeft 0.3s ease cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+            padding: 2.5rem 2rem;
+            box-sizing: border-box;
+        }
+
+        @keyframes slideLeft {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .panel-close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            border: none;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0;
+            margin: 0;
+            min-height: auto;
+        }
+
+        .panel-close-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        /* Sequence step numbers list */
+        .workflow-steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .step-item:hover {
+            background: #f0fdf4;
+            border-color: #a7f3d0;
+            transform: translateX(4px);
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #10b981;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .step-name {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 0.95rem;
+            margin: 0 0 0.15rem 0;
+        }
+
+        .step-desc {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.35;
+        }
+
+        .step-action-arrow {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+        }
+
+        .step-item:hover .step-action-arrow {
+            color: #10b981;
+        }
+
+        /* ── Legacy Banner & Audit Card ── */
+        .warning-banner {
+            background: #fff5f5;
+            border: 1px solid #fee2e2;
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .warning-banner-icon {
+            color: #ef4444;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .audit-dashboard-card {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            text-align: left;
+        }
+
+        .audit-card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 1.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .audit-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .audit-stat-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .audit-stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 0.25rem;
+        }
+
+        .audit-stat-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .audit-log-box {
+            background: #0f172a;
+            color: #38bdf8;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem;
+            border-radius: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            border: 1px solid #1e293b;
+        }
+
+        /* ── Desktop/Mobile Footer ── */
+        .main-footer {
+            background: #0f172a !important;
+            padding: 1.5rem 2.5rem !important;
+            border-top: 1px solid #1e293b !important;
+            margin-top: 4rem !important;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .footer-container-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .footer-copy-text {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-version-tag {
+            padding: 0.15rem 0.4rem;
+            background: #1e293b;
+            border-radius: 4px;
+            color: #94a3b8;
+            font-size: 0.72rem;
+            font-weight: 600;
+            border: 1px solid #334155;
+            letter-spacing: 0.5px;
+        }
+
+        .powered-by-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .powered-by-label {
+            font-style: italic;
+            font-weight: 400;
+            color: #64748b;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .footer-partner-logo {
+            height: 42px;
+            width: auto;
+            opacity: 0.75;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .footer-partner-logo:hover {
+            opacity: 1;
+        }
+
+        /* ── Mobile Bottom Navigation ── */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--bottom-nav-height);
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
+            box-sizing: border-box;
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            flex: 1;
+            height: 100%;
+            transition: all 0.2s ease;
+            width: auto;
+            min-height: auto;
+            padding: 0;
+            margin: 0;
+            border-radius: 0;
+            background: transparent;
+        }
+
+        .bottom-nav-item i {
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        .bottom-nav-item:hover {
+            color: #2563eb;
+            background: transparent;
+        }
+
+        .bottom-nav-item.active {
+            color: #2563eb;
+            background: transparent;
+        }
+
+        .bottom-nav-item.active i {
+            transform: translateY(-2px);
+        }
+
+        /* ── Responsive Rules ── */
+        @media (max-width: 1024px) {
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .desktop-sidebar {
+                display: none;
+            }
+
+            .main-content-area {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .mobile-navbar {
+                display: flex;
+            }
+
+            .mobile-bottom-nav {
+                display: flex;
+            }
+
+            .views-container {
+                padding: 1.25rem 1rem;
+                padding-bottom: calc(var(--bottom-nav-height) + 1.5rem); /* Prevents bottom bar covering content */
+            }
+
+            .view-title {
+                font-size: 1.75rem;
+            }
+
+            .view-subtitle {
+                font-size: 0.95rem;
+            }
+
+            .global-search-input {
+                height: 48px !important;
+                font-size: 0.95rem !important;
+                padding-left: 2.8rem !important;
+            }
+
+            .global-search-icon {
+                font-size: 1.1rem;
+                left: 1.1rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
                 gap: 1rem;
+            }
+
+            .workflows-main-grid, .workflows-home-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .main-footer {
+                padding: 1rem 1rem 5.5rem 1rem !important; /* Extra bottom padding for mobile bottom nav */
                 text-align: center;
             }
 
-            .banner-logo { height: 90px; }
-
-            .nav-link {
-                padding: 0.75rem 1.5rem;
-                border-radius: 6px;
-                background: var(--background-dark);
-                border: 1px solid var(--border-color);
-                font-size: 0.9rem;
-            }
-
-            .filters-section { padding: 0; }
-            .filters-container {
-                padding: 1.25rem;
+            .footer-container-inner {
+                flex-direction: column;
+                align-items: center;
                 gap: 1rem;
             }
-            .search-container {
-                margin-left: 0 !important;
-                flex: 1 1 100% !important;
-                max-width: 100% !important;
-            }
-            .search-input {
-                height: 42px !important;
-                font-size: 0.9rem !important;
-            }
-            .tools-section { padding: 1.5rem 0; }
 
-            .tools-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                gap: 0.75rem;
-            }
-
-            .tool-tile { height: 120px; }
-            .tile-content { padding: 0.75rem; }
-
-            .tile-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.25rem;
-            }
-
-            .tile-title {
-                font-size: 0.9rem;
-                margin-right: 3.5rem;
-            }
-
-            .tile-description { font-size: 0.8rem; }
-
-            .tile-category {
-                top: 0.5rem;
-                right: 0.5rem;
-                font-size: 0.55rem;
-                padding: 0.15rem 0.4rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navbar { padding: 0.75rem; }
-            .banner-logo { height: 80px; }
-
-            .nav-link {
-                padding: 0.5rem 1rem;
-                font-size: 0.85rem;
-            }
-
-            .filters-section { padding: 0.75rem; }
-
-            .filter-checkboxes {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 0.75rem 1rem !important;
-                align-items: flex-start;
-                width: 100%;
-            }
-
-            .filter-checkbox {
-                width: 100%;
-                justify-self: start;
-                margin: 0;
-            }
-
-            .tools-section { padding: 1rem 0.75rem; }
-            .tools-grid { grid-template-columns: 1fr; gap: 0.75rem; }
-            .tool-tile { height: 110px; }
-            .tile-content { padding: 0.75rem; gap: 0.75rem; }
-
-            .tile-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 1.1rem;
-            }
-
-            .tile-title {
-                font-size: 0.85rem;
-                margin-right: 3rem;
-                -webkit-line-clamp: 1;
-                line-clamp: 1;
-            }
-
-            .tile-description {
-                font-size: 0.75rem;
-                -webkit-line-clamp: 2;
-                line-clamp: 2;
-            }
-
-            .tile-category {
-                font-size: 0.5rem;
-                padding: 0.15rem 0.3rem;
+            .panel-content {
+                max-width: 100%;
+                padding: 2rem 1rem;
             }
         }
     </style>
 
-    <!-- Load external JavaScript file -->
-    <script src="js/tools-hub.js"></script>
+    <!-- Load refactored OS-Style javascript router & behavior -->
+    <script src="js/tools-hub.js?v=20"></script>
     <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-        .then(reg => {
-            console.log('SW registered ✅', reg);
-
-            // Optional: Listen for updates
-            if (reg.waiting) {
-            console.log('Update ready. You can prompt user to refresh');
-            }
-
-            reg.addEventListener('updatefound', () => {
-            const newSW = reg.installing;
-            newSW.addEventListener('statechange', () => {
-                if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-                console.log('New version installed. Notify user.');
-                // optionally show a toast here
-                }
-            });
-            });
-        })
+        navigator.serviceWorker.register('/sw.js?v=20')
+        .then(reg => console.log('SW registered ✅', reg))
         .catch(err => console.error('SW registration failed ❌', err));
     }
     </script>
-
-
 </body>
+</html>
 </html>

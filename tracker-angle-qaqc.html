@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tracker Angle / Backtracking QA Checklist — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .status-warning { background: #fef3c7; color: #b45309; }
+    .status-critical { background: #fee2e2; color: #b91c1c; }
+    .checklist-section {
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+      background: #f8fafc;
+    }
+    .checklist-title {
+      font-weight: bold;
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      font-family: 'Outfit';
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 6px;
+      color: var(--text-color);
+    }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .checklist-item input[type="checkbox"] {
+      width: auto;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+    .checklist-item label {
+      margin: 0;
+      font-weight: normal;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ ADVANCED FIELD DIAGNOSTICS</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Tracker Angle / Backtracking QA Checklist</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Validate tracker angle behavior, backtracking, mechanical alignment, and wind stow during commissioning or performance troubleshooting.
+    </p>
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">General Metadata</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="site-name">Site / Project Name <span class="required">*</span></label>
+          <input type="text" id="site-name" placeholder="e.g. Solar Field Alpha" value="Solar Field Alpha">
+        </div>
+        <div class="input-group">
+          <label for="tracker-row">Tracker Block / Row <span class="required">*</span></label>
+          <input type="text" id="tracker-row" placeholder="e.g. Block 03, Row 12" value="Block 03, Row 12">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="timestamp">Timestamp</label>
+          <input type="datetime-local" id="timestamp">
+        </div>
+        <div class="input-group">
+          <label for="tolerance">Angle Tolerance</label>
+          <div class="input-with-unit">
+            <input type="number" id="tolerance" placeholder="e.g. 1.5" step="any" value="1.5">
+            <div class="input-unit">degrees</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Angle Readings</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="expected-angle">Expected Tracker Angle <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="expected-angle" placeholder="e.g. 45.2" step="any">
+            <div class="input-unit">degrees</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="observed-angle">Observed Tracker Angle <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="observed-angle" placeholder="e.g. 42.1" step="any">
+            <div class="input-unit">degrees</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="backtracking-enabled">Backtracking Enabled?</label>
+          <select id="backtracking-enabled">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="wind-stow">Wind Stow Active?</label>
+          <select id="wind-stow">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="comm-status">Communication Status</label>
+          <select id="comm-status">
+            <option value="normal">Normal</option>
+            <option value="alarm">Alarm</option>
+            <option value="offline">Offline</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="shading-observed">Row-to-Row Shading Observed?</label>
+          <select id="shading-observed">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="controller-status">Tracker Controller Status</label>
+        <input type="text" id="controller-status" placeholder="e.g. In tracking mode, no alarms active" value="Auto-Tracking">
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Quality Checklist</h3>
+      
+      <div class="checklist-section">
+        <div class="checklist-title">1. Mechanical Alignment</div>
+        <div class="checklist-item">
+          <input type="checkbox" id="chk-mech-1" class="tracker-chk">
+          <label for="chk-mech-1">Confirm mechanical structural visual integrity (drive arm, dampers, purlins, fasteners intact)</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="chk-mech-2" class="tracker-chk">
+          <label for="chk-mech-2">Verify slewing drive has correct grease levels and no excessive backlash or slip</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="chk-mech-3" class="tracker-chk">
+          <label for="chk-mech-3">Validate torque tube connection coupling clamps are tight and bolted to specification</label>
+        </div>
+      </div>
+
+      <div class="checklist-section">
+        <div class="checklist-title">2. Controller & Backtracking Logic</div>
+        <div class="checklist-item">
+          <input type="checkbox" id="chk-ctrl-1" class="tracker-chk">
+          <label for="chk-ctrl-1">Verify GPS signal, real-time clock synchronization, and location settings match site design</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="chk-ctrl-2" class="tracker-chk">
+          <label for="chk-ctrl-2">Check slope correction and 3D digital backtracking algorithm variables in the controller configuration</label>
+        </div>
+        <div class="checklist-item">
+          <input type="checkbox" id="chk-ctrl-3" class="tracker-chk">
+          <label for="chk-ctrl-3">Confirm stow commands execute correctly from local SCADA HMI test overrides</label>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="notes">Notes / Observations</label>
+        <textarea id="notes" placeholder="Enter notes..."></textarea>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Run QA Evaluation</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none; margin-top: 24px; padding: 20px; border-radius: var(--border-radius-md); background: #f8fafc; border: 1px solid var(--border-color);">
+      <div class="result-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+        <span style="font-weight: bold; font-size: 1.1rem; color: var(--text-color);">Evaluation Results</span>
+        <span id="diagnostic-status" class="status-badge-inline status-normal">PASSED</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Angle Deviation:</span>
+        <span id="res-deviation" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Deviation Check:</span>
+        <span id="res-status" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Checklist Completion:</span>
+        <span id="res-chk-completion" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Failed / Incomplete Items:</span>
+        <span id="res-chk-incomplete" style="font-weight: 600;">--</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Summary</button>
+        <button id="export-json-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px; background: #f1f5f9; border-radius: var(--border-radius-md); padding: 16px; border: 1px solid var(--border-color);">
+      <div class="assumptions-title" style="font-weight: bold; margin-bottom: 8px;"><i class="fas fa-info-circle"></i> Tracker QA Assumptions & Limitations</div>
+      <ul class="assumptions-list" style="margin-left: 20px; font-size: 0.85rem; color: var(--text-secondary);">
+        <li>Angle Deviation = <strong>abs(Expected Angle - Observed Angle)</strong>.</li>
+        <li>Pass criteria requires deviation &le; user-defined angle tolerance (typically 1.5 to 2.0 degrees per tracker OEM specification).</li>
+        <li>This tool assists in documenting structural alignment QA/QC runs but does not execute tracker commands or directly query controller Modbus coils.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+  </div>
+
+  <script src="js/tracker-angle-qaqc.js"></script>
+</body>
+</html>

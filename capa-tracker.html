@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corrective Action Tracker / CAPA Log — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-critical { background: #fee2e2; color: #b91c1c; }
+    .status-warning { background: #fef3c7; color: #b45309; }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .action-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 0.85rem;
+    }
+    .action-table th, .action-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      text-align: left;
+    }
+    .action-table th {
+      background: var(--background-dark);
+      font-family: 'Outfit';
+      font-weight: bold;
+    }
+    .action-table tr:hover {
+      background: #f8fafc;
+    }
+    .overdue-alert {
+      border-left: 4px solid var(--error-color) !important;
+      background: #fef2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">📂 REPORTS & TEMPLATES</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Corrective Action Tracker / CAPA Log</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Track corrective and preventive actions from punchlists, RCAs, inspections, HSE forms, customer reports, and commissioning findings.
+    </p>
+
+    <!-- Filter Bar -->
+    <div style="background: #f8fafc; padding: 16px; border-radius: var(--border-radius-md); border: 1px solid var(--border-color); margin-bottom: 24px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+      <span style="font-weight: bold; font-size: 0.9rem;">Filter actions:</span>
+      <select id="filter-priority" style="width: auto; height: 36px; padding: 4px 8px; margin: 0;">
+        <option value="all">All Priorities</option>
+        <option value="Critical">Critical</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+      <select id="filter-status" style="width: auto; height: 36px; padding: 4px 8px; margin: 0;">
+        <option value="all">All Statuses</option>
+        <option value="Open">Open</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Closed">Closed</option>
+        <option value="Verified">Verified</option>
+      </select>
+      <button id="export-csv-btn" class="button-secondary" style="width: auto; margin-top: 0; height: 36px; min-height: auto; padding: 4px 12px;"><i class="fas fa-file-csv"></i> Export CSV</button>
+    </div>
+
+    <!-- Action Log Entry Form -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Add Action Item</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="capa-source">Source <span class="required">*</span></label>
+          <select id="capa-source">
+            <option value="RCA">RCA</option>
+            <option value="Punchlist">Punchlist</option>
+            <option value="Inspection">Inspection</option>
+            <option value="HSE">HSE</option>
+            <option value="Customer request">Customer Request</option>
+            <option value="Commissioning">Commissioning</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="capa-owner">Owner <span class="required">*</span></label>
+          <input type="text" id="capa-owner" placeholder="e.g. John Doe">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="capa-due">Due Date <span class="required">*</span></label>
+          <input type="date" id="capa-due">
+        </div>
+        <div class="input-group">
+          <label for="capa-priority">Priority</label>
+          <select id="capa-priority">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High" selected>High</option>
+            <option value="Critical">Critical</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="capa-status">Status</label>
+          <select id="capa-status">
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Blocked">Blocked</option>
+            <option value="Closed">Closed</option>
+            <option value="Verified">Verified</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="capa-verification">Verification Required?</label>
+          <select id="capa-verification">
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="capa-finding">Finding / Issue Description <span class="required">*</span></label>
+        <textarea id="capa-finding" placeholder="What was the observation or root issue?"></textarea>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="capa-corrective">Corrective Action</label>
+          <textarea id="capa-corrective" placeholder="Immediate fix..."></textarea>
+        </div>
+        <div class="input-group">
+          <label for="capa-preventive">Preventive Action</label>
+          <textarea id="capa-preventive" placeholder="Systemic prevention..."></textarea>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="capa-evidence">Closure Evidence Placeholder</label>
+        <input type="text" id="capa-evidence" placeholder="e.g. Torque sheet logged, signed-off sheet attached">
+      </div>
+      <div class="input-group">
+        <label for="capa-notes">Notes</label>
+        <textarea id="capa-notes" placeholder="Any additional notes..."></textarea>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <button id="add-btn"><i class="fas fa-plus"></i> Save Action Item</button>
+    </div>
+
+    <!-- Active Actions Table -->
+    <h3 style="margin-top: 24px; font-family: 'Outfit';">Action Log Summary</h3>
+    <div style="overflow-x: auto;">
+      <table class="action-table" id="action-table">
+        <thead>
+          <tr>
+            <th>Action ID</th>
+            <th>Source</th>
+            <th>Finding</th>
+            <th>Owner</th>
+            <th>Due Date</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="action-tbody">
+          <!-- Dynamically populated rows -->
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+  </div>
+
+  <script src="js/capa-tracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clean vs. Soiled String Comparison Tool — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=19" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 850px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background: var(--background-dark);
+      font-weight: 600;
+    }
+    .row-flagged {
+      background-color: #fee2e2 !important;
+      color: #991b1b;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">☀️ SOILING & PERFORMANCE</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Clean vs. Soiled String Comparison</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Clean a reference string and immediately compare its electrical output against adjacent uncleaned strings under similar irradiance to evaluate localized soiling impact.
+    </p>
+
+    <!-- Form Section -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Project Details & Ambient Conditions</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="project-name">Site / Project Name</label>
+          <input type="text" id="project-name" placeholder="e.g. Solar Field 4" style="height: 42px;">
+        </div>
+        <div class="input-group">
+          <label for="measurement-datetime">Date & Time</label>
+          <input type="datetime-local" id="measurement-datetime" style="height: 42px;">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="inverter-id">Inverter ID</label>
+          <input type="text" id="inverter-id" placeholder="e.g. INV-01" style="height: 42px;">
+        </div>
+        <div class="input-group">
+          <label for="mppt-id">MPPT ID</label>
+          <input type="text" id="mppt-id" placeholder="e.g. MPPT-A" style="height: 42px;">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="ambient-irradiance">Irradiance (Optional)</label>
+          <div class="input-with-unit" style="display: flex;">
+            <input type="number" id="ambient-irradiance" placeholder="e.g. 650" step="any" style="height: 42px; flex: 1;">
+            <div class="input-unit" style="height: 42px; display: flex; align-items: center; padding: 0 12px; background: var(--background-dark); border: 1px solid var(--border-light); border-left: none;">W/m²</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="module-temp">Module Temp (Optional)</label>
+          <div class="input-with-unit" style="display: flex;">
+            <input type="number" id="module-temp" placeholder="e.g. 48" step="any" style="height: 42px; flex: 1;">
+            <div class="input-unit" style="height: 42px; display: flex; align-items: center; padding: 0 12px; background: var(--background-dark); border: 1px solid var(--border-light); border-left: none;">°C</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="measurement-type">Measurement Type</label>
+          <select id="measurement-type" style="height: 42px;" onchange="updateUnits()">
+            <option value="current">String Current (A)</option>
+            <option value="power">String Power (kW)</option>
+            <option value="pmax">IV Curve Pmax (W)</option>
+          </select>
+        </div>
+        <div class="input-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label for="dev-threshold">Deviation Limit (%)</label>
+            <input type="number" id="dev-threshold" value="5.0" step="0.5" style="height: 42px;">
+          </div>
+          <div>
+            <label for="min-irr-threshold">Min Irradiance (W/m²)</label>
+            <input type="number" id="min-irr-threshold" value="400" step="10" style="height: 42px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Cleaned Reference String Panel -->
+      <div style="background: var(--background-dark); border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 16px; margin-top: 16px;">
+        <h3 style="margin-top: 0; margin-bottom: 12px; font-family:'Outfit'; font-size: 1.05rem;"><i class="fas fa-check-circle" style="color: var(--success-color);"></i> Cleaned Reference String</h3>
+        <div class="input-row">
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Reference String ID <span class="required">*</span></label>
+            <input type="text" id="ref-string-id" placeholder="e.g. STR-01 (Clean)" style="height: 42px; margin-bottom: 0;">
+          </div>
+          <div class="input-group" style="margin-bottom: 0;" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div style="display: flex; gap: 8px;">
+              <div style="flex: 1;">
+                <label style="margin-top: 0;">Value After Cleaning <span class="required">*</span></label>
+                <div class="input-with-unit" style="display: flex;">
+                  <input type="number" id="ref-clean-val" placeholder="Value" step="any" style="height: 42px; flex: 1;">
+                  <div class="input-unit" id="ref-unit-label" style="height: 42px; display: flex; align-items: center; padding: 0 12px; background: white; border: 1px solid var(--border-light); border-left: none;">A</div>
+                </div>
+              </div>
+              <div style="width: 80px;">
+                <label style="margin-top: 0;">Modules</label>
+                <input type="number" id="ref-module-count" value="28" style="height: 42px; text-align: center;">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="input-group" style="margin-bottom: 0; margin-top: 12px;">
+          <label style="margin-top: 0;">Reference Notes</label>
+          <input type="text" id="ref-notes" placeholder="e.g. Cleaned manually using demineralized water" style="height: 42px; margin-bottom: 0;">
+        </div>
+      </div>
+
+      <!-- Soiled Strings Section -->
+      <div style="margin-top: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="margin: 0; font-family:'Outfit'; font-size: 1.05rem;"><i class="fas fa-filter" style="color: var(--warning-color);"></i> Uncleaned Soiled Strings</h3>
+          <button id="add-row-btn" class="button-secondary" style="margin-top: 0; min-height: auto; width: auto; padding: 6px 12px; font-size: 0.85rem;"><i class="fas fa-plus"></i> Add String</button>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table id="soiled-strings-table">
+            <thead>
+              <tr>
+                <th>String ID <span class="required">*</span></th>
+                <th>Measured Value <span class="required">*</span></th>
+                <th style="width: 100px;">Modules</th>
+                <th>Location / Tracker</th>
+                <th>Notes</th>
+                <th style="width: 60px; text-align: center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="soiled-strings-tbody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 15px; display: none;"></div>
+      <div id="validation-warning" class="message warning" style="display: none; text-align: left; font-size: 0.9rem; margin-top: 15px; padding: 10px;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Compare Strings</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 20px; background: #fafafa; margin-top: 20px;">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family:'Outfit';">Comparison Results</h3>
+      
+      <div class="input-row" style="margin-bottom: 12px;">
+        <div style="background: white; border: 1px solid var(--border-color); padding: 12px; border-radius: var(--border-radius-md); text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #64748b;">CLEANED REFERENCE</div>
+          <div id="res-ref-val" style="font-size: 1.4rem; font-weight: 700; color: var(--success-color);">--</div>
+        </div>
+        <div style="background: white; border: 1px solid var(--border-color); padding: 12px; border-radius: var(--border-radius-md); text-align: center;">
+          <div style="font-size: 0.8rem; font-weight: 600; color: #64748b;">AVG SOILED STRINGS</div>
+          <div id="res-avg-soiled" style="font-size: 1.4rem; font-weight: 700; color: var(--text-color);">--</div>
+        </div>
+      </div>
+
+      <div style="background: white; border: 1px solid var(--border-color); padding: 16px; border-radius: var(--border-radius-md); text-align: center; margin-bottom: 16px;">
+        <div style="font-size: 0.9rem; font-weight: 600; color: #64748b;">AVERAGE SOILING LOSS PERCENTAGE</div>
+        <div id="res-avg-loss" style="font-size: 2rem; font-weight: 800; color: var(--error-color);">--</div>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <h4 style="font-family:'Outfit'; margin-bottom: 8px;">Detailed String Metrics</h4>
+        <div style="overflow-x: auto;">
+          <table id="results-details-table">
+            <thead>
+              <tr>
+                <th>String ID</th>
+                <th>Measured Value</th>
+                <th>Normalized Value</th>
+                <th>Soiling Loss %</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="results-details-tbody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 20px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Field Summary</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-csv"></i> Export CSV</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 16px; background: var(--background-dark);">
+      <div class="assumptions-title" style="font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;"><i class="fas fa-info-circle" style="color: var(--primary-color);"></i> Engineering Assumptions & Limitations</div>
+      <ul class="assumptions-list" style="margin-left: 20px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+        <li style="margin-bottom: 6px;">All compared strings must be electrically identical (same model panels, tracker angles, inverter settings).</li>
+        <li style="margin-bottom: 6px;">Values are mathematically normalized relative to reference module count if mismatch exists, though matching module count is recommended.</li>
+        <li style="margin-bottom: 6px;">This comparison evaluates soiling but does not distinguish it from shading, blown fuses, bypass diode failures, or degradation. Pair with visual check.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85;">
+        </div>
+    </footer>
+  </div>
+
+  <script src="js/clean-vs-soiled-strings.js"></script>
+</body>
+</html>
