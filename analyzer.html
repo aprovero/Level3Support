@@ -11,34 +11,45 @@
   <link href="css/analyzer.css" rel="stylesheet" />
 </head>
 <body>
-  <div class="container" style="max-width: 900px; margin: 20px auto; background: var(--background-light); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); padding: 24px;">
-    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
-    <!-- Header -->
-    <div class="header">
-      <div class="logo">
-        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" />
-      </div>
+  <div class="page-container">
+    <a href="index.html" class="btn-back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+    
+    <!-- Header Card -->
+    <div class="tool-header-card">
+        <div class="tool-header-flex" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+            <div class="logo">
+                <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+            </div>
+        </div>
+        <div style="margin-top: 1rem;">
+            <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem; font-family: 'Outfit', sans-serif;">SG3125 Series Data Analyzer</h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 16px;">
+                Load history files and event logs to construct visual operational charts and performance diagnostics.
+            </p>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <span style="font-size: 0.75rem; font-weight: 600; color: #0369a1; background: #e0f2fe; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">⚡ ANALYZER</span>
+                <span style="font-size: 0.75rem; font-weight: 600; color: #15803d; background: #dcfce7; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">ACTIVE</span>
+            </div>
+        </div>
     </div>
 
-    <h1 class="text-center">SG3125 Series Data Analyzer</h1>
-
     <!-- Upload Section -->
-    <section class="upload-section">
+    <div class="card-panel-wrapper"><section class="upload-section" style="margin: 0; padding: 0; border: none; box-shadow: none;">
       <div class="upload-title">Upload CSV Files</div>
       <div class="upload-input-container double">
         <input type="file" id="his-upload" accept=".csv" class="file-input" />
         <input type="file" id="events-upload" accept=".csv" class="file-input" />
       </div>
       <div class="upload-instructions">Upload the HisData file (left) and the Events file (right).</div>
-    </section>
+    </section></div></div>
 
     <!-- Parameter Selection Section -->
-    <section class="parameter-selection">
+    <div class="card-panel-wrapper"><section class="parameter-selection" style="margin: 0 0 1.5rem 0; padding: 0; border: none; box-shadow: none;">
       <div class="section-title">Select Parameters (Max 6)</div>
       <div id="param-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- JS will populate 3 columns here -->
       </div>
-    </section>
+    </section></div></div>
 
     <!-- State Filter -->
     <section class="state-filter">
@@ -46,15 +57,15 @@
       <select id="state-select">
         <option value="">All</option>
       </select>
-    </section>
+    </section></div></div>
 
     <!-- Chart Section -->
-    <section class="chart-section">
+    <div class="card-panel-wrapper"><section class="chart-section" style="margin: 0; padding: 0; border: none; box-shadow: none;">
       <div class="section-title">Power Chart</div>
       <div id="chart-container" class="chart-container">
         <canvas id="chart-canvas" height="300"></canvas>
       </div>
-    </section>
+    </section></div></div>
 
     <!-- Export Button Below Chart -->
     <div class="mt-4 flex justify-center">
@@ -70,7 +81,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-text">
-            <div class="footer-copyright">© 2026 LEVEL3SUPPORT &amp; COR SOLUTIONS. ALL RIGHTS RESERVED.</div>
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
         </div>
         <div class="footer-logo">
             <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
@@ -85,5 +96,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script type="module" src="js/analyzer.js"></script>
+    </div>
+    </div>
 </body>
 </html>

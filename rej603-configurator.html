@@ -17,22 +17,33 @@
 
 </head>
 <body>
-    <div class="container" style="max-width: 900px; margin: 20px auto; background: var(--background-light); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); padding: 24px;">
-        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
-        <!-- Portal Header - Using shared styles -->
-        <div class="header">
-            <div class="logo">
-                <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support">
+    <div class="page-container">
+        <a href="index.html" class="btn-back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+        
+        <!-- Header Card -->
+        <div class="tool-header-card">
+            <div class="tool-header-flex" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+                <div class="logo">
+                    <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+                </div>
+                <div class="abb-logo">
+                    <img src="images/ABB_LOGO.png" alt="ABB Logo" style="height: 24px; width: auto;">
+                </div>
             </div>
-            <div class="abb-logo">
-                <img src="images/ABB_LOGO.png" alt="ABB Logo">
+            <div style="margin-top: 1rem;">
+                <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem; font-family: 'Outfit', sans-serif;">REJ603 Relay DIP Switch Configurator</h1>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 16px;">
+                    Interactive configuration utility to calculate and reverse-engineer protection settings on ABB REJ603 relays.
+                </p>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span style="font-size: 0.75rem; font-weight: 600; color: #0369a1; background: #e0f2fe; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">⚡ PROTECTION RELAY</span>
+                    <span style="font-size: 0.75rem; font-weight: 600; color: #15803d; background: #dcfce7; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">ACTIVE</span>
+                </div>
             </div>
         </div>
-        
-        <!-- Original DIP Switch Configurator Content -->
-        <h1 class="configurator-title">REJ603 Relay DIP Switch Configurator</h1>
-        
-        <div class="mode-selector">
+
+        <div class="card-panel-wrapper">
+            <div class="mode-selector">
                 <h2>Operation Mode</h2>
                 <div class="mode-buttons">
                     <div class="mode-button active" onclick="setMode('configure')">Configure Settings</div>
@@ -42,8 +53,9 @@
                     Enter your protection requirements and generate DIP switch positions.
                 </div>
             </div>
+        </div>
             
-            <div id="configureMode">
+            <div id="configureMode" class="card-panel-wrapper">
                 <div class="input-section">
                     <h2>Basic Settings</h2>
                     <div style="margin-bottom: 20px;">
@@ -285,7 +297,7 @@
                 <button class="configurator-button" onclick="calculateDipSwitches()">Calculate DIP Switch Configuration</button>
             </div>
             
-            <div id="reverseMode" style="display: none;">
+            <div id="reverseMode" class="card-panel-wrapper" style="display: none;">
                 <div class="input-section">
                     <h2>Reverse Settings Instructions</h2>
                     <p>👉 <strong>Click on each DIP switch below to match the physical relay configuration.</strong></p>
@@ -294,12 +306,12 @@
                 </div>
             </div>
             
-            <div id="errorDisplay" style="display: none;" class="configurator-error">
+            <div id="errorDisplay" style="display: none;" class="configurator-error card-panel-wrapper">
                 <h3>⚠️ Configuration Error</h3>
                 <div id="errorMessage"></div>
             </div>
             
-            <div id="results" style="display: none;">
+            <div id="results" class="card-panel-wrapper" style="display: none;">
                 <div id="calculatedValues" class="calculated-values" style="margin-top: 20px;"></div>
                 
                 <div class="switch-display">
@@ -348,7 +360,7 @@
         <!-- Portal Footer -->
         <footer class="footer">
         <div class="footer-text">
-            <div class="footer-copyright">© 2026 LEVEL3SUPPORT &amp; COR SOLUTIONS. ALL RIGHTS RESERVED.</div>
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
         </div>
         <div class="footer-logo">
             <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
@@ -1123,5 +1135,7 @@
             resultsDiv.style.display = 'block';
         }
     </script>
+    </div>
+    </div>
 </body>
 </html>
