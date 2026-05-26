@@ -152,7 +152,7 @@
         </div>
     </footer>
 
-    <link href="css/shared-styles.css" rel="stylesheet">
+    <link href="css/shared-styles.css?v=12" rel="stylesheet">
     <style>
         /* ── index.html page-specific overrides ── */
         /* Inherits all tokens from shared-styles.css :root */
@@ -255,6 +255,19 @@
             margin: 0 !important;
             width: 100%;
             max-width: 100%;
+            align-self: center;
+        }
+
+        .search-input {
+            padding: 0.45rem 1rem 0.45rem 2.5rem !important;
+            font-size: 0.85rem !important;
+            border-radius: 9999px !important;
+            height: 38px !important;
+        }
+
+        .search-icon {
+            top: 50% !important;
+            transform: translateY(-50%) !important;
         }
 
         .filter-checkboxes {

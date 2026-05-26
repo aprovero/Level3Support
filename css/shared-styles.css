@@ -1748,7 +1748,7 @@ button:disabled, .submit-button:disabled {
 .tool-tile[data-category="legacy-archive"]::before { background-color: var(--color-legacy-archive); }
 
 .tile-content {
-    padding: 1.5rem;
+    padding: 1.5rem 1.5rem 1.4rem 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -1772,6 +1772,7 @@ button:disabled, .submit-button:disabled {
     background: #f1f5f9;
     padding: 0.25rem 0.6rem;
     border-radius: 9999px;
+    flex-shrink: 0;
 }
 
 /* Category-specific badge texts */
@@ -1791,6 +1792,7 @@ button:disabled, .submit-button:disabled {
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
     text-transform: uppercase;
+    flex-shrink: 0;
 }
 
 .status-active { background-color: #dcfce7; color: #15803d; }
@@ -1867,7 +1869,7 @@ button:disabled, .submit-button:disabled {
     align-items: center;
     border-top: 1px solid #f1f5f9;
     padding-top: 0.75rem;
-    margin-top: 0.75rem;
+    margin-top: auto;
 }
 
 .tile-tags {
