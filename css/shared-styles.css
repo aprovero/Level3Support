@@ -1763,27 +1763,25 @@ button:disabled, .submit-button:disabled {
 }
 
 .tool-settings-btn {
-    position: absolute;
-    top: 0.4rem;
-    right: 0.4rem;
-    z-index: 10;
     background: transparent;
     border: none;
     color: #94a3b8;
     cursor: pointer;
     font-size: 0.9rem;
-    padding: 0.3rem;
+    padding: 0.2rem;
     border-radius: 4px;
-    transition: all 0.2s ease;
-    display: flex;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
 .tool-settings-btn:hover {
-    color: #475569;
-    background: #f1f5f9;
+    color: var(--primary-color);
+    background: transparent !important;
+    transform: rotate(360deg);
 }
+
 
 .tile-category {
     font-size: 0.7rem;
@@ -2052,19 +2050,19 @@ button:disabled, .submit-button:disabled {
     border: none;
     color: #94a3b8;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     padding: 0.2rem;
     border-radius: 4px;
-    transition: all 0.2s ease;
-    display: flex;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
 .tool-settings-btn:hover {
     color: var(--primary-color);
-    background: #f1f5f9;
-    transform: rotate(45deg);
+    background: transparent !important;
+    transform: rotate(360deg);
 }
 
 

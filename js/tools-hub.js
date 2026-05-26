@@ -618,13 +618,15 @@ function createToolCard(tool) {
     
     // Create card HTML
     card.innerHTML = `
-        <button class="tool-settings-btn" title="Configure Tool Settings" onclick="event.stopPropagation(); openToolSettings(${tool.id})">
-            <i class="fas fa-cog"></i>
-        </button>
         <div class="tile-content">
             <div class="tile-header">
                 <span class="status-badge status-${cleanStatus}">${statusText}</span>
-                <span class="tile-category">${tool.category}</span>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="tile-category">${tool.category}</span>
+                    <button class="tool-settings-btn" title="Configure Tool Settings" onclick="event.stopPropagation(); openToolSettings(${tool.id})">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
             </div>
             <div class="tile-main">
                 <div class="tile-icon-wrapper">
@@ -683,11 +685,34 @@ function getCategoryIcon(category) {
 }
 
 /**
- * Initialize filter functionality
+ * Initialize filter functionality with a custom premium multi-select dropdown
  */
 function initializeFilters() {
-    // Select category radios/checkboxes
-    const checkboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"], .filter-checkbox input[type="radio"]');
+    const trigger = document.getElementById('dropdown-trigger');
+    const menu = document.getElementById('dropdown-menu');
+    const chevron = document.getElementById('dropdown-chevron');
+    const checkboxes = document.querySelectorAll('#dropdown-menu input[type="checkbox"]');
+    
+    if (trigger && menu) {
+        // Toggle dropdown open/closed
+        trigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            menu.classList.toggle('hidden');
+            if (menu.classList.contains('hidden')) {
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                chevron.style.transform = 'rotate(180deg)';
+            }
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!menu.classList.contains('hidden') && !e.target.closest('#category-multiselect')) {
+                menu.classList.add('hidden');
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        });
+    }
     
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', handleFilterChange);
@@ -698,26 +723,61 @@ function initializeFilters() {
  * Handle filter and search combined change
  */
 function handleFilterChange() {
-    const checkboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]');
-    const allCheckbox = document.querySelector('.filter-checkbox input[value="all"]');
-    const categoryCheckboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]:not([value="all"])');
+    const checkboxes = document.querySelectorAll('#dropdown-menu input[type="checkbox"]');
+    const allCheckbox = document.querySelector('#dropdown-menu input[value="all"]');
+    const categoryCheckboxes = document.querySelectorAll('#dropdown-menu input[type="checkbox"]:not([value="all"])');
+    const labelText = document.getElementById('dropdown-label-text');
     
     // Handle All Tools logic
     if (this && this.value === 'all') {
         if (this.checked) {
             categoryCheckboxes.forEach(cb => cb.checked = false);
+        } else {
+            // Prevent unchecking "all" if nothing else is selected
+            let anyChecked = Array.from(categoryCheckboxes).some(cb => cb.checked);
+            if (!anyChecked) {
+                this.checked = true;
+            }
         }
     } else if (this && this.checked && allCheckbox) {
         allCheckbox.checked = false;
     }
     
-    // Get checked categories
+    // If absolutely nothing is checked, fallback to checking "all"
+    let anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+    if (!anyChecked && allCheckbox) {
+        allCheckbox.checked = true;
+    }
+    
+    // Get checked categories and display label names
     const selectedCategories = [];
+    const selectedLabels = [];
+    
     checkboxes.forEach(checkbox => {
         if (checkbox.checked && checkbox.value !== 'all') {
             selectedCategories.push(checkbox.value.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
+            // Get label text
+            const labelSpan = checkbox.nextElementSibling;
+            if (labelSpan) {
+                selectedLabels.push(labelSpan.textContent.trim());
+            }
         }
     });
+    
+    // Update trigger text dynamically
+    if (labelText) {
+        if (allCheckbox && allCheckbox.checked) {
+            labelText.textContent = 'All Categories';
+        } else if (selectedLabels.length === 0) {
+            labelText.textContent = 'All Categories';
+        } else if (selectedLabels.length === 1) {
+            labelText.textContent = selectedLabels[0];
+        } else if (selectedLabels.length === 2) {
+            labelText.textContent = `${selectedLabels[0]}, ${selectedLabels[1]}`;
+        } else {
+            labelText.textContent = `${selectedLabels[0]}, ${selectedLabels[1]} (+${selectedLabels.length - 2})`;
+        }
+    }
     
     // Get search term
     const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';

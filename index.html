@@ -33,69 +33,62 @@
 
     <div class="main-content-wrapper">
 
-        <!-- Category Filters Section -->
+        <!-- Category Filters & Search Section -->
         <section class="filters-section" style="margin-top: 2rem;">
             <div class="filters-container">
-                <!-- Bottom Filters Section -->
-                <div class="filter-section-wrapper">
-                    <h3 class="filters-title">Filter by Category:</h3>
-                    <div class="filter-checkboxes">
-                        <label class="filter-checkbox">
-                            <input type="checkbox" value="all" checked>
-                            <span class="checkmark"></span>
-                            All Tools
-                        </label>
-                        <label class="filter-checkbox">
-                            <input type="checkbox" value="calculators">
-                            <span class="checkmark"></span>
-                            Calculators
-                        </label>
-                        <label class="filter-checkbox">
-                            <input type="checkbox" value="pv-field-tools">
-                            <span class="checkmark"></span>
-                            PV Field Tools
-                        </label>
-                        <label class="filter-checkbox">
-                            <input type="checkbox" value="bess-field-tools">
-                            <span class="checkmark"></span>
-                            BESS Field Tools
-                        </label>
-                        <label class="filter-checkbox">
-                            <input type="checkbox" value="electrical-test-forms">
-                            <span class="checkmark"></span>
-                            Electrical Test Forms
-                        </label>
-                        <label class="filter-checkbox">
-                            <input type="checkbox" value="scada-diagnostics">
-                            <span class="checkmark"></span>
-                            SCADA & Diagnostics
-                        </label>
-                        <label class="filter-checkbox">
-                            <input type="checkbox" value="reports-templates">
-                            <span class="checkmark"></span>
-                            Reports & Templates
-                        </label>
-                        <label class="filter-checkbox">
-                            <input type="checkbox" value="reference-guides">
-                            <span class="checkmark"></span>
-                            Reference Guides
-                        </label>
-                        <label class="filter-checkbox">
-                            <input type="checkbox" value="hse">
-                            <span class="checkmark"></span>
-                            HSE
-                        </label>
-                        <label class="filter-checkbox">
-                            <input type="checkbox" value="legacy-archive">
-                            <span class="checkmark"></span>
-                            Legacy / Archive
-                        </label>
-
-                        <!-- Moved Search Section to align with second row of filters -->
-                        <div class="search-container" style="margin-left: auto; flex: 1 1 300px; max-width: 400px; position: relative;">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" id="search-input" class="search-input" placeholder="Search PV/BESS tools, relays, tags...">
+                <div class="filter-search-wrapper" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; width: 100%;">
+                    <div class="dropdown-label" style="font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.5px;">Filter by Category:</div>
+                    <div class="custom-multiselect" id="category-multiselect" style="position: relative; flex: 1 1 250px; max-width: 320px; z-index: 100;">
+                        <button type="button" class="multiselect-trigger" id="dropdown-trigger" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.25rem; font-size: 0.95rem; border-radius: 9999px; height: 46px; border: 1px solid #cbd5e1; background: #f8fafc; cursor: pointer; font-weight: 550; color: #475569; transition: all 0.2s ease;">
+                            <span id="dropdown-label-text">All Categories</span>
+                            <i class="fas fa-chevron-down" style="color: #94a3b8; font-size: 0.85rem; transition: transform 0.2s ease;" id="dropdown-chevron"></i>
+                        </button>
+                        <div class="multiselect-dropdown hidden" id="dropdown-menu" style="position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); padding: 0.75rem; display: flex; flex-direction: column; gap: 0.5rem; max-height: 300px; overflow-y: auto;">
+                            <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                                <input type="checkbox" value="all" checked style="width: 16px; height: 16px; accent-color: var(--primary-color);">
+                                <span style="font-size: 0.88rem; font-weight: 550; color: #334155;">All Categories</span>
+                            </label>
+                            <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                                <input type="checkbox" value="calculators" style="width: 16px; height: 16px; accent-color: var(--color-calculators);">
+                                <span style="font-size: 0.88rem; font-weight: 550; color: #334155;">Calculators</span>
+                            </label>
+                            <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                                <input type="checkbox" value="pv-field-tools" style="width: 16px; height: 16px; accent-color: var(--color-pv-field-tools);">
+                                <span style="font-size: 0.88rem; font-weight: 550; color: #334155;">PV Field Tools</span>
+                            </label>
+                            <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                                <input type="checkbox" value="bess-field-tools" style="width: 16px; height: 16px; accent-color: var(--color-bess-field-tools);">
+                                <span style="font-size: 0.88rem; font-weight: 550; color: #334155;">BESS Field Tools</span>
+                            </label>
+                            <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                                <input type="checkbox" value="electrical-test-forms" style="width: 16px; height: 16px; accent-color: var(--color-electrical-test-forms);">
+                                <span style="font-size: 0.88rem; font-weight: 550; color: #334155;">Electrical Test Forms</span>
+                            </label>
+                            <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                                <input type="checkbox" value="scada-diagnostics" style="width: 16px; height: 16px; accent-color: var(--color-scada-diagnostics);">
+                                <span style="font-size: 0.88rem; font-weight: 550; color: #334155;">SCADA & Diagnostics</span>
+                            </label>
+                            <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                                <input type="checkbox" value="reports-templates" style="width: 16px; height: 16px; accent-color: var(--color-reports-templates);">
+                                <span style="font-size: 0.88rem; font-weight: 550; color: #334155;">Reports & Templates</span>
+                            </label>
+                            <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                                <input type="checkbox" value="reference-guides" style="width: 16px; height: 16px; accent-color: var(--color-reference-guides);">
+                                <span style="font-size: 0.88rem; font-weight: 550; color: #334155;">Reference Guides</span>
+                            </label>
+                            <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                                <input type="checkbox" value="hse" style="width: 16px; height: 16px; accent-color: var(--color-hse);">
+                                <span style="font-size: 0.88rem; font-weight: 550; color: #334155;">HSE</span>
+                            </label>
+                            <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; cursor: pointer; transition: background 0.15s ease;" onmouseover="this.style.background='#f1f5f9';" onmouseout="this.style.background='transparent';">
+                                <input type="checkbox" value="legacy-archive" style="width: 16px; height: 16px; accent-color: var(--color-legacy-archive);">
+                                <span style="font-size: 0.88rem; font-weight: 550; color: #334155;">Legacy / Archive</span>
+                            </label>
                         </div>
+                    </div>
+                    <div class="search-container" style="flex: 1 1 300px; max-width: 400px; position: relative; margin-left: auto;">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="search-input" class="search-input" placeholder="Search PV/BESS tools, relays, tags...">
                     </div>
                 </div>
             </div>
@@ -132,7 +125,7 @@
         <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; width: 100%;">
             <p style="margin: 0; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; gap: 0.75rem;">
                 <span>&copy; 2026 LEVEL3SUPPORT &amp; COR SOLUTIONS. ALL RIGHTS RESERVED.</span>
-                <span style="padding: 0.15rem 0.4rem; background: #1e293b; border-radius: 4px; color: #94a3b8; font-size: 0.72rem; font-weight: 600; border: 1px solid #334155; letter-spacing: 0.5px;">v1.2.0</span>
+                <span style="padding: 0.15rem 0.4rem; background: #1e293b; border-radius: 4px; color: #94a3b8; font-size: 0.72rem; font-weight: 600; border: 1px solid #334155; letter-spacing: 0.5px;">v1.2.1</span>
             </p>
             <div class="powered-by-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
                 <span style="font-style: italic; font-weight: 400; color: #64748b; font-size: 0.85rem; font-family: 'Inter', sans-serif;">Powered by</span>
@@ -141,7 +134,7 @@
         </div>
     </footer>
 
-    <link href="css/shared-styles.css?v=15" rel="stylesheet">
+    <link href="css/shared-styles.css?v=16" rel="stylesheet">
     <style>
         /* ── index.html page-specific overrides ── */
         /* Inherits all tokens from shared-styles.css :root */
