@@ -334,15 +334,13 @@ function createToolCard(tool) {
     
     // Create card HTML
     card.innerHTML = `
+        <button class="tool-settings-btn" title="Configure Tool Settings" onclick="event.stopPropagation(); openToolSettings(${tool.id})">
+            <i class="fas fa-cog"></i>
+        </button>
         <div class="tile-content">
             <div class="tile-header">
                 <span class="status-badge status-${cleanStatus}">${statusText}</span>
-                <div style="display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;">
-                    <span class="tile-category">${tool.category}</span>
-                    <button class="tool-settings-btn" title="Configure Tool Settings" onclick="event.stopPropagation(); openToolSettings(${tool.id})">
-                        <i class="fas fa-cog"></i>
-                    </button>
-                </div>
+                <span class="tile-category">${tool.category}</span>
             </div>
             <div class="tile-main">
                 <div class="tile-icon-wrapper">
