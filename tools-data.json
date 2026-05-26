@@ -3,66 +3,172 @@
     {
       "id": 1,
       "name": "Level3Support Request Form",
-      "category": "Form",
-      "description": "Request form for: Support, RCA, Training and other Level3Support services",
-      "url": "https://coelatam.onrender.com/support-request.html",
-      "notes": "Use for all support-related requests"
+      "category": "Legacy / Archive",
+      "status": "Legacy",
+      "description": "Legacy request form for Support, RCA, Training and other Level3Support services.",
+      "url": "support-request.html",
+      "tags": ["Support", "Form"],
+      "notes": "Archived, replaced by local procedures."
     },
     {
       "id": 2,
       "name": "Technical Documentation Database",
-      "category": "Reference",
-      "description": "Searchable database of technical documents, manuals, and troubleshooting guides",
-      "url": "https://coelatam.onrender.com/documentation.html",
-      "notes": "Updated monthly"
+      "category": "Legacy / Archive",
+      "status": "Legacy",
+      "description": "Legacy searchable database of technical documents, manuals, and troubleshooting guides.",
+      "url": "training-request.html",
+      "tags": ["Reference", "Database"],
+      "notes": "Offline legacy document library."
     },
     {
       "id": 3,
       "name": "Training Catalog",
-      "category": "Catalog",
-      "description": "Available training courses and resources provided by Level3Support",
-      "url": "https://coelatam.onrender.com/training.html",
-      "notes": ""
+      "category": "Legacy / Archive",
+      "status": "Legacy",
+      "description": "Legacy list of available training courses and resources provided by Level3Support.",
+      "url": "training.html",
+      "tags": ["Catalog", "Training"],
+      "notes": "Legacy training materials index."
     },
     {
       "id": 4,
       "name": "Training Evaluation Form",
-      "category": "Form",
-      "description": "Official Level3Support training evaluation form",
-      "url": "https://coelatam.onrender.com/evaluation.html",
-      "notes": "Available in English, Spanish and Portuguese"
+      "category": "Legacy / Archive",
+      "status": "Legacy",
+      "description": "Legacy training evaluation form (English / Spanish).",
+      "url": "evaluation.html",
+      "tags": ["Form", "Training"],
+      "notes": "Archived course feedback form."
     },
     {
       "id": 5,
       "name": "ABB REJ603 Relay Configuration Tool",
-      "category": "Tool",
-      "description": "Interactive tool for configuring ABB REJ603 relays",
-      "url": "https://coelatam.onrender.com/rej603-configurator.html",
-      "notes": ""
+      "category": "SCADA & Diagnostics",
+      "status": "Active",
+      "description": "Interactive configuration utility for ABB REJ603 protection relays.",
+      "url": "rej603-configurator.html",
+      "tags": ["Relay", "Protection", "Commissioning"],
+      "notes": "Fully operational field tool."
     },
     {
       "id": 6,
       "name": "SG1+x Parameter Comparison Tool",
-      "category": "Tool",
-      "description": "Used for comparing SG1+x parameters between different units",
-      "url": "https://coelatam.onrender.com/parameter-comparison.html",
-      "notes": "Troubleshooting"
+      "category": "SCADA & Diagnostics",
+      "status": "Active",
+      "description": "Compare SG1+x parameters and settings between multiple field units.",
+      "url": "parameter-comparison.html",
+      "tags": ["Inverter", "Parameters", "SCADA"],
+      "notes": "Excellent troubleshooting tool."
     },
     {
       "id": 7,
       "name": "UMCG Data Analysis Tool",
-      "category": "Tool",
-      "description": "Used for Analyzing data extracted from UMCG devices",
-      "url": "https://coelatam.onrender.com/analyzer.html",
-      "notes": "Troubleshooting"
+      "category": "SCADA & Diagnostics",
+      "status": "In Progress",
+      "description": "Used for analyzing and parsing data logs extracted from UMCG devices.",
+      "url": "analyzer.html",
+      "tags": ["UMCG", "Data", "Diagnostics"],
+      "notes": "Development in progress."
     },  
     {
       "id": 8,
       "name": "PDP Module Fault Code Interpreter",
-      "category": "Tool",
-      "description": "Used for decoding PDP fault codes",
-      "url": "https://coelatam.onrender.com/fault-interpreter.html",
-      "notes": "Troubleshooting"
+      "category": "SCADA & Diagnostics",
+      "status": "Active",
+      "description": "Decode and troubleshoot PDP power module status and fault codes.",
+      "url": "fault-interpreter.html",
+      "tags": ["PDP", "Faults", "Troubleshooting"],
+      "notes": "Updated with premium styling."
+    },
+    {
+      "id": 9,
+      "name": "PV String Sizer & VOC Calculator",
+      "category": "Calculators",
+      "status": "In Progress",
+      "description": "Calculate optimal solar PV string configurations based on panel Voc, thermal coefficients, and ambient temperatures.",
+      "url": "tool-placeholder.html?tool=pv-string-sizer",
+      "tags": ["PV", "Calculators", "Design"],
+      "notes": "Planned for Agent 2"
+    },
+    {
+      "id": 10,
+      "name": "BESS Cable Sizing Calculator",
+      "category": "Calculators",
+      "status": "In Progress",
+      "description": "Calculate DC and AC cable ampacity, voltage drop, and temperature derating factors for battery racks.",
+      "url": "tool-placeholder.html?tool=bess-cable-sizer",
+      "tags": ["BESS", "Calculators", "Electrical"],
+      "notes": "Planned for Agent 2"
+    },
+    {
+      "id": 11,
+      "name": "Torque & Bolted Connection Calculator",
+      "category": "Calculators",
+      "status": "In Progress",
+      "description": "Lookup target bolt pre-loads and recommended mechanical torques based on size, grade, and lubrication.",
+      "url": "tool-placeholder.html?tool=torque-calculator",
+      "tags": ["PV", "BESS", "Mechanical", "Torque"],
+      "notes": "Planned for Agent 2"
+    },
+    {
+      "id": 12,
+      "name": "PV Insulation Resistance (Megger) Tester",
+      "category": "PV Field Tools",
+      "status": "In Progress",
+      "description": "Calculate minimum acceptable insulation values and log field megger readings for array commissioning.",
+      "url": "tool-placeholder.html?tool=pv-megger-tester",
+      "tags": ["PV", "Testing", "Commissioning"],
+      "notes": "Planned for Agent 3"
+    },
+    {
+      "id": 13,
+      "name": "BESS Cell Voltage Imbalance Calculator",
+      "category": "BESS Field Tools",
+      "status": "In Progress",
+      "description": "Analyze battery rack pack balancing, identify outlier cells, and calculate standard deviation of voltage imbalance.",
+      "url": "tool-placeholder.html?tool=bess-cell-imbalance",
+      "tags": ["BESS", "Testing", "Commissioning"],
+      "notes": "Planned for Agent 4"
+    },
+    {
+      "id": 14,
+      "name": "Transformer Turns Ratio (TTR) Form",
+      "category": "Electrical Test Forms",
+      "status": "In Progress",
+      "description": "Log and calculate deviations for high-voltage and medium-voltage transformer turns ratio testing.",
+      "url": "tool-placeholder.html?tool=ttr-form",
+      "tags": ["Electrical", "Testing", "Report"],
+      "notes": "Planned for Agent 5"
+    },
+    {
+      "id": 15,
+      "name": "LOTO Verification Checklist",
+      "category": "HSE",
+      "status": "In Progress",
+      "description": "Standardized digital checklist to audit and confirm Lockout/Tagout energy isolation integrity before starting work.",
+      "url": "tool-placeholder.html?tool=loto-checklist",
+      "tags": ["HSE", "LOTO", "Safety"],
+      "notes": "Critical safety template."
+    },
+    {
+      "id": 16,
+      "name": "Arc Flash Boundary Calculator",
+      "category": "HSE",
+      "status": "In Progress",
+      "description": "Determine shock protection boundaries, limited/restricted space access, and required PPE levels based on fault current.",
+      "url": "tool-placeholder.html?tool=arc-flash",
+      "tags": ["HSE", "Electrical", "Safety"],
+      "notes": "Critical safety calculation tool."
+    },
+    {
+      "id": 17,
+      "name": "Daily Commissioning Progress Report",
+      "category": "Reports & Templates",
+      "status": "In Progress",
+      "description": "Generate standard supervisor shift handovers detailing completed tests, safety issues, and pending punchlists.",
+      "url": "tool-placeholder.html?tool=daily-progress",
+      "tags": ["Report", "Commissioning", "SCADA"],
+      "notes": "Planned for Agent 6"
     }
   ]
 }

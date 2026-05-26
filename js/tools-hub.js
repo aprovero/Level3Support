@@ -11,6 +11,7 @@ let allTools = [];
 let toolsGrid;
 let emptyState;
 let loadingIndicator;
+let searchInput;
 
 /**
  * Page Initialization
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     toolsGrid = document.getElementById('tools-grid');
     emptyState = document.getElementById('empty-state');
     loadingIndicator = document.getElementById('loading-indicator');
+    searchInput = document.getElementById('search-input');
     
     console.log('DOM elements cached:', { 
         toolsGrid: !!toolsGrid, 
@@ -31,6 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load tools data
     loadToolsData();
+    
+    // Set up global search if input exists
+    if (searchInput) {
+        searchInput.addEventListener('input', handleFilterChange);
+    }
     
     console.log('Tools hub initialization completed');
 });
@@ -75,74 +82,180 @@ function loadToolsData() {
 }
 
 /**
- * Fallback data if JSON file is not available - using proper URLs
+ * Fallback data if JSON file is not available
  */
 function loadFallbackData() {
-    console.log('Loading fallback data with proper URLs');
+    console.log('Loading fallback data');
     allTools = [
         {
-            id: 1,
-            name: "Level3Support Request",
-            category: "Form",
-            description: "Request form for: Support, RCA, Training and other Level3Support services",
-            url: "https://coelatam.onrender.com/support-request.html",
-            notes: "Use for all CoE-related requests"
+            "id": 1,
+            "name": "Level3Support Request Form",
+            "category": "Legacy / Archive",
+            "status": "Legacy",
+            "description": "Legacy request form for Support, RCA, Training and other Level3Support services.",
+            "url": "support-request.html",
+            "tags": ["Support", "Form"],
+            "notes": "Archived, replaced by local procedures."
         },
         {
-            id: 2,
-            name: "Technical Documentation Database",
-            category: "Reference", 
-            description: "Searchable database of technical documents, manuals, and troubleshooting guides",
-            url: "https://coelatam.onrender.com/documentation.html",
-            notes: "Updated monthly"
+            "id": 2,
+            "name": "Technical Documentation Database",
+            "category": "Legacy / Archive",
+            "status": "Legacy",
+            "description": "Legacy searchable database of technical documents, manuals, and troubleshooting guides.",
+            "url": "training-request.html",
+            "tags": ["Reference", "Database"],
+            "notes": "Offline legacy document library."
         },
         {
-            id: 3,
-            name: "Training Catalog",
-            category: "Catalog",
-            description: "Available training courses and resources provided by Level3Support",
-            url: "https://coelatam.onrender.com/training.html",
-            notes: ""
+            "id": 3,
+            "name": "Training Catalog",
+            "category": "Legacy / Archive",
+            "status": "Legacy",
+            "description": "Legacy list of available training courses and resources provided by Level3Support.",
+            "url": "training.html",
+            "tags": ["Catalog", "Training"],
+            "notes": "Legacy training materials index."
         },
         {
-            id: 4,
-            name: "Training Evaluation Form",
-            category: "Form",
-            description: "Official Level3Support training evaluation form",
-            url: "https://coelatam.onrender.com/evaluation.html",
-            notes: "Available in English, Spanish and Portuguese"
+            "id": 4,
+            "name": "Training Evaluation Form",
+            "category": "Legacy / Archive",
+            "status": "Legacy",
+            "description": "Legacy training evaluation form (English / Spanish).",
+            "url": "evaluation.html",
+            "tags": ["Form", "Training"],
+            "notes": "Archived course feedback form."
         },
         {
-            id: 5,
-            name: "ABB REJ603 Relay Configuration Tool",
-            category: "Tool",
-            description: "Interactive tool for configuring ABB REJ603 relays",
-            url: "https://coelatam.onrender.com/rej603-configurator.html",
-            notes: ""
+            "id": 5,
+            "name": "ABB REJ603 Relay Configuration Tool",
+            "category": "SCADA & Diagnostics",
+            "status": "Active",
+            "description": "Interactive configuration utility for ABB REJ603 protection relays.",
+            "url": "rej603-configurator.html",
+            "tags": ["Relay", "Protection", "Commissioning"],
+            "notes": "Fully operational field tool."
         },
         {
-            id: 6,
-            name: "SG1+x Parameter Comparison Tool",
-            category: "Tool",
-            description: "Used for comparing SG1+x parameters between different units",
-            url: "https://coelatam.onrender.com/parameter-comparison.html",
-            notes: "Troubleshooting"
+            "id": 6,
+            "name": "SG1+x Parameter Comparison Tool",
+            "category": "SCADA & Diagnostics",
+            "status": "Active",
+            "description": "Compare SG1+x parameters and settings between multiple field units.",
+            "url": "parameter-comparison.html",
+            "tags": ["Inverter", "Parameters", "SCADA"],
+            "notes": "Excellent troubleshooting tool."
         },
         {
-            id: 7,
-            name: "UMCG Data Analysis Tool",
-            category: "Tool",
-            description: "Used for Analyzing data extracted from UMCG devices",
-            url: "https://coelatam.onrender.com/data-analyzer.html",
-            notes: "Troubleshooting"
+            "id": 7,
+            "name": "UMCG Data Analysis Tool",
+            "category": "SCADA & Diagnostics",
+            "status": "In Progress",
+            "description": "Used for analyzing and parsing data logs extracted from UMCG devices.",
+            "url": "analyzer.html",
+            "tags": ["UMCG", "Data", "Diagnostics"],
+            "notes": "Development in progress."
         },  
         {
-            id: 8,
-            name: "PDP Module Fault Code Interpreter",
-            category: "Tool",
-            description: "Used for decoding PDP fault codes",
-            url: "https://coelatam.onrender.com/PDP-fault.html",
-            notes: "Troubleshooting"
+            "id": 8,
+            "name": "PDP Module Fault Code Interpreter",
+            "category": "SCADA & Diagnostics",
+            "status": "Active",
+            "description": "Decode and troubleshoot PDP power module status and fault codes.",
+            "url": "fault-interpreter.html",
+            "tags": ["PDP", "Faults", "Troubleshooting"],
+            "notes": "Updated with premium styling."
+        },
+        {
+            "id": 9,
+            "name": "PV String Sizer & VOC Calculator",
+            "category": "Calculators",
+            "status": "In Progress",
+            "description": "Calculate optimal solar PV string configurations based on panel Voc, thermal coefficients, and ambient temperatures.",
+            "url": "tool-placeholder.html?tool=pv-string-sizer",
+            "tags": ["PV", "Calculators", "Design"],
+            "notes": "Planned for Agent 2"
+        },
+        {
+            "id": 10,
+            "name": "BESS Cable Sizing Calculator",
+            "category": "Calculators",
+            "status": "In Progress",
+            "description": "Calculate DC and AC cable ampacity, voltage drop, and temperature derating factors for battery racks.",
+            "url": "tool-placeholder.html?tool=bess-cable-sizer",
+            "tags": ["BESS", "Calculators", "Electrical"],
+            "notes": "Planned for Agent 2"
+        },
+        {
+            "id": 11,
+            "name": "Torque & Bolted Connection Calculator",
+            "category": "Calculators",
+            "status": "In Progress",
+            "description": "Lookup target bolt pre-loads and recommended mechanical torques based on size, grade, and lubrication.",
+            "url": "tool-placeholder.html?tool=torque-calculator",
+            "tags": ["PV", "BESS", "Mechanical", "Torque"],
+            "notes": "Planned for Agent 2"
+        },
+        {
+            "id": 12,
+            "name": "PV Insulation Resistance (Megger) Tester",
+            "category": "PV Field Tools",
+            "status": "In Progress",
+            "description": "Calculate minimum acceptable insulation values and log field megger readings for array commissioning.",
+            "url": "tool-placeholder.html?tool=pv-megger-tester",
+            "tags": ["PV", "Testing", "Commissioning"],
+            "notes": "Planned for Agent 3"
+        },
+        {
+            "id": 13,
+            "name": "BESS Cell Voltage Imbalance Calculator",
+            "category": "BESS Field Tools",
+            "status": "In Progress",
+            "description": "Analyze battery rack pack balancing, identify outlier cells, and calculate standard deviation of voltage imbalance.",
+            "url": "tool-placeholder.html?tool=bess-cell-imbalance",
+            "tags": ["BESS", "Testing", "Commissioning"],
+            "notes": "Planned for Agent 4"
+        },
+        {
+            "id": 14,
+            "name": "Transformer Turns Ratio (TTR) Form",
+            "category": "Electrical Test Forms",
+            "status": "In Progress",
+            "description": "Log and calculate deviations for high-voltage and medium-voltage transformer turns ratio testing.",
+            "url": "tool-placeholder.html?tool=ttr-form",
+            "tags": ["Electrical", "Testing", "Report"],
+            "notes": "Planned for Agent 5"
+        },
+        {
+            "id": 15,
+            "name": "LOTO Verification Checklist",
+            "category": "HSE",
+            "status": "In Progress",
+            "description": "Standardized digital checklist to audit and confirm Lockout/Tagout energy isolation integrity before starting work.",
+            "url": "tool-placeholder.html?tool=loto-checklist",
+            "tags": ["HSE", "LOTO", "Safety"],
+            "notes": "Critical safety template."
+        },
+        {
+            "id": 16,
+            "name": "Arc Flash Boundary Calculator",
+            "category": "HSE",
+            "status": "In Progress",
+            "description": "Determine shock protection boundaries, limited/restricted space access, and required PPE levels based on fault current.",
+            "url": "tool-placeholder.html?tool=arc-flash",
+            "tags": ["HSE", "Electrical", "Safety"],
+            "notes": "Critical safety calculation tool."
+        },
+        {
+            "id": 17,
+            "name": "Daily Commissioning Progress Report",
+            "category": "Reports & Templates",
+            "status": "In Progress",
+            "description": "Generate standard supervisor shift handovers detailing completed tests, safety issues, and pending punchlists.",
+            "url": "tool-placeholder.html?tool=daily-progress",
+            "tags": ["Report", "Commissioning", "SCADA"],
+            "notes": "Planned for Agent 6"
         }
     ];
     
@@ -152,7 +265,7 @@ function loadFallbackData() {
 }
 
 /**
- * Render tools as tiles
+ * Render tools as cards
  */
 function renderTools(tools) {
     console.log('Rendering', tools.length, 'tool tiles');
@@ -179,65 +292,78 @@ function renderTools(tools) {
         toolsGrid.style.display = 'grid';
     }
     
-    // Create tile for each tool
+    // Create card for each tool
     tools.forEach(tool => {
-        const tile = createToolTile(tool);
-        toolsGrid.appendChild(tile);
+        const card = createToolCard(tool);
+        toolsGrid.appendChild(card);
     });
 }
 
 /**
- * Create a tool tile element (Windows 10 style)
+ * Create a premium Tool Card Component
  */
-function createToolTile(tool) {
-    const tile = document.createElement('div');
-    tile.className = 'tool-tile';
-    tile.setAttribute('data-id', tool.id);
-    tile.setAttribute('data-category', tool.category.toLowerCase().replace(/\s+/g, '-'));
+function createToolCard(tool) {
+    const card = document.createElement('div');
+    card.className = 'tool-tile';
+    card.setAttribute('data-id', tool.id);
+    
+    // Create structured class for category
+    const cleanCategory = tool.category.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    card.setAttribute('data-category', cleanCategory);
     
     // Get appropriate icon for category
     const icon = getCategoryIcon(tool.category);
     
-    // Determine if external link
-    const isExternal = tool.category === 'External Link' || (tool.url && tool.url.startsWith('http'));
+    // Generate Tags HTML
+    const tagsHTML = (tool.tags || [])
+        .map(tag => `<span class="tag-badge tag-${tag.toLowerCase()}">${tag}</span>`)
+        .join('');
+        
+    // Get Status Badge details
+    const statusText = tool.status || 'Active';
+    const cleanStatus = statusText.toLowerCase().replace(/\s+/g, '-');
     
-    // Create tile HTML
-    tile.innerHTML = `
+    // Create card HTML
+    card.innerHTML = `
         <div class="tile-content">
-            <div class="tile-icon">
-                <i class="${icon}"></i>
+            <div class="tile-header">
+                <span class="status-badge status-${cleanStatus}">${statusText}</span>
+                <span class="tile-category">${tool.category}</span>
             </div>
-            <div class="tile-info">
-                <h3 class="tile-title">${tool.name}</h3>
-                <p class="tile-description">${tool.description}</p>
-                <div class="tile-category">${tool.category.toUpperCase()}</div>
+            <div class="tile-main">
+                <div class="tile-icon-wrapper">
+                    <i class="${icon}"></i>
+                </div>
+                <div class="tile-info">
+                    <h3 class="tile-title">${tool.name}</h3>
+                    <p class="tile-description">${tool.description}</p>
+                </div>
+            </div>
+            <div class="tile-footer">
+                <div class="tile-tags">
+                    ${tagsHTML}
+                </div>
+                <div class="tile-action-indicator">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
             </div>
         </div>
     `;
     
-    // Add click handler
+    // Click action handler
     if (tool.url) {
-        tile.addEventListener('click', function(e) {
+        card.addEventListener('click', function(e) {
             e.preventDefault();
-            console.log('Tile clicked:', tool.name, 'URL:', tool.url);
-            
-            if (isExternal) {
-                window.open(tool.url, '_blank', 'noopener,noreferrer');
-            } else {
-                window.location.href = tool.url;
-            }
+            console.log('Tool selected:', tool.name, '->', tool.url);
+            window.location.href = tool.url;
         });
-        
-        // Add cursor pointer
-        tile.style.cursor = 'pointer';
-        
+        card.style.cursor = 'pointer';
     } else {
-        tile.style.cursor = 'default';
-        tile.style.opacity = '0.6';
-        console.log('No URL available for:', tool.name);
+        card.style.cursor = 'default';
+        card.style.opacity = '0.6';
     }
     
-    return tile;
+    return card;
 }
 
 /**
@@ -245,25 +371,27 @@ function createToolTile(tool) {
  */
 function getCategoryIcon(category) {
     const iconMap = {
-        'form': 'fas fa-file-alt',
-        'reference': 'fas fa-book',
-        'catalog': 'fas fa-list',
-        'tool': 'fas fa-wrench',
-        'calculator': 'fas fa-calculator',
-        'template': 'fas fa-file-template',
-        'external link': 'fas fa-external-link-alt',
-        'external-link': 'fas fa-external-link-alt'
+        'calculators': 'fas fa-calculator',
+        'pv-field-tools': 'fas fa-solar-panel',
+        'bess-field-tools': 'fas fa-battery-three-quarters',
+        'electrical-test-forms': 'fas fa-file-invoice-dollar',
+        'scada-diagnostics': 'fas fa-network-wired',
+        'reports-templates': 'fas fa-file-medical-alt',
+        'reference-guides': 'fas fa-book-open',
+        'hse': 'fas fa-shield-alt',
+        'legacy-archive': 'fas fa-archive'
     };
     
-    const key = category.toLowerCase().replace(/\s+/g, '-');
-    return iconMap[key] || 'fas fa-cog'; // default icon
+    const key = category.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    return iconMap[key] || 'fas fa-wrench';
 }
 
 /**
  * Initialize filter functionality
  */
 function initializeFilters() {
-    const checkboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]');
+    // Select category radios/checkboxes
+    const checkboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"], .filter-checkbox input[type="radio"]');
     
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', handleFilterChange);
@@ -271,52 +399,48 @@ function initializeFilters() {
 }
 
 /**
- * Handle filter changes
+ * Handle filter and search combined change
  */
 function handleFilterChange() {
     const checkboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]');
     const allCheckbox = document.querySelector('.filter-checkbox input[value="all"]');
     const categoryCheckboxes = document.querySelectorAll('.filter-checkbox input[type="checkbox"]:not([value="all"])');
     
-    // If "all" checkbox was clicked
-    if (this.value === 'all') {
+    // Handle All Tools logic
+    if (this && this.value === 'all') {
         if (this.checked) {
-            // Uncheck all category checkboxes
             categoryCheckboxes.forEach(cb => cb.checked = false);
         }
-    } else {
-        // If a category checkbox was clicked, uncheck "all"
-        if (this.checked && allCheckbox) {
-            allCheckbox.checked = false;
-        }
+    } else if (this && this.checked && allCheckbox) {
+        allCheckbox.checked = false;
     }
     
-    // Get selected filters
-    const selectedFilters = [];
+    // Get checked categories
+    const selectedCategories = [];
     checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            selectedFilters.push(checkbox.value);
+        if (checkbox.checked && checkbox.value !== 'all') {
+            selectedCategories.push(checkbox.value.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
         }
     });
     
-    console.log('Selected filters:', selectedFilters);
+    // Get search term
+    const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
     
-    // If "all" is selected or no filters, show all tools
-    if (selectedFilters.includes('all') || selectedFilters.length === 0) {
-        console.log('Showing all tools');
-        renderTools(allTools);
-        return;
-    }
-    
-    // Filter tools based on selected categories
+    // Filter tools
     const filteredTools = allTools.filter(tool => {
-        const toolCategory = tool.category.toLowerCase();
-        const isMatch = selectedFilters.includes(toolCategory);
-        console.log(`Tool: ${tool.name}, Category: ${tool.category} (${toolCategory}), Match: ${isMatch}`);
-        return isMatch;
+        const matchesCategory = selectedCategories.length === 0 || 
+                                (allCheckbox && allCheckbox.checked) ||
+                                selectedCategories.includes(tool.category.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
+                                
+        const matchesSearch = searchVal === '' || 
+                              tool.name.toLowerCase().includes(searchVal) ||
+                              tool.description.toLowerCase().includes(searchVal) ||
+                              (tool.tags || []).some(t => t.toLowerCase().includes(searchVal));
+                              
+        return matchesCategory && matchesSearch;
     });
     
-    console.log('Filtered tools:', filteredTools.length, 'out of', allTools.length);
+    console.log(`Filtered tools: ${filteredTools.length} of ${allTools.length}`);
     renderTools(filteredTools);
 }
 
@@ -343,7 +467,7 @@ function showLoadingState(isLoading) {
  */
 function handleError(message) {
     if (toolsGrid) {
-        toolsGrid.innerHTML = `<div class="error-message" style="grid-column: 1 / -1; text-align: center; padding: 2rem; background: white; border-radius: 4px; border: 1px solid #e9ecef;">${message}</div>`;
+        toolsGrid.innerHTML = `<div class="error-message" style="grid-column: 1 / -1; text-align: center; padding: 2rem; background: white; border-radius: 8px; border: 1px solid var(--border-color);">${message}</div>`;
         toolsGrid.style.display = 'grid';
     }
     if (emptyState) {
@@ -352,63 +476,12 @@ function handleError(message) {
 }
 
 /**
- * New Service Worker message handler
+ * PWA Service Worker loading
  */
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(reg => {
     console.log('[PWA] Service Worker registered:', reg);
-
-    // 🔄 Listen for updates
-    reg.addEventListener('updatefound', () => {
-      const newSW = reg.installing;
-      newSW.addEventListener('statechange', () => {
-        if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-          // Show update banner
-          showUpdateToast(newSW);
-        }
-      });
-    });
-  });
-}
-
-function showUpdateToast(sw) {
-  const toast = document.createElement('div');
-  toast.innerHTML = `
-    <div style="
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      right: 20px;
-      background: #0a74da;
-      color: white;
-      padding: 1em;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 9999;
-      font-family: sans-serif;
-    ">
-      <span>🔄 New version available</span>
-      <button id="refresh-pwa" style="
-        background: white;
-        color: #0a74da;
-        border: none;
-        padding: 0.5em 1em;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-      ">Refresh</button>
-    </div>
-  `;
-  document.body.appendChild(toast);
-
-  document.getElementById('refresh-pwa').addEventListener('click', () => {
-    sw.postMessage({ type: 'SKIP_WAITING' });
-  });
-
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    window.location.reload();
+  }).catch(err => {
+    console.warn('[PWA] SW registration failed:', err);
   });
 }

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Placeholder - Level3Support</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/shared-styles.css" rel="stylesheet">
+    <style>
+        .placeholder-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .tool-header-section {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .tool-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .tool-meta {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease;
+        }
+        .btn-back:hover {
+            transform: translateX(-4px);
+        }
+        .tool-body-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .tool-body-grid {
+                grid-template-columns: 3fr 2fr;
+            }
+        }
+        .card-panel {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+        }
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 650;
+            font-size: 1.15rem;
+            color: #0f172a;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        @media (min-width: 480px) {
+            .form-row-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .btn-action-primary {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .btn-action-primary:hover {
+            background-color: var(--primary-hover);
+        }
+        .btn-action-secondary {
+            width: 100%;
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        .btn-action-secondary:hover {
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" style="background:#ffffff; box-shadow:0 1px 3px rgba(0,0,0,0.06); padding:1rem 2rem;">
+        <div style="max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center;">
+            <a href="index.html">
+                <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height:60px; width:auto;">
+            </a>
+        </div>
+    </nav>
+
+    <div class="placeholder-container">
+        <!-- Back Link -->
+        <a href="index.html" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back to ToolHub
+        </a>
+
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 id="tool-name" style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif;">Tool Title</h1>
+                    <p id="tool-purpose" style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">Calculating metrics for solar PV and battery storage operations.</p>
+                </div>
+                <div class="tool-meta">
+                    <span id="tool-category" class="tile-category">Calculators</span>
+                    <span id="tool-status" class="status-badge status-in-progress">In Progress</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Global Safety Disclaimer -->
+        <div class="warning-box">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+                <div class="warning-title">Safety & Professional Use Disclaimer</div>
+                This ToolHub assists field engineers but does not replace official project documents, local electrical codes, manufacturer manuals, approved commissioning procedures, or site-specific HSE procedures. Any safety-critical work must involve direct reference verification.
+            </div>
+        </div>
+
+        <!-- Grid Body -->
+        <div class="tool-body-grid">
+            <!-- Left Column: Inputs & Outputs -->
+            <div>
+                <!-- Inputs Section -->
+                <div class="card-panel">
+                    <div class="card-title"><i class="fas fa-edit"></i> Tool Inputs</div>
+                    <form id="placeholder-form" onsubmit="event.preventDefault(); return false;">
+                        <div id="dynamic-inputs">
+                            <!-- Injected dynamically -->
+                            <div class="form-group">
+                                <label for="field-1">Generic Input Parameter 1</label>
+                                <input type="number" id="field-1" value="100">
+                                <div class="field-note">Helpful instruction or standard unit.</div>
+                            </div>
+                        </div>
+                        <button class="btn-action-primary" onclick="simulateCalculation()"><i class="fas fa-calculator"></i> Run Calculations</button>
+                    </form>
+                </div>
+
+                <!-- Output Panel -->
+                <div class="card-panel">
+                    <div class="card-title"><i class="fas fa-chart-bar"></i> Results & Outputs</div>
+                    <div id="dynamic-results" class="result-panel">
+                        <div class="result-header">
+                            <span>Calculated Metric</span>
+                            <span>Value</span>
+                        </div>
+                        <div class="result-row">
+                            <span>Baseline Calculation</span>
+                            <span class="result-value">--</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-action-secondary" onclick="alert('Export to PDF / CSV will be available here.')">
+                        <i class="fas fa-download"></i> Export Results
+                    </button>
+                    <button class="btn-action-secondary" onclick="alert('Copied results summary to clipboard!')">
+                        <i class="fas fa-copy"></i> Copy to Clipboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column: Safety & Assumptions -->
+            <div>
+                <!-- Assumptions Panel -->
+                <div id="dynamic-assumptions" class="assumptions-box">
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>All values are referenced standard measurements.</li>
+                        <li>Standard ambient temperature of 25°C under normal atmospheric pressure.</li>
+                        <li>Assumes clean utility grade parameters.</li>
+                    </ul>
+                </div>
+
+                <!-- Development Panel -->
+                <div class="card-panel" style="border-top:4px solid var(--primary-color);">
+                    <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
+                    <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+                        This module is assigned to future development agents. Form structures and interactive logic are mocked as placeholders for safety-critical integration.
+                    </p>
+                    <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
+                        <strong>Agent Handler:</strong> Agent <span id="agent-number">X</span><br>
+                        <strong>Status:</strong> Under Construction<br>
+                        <strong>API Hook:</strong> Client-Side JS logic
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer" style="background:#0f172a; color:#ffffff; padding:2rem; margin-top:4rem; font-size:0.85rem;">
+        <div style="max-width:1400px; margin:0 auto; text-align:center;">
+            <p>&copy; 2026 Level3Support | Developed by Andres Provero</p>
+        </div>
+    </footer>
+
+    <!-- Contextual Dynamic JS Configuration -->
+    <script>
+        const toolsContext = {
+            'pv-string-sizer': {
+                name: "PV String Sizer & VOC Calculator",
+                category: "Calculators",
+                purpose: "Calculate optimal solar PV string configurations based on panel Voc, thermal coefficients, and ambient temperatures.",
+                agent: "2",
+                inputs: `
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label>PV Panel Open-Circuit Voltage (Voc)</label>
+                            <input type="number" id="in-voc" value="49.5">
+                            <div class="field-note">Volts (V) at STC.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Temp Coefficient of Voc (&beta;)</label>
+                            <input type="number" id="in-coeff" value="-0.27" step="0.01">
+                            <div class="field-note">Percent per degree Celsius (%/&deg;C).</div>
+                        </div>
+                    </div>
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label>Minimum Ambient Temp</label>
+                            <input type="number" id="in-temp-min" value="-10">
+                            <div class="field-note">Celsius (&deg;C) site extreme.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Max Inverter Input Voltage</label>
+                            <input type="number" id="in-v-max" value="1000">
+                            <div class="field-note">Max DC input limit (V).</div>
+                        </div>
+                    </div>
+                `,
+                assumptions: `
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>NEC Article 690 Solar Photovoltaic Systems standard.</li>
+                        <li>Standard temperature coefficient lookup formula.</li>
+                        <li>Extreme low design temp based on local ASHRAE weather tables.</li>
+                    </ul>
+                `,
+                results: `
+                    <div class="result-header">
+                        <span>Calculated Voc extreme</span>
+                        <span>Value</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Voc at Min Temp (-10&deg;C)</span>
+                        <span class="result-value">54.18 V</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Max Panels per String</span>
+                        <span class="result-value">18 Panels</span>
+                    </div>
+                `
+            },
+            'bess-cable-sizer': {
+                name: "BESS Cable Sizing Calculator",
+                category: "Calculators",
+                purpose: "Calculate DC and AC cable ampacity, voltage drop, and temperature derating factors for battery racks.",
+                agent: "2",
+                inputs: `
+                    <div class="form-group">
+                        <label>Max Battery Continuous DC Current</label>
+                        <input type="number" id="in-bess-current" value="350">
+                        <div class="field-note">Amperes (A) continuous.</div>
+                    </div>
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label>Ambient Operating Temp</label>
+                            <input type="number" id="in-bess-temp" value="40">
+                            <div class="field-note">Derating boundary temperature (&deg;C).</div>
+                        </div>
+                        <div class="form-group">
+                            <label>One-Way Cable Run Length</label>
+                            <input type="number" id="in-bess-len" value="75">
+                            <div class="field-note">Length in meters (m).</div>
+                        </div>
+                    </div>
+                `,
+                assumptions: `
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>NFPA 70 / NEC Table 310.15 ampacity guidelines.</li>
+                        <li>Max acceptable voltage drop limited to 1.5% for DC.</li>
+                        <li>Copper conductor with 90&deg;C terminal ratings.</li>
+                    </ul>
+                `,
+                results: `
+                    <div class="result-header">
+                        <span>Sizing recommendations</span>
+                        <span>Value</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Required Ampacity (125% factor)</span>
+                        <span class="result-value">437.5 A</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Recommended Copper Cable</span>
+                        <span class="result-value">2x 250 kcmil</span>
+                    </div>
+                `
+            },
+            'torque-calculator': {
+                name: "Torque & Bolted Connection Calculator",
+                category: "Calculators",
+                purpose: "Lookup target bolt pre-loads and recommended mechanical torques based on size, grade, and lubrication.",
+                agent: "2",
+                inputs: `
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label>Bolt Size (Diameter)</label>
+                            <select>
+                                <option>M8</option>
+                                <option selected>M10</option>
+                                <option>M12</option>
+                                <option>M16</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Bolt Grade / Class</label>
+                            <select>
+                                <option>Grade 5</option>
+                                <option selected>Class 8.8</option>
+                                <option>Class 10.9</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Lubrication Coefficient (K)</label>
+                        <select>
+                            <option value="0.2">Dry Bolting (K=0.20)</option>
+                            <option value="0.15" selected>Lubricated / Waxed (K=0.15)</option>
+                        </select>
+                    </div>
+                `,
+                assumptions: `
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>Torque calculation based on VDI 2230 guidelines.</li>
+                        <li>Thread friction coefficient assumptions apply.</li>
+                        <li>90% yield strength utilization factor.</li>
+                    </ul>
+                `,
+                results: `
+                    <div class="result-header">
+                        <span>Torque recommendation</span>
+                        <span>Value</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Required Preload</span>
+                        <span class="result-value">29.1 kN</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Target Torque Spec</span>
+                        <span class="result-value">43.7 N&middot;m</span>
+                    </div>
+                `
+            },
+            'pv-megger-tester': {
+                name: "PV Insulation Resistance (Megger) Tester",
+                category: "PV Field Tools",
+                purpose: "Calculate minimum acceptable insulation values and log field megger readings for array commissioning.",
+                agent: "3",
+                inputs: `
+                    <div class="form-group">
+                        <label>Nominal DC System Voltage</label>
+                        <input type="number" value="1500">
+                    </div>
+                    <div class="form-group">
+                        <label>Array Capacity (kWp)</label>
+                        <input type="number" value="350">
+                    </div>
+                `,
+                assumptions: `
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>IEC 62446-1 Solar PV Systems testing standards.</li>
+                        <li>Wet vs dry insulation baseline values.</li>
+                    </ul>
+                `,
+                results: `
+                    <div class="result-header">
+                        <span>Insulation limits</span>
+                        <span>Value</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Required Megger Voltage</span>
+                        <span class="result-value">1000 VDC</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Min Insulation Resistance</span>
+                        <span class="result-value">1.0 M&Omega;</span>
+                    </div>
+                `
+            },
+            'bess-cell-imbalance': {
+                name: "BESS Cell Voltage Imbalance Calculator",
+                category: "BESS Field Tools",
+                purpose: "Analyze battery rack pack balancing, identify outlier cells, and calculate standard deviation of voltage imbalance.",
+                agent: "4",
+                inputs: `
+                    <div class="form-group">
+                        <label>Number of Cells in Series</label>
+                        <input type="number" value="240">
+                    </div>
+                    <div class="form-group">
+                        <label>Cell Voltages Input (CSV or Sample)</label>
+                        <textarea placeholder="Paste cell voltages (e.g. 3.29, 3.31, 3.30...)">3.32, 3.32, 3.21, 3.33, 3.32, 3.31</textarea>
+                    </div>
+                `,
+                assumptions: `
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>Imbalance threshold specified by battery rack manufacturer specs.</li>
+                        <li>Assumes cell state-of-charge matches balancing window criteria.</li>
+                    </ul>
+                `,
+                results: `
+                    <div class="result-header">
+                        <span>Imbalance diagnostics</span>
+                        <span>Value</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Voltage Delta (Max-Min)</span>
+                        <span class="result-value">120 mV</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Imbalance Status</span>
+                        <span class="result-value" style="color:var(--error-color);">Outlier Detected</span>
+                    </div>
+                `
+            },
+            'ttr-form': {
+                name: "Transformer Turns Ratio (TTR) Form",
+                category: "Electrical Test Forms",
+                purpose: "Log and calculate deviations for high-voltage and medium-voltage transformer turns ratio testing.",
+                agent: "5",
+                inputs: `
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label>Nominal Ratio</label>
+                            <input type="number" value="156.5">
+                        </div>
+                        <div class="form-group">
+                            <label>Measured Ratio H1-H2</label>
+                            <input type="number" value="156.8">
+                        </div>
+                    </div>
+                `,
+                assumptions: `
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>IEEE C57.12.90 turns ratio guidelines.</li>
+                        <li>Standard ratio tolerance limit is &plusmn;0.5%.</li>
+                    </ul>
+                `,
+                results: `
+                    <div class="result-header">
+                        <span>TTR results</span>
+                        <span>Value</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Deviation Percentage</span>
+                        <span class="result-value">0.19%</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Test Evaluation</span>
+                        <span class="result-value" style="color:var(--success-color);">PASS</span>
+                    </div>
+                `
+            },
+            'loto-checklist': {
+                name: "LOTO Verification Checklist",
+                category: "HSE",
+                purpose: "Standardized digital checklist to audit and confirm Lockout/Tagout energy isolation integrity before starting work.",
+                agent: "HSE Lead",
+                inputs: `
+                    <div class="form-group">
+                        <label>Site Location / Area</label>
+                        <input type="text" value="Main MV Substation Area 1">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="c1" checked>
+                        <label for="c1">All energy sources identified (Electrical, Mechanical, Gravity)?</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="c2" checked>
+                        <label for="c2">Individual padlock and tags locked on breaker hassp?</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="c3">
+                        <label for="c3">Verified zero electrical potential using calibrated detector?</label>
+                    </div>
+                `,
+                assumptions: `
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>OSHA 1910.147 Control of Hazardous Energy safety standards.</li>
+                        <li>Requires continuous monitoring and individual lock key custody.</li>
+                    </ul>
+                `,
+                results: `
+                    <div class="result-header">
+                        <span>LOTO Integrity Status</span>
+                        <span>Value</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Verification Check</span>
+                        <span class="result-value" style="color:var(--error-color);">Incomplete (Test for Voltage)</span>
+                    </div>
+                `
+            },
+            'arc-flash': {
+                name: "Arc Flash Boundary Calculator",
+                category: "HSE",
+                purpose: "Determine shock protection boundaries, limited/restricted space access, and required PPE levels based on fault current.",
+                agent: "Safety Expert",
+                inputs: `
+                    <div class="form-group">
+                        <label>Nominal AC System Voltage (V)</label>
+                        <input type="number" value="480">
+                    </div>
+                    <div class="form-group">
+                        <label>Bolted Fault Current (kA)</label>
+                        <input type="number" value="25">
+                    </div>
+                `,
+                assumptions: `
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>NFPA 70E Arc Flash protection boundary standards.</li>
+                        <li>Standard clearing time of 0.1 seconds assumes upstream protection.</li>
+                    </ul>
+                `,
+                results: `
+                    <div class="result-header">
+                        <span>Arc Flash protection limits</span>
+                        <span>Value</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Arc Flash Boundary</span>
+                        <span class="result-value">1.2 meters</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Incident Energy Level</span>
+                        <span class="result-value">3.2 cal/cm&sup2;</span>
+                    </div>
+                `
+            },
+            'daily-progress': {
+                name: "Daily Commissioning Progress Report",
+                category: "Reports & Templates",
+                purpose: "Generate standard supervisor shift handovers detailing completed tests, safety issues, and pending punchlists.",
+                agent: "6",
+                inputs: `
+                    <div class="form-group">
+                        <label>Shift Supervisor Name</label>
+                        <input type="text" value="Andres Provero">
+                    </div>
+                    <div class="form-group">
+                        <label>Completed Commissioning Tasks</label>
+                        <textarea>Completed ABB REJ603 configurations on Bay 3. Inverter parameter checks on Block A are 90% done.</textarea>
+                    </div>
+                `,
+                assumptions: `
+                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                    <ul class="assumptions-list">
+                        <li>Commissioning schedule daily reporting protocol.</li>
+                        <li>Integrates with standard punchlist log files.</li>
+                    </ul>
+                `,
+                results: `
+                    <div class="result-header">
+                        <span>Shift metrics summary</span>
+                        <span>Value</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Shift Efficiency Status</span>
+                        <span class="result-value" style="color:var(--success-color);">On Schedule</span>
+                    </div>
+                `
+            }
+        };
+
+        // Parse query parameter to customize layout dynamically
+        const urlParams = new URLSearchParams(window.location.search);
+        const toolKey = urlParams.get('tool');
+
+        if (toolKey && toolsContext[toolKey]) {
+            const context = toolsContext[toolKey];
+            document.getElementById('tool-name').innerText = context.name;
+            document.getElementById('tool-purpose').innerText = context.purpose;
+            document.getElementById('tool-category').innerText = context.category;
+            document.getElementById('agent-number').innerText = context.agent;
+            document.getElementById('dynamic-inputs').innerHTML = context.inputs;
+            document.getElementById('dynamic-assumptions').innerHTML = context.assumptions;
+            document.getElementById('dynamic-results').innerHTML = context.results;
+            
+            // Adjust header badge category style class
+            const cleanCategory = context.category.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            document.getElementById('tool-category').className = `tile-category category-${cleanCategory}`;
+            document.title = `${context.name} - Level3Support`;
+        }
+
+        function simulateCalculation() {
+            // Give interactive calculation visual micro-feedback
+            const values = document.querySelectorAll('.result-value');
+            values.forEach(v => {
+                const originalVal = v.innerHTML;
+                v.innerHTML = '<i class="fas fa-sync fa-spin"></i>';
+                setTimeout(() => {
+                    v.innerHTML = originalVal;
+                }, 600);
+            });
+        }
+    </script>
+</body>
+</html>
