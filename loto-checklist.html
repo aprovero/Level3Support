@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOTO Checklist Generator — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 950px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .warning-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid var(--error-color);
+      color: var(--error-text);
+      padding: 12px 16px;
+      border-radius: var(--border-radius-md);
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .warning-box i {
+      font-size: 1.2rem;
+      margin-top: 2px;
+    }
+    
+    /* Dynamic tables styling */
+    .dynamic-table-wrapper {
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+    }
+    .dynamic-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .dynamic-table th {
+      background: var(--background-dark);
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+    .dynamic-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .dynamic-table tr:last-child td { border-bottom: none; }
+    .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
+      margin-bottom: 0;
+      padding: 6px 10px;
+      height: 34px;
+      font-size: 0.85rem;
+    }
+    
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-action {
+      width: auto;
+      min-height: unset;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      margin-top: 0;
+    }
+    
+    @media print {
+      body { background: white; color: black; }
+      .calc-container { box-shadow: none; padding: 0; margin: 0; max-width: 100%; }
+      .back-link, .btn-row, .btn-add-row, td button { display: none !important; }
+      .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
+        border: none !important;
+        background: transparent !important;
+        pointer-events: none !important;
+        padding: 0 !important;
+      }
+      .dynamic-table th { background: #eee !important; color: black !important; }
+      .form-section { border: 1px solid #000 !important; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">🛡 HSE & SAFETY</div>
+    </div>
+
+    <!-- LOTO Safety Warning -->
+    <div class="warning-box">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <strong style="display:block; margin-bottom: 2px;">LOTO Authorization Disclaimer</strong>
+        This planning tool assists in lockout/tagout preparation but does NOT authorize isolation or work. LOTO operations must strictly follow site-specific safety procedures, occupational regulations (OSHA/local laws), and must be executed only by qualified authorized personnel with a confirmed Permit-to-Work block.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 6px 0; font-size: 1.7rem;">LOTO Checklist Generator</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px;">
+      Identify hazardous energy sources, log specific isolation locking/tagging points, and perform zero-energy dry tests.
+    </p>
+
+    <form id="loto-form" onsubmit="event.preventDefault();">
+
+      <!-- Section 1: Work Scope -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-file-contract" style="color:var(--primary-color);"></i> 1. Isolation Work Scope</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="site-name">Project / Site Name</label>
+            <input type="text" id="site-name" placeholder="e.g. Red Mesa Solar" required>
+          </div>
+          <div class="input-group">
+            <label for="loto-eq">Equipment / System isolated</label>
+            <input type="text" id="loto-eq" placeholder="e.g. Medium Voltage Switchgear Section A" required>
+          </div>
+          <div class="input-group">
+            <label for="loto-desc">Work Description</label>
+            <input type="text" id="loto-desc" placeholder="e.g. 3-Year Protection Relay Maintenance Testing" required>
+          </div>
+        </div>
+        <div class="input-row" style="margin-bottom:0;">
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="loto-auth">Authorized LOTO Lead</label>
+            <input type="text" id="loto-auth" placeholder="Authorized person name" required style="margin-bottom:0;">
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="loto-supervisor">LOTO Supervisor</label>
+            <input type="text" id="loto-supervisor" placeholder="Supervisor name" required style="margin-bottom:0;">
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="loto-date">Date & Time</label>
+            <input type="datetime-local" id="loto-date" required style="margin-bottom:0;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Energy Sources -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-bolt" style="color:var(--primary-color);"></i> 2. Hazardous Energy Sources</h3>
+        <div class="dynamic-table-wrapper">
+          <table class="dynamic-table">
+            <thead>
+              <tr>
+                <th style="width: 180px;">Energy Type</th>
+                <th>Source Description</th>
+                <th>Hazard Details</th>
+                <th>Isolation Method</th>
+                <th>Verification Method</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="energy-tbody">
+              <!-- Dynamic energy sources -->
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="button-secondary btn-add-row" onclick="addEnergyRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add Energy Source</button>
+      </div>
+
+      <!-- Section 3: Isolation Points -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-key" style="color:var(--primary-color);"></i> 3. Lock & Tag Isolation Points</h3>
+        <div class="dynamic-table-wrapper">
+          <table class="dynamic-table">
+            <thead>
+              <tr>
+                <th style="width: 100px;">Point ID</th>
+                <th>Location / Area</th>
+                <th>Device Type / Name</th>
+                <th>Normal State</th>
+                <th>Isolated State</th>
+                <th style="width: 90px;">Lock #</th>
+                <th style="width: 90px;">Tag #</th>
+                <th>Applied By</th>
+                <th>Verified By</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="isolation-tbody">
+              <!-- Dynamic isolation points -->
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="button-secondary btn-add-row" onclick="addIsolationRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add Isolation Point</button>
+      </div>
+
+      <!-- Section 4: Zero-Energy Verification -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-check-circle" style="color:var(--primary-color);"></i> 4. Zero-Energy (Live-Dead-Live) Verification</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="verify-inst">Testing Instrument / Multimeter</label>
+            <input type="text" id="verify-inst" placeholder="e.g. Fluke 289 DMM, 10kV Tester" required>
+          </div>
+          <div class="input-group">
+            <label for="verify-serial">Instrument Serial Number</label>
+            <input type="text" id="verify-serial" placeholder="Serial #" required>
+          </div>
+          <div class="input-group">
+            <label for="verify-ldl">Live-Dead-Live physical check complete?</label>
+            <select id="verify-ldl">
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+              <option value="N/A">N/A</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-row" style="margin-bottom:0;">
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="verify-method">Verification Method</label>
+            <input type="text" id="verify-method" placeholder="e.g. Tested Phase-to-Phase and Phase-to-Ground" style="margin-bottom:0;" required>
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="verify-result">Zero Energy Verified Result</label>
+            <select id="verify-result" style="margin-bottom:0;">
+              <option value="0.00 V AC / DC confirmed">0.00 V AC / DC confirmed</option>
+              <option value="Energy residual detected - STOP">Energy residual detected - STOP</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Try-Out Confirmation -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-redo-alt" style="color:var(--primary-color);"></i> 5. Equipment Try-Out Confirmation</h3>
+        <div class="input-row" style="margin-bottom:0;">
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="try-controls">Control Switches tested (Start/Reset buttons pushed)?</label>
+            <input type="text" id="try-controls" placeholder="e.g. Pressed HMI local start button, system did not start" required style="margin-bottom:0;">
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="try-stored">Stored Energy Released (Capacitors, spring charges)?</label>
+            <input type="text" id="try-stored" placeholder="e.g. spring discharge button pressed on MV breaker" required style="margin-bottom:0;">
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="try-result">Try-Out Verification Result</label>
+            <select id="try-result" style="margin-bottom:0;">
+              <option value="Confirmed isolated - Safe for work">Confirmed isolated - Safe for work</option>
+              <option value="Isolation failure - STOP WORK">Isolation failure - STOP WORK</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Restoration Steps -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-history" style="color:var(--primary-color);"></i> 6. De-Isolation / Restoration Steps</h3>
+        <div class="dynamic-table-wrapper">
+          <table class="dynamic-table">
+            <thead>
+              <tr>
+                <th style="width: 80px;">Step #</th>
+                <th>Restoration Action / Re-energization step</th>
+                <th>Responsible Person</th>
+                <th>Verification Details</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="restoration-tbody">
+              <!-- Dynamic restoration steps -->
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="button-secondary btn-add-row" onclick="addRestorationRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add Restoration Step</button>
+      </div>
+
+      <!-- Section 7: Final Authorization Sign-Off -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-signature" style="color:var(--primary-color);"></i> 7. De-Isolation Sign-Off Approvals</h3>
+        <div class="input-row" style="margin-bottom:0;">
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="sign-auth">LOTO Lead Signature</label>
+            <div style="border: 1px dashed var(--border-color); height: 42px; display:flex; align-items:center; justify-content:center; border-radius: 4px; font-size:0.8rem; color:var(--text-light); font-weight:600;">[ LOTO Authorized Person Signature ]</div>
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="sign-sup">LOTO Supervisor Signature</label>
+            <div style="border: 1px dashed var(--border-color); height: 42px; display:flex; align-items:center; justify-content:center; border-radius: 4px; font-size:0.8rem; color:var(--text-light); font-weight:600;">[ LOTO Supervisor Signature ]</div>
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="sign-date">Release Date</label>
+            <input type="date" id="sign-date" style="margin-bottom:0;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer action controls -->
+      <div class="btn-row">
+        <div class="btn-group">
+          <button type="button" id="copy-summary-btn" class="button-secondary btn-action"><i class="fas fa-copy"></i> Copy LOTO Plan Summary</button>
+          <button type="button" id="export-json-btn" class="button-secondary btn-action"><i class="fas fa-file-code"></i> Export JSON</button>
+        </div>
+        <div class="btn-group">
+          <button type="button" id="print-form-btn" class="button-secondary btn-action" onclick="window.print()"><i class="fas fa-print"></i> Print Isolation Sheet</button>
+          <button type="button" id="reset-btn" class="button-secondary btn-action btn-danger-action" onclick="resetForm()"><i class="fas fa-undo"></i> Reset Checklist</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <script src="js/loto-checklist.js"></script>
+</body>
+</html>

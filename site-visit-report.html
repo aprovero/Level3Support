@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Site Visit Report Generator — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 1000px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .warning-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid var(--primary-color);
+      color: #1e40af;
+      padding: 12px 16px;
+      border-radius: var(--border-radius-md);
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .warning-box i {
+      font-size: 1.2rem;
+      margin-top: 2px;
+    }
+    .warning-title {
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    
+    /* Dynamic table styles */
+    .dynamic-table-wrapper {
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+    }
+    .dynamic-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .dynamic-table th {
+      background: var(--background-dark);
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+    .dynamic-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .dynamic-table tr:last-child td { border-bottom: none; }
+    .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
+      margin-bottom: 0;
+      padding: 6px 10px;
+      height: 34px;
+      font-size: 0.85rem;
+    }
+    .dynamic-table textarea {
+      min-height: unset;
+      height: 34px;
+    }
+    
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-action {
+      width: auto;
+      min-height: unset;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      margin-top: 0;
+    }
+    
+    /* Print / Preview Mode */
+    @media print {
+      body { background: white; color: black; }
+      .calc-container { box-shadow: none; padding: 0; margin: 0; max-width: 100%; }
+      .back-link, .btn-row, .dynamic-table td button, .btn-add-row { display: none !important; }
+      .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
+        border: none !important;
+        background: transparent !important;
+        pointer-events: none !important;
+        padding: 0 !important;
+      }
+      .dynamic-table th { background: #eee !important; color: black !important; }
+      .form-section { border: 1px solid #000 !important; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">📝 REPORTS & TEMPLATES</div>
+    </div>
+
+    <!-- Review reminder Disclaimer -->
+    <div class="warning-box">
+      <i class="fas fa-info-circle"></i>
+      <div>
+        <div class="warning-title">Site Report Review Procedure</div>
+        Report content should be thoroughly reviewed before customer submission. Maintain a professional, factual, and service-oriented tone. Ensure all technical assertions are supported by approved procedures or test logs.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 6px 0; font-size: 1.7rem;">Customer Site Visit Report</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Compile on-site field engineering visits, safety audits, works performed, and corrective plans into a polished PDF report.
+    </p>
+
+    <form id="report-form" onsubmit="event.preventDefault();">
+      
+      <!-- Section 1: Project Information -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-building" style="color:var(--primary-color);"></i> 1. Project & Site Information</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="proj-name">Project Name</label>
+            <input type="text" id="proj-name" placeholder="e.g. Desert Peak Solar" required>
+          </div>
+          <div class="input-group">
+            <label for="site-name">Site Name</label>
+            <input type="text" id="site-name" placeholder="e.g. Substation Alpha" required>
+          </div>
+          <div class="input-group">
+            <label for="customer">Customer</label>
+            <input type="text" id="customer" placeholder="e.g. Apex Utilities" required>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" placeholder="e.g. Pecos, TX">
+          </div>
+          <div class="input-group">
+            <label for="visit-date">Date of Visit</label>
+            <input type="date" id="visit-date" required>
+          </div>
+          <div class="input-group">
+            <label for="prepared-by">Report Prepared By</label>
+            <input type="text" id="prepared-by" placeholder="e.g. John Doe, Field Engineer" required>
+          </div>
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+          <label for="personnel">Personnel Present</label>
+          <input type="text" id="personnel" placeholder="e.g. John Doe (L3S), Sarah Miller (Apex), Techs..." style="margin-bottom:0;">
+        </div>
+      </div>
+
+      <!-- Section 2: Visit Objective -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-bullseye" style="color:var(--primary-color);"></i> 2. Visit Objective</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="main-objective">Main Objective</label>
+            <input type="text" id="main-objective" placeholder="e.g. Post-energization inverter commissioning audit" required>
+          </div>
+          <div class="input-group">
+            <label for="requested-by">Requested By</label>
+            <input type="text" id="requested-by" placeholder="e.g. Solar Operations Manager">
+          </div>
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+          <label for="scope-visit">Scope of Visit</label>
+          <textarea id="scope-visit" placeholder="Outline specific tasks, checks, and equipment bounds..." style="min-height: 60px; margin-bottom:0;"></textarea>
+        </div>
+      </div>
+
+      <!-- Section 3: Site Conditions -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-cloud-sun" style="color:var(--primary-color);"></i> 3. Site Conditions</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="weather">Weather Conditions</label>
+            <input type="text" id="weather" placeholder="e.g. Sunny, 85°F, Low wind">
+          </div>
+          <div class="input-group">
+            <label for="access-cond">Access Conditions</label>
+            <input type="text" id="access-cond" placeholder="e.g. Good, gravel roads dry">
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="safety-cond">Safety Conditions</label>
+            <input type="text" id="safety-cond" placeholder="e.g. Clear, site LOTO in force">
+          </div>
+          <div class="input-group">
+            <label for="eq-status-arrival">Equipment Status on Arrival</label>
+            <input type="text" id="eq-status-arrival" placeholder="e.g. Inverters offline, DC disconnects open">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Work Performed -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-tools" style="color:var(--primary-color);"></i> 4. Work Performed</h3>
+        <div class="dynamic-table-wrapper">
+          <table class="dynamic-table" id="work-table">
+            <thead>
+              <tr>
+                <th>Equipment ID</th>
+                <th>Description of Work</th>
+                <th>Result / Status</th>
+                <th>Notes</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="work-tbody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="button-secondary btn-add-row" onclick="addWorkRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add Work Entry</button>
+      </div>
+
+      <!-- Section 5: Issues Found -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-exclamation-triangle" style="color:var(--primary-color);"></i> 5. Issues Found</h3>
+        <div class="dynamic-table-wrapper">
+          <table class="dynamic-table" id="issues-table">
+            <thead>
+              <tr>
+                <th>Severity</th>
+                <th>Equipment / Location</th>
+                <th>Description</th>
+                <th>Immediate Action Taken</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="issues-tbody">
+              <!-- Dynamic rows -->
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="button-secondary btn-add-row" onclick="addIssueRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add Issue Entry</button>
+      </div>
+
+      <!-- Section 6: Corrective Actions -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-clipboard-check" style="color:var(--primary-color);"></i> 6. Corrective Actions</h3>
+        <div class="dynamic-table-wrapper">
+          <table class="dynamic-table" id="actions-table">
+            <thead>
+              <tr>
+                <th>Action Required</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Due Date</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="actions-tbody">
+              <!-- Dynamic rows -->
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="button-secondary btn-add-row" onclick="addActionRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add Action Entry</button>
+      </div>
+
+      <!-- Section 7: Pending Items -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-hourglass-half" style="color:var(--primary-color);"></i> 7. Pending Items</h3>
+        <div class="dynamic-table-wrapper">
+          <table class="dynamic-table" id="pending-table">
+            <thead>
+              <tr>
+                <th>Item / Description</th>
+                <th>Responsible Party</th>
+                <th>Target Date</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="pending-tbody">
+              <!-- Dynamic rows -->
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="button-secondary btn-add-row" onclick="addPendingRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add Pending Entry</button>
+      </div>
+
+      <!-- Section 8: Safety Observations -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-shield-alt" style="color:var(--primary-color);"></i> 8. Safety Observations</h3>
+        <div class="input-group">
+          <label for="safety-positive">Positive Safety Observations</label>
+          <textarea id="safety-positive" placeholder="e.g. Proper PPE worn at all times, JHA thoroughly conducted before switchgear testing..." style="min-height: 50px;"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="safety-unsafe">Unsafe Conditions Identified</label>
+          <textarea id="safety-unsafe" placeholder="e.g. Tripping hazard in central walkway..." style="min-height: 50px;"></textarea>
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+          <label for="safety-taken">Actions Taken / Resolution</label>
+          <textarea id="safety-taken" placeholder="e.g. Conducted safety stand-down, cleared walkway immediately..." style="min-height: 50px; margin-bottom:0;"></textarea>
+        </div>
+      </div>
+
+      <!-- Section 9: Recommendations -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-lightbulb" style="color:var(--primary-color);"></i> 9. Recommendations</h3>
+        <div class="input-row">
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="recs-desc">Key Recommendation</label>
+            <input type="text" id="recs-desc" placeholder="e.g. Implement monthly HVAC filter sweeps">
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="recs-priority">Priority</label>
+            <select id="recs-priority">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 10: Customer comments/sign-off placeholder -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-signature" style="color:var(--primary-color);"></i> 10. Sign-Off & Approvals</h3>
+        <div class="input-row">
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="rep-customer">Customer Representative</label>
+            <input type="text" id="rep-customer" placeholder="Representative Name">
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label>Signature Placeholder</label>
+            <div style="border: 1px dashed var(--border-color); height: 42px; display:flex; align-items:center; justify-content:center; border-radius: 4px; font-size:0.8rem; color:var(--text-light); font-weight:600;">[ Customer Signature Space ]</div>
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="sign-date">Date Signed</label>
+            <input type="date" id="sign-date">
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Footer Buttons -->
+      <div class="btn-row">
+        <div class="btn-group">
+          <button type="button" id="copy-summary-btn" class="button-secondary btn-action"><i class="fas fa-copy"></i> Copy Text Summary</button>
+          <button type="button" id="export-json-btn" class="button-secondary btn-action"><i class="fas fa-file-code"></i> Export JSON</button>
+        </div>
+        <div class="btn-group">
+          <button type="button" id="print-report-btn" class="button-secondary btn-action" onclick="window.print()"><i class="fas fa-print"></i> Print Service Report</button>
+          <button type="button" id="reset-btn" class="button-secondary btn-action btn-danger-action" onclick="resetReport()"><i class="fas fa-undo"></i> Reset Report</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <script src="js/site-visit-report.js"></script>
+</body>
+</html>

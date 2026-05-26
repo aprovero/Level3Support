@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Documentation / Reference Search Tool — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 1000px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .warning-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid var(--success-color);
+      color: var(--success-text);
+      padding: 12px 16px;
+      border-radius: var(--border-radius-md);
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .warning-box i {
+      font-size: 1.2rem;
+      margin-top: 2px;
+    }
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr repeat(3, 180px);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .data-table-wrapper {
+      overflow-x: auto;
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .data-table th {
+      background: var(--background-dark);
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .status-active { background: #dcfce7; color: #166534; }
+    .status-superseded { background: #fee2e2; color: #991b1b; }
+    .status-draft { background: #eff6ff; color: #1e40af; }
+    .status-legacy { background: #f1f5f9; color: #475569; }
+    .status-needs-review { background: #fef3c7; color: #92400e; }
+
+    .discipline-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .disc-pv { background: #e0f2fe; color: #0369a1; }
+    .disc-bess { background: #dcfce7; color: #15803d; }
+    .disc-scada { background: #f3e8ff; color: #6b21a8; }
+    .disc-elec { background: #fef3c7; color: #b45309; }
+    .disc-general { background: #f1f5f9; color: #475569; }
+    
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-action {
+      width: auto;
+      min-height: unset;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      margin-top: 0;
+    }
+    .btn-danger-action {
+      background: var(--error-color);
+    }
+    .btn-danger-action:hover {
+      background: var(--error-text);
+    }
+
+    /* Modal overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal-card {
+      background: #fff;
+      border-radius: var(--border-radius-lg);
+      width: 92%;
+      max-width: 650px;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .search-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">📖 REFERENCE GUIDES</div>
+    </div>
+
+    <!-- Active vs Legacy database alert -->
+    <div class="warning-box">
+      <i class="fas fa-info-circle"></i>
+      <div>
+        <strong style="display:block; margin-bottom: 2px;">Active Documentation Reference Library</strong>
+        This is the **Active Technical Documentation & Reference Search Tool** for ongoing commissioning procedures and bulletins. To view legacy training requests or archived training databases, go to the <a href="training-request.html" style="font-weight: 700; text-decoration: underline; color: var(--success-text);">Legacy Technical Documentation Database</a>.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 6px 0; font-size: 1.7rem;">Active Technical Reference Search</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Search active equipment manuals, commissioning field guides, datasheets, and manufacturer bulletins.
+    </p>
+
+    <!-- Search / Filter Grid -->
+    <div class="search-row">
+      <div class="input-with-unit" style="position: relative;">
+        <input type="text" id="search-input" placeholder="Search by document title, keyword, manufacturer, model..." style="margin-bottom:0; height: 42px; padding-left: 36px;">
+        <i class="fas fa-search" style="position: absolute; left: 12px; top: 13px; color: var(--text-light);"></i>
+      </div>
+      <select id="filter-category" style="margin-bottom:0; height: 42px;">
+        <option value="all">All Categories</option>
+        <option value="Manual">Manual</option>
+        <option value="Commissioning Procedure">Commissioning Procedure</option>
+        <option value="Troubleshooting Guide">Troubleshooting Guide</option>
+        <option value="Test Form">Test Form</option>
+        <option value="Training Material">Training Material</option>
+        <option value="Datasheet">Datasheet</option>
+        <option value="Service Bulletin">Service Bulletin</option>
+        <option value="Drawing">Drawing</option>
+        <option value="Checklist">Checklist</option>
+        <option value="Other">Other</option>
+      </select>
+      <select id="filter-discipline" style="margin-bottom:0; height: 42px;">
+        <option value="all">All Disciplines</option>
+        <option value="PV">PV</option>
+        <option value="BESS">BESS</option>
+        <option value="SCADA">SCADA</option>
+        <option value="Electrical">Electrical</option>
+        <option value="HSE">HSE</option>
+        <option value="Mechanical">Mechanical</option>
+        <option value="General">General</option>
+      </select>
+      <select id="filter-status" style="margin-bottom:0; height: 42px;">
+        <option value="all">All Statuses</option>
+        <option value="Active">Active</option>
+        <option value="Superseded">Superseded</option>
+        <option value="Draft">Draft</option>
+        <option value="Legacy">Legacy</option>
+        <option value="Needs Review">Needs Review</option>
+      </select>
+    </div>
+
+    <!-- Data Table -->
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Document Title</th>
+            <th>Category</th>
+            <th>Discipline</th>
+            <th>Manufacturer / Model</th>
+            <th style="width: 100px;">Revision & Date</th>
+            <th>Status</th>
+            <th>Link</th>
+            <th style="width: 80px; text-align: center;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="docs-tbody">
+          <!-- Dynamic insertion -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Action Controls -->
+    <div class="btn-row">
+      <div class="btn-group">
+        <button id="add-doc-btn" class="button-secondary btn-action"><i class="fas fa-plus"></i> Add Entry</button>
+        <button id="export-csv-btn" class="button-secondary btn-action"><i class="fas fa-file-csv"></i> Export CSV</button>
+        <button id="import-csv-btn" class="button-secondary btn-action" onclick="document.getElementById('csv-file-input').click()"><i class="fas fa-upload"></i> Import CSV</button>
+        <input type="file" id="csv-file-input" style="display: none;" accept=".csv">
+      </div>
+      <button id="reset-btn" class="button-secondary btn-action btn-danger-action"><i class="fas fa-undo"></i> Reset Default List</button>
+    </div>
+
+    <!-- Engineering Warnings Box -->
+    <div class="assumptions-box" style="margin-top: 30px;">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Revision Disclaimer</div>
+      <ul class="assumptions-list">
+        <li><strong>Verify Revision Applicability:</strong> Always check that the document revision matches the specific equipment model serial tag on-site.</li>
+        <li><strong>Do not use Superseded/Drafts:</strong> Documents marked as Draft or Superseded should not be utilized for active electrical operations or isolation points without supervisor sign-off.</li>
+        <li>Links and reference files listed as sample are marked "Sample only" to provide design guides.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div id="doc-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <h3 style="font-family:'Outfit'; font-size: 1.25rem; margin-top:0; margin-bottom: 16px;" id="modal-title">Add Reference Document</h3>
+      <form id="doc-form" onsubmit="event.preventDefault(); saveDoc();">
+        <input type="hidden" id="doc-index">
+        <div class="input-group">
+          <label for="doc-title">Document Title</label>
+          <input type="text" id="doc-title" required placeholder="e.g. Sungrow SG3125HV Modbus Map Specification">
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label for="doc-cat">Category</label>
+            <select id="doc-cat" required>
+              <option value="Manual">Manual</option>
+              <option value="Commissioning Procedure">Commissioning Procedure</option>
+              <option value="Troubleshooting Guide">Troubleshooting Guide</option>
+              <option value="Test Form">Test Form</option>
+              <option value="Training Material">Training Material</option>
+              <option value="Datasheet">Datasheet</option>
+              <option value="Service Bulletin">Service Bulletin</option>
+              <option value="Drawing">Drawing</option>
+              <option value="Checklist">Checklist</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="doc-disc">Discipline</label>
+            <select id="doc-disc" required>
+              <option value="PV">PV</option>
+              <option value="BESS">BESS</option>
+              <option value="SCADA">SCADA</option>
+              <option value="Electrical">Electrical</option>
+              <option value="HSE">HSE</option>
+              <option value="Mechanical">Mechanical</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label for="doc-mfr">Manufacturer</label>
+            <input type="text" id="doc-mfr" required placeholder="e.g. Sungrow">
+          </div>
+          <div class="input-group">
+            <label for="doc-model">Model / Equipment Type</label>
+            <input type="text" id="doc-model" required placeholder="e.g. Inverter SG3125HV">
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label for="doc-rev">Revision</label>
+            <input type="text" id="doc-rev" placeholder="e.g. Rev 1.2">
+          </div>
+          <div class="input-group">
+            <label for="doc-date">Date</label>
+            <input type="date" id="doc-date">
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label for="doc-link">Source Link / Local Path</label>
+            <input type="text" id="doc-link" placeholder="e.g. docs/manual_sg3125.pdf">
+          </div>
+          <div class="input-group">
+            <label for="doc-status">Status</label>
+            <select id="doc-status" required>
+              <option value="Active">Active</option>
+              <option value="Superseded">Superseded</option>
+              <option value="Draft">Draft</option>
+              <option value="Legacy">Legacy</option>
+              <option value="Needs Review">Needs Review</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+          <label for="doc-summary">Document Summary & Notes</label>
+          <textarea id="doc-summary" placeholder="Summary notes or cross compatibility links..." style="min-height: 60px; margin-bottom: 0;"></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="button-secondary" onclick="closeModal()" style="margin-top:0; width: auto;">Cancel</button>
+          <button type="submit" style="margin-top:0; width: auto;">Save Document</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/technical-reference-search.js"></script>
+</body>
+</html>

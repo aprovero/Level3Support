@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alarm / Fault Event Timeline Builder — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 1100px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .timeline-summary-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 768px) {
+      .timeline-summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .rca-narrative-card {
+      background: #eff6ff;
+      border: 1px dashed #3b82f6;
+      border-radius: var(--border-radius-md);
+      padding: 16px;
+    }
+    .rca-narrative-title {
+      font-weight: 700;
+      color: #1e3a8a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+    .rca-text {
+      font-size: 0.88rem;
+      color: #1e293b;
+      line-height: 1.5;
+    }
+    .quick-metrics {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .quick-metric-card {
+      background: var(--background-dark);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+    .paste-box-wrapper {
+      background: var(--background-dark);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .timeline-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      margin-bottom: 20px;
+    }
+    .timeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .timeline-table th {
+      background: var(--background-dark);
+      color: var(--text-color);
+      font-weight: 600;
+      padding: 12px 10px;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+    .timeline-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+    .timeline-table tr:hover {
+      background: #f8fafc;
+    }
+    .row-input {
+      height: 32px;
+      padding: 0 8px;
+      margin-bottom: 0;
+      font-size: 0.85rem;
+    }
+    .row-select {
+      height: 32px;
+      padding: 0 4px;
+      margin-bottom: 0;
+    }
+    .badge-severity {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .badge-critical { background: #fee2e2; color: #b91c1c; }
+    .badge-high { background: #ffedd5; color: #c2410c; }
+    .badge-medium { background: #fef3c7; color: #b45309; }
+    .badge-low { background: #f0fdf4; color: #166534; }
+    .badge-info { background: #e0f2fe; color: #0369a1; }
+    
+    .delta-badge {
+      background: #f1f5f9;
+      color: #64748b;
+      font-weight: 600;
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      white-space: nowrap;
+    }
+    .btn-delete {
+      color: var(--error-color);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px;
+      margin-top: 0;
+      min-height: auto;
+      width: auto;
+    }
+    .btn-delete:hover {
+      color: #991b1b;
+    }
+    .action-btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      margin-bottom: 24px;
+    }
+    .action-btn-row button {
+      margin-top: 0;
+      flex: 1;
+      min-width: 140px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ SCADA & DIAGNOSTICS</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">RCA Engineering Disclaimer</div>
+        Timeline building tools assist with logical correlation but do not replace engineering evaluations. Final Root Cause Analysis (RCA) conclusions must account for telemetry delays, clock synchronization limits, and mechanical behaviors.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Alarm / Fault Event Timeline Builder</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Reconstruct fault event log files, order alarms chronologically, analyze cascade delta intervals, and generate RCA reports.
+    </p>
+
+    <!-- RCA Narrative and Metrics Overview -->
+    <div class="timeline-summary-grid">
+      <div class="rca-narrative-card">
+        <div class="rca-narrative-title">
+          <i class="fas fa-file-invoice"></i>
+          <span>Auto-Generated RCA Executive Narrative Summary</span>
+        </div>
+        <p id="rca-summary-text" class="rca-text">
+          Add at least two fault event logs to generate a root cause analysis chronological narrative summary.
+        </p>
+      </div>
+
+      <div class="quick-metrics">
+        <div class="quick-metric-card">
+          <span>First Event Time:</span>
+          <span id="metric-first" style="font-weight:600;">--</span>
+        </div>
+        <div class="quick-metric-card">
+          <span>Last Event Time:</span>
+          <span id="metric-last" style="font-weight:600;">--</span>
+        </div>
+        <div class="quick-metric-card">
+          <span>Total Outage Duration:</span>
+          <span id="metric-duration" style="font-weight:600; color:var(--primary-color);">--</span>
+        </div>
+        <div class="quick-metric-card">
+          <span>Repeated Code Alarms:</span>
+          <span id="metric-repeated" style="font-weight:600; color:var(--error-color);">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bulk CSV Paste Box -->
+    <div class="paste-box-wrapper">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
+        <span style="font-size:0.9rem; font-weight:600; color:var(--text-color);"><i class="fas fa-paste"></i> Bulk CSV/Log Text Paste Import</span>
+        <span style="font-size:0.75rem; color:var(--text-secondary);">Format: Timestamp, Device, Code, Description, Severity</span>
+      </div>
+      <textarea id="paste-box" placeholder="e.g.
+2026-05-25 14:02:11.120, Inverter 1, 104, Overvoltage Fault, Critical
+2026-05-25 14:02:11.230, PPC Gateway, W102, Curtailment Cmd, Info" style="font-family:monospace; font-size:0.8rem; min-height:80px; margin-bottom:10px;"></textarea>
+      <button id="import-paste-btn" class="button-secondary" style="margin-top:0; width:auto; padding:6px 12px; height:34px; min-height:auto; font-size:0.85rem;"><i class="fas fa-check"></i> Parse & Import logs</button>
+    </div>
+
+    <!-- Table Toolbar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+      <div style="display:flex; gap:8px;">
+        <button id="sort-asc-btn" class="button-secondary" style="margin-top:0; width:auto; padding:6px 12px; height:34px; min-height:auto; font-size:0.8rem;"><i class="fas fa-sort-amount-down-alt"></i> Sort Ascending</button>
+        <button id="sort-desc-btn" class="button-secondary" style="margin-top:0; width:auto; padding:6px 12px; height:34px; min-height:auto; font-size:0.8rem;"><i class="fas fa-sort-amount-up"></i> Sort Descending</button>
+      </div>
+      <button id="add-row-btn" class="button-secondary" style="margin-top:0; width:auto; padding:6px 12px; height:34px; min-height:auto; font-size:0.8rem; background:#0f172a; color:white;"><i class="fas fa-plus"></i> Add Event Row</button>
+    </div>
+
+    <!-- Timeline Table -->
+    <div class="timeline-table-wrapper">
+      <table class="timeline-table">
+        <thead>
+          <tr>
+            <th style="width: 200px;">Timestamp</th>
+            <th style="width: 80px;">TZ</th>
+            <th style="width: 140px;">Source Device</th>
+            <th style="width: 80px;">Code</th>
+            <th>Description</th>
+            <th style="width: 100px;">Severity</th>
+            <th style="width: 100px;">Status</th>
+            <th style="width: 120px;">Cascade Delta</th>
+            <th style="width: 40px; text-align: center;"></th>
+          </tr>
+        </thead>
+        <tbody id="timeline-tbody">
+          <!-- Filled dynamically -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Action row -->
+    <div class="action-btn-row">
+      <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset Builder</button>
+      <button id="copy-btn" class="button-secondary"><i class="fas fa-copy"></i> Copy RCA Report</button>
+      <button id="export-json-btn" class="button-secondary"><i class="fas fa-file-code"></i> Export JSON</button>
+      <button id="export-btn" class="button-primary" style="background: var(--primary-color);"><i class="fas fa-file-export"></i> Export CSV</button>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Timeline Analysis Guide</div>
+      <ul class="assumptions-list">
+        <li><strong>Cascade Delta:</strong> The time interval calculated represents the duration elapsed between that specific row and the <i>preceding event</i> in chronological order.</li>
+        <li><strong>Chatter Detection:</strong> Highlighted repeated event codes within millisecond ranges are typically telemetry loop anomalies or mechanical switch bounces.</li>
+        <li><strong>Timezones:</strong> Keep timezone labels consistent (e.g. UTC) to prevent shift errors when combining server logs.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/alarm-timeline.js"></script>
+</body>
+</html>

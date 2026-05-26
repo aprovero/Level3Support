@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safety Pre-Task Plan / JHA Form — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 950px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .warning-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid var(--error-color);
+      color: var(--error-text);
+      padding: 12px 16px;
+      border-radius: var(--border-radius-md);
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .warning-box i {
+      font-size: 1.2rem;
+      margin-top: 2px;
+    }
+    
+    /* Dynamic table styling */
+    .dynamic-table-wrapper {
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+    }
+    .dynamic-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .dynamic-table th {
+      background: var(--background-dark);
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+    .dynamic-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .dynamic-table tr:last-child td { border-bottom: none; }
+    .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
+      margin-bottom: 0;
+      padding: 6px 10px;
+      height: 34px;
+      font-size: 0.85rem;
+    }
+    
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-action {
+      width: auto;
+      min-height: unset;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      margin-top: 0;
+    }
+    
+    @media print {
+      body { background: white; color: black; }
+      .calc-container { box-shadow: none; padding: 0; margin: 0; max-width: 100%; }
+      .back-link, .btn-row, .btn-add-row, td button { display: none !important; }
+      .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
+        border: none !important;
+        background: transparent !important;
+        pointer-events: none !important;
+        padding: 0 !important;
+      }
+      .dynamic-table th { background: #eee !important; color: black !important; }
+      .form-section { border: 1px solid #000 !important; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">🛡 HSE & SAFETY</div>
+    </div>
+
+    <!-- Critical Safety Warning -->
+    <div class="warning-box">
+      <i class="fas fa-shield-alt"></i>
+      <div>
+        <strong style="display:block; margin-bottom: 2px;">Critical Safety Disclaimer</strong>
+        This tool supports pre-task safety planning but does not replace the approved site-specific HSE plan, official JHA/JSA process, permits, legal requirements, or supervisor authorization. Never perform work without an active approved Permit-to-Work (PTW) if required by site operations.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 6px 0; font-size: 1.7rem;">Safety Pre-Task Plan / JHA Form</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px;">
+      Analyze task steps, identify hazards, document specific mitigation controls, and acknowledge safety limits as a crew.
+    </p>
+
+    <form id="jha-form" onsubmit="event.preventDefault();">
+
+      <!-- Section 1: Task Information -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-info-circle" style="color:var(--primary-color);"></i> 1. Task & Crew Details</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="site-name">Project / Site Name</label>
+            <input type="text" id="site-name" placeholder="e.g. Pecos Solar Plant" required>
+          </div>
+          <div class="input-group">
+            <label for="work-loc">Specific Work Location</label>
+            <input type="text" id="work-loc" placeholder="e.g. Inverter Pad 4" required>
+          </div>
+          <div class="input-group">
+            <label for="task-desc">Task Description</label>
+            <input type="text" id="task-desc" placeholder="e.g. MV Winding Resistance Testing" required>
+          </div>
+        </div>
+        
+        <div class="input-row">
+          <div class="input-group">
+            <label for="plan-date">Date & Time</label>
+            <input type="datetime-local" id="plan-date" required>
+          </div>
+          <div class="input-group">
+            <label for="supervisor">Work Supervisor</label>
+            <input type="text" id="supervisor" placeholder="Supervisor name" required>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-weight:600; color:var(--text-secondary); font-size:0.85rem;">Special Permits & High-Risk Tasks</label>
+          <div class="checkbox-grid" style="margin-top: 6px;">
+            <div class="checkbox-group">
+              <input type="checkbox" id="permit-req">
+              <label for="permit-req">Permit to Work (PTW) Required?</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="energized-work">
+              <label for="energized-work">Energized Electrical Work?</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="loto-req">
+              <label for="loto-req">LOTO Required?</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="heights-work">
+              <label for="heights-work">Working at Heights?</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="hot-work">
+              <label for="hot-work">Hot Work Permit?</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="confined-space">
+              <label for="confined-space">Confined Space Entry?</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: PPE Selection -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-hard-hat" style="color:var(--primary-color);"></i> 2. Required Personal Protective Equipment (PPE)</h3>
+        <div class="checkbox-grid">
+          <div class="checkbox-group">
+            <input type="checkbox" id="ppe-hardhat" checked>
+            <label for="ppe-hardhat">Hard Hat</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="ppe-glasses" checked>
+            <label for="ppe-glasses">Safety Glasses</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="ppe-gloves" checked>
+            <label for="ppe-gloves">Standard Work Gloves</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="ppe-elec-gloves">
+            <label for="ppe-elec-gloves">Electrical Rated Gloves (Class 0/1/2)</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="ppe-arc">
+            <label for="ppe-arc">Arc-Rated clothing (Cal/cm²)</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="ppe-shoes" checked>
+            <label for="ppe-shoes">Safety Shoes (Steel/Composite Toe)</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="ppe-hearing">
+            <label for="ppe-hearing">Hearing Protection</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="ppe-fall">
+            <label for="ppe-fall">Full Body Harness / Fall Protection</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="ppe-respiratory">
+            <label for="ppe-respiratory">Respiratory Protection</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="ppe-other">
+            <label for="ppe-other">Other Special PPE</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Tools and Equipment Inspection -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-toolbox" style="color:var(--primary-color);"></i> 3. Tools & Equipment Inspections</h3>
+        <div class="dynamic-table-wrapper">
+          <table class="dynamic-table">
+            <thead>
+              <tr>
+                <th>Tool / Equipment Name</th>
+                <th style="width: 180px;">Inspection Status</th>
+                <th>Notes / Inspected By</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="tools-tbody">
+              <!-- Tools rows -->
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="button-secondary btn-add-row" onclick="addToolRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add Tool Entry</button>
+      </div>
+
+      <!-- Section 4: Hazard Identification Grid -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-exclamation-triangle" style="color:var(--primary-color);"></i> 4. Job Hazard Analysis (JHA)</h3>
+        <div class="dynamic-table-wrapper">
+          <table class="dynamic-table">
+            <thead>
+              <tr>
+                <th style="width: 160px;">Task Step</th>
+                <th>Identified Hazard</th>
+                <th>Potential Consequence</th>
+                <th>Control Measure / Mitigator</th>
+                <th style="width: 140px;">Residual Risk</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="hazards-tbody">
+              <!-- Hazard rows -->
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="button-secondary btn-add-row" onclick="addHazardRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add Hazard Step</button>
+      </div>
+
+      <!-- Section 5: Environmental Conditions -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-cloud" style="color:var(--primary-color);"></i> 5. Environmental & Site Conditions</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="env-weather">Weather / Ambient Temp</label>
+            <input type="text" id="env-weather" placeholder="e.g. Sunny, hot (37°C), dry">
+          </div>
+          <div class="input-group">
+            <label for="env-heat">Heat/Cold Stress Risk</label>
+            <select id="env-heat">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="env-lightning">Lightning / Storm Risk</label>
+            <select id="env-lightning">
+              <option value="No threat">No threat</option>
+              <option value="Monitor forecast">Monitor forecast</option>
+              <option value="Active lightning threat">Active lightning threat</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-row" style="margin-bottom: 0;">
+          <div class="input-group" style="margin-bottom: 0;">
+            <label for="env-access">Access/Egress & Housekeeping Status</label>
+            <input type="text" id="env-access" placeholder="e.g. Clear of debris, walkways open" style="margin-bottom: 0;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Emergency Information -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-phone-alt" style="color:var(--primary-color);"></i> 6. Emergency Contacts & Muster Info</h3>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="em-contact">Emergency Contact Person</label>
+            <input type="text" id="em-contact" placeholder="e.g. Site Manager / HSE Coordinator" required>
+          </div>
+          <div class="input-group">
+            <label for="em-phone">Site Emergency Phone</label>
+            <input type="text" id="em-phone" placeholder="e.g. +1 555-0199" required>
+          </div>
+          <div class="input-group">
+            <label for="em-medical">Nearest Medical Facility</label>
+            <input type="text" id="em-medical" placeholder="e.g. Pecos County Memorial Hospital" required>
+          </div>
+        </div>
+        <div class="input-row" style="margin-bottom:0;">
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="em-muster">Designated Muster Point</label>
+            <input type="text" id="em-muster" placeholder="e.g. Main Substation Entrance Gate Assembly Area" required style="margin-bottom:0;">
+          </div>
+          <div class="input-group" style="margin-bottom:0;">
+            <label for="em-firstaid">First Aid Kit Available on-site?</label>
+            <select id="em-firstaid" style="margin-bottom:0;">
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: Crew Acknowledgment -->
+      <div class="form-section">
+        <h3 class="form-section-title"><i class="fas fa-users" style="color:var(--primary-color);"></i> 7. Crew Acknowledgment & Sign-Off</h3>
+        <div class="dynamic-table-wrapper">
+          <table class="dynamic-table">
+            <thead>
+              <tr>
+                <th>Crew Member Name</th>
+                <th>Role</th>
+                <th>Signature Placeholder</th>
+                <th style="width: 150px;">Time Signed</th>
+                <th style="width: 50px;"></th>
+              </tr>
+            </thead>
+            <tbody id="crew-tbody">
+              <!-- Crew rows -->
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="button-secondary btn-add-row" onclick="addCrewRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add Crew Member</button>
+      </div>
+
+      <!-- Footer action controls -->
+      <div class="btn-row">
+        <div class="btn-group">
+          <button type="button" id="copy-summary-btn" class="button-secondary btn-action"><i class="fas fa-copy"></i> Copy Safety Summary</button>
+          <button type="button" id="export-json-btn" class="button-secondary btn-action"><i class="fas fa-file-code"></i> Export JSON</button>
+        </div>
+        <div class="btn-group">
+          <button type="button" id="print-form-btn" class="button-secondary btn-action" onclick="window.print()"><i class="fas fa-print"></i> Print JHA Plan</button>
+          <button type="button" id="reset-btn" class="button-secondary btn-action btn-danger-action" onclick="resetForm()"><i class="fas fa-undo"></i> Reset Form</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <script src="js/jha-pre-task-plan.js"></script>
+</body>
+</html>

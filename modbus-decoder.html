@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MODBUS Register Decoder — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .binary-bit-display {
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      gap: 4px;
+      margin-top: 12px;
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+    .bit-box {
+      border: 1px solid var(--border-light);
+      background: var(--background-dark);
+      text-align: center;
+      padding: 4px 2px;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .bit-val {
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+    .bit-idx {
+      font-size: 0.6rem;
+      color: var(--text-light);
+      border-top: 1px solid var(--border-color);
+      width: 100%;
+      margin-top: 2px;
+      padding-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ SCADA & DIAGNOSTICS</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        MODBUS decoding interpretations depend heavily on device-specific register map manuals. Validate register offsets (0-based vs 1-based) before drawing final engineering conclusions.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">MODBUS Register Decoder</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Decode raw 16-bit MODBUS registers (Decimal or Hex) into 16-bit or 32-bit integers, IEEE-754 floating-point values, and bitmasks.
+    </p>
+
+    <!-- Decoder Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Register Configurations</h3>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="input-format">Raw Input Format</label>
+          <select id="input-format" style="margin-bottom: 0;">
+            <option value="Decimal">Decimal (e.g. 17234)</option>
+            <option value="Hex">Hexadecimal (e.g. 4352)</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="data-type">Data Representation Type</label>
+          <select id="data-type" style="margin-bottom: 0;">
+            <option value="uint16">16-bit Unsigned Integer (uint16)</option>
+            <option value="int16">16-bit Signed Integer (int16)</option>
+            <option value="uint32">32-bit Unsigned Integer (uint32)</option>
+            <option value="int32">32-bit Signed Integer (int32)</option>
+            <option value="float32">32-bit Floating Point (float32 / IEEE-754)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="register-val-1">First Register Value <span class="required">*</span></label>
+          <input type="text" id="register-val-1" placeholder="e.g. 16560" style="margin-bottom: 0;">
+          <div class="field-note">Low register or first word.</div>
+        </div>
+
+        <div id="register-val-2-group" class="input-group" style="display: none;">
+          <label for="register-val-2">Second Register Value <span class="required">*</span></label>
+          <input type="text" id="register-val-2" placeholder="e.g. 0" style="margin-bottom: 0;">
+          <div class="field-note">High register or second word for 32-bit values.</div>
+        </div>
+      </div>
+
+      <div id="word-order-row" class="input-row" style="display: none;">
+        <div class="input-group">
+          <label for="word-order">Word/Register Order</label>
+          <select id="word-order" style="margin-bottom: 0;">
+            <option value="ABCD">Big Endian Word (AB CD / High Word First)</option>
+            <option value="CDAB">Little Endian Word (CD AB / Low Word First)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="byte-order">Byte Order</label>
+          <select id="byte-order" style="margin-bottom: 0;">
+            <option value="Big">Big Endian Byte (AB)</option>
+            <option value="Little">Little Endian Byte (BA)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-row" style="border-top: 1px dashed var(--border-color); padding-top: 16px; margin-top: 8px;">
+        <div class="input-group">
+          <label for="scale-factor">Scale Factor (Multiplier)</label>
+          <input type="number" id="scale-factor" value="1" step="any" style="margin-bottom: 0;">
+        </div>
+
+        <div class="input-group">
+          <label for="offset-factor">Offset Value</label>
+          <input type="number" id="offset-factor" value="0" step="any" style="margin-bottom: 0;">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="unit-label">Engineering Unit Label</label>
+          <input type="text" id="unit-label" placeholder="e.g. kW, V, °C" style="margin-bottom: 0;">
+        </div>
+        <div class="input-group">
+          <label for="register-address">Register Address Reference</label>
+          <input type="text" id="register-address" placeholder="e.g. 40001" style="margin-bottom: 0;">
+        </div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-magic"></i> Decode Register</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none;">
+      <div class="result-header">
+        <span>Decoding Evaluation</span>
+        <span class="status-badge-inline status-normal" style="background:#e0f2fe; color:#0369a1;">Parsed</span>
+      </div>
+
+      <div class="result-row">
+        <span>Register Address:</span>
+        <span id="res-address" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Decoded Raw Value:</span>
+        <span id="res-raw-val" style="font-weight: 700;">--</span>
+      </div>
+      <div class="result-row" style="border-top: 1px dashed #bae6fd; margin-top: 8px; padding-top: 8px;">
+        <span style="font-size: 1.1rem; font-weight: 600;">Scaled Engineering Value:</span>
+        <span id="res-scaled-val" class="result-value">--</span>
+      </div>
+      <div class="result-row">
+        <span>Combined Hex Value:</span>
+        <span id="res-hex" style="font-family: monospace; font-weight: 600;">--</span>
+      </div>
+
+      <!-- Binary Bit Display Panel -->
+      <div style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+        <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-color);"><i class="fas fa-microchip"></i> Register Binary Bitmask View</span>
+        <div id="bit-display-container-1" class="binary-bit-display">
+          <!-- Bits filled dynamically -->
+        </div>
+        <div id="bit-display-container-2" class="binary-bit-display" style="display: none;">
+          <!-- High Word Bits filled dynamically -->
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 20px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Results</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> MODBUS Bit-Ordering Reference</div>
+      <ul class="assumptions-list">
+        <li><strong>Big Endian Word (ABCD):</strong> High word comes first, low word second.</li>
+        <li><strong>Little Endian Word (CDAB):</strong> Low word comes first, high word second (common in many solar inverters).</li>
+        <li><strong>32-Bit Float:</strong> Follows the IEEE-754 standard for single precision floating point numbers.</li>
+        <li><strong>Bit 0:</strong> Represents the Least Significant Bit (LSB) on the far right of the bitmask.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/modbus-decoder.js"></script>
+</body>
+</html>

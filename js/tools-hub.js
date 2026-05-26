@@ -346,6 +346,200 @@ function loadFallbackData() {
             "url": "bess-spare-parts.html",
             "tags": ["BESS", "Reference", "Database"],
             "notes": "Supports adding/editing entries and CSV import/export."
+        },
+        {
+            "id": 23,
+            "name": "Insulation Resistance Test Form",
+            "category": "Electrical Test Forms",
+            "status": "Active",
+            "description": "Record insulation resistance test results for PV, BESS, AC, DC, and transformer circuits.",
+            "url": "electrical-test-forms.html?tool=insulation-resistance",
+            "tags": ["Testing","Electrical","PV","BESS"],
+            "notes": "Agent 5 — Sample min resistance 5 MΩ."
+        },
+        {
+            "id": 24,
+            "name": "Transformer Test Results Form",
+            "category": "Electrical Test Forms",
+            "status": "Active",
+            "description": "Create a structured transformer test report covering nameplate, visual, IR, winding resistance, turns ratio, vector group, and tap changer.",
+            "url": "electrical-test-forms.html?tool=transformer-test",
+            "tags": ["Testing","Electrical","Transformer"],
+            "notes": "Agent 5 — Sample rated power 10 MVA."
+        },
+        {
+            "id": 25,
+            "name": "Grounding Continuity Test Form",
+            "category": "Electrical Test Forms",
+            "status": "Active",
+            "description": "Record grounding and bonding continuity tests with multiple points.",
+            "url": "electrical-test-forms.html?tool=grounding-continuity",
+            "tags": ["Testing","Electrical","Grounding"],
+            "notes": "Agent 5 — Sample max allowed resistance 0.5 Ω."
+        },
+        {
+            "id": 26,
+            "name": "CT/PT Ratio Verification Tool",
+            "category": "Electrical Test Forms",
+            "status": "Active",
+            "description": "Verify CT and PT ratios against measured values and relay configuration.",
+            "url": "electrical-test-forms.html?tool=ct-pt-ratio",
+            "tags": ["Testing","Electrical","CT","PT"],
+            "notes": "Agent 5 — Sample allowable error 5%."
+        },
+        {
+            "id": 27,
+            "name": "Relay Settings Checklist",
+            "category": "Electrical Test Forms",
+            "status": "Active",
+            "description": "Checklist to confirm relay settings were loaded and verified.",
+            "url": "electrical-test-forms.html?tool=relay-checklist",
+            "tags": ["Testing","Electrical","Relay","Checklist"],
+            "notes": "Agent 5 — Sample manufacturer data pre‑filled."
+        },
+        {
+            "id": 28,
+            "name": "PV Performance Ratio Calculator",
+            "category": "Calculators",
+            "status": "Active",
+            "description": "Determine utility-scale solar PV system Performance Ratio (PR) with optional temperature correction.",
+            "url": "pv-performance-ratio.html",
+            "tags": ["PV", "Performance", "Commissioning", "O&M"]
+        },
+        {
+            "id": 29,
+            "name": "Cable Ampacity / Max Current Calculator",
+            "category": "Calculators",
+            "status": "Active",
+            "description": "Estimate corrected cable ampacity based on insulation ratings, ambient temp, and bundling factors.",
+            "url": "cable-ampacity.html",
+            "tags": ["Electrical", "Cable", "QA/QC", "Field Check"]
+        },
+        {
+            "id": 30,
+            "name": "Voltage Drop Calculator",
+            "category": "Calculators",
+            "status": "Active",
+            "description": "Calculate voltage drop and power loss for DC, single-phase AC, and three-phase AC circuits.",
+            "url": "voltage-drop.html",
+            "tags": ["Electrical", "Cable", "PV", "BESS", "QA/QC"]
+        },
+        {
+            "id": 31,
+            "name": "BESS Availability Calculator",
+            "category": "Calculators",
+            "status": "Active",
+            "description": "Calculate simple and adjusted availability for utility-scale battery systems over reporting periods.",
+            "url": "bess-availability.html",
+            "tags": ["BESS", "O&M", "Availability", "Reporting"]
+        },
+        {
+            "id": 32,
+            "name": "HVAC Delta-T Calculator",
+            "category": "Calculators",
+            "status": "Active",
+            "description": "Sanity check BESS enclosure HVAC cooling and heating performance using supply, return, and ambient readings.",
+            "url": "hvac-delta-t.html",
+            "tags": ["BESS", "HVAC", "Thermal", "Field Check"]
+        },
+        {
+            "id": 33,
+            "name": "Weather Correction Calculator for PV Testing",
+            "category": "Calculators",
+            "status": "Active",
+            "description": "Translate open-air PV power measurements to Standard Test Conditions (STC) using real-time irradiance and temp.",
+            "url": "pv-weather-correction.html",
+            "tags": ["PV", "Testing", "Commissioning", "Performance"]
+        },
+        {
+            "id": 34,
+            "name": "SCADA Tag QA/QC Checklist",
+            "category": "SCADA & Diagnostics",
+            "status": "Active",
+            "description": "Verify signal list scaling, remote controls, HMI displays, and historian logging for communications handovers.",
+            "url": "scada-tag-qaqc.html",
+            "tags": ["SCADA", "Commissioning", "QA/QC", "Controls"]
+        },
+        {
+            "id": 35,
+            "name": "MODBUS Register Decoder",
+            "category": "SCADA & Diagnostics",
+            "status": "Active",
+            "description": "Decode raw decimal/hex MODBUS registers into engineering values including 16/32-bit types and 32-bit floats.",
+            "url": "modbus-decoder.html",
+            "tags": ["MODBUS", "Communications", "Troubleshooting", "SCADA"]
+        },
+        {
+            "id": 36,
+            "name": "Alarm / Fault Event Timeline Builder",
+            "category": "SCADA & Diagnostics",
+            "status": "Active",
+            "description": "Build chronological alarm and fault timelines to analyze cascading faults, repeated codes, and trigger times.",
+            "url": "alarm-timeline.html",
+            "tags": ["RCA", "Troubleshooting", "Alarms", "Events", "SCADA", "BESS", "PV"]
+        },
+        {
+            "id": 37,
+            "name": "Torque Spec Finder",
+            "category": "Reference Guides",
+            "status": "Active",
+            "description": "Searchable torque specification reference tool for solar array and battery rack connections.",
+            "url": "torque-spec-finder.html",
+            "tags": ["Torque", "Electrical", "Mechanical", "QA/QC", "Reference"]
+        },
+        {
+            "id": 38,
+            "name": "Commissioning Punchlist Builder",
+            "category": "Reports & Templates",
+            "status": "Active",
+            "description": "Create, manage, and filter field punchlist items for PV/BESS commissioning and close-out.",
+            "url": "commissioning-punchlist.html",
+            "tags": ["Commissioning", "Punchlist", "QA/QC", "Closeout", "PV", "BESS"]
+        },
+        {
+            "id": 39,
+            "name": "Customer Site Visit Report Generator",
+            "category": "Reports & Templates",
+            "status": "Active",
+            "description": "Generate a structured, professional, customer-facing field service site visit report.",
+            "url": "site-visit-report.html",
+            "tags": ["Report", "Site Visit", "Customer", "Field Service", "PV", "BESS"]
+        },
+        {
+            "id": 40,
+            "name": "RCA Template Builder",
+            "category": "Reports & Templates",
+            "status": "Active",
+            "description": "Structured Root Cause Analysis (RCA) report builder for solar and battery plant incidents.",
+            "url": "rca-template-builder.html",
+            "tags": ["RCA", "Troubleshooting", "Incident", "Report", "PV", "BESS"]
+        },
+        {
+            "id": 41,
+            "name": "Safety Pre-Task Plan / JHA Form",
+            "category": "HSE",
+            "status": "Active",
+            "description": "Standardized Job Hazard Analysis (JHA) and safety planning form to conduct before field tasks.",
+            "url": "jha-pre-task-plan.html",
+            "tags": ["HSE", "Safety", "JHA", "JSA", "Pre-Task Plan", "Field Work"]
+        },
+        {
+            "id": 42,
+            "name": "LOTO Checklist Generator",
+            "category": "HSE",
+            "status": "Active",
+            "description": "Lockout/Tagout energy isolation planning and zero-energy verification checklist aid.",
+            "url": "loto-checklist.html",
+            "tags": ["LOTO", "HSE", "Electrical Safety", "Isolation", "Energization"]
+        },
+        {
+            "id": 43,
+            "name": "Technical Documentation / Reference Search Tool",
+            "category": "Reference Guides",
+            "status": "Active",
+            "description": "Find and view active service bulletins, commissioning manuals, training resources, and datasheets.",
+            "url": "technical-reference-search.html",
+            "tags": ["Documentation", "Reference", "Manuals", "Procedures", "Training", "Search"]
         }
     ];
     

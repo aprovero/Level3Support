@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torque Spec Finder — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .warning-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 4px solid #d97706;
+      color: #92400e;
+      padding: 12px 16px;
+      border-radius: var(--border-radius-md);
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .warning-box i {
+      font-size: 1.2rem;
+      margin-top: 2px;
+    }
+    .warning-title {
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .input-group { margin-bottom: 14px; }
+    .input-group label {
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr 200px 200px;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .data-table-wrapper {
+      overflow-x: auto;
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .data-table th {
+      background: var(--background-dark);
+      padding: 12px 14px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .data-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .status-sample { background: #f1f5f9; color: #475569; }
+    .status-verified { background: #dcfce7; color: #166534; }
+    .status-needs-verification { background: #fee2e2; color: #991b1b; }
+    
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-action {
+      width: auto;
+      min-height: unset;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      margin-top: 0;
+    }
+    .btn-danger-action {
+      background: var(--error-color);
+    }
+    .btn-danger-action:hover {
+      background: var(--error-text);
+    }
+    
+    /* Dialog Overlay styling for Local storage creation */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal-card {
+      background: #fff;
+      border-radius: var(--border-radius-lg);
+      width: 100%;
+      max-width: 600px;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    @media (max-width: 768px) {
+      .search-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">📖 REFERENCE GUIDES</div>
+    </div>
+
+    <!-- Critical Warning Box -->
+    <div class="warning-box">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Critical Torque Warning</div>
+        Torque values must be verified against approved project drawings and manufacturer manual specifications before execution. This digital tool serves as a reference organizer and log, and does NOT replace site-approved QA/QC standards or structural/electrical assembly manuals.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 6px 0; font-size: 1.7rem;">Torque Spec Finder</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Lookup standard mechanical and electrical connection torque targets. Add, edit, or import custom project torque specs.
+    </p>
+
+    <!-- Search & Filter Controls -->
+    <div class="search-row">
+      <div class="input-with-unit" style="position: relative;">
+        <input type="text" id="search-input" placeholder="Search by manufacturer, model, component, or bolt size..." style="margin-bottom:0; height: 42px; padding-left: 36px;">
+        <i class="fas fa-search" style="position: absolute; left: 12px; top: 13px; color: var(--text-light);"></i>
+      </div>
+      <select id="filter-equipment" style="margin-bottom:0; height: 42px;">
+        <option value="all">All Equipment Types</option>
+        <option value="Inverter">Inverter</option>
+        <option value="BESS container">BESS container</option>
+        <option value="Battery rack">Battery rack</option>
+        <option value="Transformer">Transformer</option>
+        <option value="Switchgear">Switchgear</option>
+        <option value="Combiner box">Combiner box</option>
+        <option value="Tracker">Tracker</option>
+        <option value="Grounding">Grounding</option>
+        <option value="Other">Other</option>
+      </select>
+      <select id="filter-status" style="margin-bottom:0; height: 42px;">
+        <option value="all">All Verification Statuses</option>
+        <option value="Sample only">Sample only</option>
+        <option value="Verified">Verified</option>
+        <option value="Needs verification">Needs verification</option>
+      </select>
+    </div>
+
+    <!-- Data Table -->
+    <div class="data-table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Equipment</th>
+            <th>Manufacturer / Model</th>
+            <th>Component & Connection</th>
+            <th>Bolt / Terminal</th>
+            <th>Torque Value</th>
+            <th>Source Doc</th>
+            <th>Status</th>
+            <th style="width: 80px; text-align: center;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="specs-tbody">
+          <!-- Dynamic Row Generation -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="btn-row">
+      <div class="btn-group">
+        <button id="add-spec-btn" class="button-secondary btn-action"><i class="fas fa-plus"></i> Add Spec</button>
+        <button id="export-csv-btn" class="button-secondary btn-action"><i class="fas fa-file-csv"></i> Export CSV</button>
+        <button id="import-csv-btn" class="button-secondary btn-action" onclick="document.getElementById('csv-file-input').click()"><i class="fas fa-upload"></i> Import CSV</button>
+        <input type="file" id="csv-file-input" style="display: none;" accept=".csv">
+      </div>
+      <button id="reset-btn" class="button-secondary btn-action btn-danger-action"><i class="fas fa-undo"></i> Reset Default Data</button>
+    </div>
+
+    <!-- Engineering Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 30px;">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Reference Information</div>
+      <ul class="assumptions-list">
+        <li><strong>Standard Lug Lube Factor (K):</strong> Torque is heavily dependent on lubrication. Unlubricated threads require higher torque values compared to lubricated ones. Always check if specs specify dry or greased threads.</li>
+        <li><strong>Copper vs Aluminum Terminals:</strong> Aluminum lugs suffer from cold flow/creep. Always verify matching torque settings and anti-oxidant joint compound requirements.</li>
+        <li>Data listed as "Sample only" consists of common industry estimates (e.g. common busbar connections) and must be replaced by project-specific datasheets.</li>
+      </ul>
+    </div>
+
+    <!-- Spacer / Footer -->
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Add/Edit Modal Overlay -->
+  <div id="spec-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <h3 style="font-family:'Outfit'; font-size: 1.25rem; margin-top:0; margin-bottom: 16px;" id="modal-title">Add Connection Specification</h3>
+      <form id="spec-form" onsubmit="event.preventDefault(); saveSpec();">
+        <input type="hidden" id="spec-index">
+        <div class="input-row">
+          <div class="input-group">
+            <label for="eq-type">Equipment Type</label>
+            <select id="eq-type" required>
+              <option value="Inverter">Inverter</option>
+              <option value="BESS container">BESS container</option>
+              <option value="Battery rack">Battery rack</option>
+              <option value="Transformer">Transformer</option>
+              <option value="Switchgear">Switchgear</option>
+              <option value="Combiner box">Combiner box</option>
+              <option value="Tracker">Tracker</option>
+              <option value="Grounding">Grounding</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="mfr">Manufacturer</label>
+            <input type="text" id="mfr" required placeholder="e.g. Sungrow">
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label for="model">Model</label>
+            <input type="text" id="model" required placeholder="e.g. SG3125HV">
+          </div>
+          <div class="input-group">
+            <label for="component">Component</label>
+            <input type="text" id="component" required placeholder="e.g. AC Busbar">
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label for="conn-type">Connection Type</label>
+            <select id="conn-type" required>
+              <option value="Lug">Lug</option>
+              <option value="Busbar">Busbar</option>
+              <option value="Terminal block">Terminal block</option>
+              <option value="Grounding/bonding">Grounding/bonding</option>
+              <option value="Mechanical fastener">Mechanical fastener</option>
+              <option value="Battery terminal">Battery terminal</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="bolt-size">Bolt Size / Thread</label>
+            <input type="text" id="bolt-size" required placeholder="e.g. M10, 3/8-16">
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label for="torque-val">Torque Value</label>
+            <input type="number" id="torque-val" required step="any" placeholder="e.g. 45">
+          </div>
+          <div class="input-group">
+            <label for="torque-unit">Unit</label>
+            <select id="torque-unit" required>
+              <option value="Nm">Nm</option>
+              <option value="lb-ft">lb-ft</option>
+              <option value="lb-in">lb-in</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label for="source-doc">Source Document</label>
+            <input type="text" id="source-doc" placeholder="e.g. User Manual v1.2">
+          </div>
+          <div class="input-group">
+            <label for="data-status">Data Status</label>
+            <select id="data-status" required>
+              <option value="Sample only">Sample only</option>
+              <option value="Verified">Verified</option>
+              <option value="Needs verification">Needs verification</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+          <label for="notes">Notes</label>
+          <textarea id="notes" placeholder="e.g. Use Belleville washer, grease with copper paste" style="min-height: 60px; margin-bottom: 0;"></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="button-secondary" onclick="closeModal()" style="margin-top:0; width: auto;">Cancel</button>
+          <button type="submit" style="margin-top:0; width: auto;">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/torque-spec-finder.js"></script>
+</body>
+</html>

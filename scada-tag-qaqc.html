@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCADA Tag QA/QC Checklist — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 1100px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .metric-card {
+      background: var(--background-dark);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 16px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .metric-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      line-height: 1.2;
+      margin-top: 4px;
+    }
+    .metric-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .control-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .filter-select {
+      height: 38px;
+      padding: 0 8px;
+      margin-bottom: 0;
+      width: auto;
+      font-size: 0.85rem;
+    }
+    .search-tag {
+      height: 38px;
+      margin-bottom: 0;
+      width: 220px;
+      padding: 0 12px;
+      font-size: 0.85rem;
+    }
+    .tag-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      margin-bottom: 20px;
+    }
+    .tag-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .tag-table th {
+      background: var(--background-dark);
+      color: var(--text-color);
+      font-weight: 600;
+      padding: 12px 10px;
+      border-bottom: 2px solid var(--border-color);
+      white-space: nowrap;
+    }
+    .tag-table td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+    .tag-table tr:hover {
+      background: #f8fafc;
+    }
+    .checkbox-col {
+      text-align: center;
+      width: 60px;
+    }
+    .checkbox-col input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      margin: 0 auto;
+    }
+    .row-result-select {
+      height: 32px;
+      padding: 0 4px;
+      margin-bottom: 0;
+      width: 80px;
+      font-weight: 600;
+    }
+    .row-type-select {
+      height: 32px;
+      padding: 0 4px;
+      margin-bottom: 0;
+      width: 100px;
+    }
+    .row-input {
+      height: 32px;
+      padding: 0 8px;
+      margin-bottom: 0;
+      font-size: 0.85rem;
+    }
+    .btn-delete {
+      color: var(--error-color);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px;
+      margin-top: 0;
+      min-height: auto;
+      width: auto;
+    }
+    .btn-delete:hover {
+      color: #991b1b;
+      background: transparent;
+    }
+    .action-btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      margin-bottom: 24px;
+    }
+    .action-btn-row button {
+      margin-top: 0;
+      flex: 1;
+      min-width: 140px;
+    }
+    .import-btn-wrapper {
+      position: relative;
+      display: inline-block;
+      flex: 1;
+      min-width: 140px;
+    }
+    .import-btn-wrapper input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    .failed-summary {
+      background: var(--error-light);
+      border: 1px solid var(--error-border);
+      border-radius: var(--border-radius-md);
+      padding: 16px;
+      margin-bottom: 24px;
+      display: none;
+    }
+    .failed-summary-title {
+      font-weight: 700;
+      color: var(--error-text);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ SCADA & DIAGNOSTICS</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety & Security Disclaimer</div>
+        SCADA point validation must follow approved project signal lists, control narratives, cyber-security policies, and access control procedures. Never attempt live controls without explicit authorization.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">SCADA Tag QA/QC Checklist</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Track and verify signal scaling, remote control capabilities, historian logging, and HMI alignment for PV and BESS site communication handovers.
+    </p>
+
+    <!-- Project info -->
+    <div class="form-section" style="padding: 16px; margin-bottom: 24px; background: #ffffff;">
+      <div class="input-row">
+        <div class="input-group" style="margin-bottom: 0;">
+          <label for="project-name">Project/Site Name</label>
+          <input type="text" id="project-name" placeholder="e.g. Desert Sky Solar" style="margin-bottom: 0;">
+        </div>
+        <div class="input-group" style="margin-bottom: 0;">
+          <label for="system-type">System Component</label>
+          <select id="system-type" style="margin-bottom: 0;">
+            <option value="SCADA">SCADA Master Server</option>
+            <option value="PPC">PPC (Power Plant Controller)</option>
+            <option value="EMS">EMS (Energy Management System)</option>
+            <option value="BMS">BMS (Battery Management System)</option>
+            <option value="Inverter">Inverter Controller</option>
+            <option value="Meter">Revenue/Utility Meter</option>
+            <option value="Other">Other Auxiliary Gateway</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Pass Tags</div>
+        <div id="metric-pass" class="metric-value" style="color: var(--success-color);">0</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Failed Tags</div>
+        <div id="metric-fail" class="metric-value" style="color: var(--error-color);">0</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Pending Tags</div>
+        <div id="metric-pending" class="metric-value" style="color: var(--warning-color);">0</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Completion %</div>
+        <div id="metric-pct" class="metric-value">0%</div>
+      </div>
+    </div>
+
+    <!-- Failed summary list -->
+    <div id="failed-summary" class="failed-summary">
+      <div class="failed-summary-title">
+        <i class="fas fa-times-circle"></i>
+        <span>Failed Tags Requiring Troubleshooting</span>
+      </div>
+      <ul id="failed-list" style="margin-left: 20px; list-style-type: disc; font-size: 0.9rem; color: #991b1b;">
+        <!-- Filled dynamically -->
+      </ul>
+    </div>
+
+    <!-- Toolbar Filters -->
+    <div class="control-row">
+      <div class="filter-group">
+        <input type="text" id="search-tag" class="search-tag" placeholder="Search by Tag or Desc...">
+        
+        <select id="filter-type" class="filter-select">
+          <option value="ALL">All Types</option>
+          <option value="Analog">Analog</option>
+          <option value="Digital status">Digital Status</option>
+          <option value="Command">Command</option>
+          <option value="Alarm">Alarm</option>
+          <option value="Setpoint">Setpoint</option>
+        </select>
+
+        <select id="filter-result" class="filter-select">
+          <option value="ALL">All Results</option>
+          <option value="Pass">Pass</option>
+          <option value="Fail">Fail</option>
+          <option value="N/A">N/A</option>
+          <option value="Pending">Pending</option>
+        </select>
+      </div>
+
+      <button id="add-row-btn" class="button-secondary" style="margin-top:0; width:auto; padding: 8px 16px; height: 38px; min-height: auto;"><i class="fas fa-plus"></i> Add Tag Row</button>
+    </div>
+
+    <!-- Tag Table -->
+    <div class="tag-table-wrapper">
+      <table class="tag-table">
+        <thead>
+          <tr>
+            <th>Tag Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th class="checkbox-col" title="Scaling / Units calibration verified">Scale</th>
+            <th class="checkbox-col" title="Data timestamp synchronization verified">Time</th>
+            <th class="checkbox-col" title="Historical recording verified">Hist</th>
+            <th class="checkbox-col" title="HMI screen alignment verified">HMI</th>
+            <th class="checkbox-col" title="Remote control loop command verified">Ctrl</th>
+            <th>Expected</th>
+            <th>Observed</th>
+            <th>Result</th>
+            <th style="width: 40px; text-align: center;"></th>
+          </tr>
+        </thead>
+        <tbody id="tag-tbody">
+          <!-- Dynamically generated rows -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Action Row -->
+    <div class="action-btn-row">
+      <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset Checklist</button>
+      <button id="copy-btn" class="button-secondary"><i class="fas fa-copy"></i> Copy Summary</button>
+      <div class="import-btn-wrapper">
+        <button class="button-secondary" style="width: 100%; pointer-events: none;"><i class="fas fa-file-import"></i> Import CSV</button>
+        <input type="file" id="import-csv-file" accept=".csv">
+      </div>
+      <button id="export-btn" class="button-primary" style="background: var(--primary-color);"><i class="fas fa-file-export"></i> Export CSV</button>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering QA/QC Verification Standards</div>
+      <ul class="assumptions-list">
+        <li><strong>Scale Check:</strong> Ensure Analog points match field readings within allowed sensor tolerances and linear scaling values (e.g. 4-20mA scaling).</li>
+        <li><strong>Time Check:</strong> Timestamps must be synchronized within ±1 second across device clocks, RTUs, and the master SCADA server (using NTP/IRIG-B).</li>
+        <li><strong>Hist Check:</strong> Confirm tags are correctly logged in the historian database (OPC DA/UA or Modbus poll loops) at regular intervals.</li>
+        <li><strong>Ctrl Check:</strong> Digital commands and Setpoints must verify physical feedback loops and emergency override locks.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 Level3Support | Developed by Andres Provero (@aprovero)</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/scada-tag-qaqc.js"></script>
+</body>
+</html>
