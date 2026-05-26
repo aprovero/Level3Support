@@ -38,50 +38,50 @@
             <div class="filters-container">
                 <div class="filter-search-wrapper" style="display: flex; gap: 1rem; align-items: center; justify-content: space-between; width: 100%; flex-wrap: wrap;">
                     <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                        <div class="dropdown-label" style="font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;">Filter by Category:</div>
+                        <div class="dropdown-label" style="font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; margin-bottom: 0;">Filter by Category:</div>
                         <div class="custom-multiselect" id="category-multiselect" style="position: relative; width: 280px; z-index: 100;">
-                            <button type="button" class="multiselect-trigger" id="dropdown-trigger" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.25rem; font-size: 0.95rem; border-radius: 9999px; height: 46px; border: 1px solid #cbd5e1; background: #f8fafc; cursor: pointer; font-weight: 550; color: #475569; transition: all 0.2s ease; box-sizing: border-box;">
+                            <button type="button" class="multiselect-trigger" id="dropdown-trigger" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.25rem; font-size: 0.95rem; border-radius: 9999px; height: 46px; border: 1px solid #cbd5e1; background: #f8fafc; cursor: pointer; font-weight: 550; color: #475569; transition: all 0.2s ease; box-sizing: border-box; margin: 0;">
                                 <span id="dropdown-label-text">All Categories</span>
                                 <i class="fas fa-chevron-down" style="color: #94a3b8; font-size: 0.85rem; transition: transform 0.2s ease;" id="dropdown-chevron"></i>
                             </button>
                             <div class="multiselect-dropdown hidden" id="dropdown-menu" style="position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.03); padding: 0.5rem; display: flex; flex-direction: column; gap: 2px; max-height: 320px; overflow-y: auto; z-index: 1000; box-sizing: border-box;">
-                                <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
+                                <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
                                     <input type="checkbox" value="all" checked style="width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer;">
                                     <span style="font-size: 0.9rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif;">All Categories</span>
                                 </label>
-                                <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
+                                <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
                                     <input type="checkbox" value="calculators" style="width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer;">
                                     <span style="font-size: 0.9rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif;">Calculators</span>
                                 </label>
-                                <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
+                                <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
                                     <input type="checkbox" value="pv-field-tools" style="width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer;">
                                     <span style="font-size: 0.9rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif;">PV Field Tools</span>
                                 </label>
-                                <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
+                                <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
                                     <input type="checkbox" value="bess-field-tools" style="width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer;">
                                     <span style="font-size: 0.9rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif;">BESS Field Tools</span>
                                 </label>
-                                <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
+                                <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
                                     <input type="checkbox" value="electrical-test-forms" style="width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer;">
                                     <span style="font-size: 0.9rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif;">Electrical Test Forms</span>
                                 </label>
-                                <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
+                                <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
                                     <input type="checkbox" value="scada-diagnostics" style="width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer;">
                                     <span style="font-size: 0.9rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif;">SCADA & Diagnostics</span>
                                 </label>
-                                <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
+                                <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
                                     <input type="checkbox" value="reports-templates" style="width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer;">
                                     <span style="font-size: 0.9rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif;">Reports & Templates</span>
                                 </label>
-                                <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
+                                <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
                                     <input type="checkbox" value="reference-guides" style="width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer;">
                                     <span style="font-size: 0.9rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif;">Reference Guides</span>
                                 </label>
-                                <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
+                                <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
                                     <input type="checkbox" value="hse" style="width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer;">
                                     <span style="font-size: 0.9rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif;">HSE</span>
                                 </label>
-                                <label class="filter-checkbox" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
+                                <label class="dropdown-checkbox-item" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 8px; cursor: pointer; transition: all 0.15s ease;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='transparent';">
                                     <input type="checkbox" value="legacy-archive" style="width: 16px; height: 16px; accent-color: var(--primary-color); cursor: pointer;">
                                     <span style="font-size: 0.9rem; font-weight: 500; color: #334155; font-family: 'Inter', sans-serif;">Legacy / Archive</span>
                                 </label>
@@ -127,7 +127,7 @@
         <div style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; width: 100%;">
             <p style="margin: 0; color: #64748b; font-size: 0.85rem; display: flex; align-items: center; gap: 0.75rem;">
                 <span>&copy; 2026 LEVEL3SUPPORT &amp; COR SOLUTIONS. ALL RIGHTS RESERVED.</span>
-                <span style="padding: 0.15rem 0.4rem; background: #1e293b; border-radius: 4px; color: #94a3b8; font-size: 0.72rem; font-weight: 600; border: 1px solid #334155; letter-spacing: 0.5px;">v1.2.2</span>
+                <span style="padding: 0.15rem 0.4rem; background: #1e293b; border-radius: 4px; color: #94a3b8; font-size: 0.72rem; font-weight: 600; border: 1px solid #334155; letter-spacing: 0.5px;">v1.2.3</span>
             </p>
             <div class="powered-by-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
                 <span style="font-style: italic; font-weight: 400; color: #64748b; font-size: 0.85rem; font-family: 'Inter', sans-serif;">Powered by</span>
@@ -136,7 +136,7 @@
         </div>
     </footer>
 
-    <link href="css/shared-styles.css?v=17" rel="stylesheet">
+    <link href="css/shared-styles.css?v=18" rel="stylesheet">
     <style>
         /* ── index.html page-specific overrides ── */
         /* Inherits all tokens from shared-styles.css :root */
