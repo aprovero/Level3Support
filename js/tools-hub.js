@@ -649,7 +649,7 @@ function buildToolCardHTML(tool) {
         .join('');
 
     return `
-        <div class="tool-tile" data-id="${tool.id}" onclick="openTool(${tool.id}, '${tool.url}')" style="cursor: pointer;">
+        <div class="tool-tile" data-id="${tool.id}" data-status="${cleanStatus}" onclick="openTool(${tool.id}, '${tool.url}')" style="cursor: pointer;">
             <div class="tile-content">
                 <div class="tile-header">
                     <span class="status-badge status-${cleanStatus}">${statusText}</span>

@@ -1737,17 +1737,11 @@ button:disabled, .submit-button:disabled {
     width: 8px;
 }
 
-/* Category Left Border Custom Mapping */
-.tool-tile[data-category="calculators"]::before { background-color: var(--color-calculators); }
-.tool-tile[data-category="pv-field-tools"]::before { background-color: var(--color-pv-field-tools); }
-.tool-tile[data-category="bess-field-tools"]::before { background-color: var(--color-bess-field-tools); }
-.tool-tile[data-category="electrical-test-forms"]::before { background-color: var(--color-electrical-test-forms); }
-.tool-tile[data-category="scada-diagnostics"]::before { background-color: var(--color-scada-diagnostics); }
-.tool-tile[data-category="reports-templates"]::before { background-color: var(--color-reports-templates); }
-.tool-tile[data-category="reference-guides"]::before { background-color: var(--color-reference-guides); }
-.tool-tile[data-category="hse"]::before { background-color: var(--color-hse); }
-.tool-tile[data-category="legacy-archive"]::before { background-color: var(--color-legacy-archive); }
-.tool-tile[data-category="oem-specific"]::before { background-color: var(--color-oem-specific); }
+/* Status Left Border Custom Mapping */
+.tool-tile[data-status="active"]::before { background-color: #15803d; }
+.tool-tile[data-status="under-review"]::before { background-color: #c2410c; }
+.tool-tile[data-status="in-progress"]::before { background-color: #b45309; }
+.tool-tile[data-status="legacy"]::before { background-color: #64748b; }
 
 .tile-content {
     padding: 0.85rem 1.25rem 1.15rem 1.25rem;
