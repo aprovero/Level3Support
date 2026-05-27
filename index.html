@@ -446,7 +446,7 @@
     </div>
 
     <!-- Embed Font & Styling and Router CSS -->
-    <link href="css/shared-styles.css?v=21" rel="stylesheet">
+    <link href="css/shared-styles.css?v=31" rel="stylesheet">
     <style>
         /* ── Unified OS-Style ToolHub Layout CSS ── */
         :root {
@@ -580,13 +580,16 @@
         }
 
         .sidebar-footer {
-            padding: 1.25rem 1rem;
+            height: 88px;
+            padding: 1rem;
             border-top: 1px solid #cbd5e1;
-            background: #f8fafc;
+            background: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.6rem;
+            justify-content: center;
+            gap: 0.4rem;
+            box-sizing: border-box;
         }
 
         .version-tag {
@@ -1531,12 +1534,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1.25rem 2.5rem;
+            padding: 1rem 2.5rem;
             border-top: 1px solid #cbd5e1;
             margin-top: auto; /* Push to bottom of content area */
             background: #ffffff;
             box-sizing: border-box;
-            height: 70px; /* Aligns perfectly with desktop-sidebar footer height */
+            height: 88px; /* Perfectly matches sidebar footer height */
         }
 
         .mobile-footer-text {
@@ -1661,7 +1664,7 @@
 
             .views-container {
                 padding: 0.5rem 0.5rem;
-                padding-bottom: calc(var(--bottom-nav-height) + 1rem);
+                padding-bottom: 0.5rem;
             }
 
             .view-header {
@@ -1745,11 +1748,11 @@
     </style>
 
     <!-- Load refactored OS-Style javascript router & behavior -->
-    <script src="js/tool-resources.js?v=29"></script>
-    <script src="js/tools-hub.js?v=29"></script>
+    <script src="js/tool-resources.js?v=31"></script>
+    <script src="js/tools-hub.js?v=31"></script>
     <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js?v=29')
+        navigator.serviceWorker.register('/sw.js?v=31')
         .then(reg => console.log('SW registered ✅', reg))
         .catch(err => console.error('SW registration failed ❌', err));
     }
