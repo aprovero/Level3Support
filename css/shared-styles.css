@@ -1822,6 +1822,7 @@ button:disabled, .submit-button:disabled {
 }
 
 .status-active { background-color: #dcfce7; color: #15803d; }
+.status-under-review { background-color: #ffedd5; color: #c2410c; }
 .status-in-progress { background-color: #fef3c7; color: #b45309; }
 .status-legacy { background-color: #e2e8f0; color: #475569; }
 .status-disabled { background-color: #fee2e2; color: #b91c1c; }
