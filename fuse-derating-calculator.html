@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fuse Derating Calculator — Level3Support</title>
+  <meta name="description" content="Field calculator for checking fuse continuous-current and temperature derating. For PV, BESS, inverter, combiner box, AC/DC auxiliary circuits, and general QA/QC checks.">
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* ── Layout ── */
+    .calc-container {
+      max-width: 860px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 28px;
+    }
+
+    /* ── Mode Toggle ── */
+    .mode-toggle {
+      display: flex;
+      gap: 0;
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 24px;
+      border: 1px solid #e2e8f0;
+    }
+    .mode-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-height: auto;
+      margin: 0;
+    }
+    .mode-btn.active {
+      background: #ffffff;
+      color: #2563eb;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .mode-btn:hover:not(.active) {
+      color: #334155;
+      background: #e8edf4;
+    }
+
+    /* ── Input Grid ── */
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .input-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 640px) {
+      .input-row, .input-row-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+
+    /* ── Section Headers ── */
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 14px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title i {
+      color: #2563eb;
+      font-size: 0.95rem;
+    }
+
+    /* ── Form Card ── */
+    .form-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* ── Button Row ── */
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    /* ── Status Badges ── */
+    .status-badge-lg {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-pass-lg { background: #dcfce7; color: #15803d; }
+    .status-fail-lg { background: #fee2e2; color: #b91c1c; }
+    .status-review-lg { background: #fef3c7; color: #92400e; }
+
+    /* ── Result Panel ── */
+    .result-panel {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: var(--border-radius-md);
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .result-panel.fail-panel {
+      background: #fef2f2;
+      border-color: #fca5a5;
+    }
+    .result-panel.review-panel {
+      background: #fffbeb;
+      border-color: #fde68a;
+    }
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .result-header-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed #d1fae5;
+      font-size: 0.9rem;
+    }
+    .result-panel.fail-panel .result-row { border-bottom-color: #fecaca; }
+    .result-panel.review-panel .result-row { border-bottom-color: #fde68a; }
+    .result-row:last-child { border-bottom: none; }
+    .result-row-label { color: #374151; font-weight: 500; }
+    .result-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .result-sub { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+
+    /* ── Soft Warnings ── */
+    .soft-warning {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 4px solid #f59e0b;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 0.84rem;
+      color: #78350f;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-top: 10px;
+    }
+    .soft-warning i { color: #f59e0b; margin-top: 2px; flex-shrink: 0; }
+
+    .info-warning {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 0.84rem;
+      color: #1e3a8a;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-top: 10px;
+    }
+    .info-warning i { color: #3b82f6; margin-top: 2px; flex-shrink: 0; }
+
+    /* ── Loading bar ── */
+    .loading-bar-wrapper {
+      background: #e2e8f0;
+      border-radius: 6px;
+      height: 10px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .loading-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+    .fill-green { background: linear-gradient(90deg, #22c55e, #16a34a); }
+    .fill-amber { background: linear-gradient(90deg, #f59e0b, #d97706); }
+    .fill-red { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+
+    /* ── Recommended fuse ── */
+    .rec-fuse-card {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 4px solid #0284c7;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-top: 14px;
+    }
+    .rec-fuse-label {
+      font-size: 0.8rem;
+      color: #0369a1;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 4px;
+    }
+    .rec-fuse-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .rec-fuse-note {
+      font-size: 0.78rem;
+      color: #0369a1;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* ── Summary Box ── */
+    .summary-box {
+      background: #1e293b;
+      color: #e2e8f0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      border-radius: 6px;
+      padding: 14px 16px;
+      line-height: 1.6;
+      margin-top: 14px;
+      white-space: pre-wrap;
+    }
+
+    /* ── Action Buttons ── */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .action-row button {
+      flex: 1;
+      min-width: 130px;
+      font-size: 0.85rem;
+      padding: 9px;
+      min-height: auto;
+      margin: 0;
+    }
+
+    /* ── Assumptions ── */
+    .assumptions-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #64748b;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-top: 20px;
+    }
+    .assumptions-title {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #334155;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .assumptions-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 0.82rem;
+      color: #475569;
+      line-height: 1.7;
+    }
+    .assumptions-list li { margin-bottom: 2px; }
+
+    /* ── Collapsible Advanced ── */
+    .advanced-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 10px 0;
+      color: #2563eb;
+      font-size: 0.88rem;
+      font-weight: 600;
+      user-select: none;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 4px;
+    }
+    .advanced-toggle i { transition: transform 0.2s ease; font-size: 0.8rem; }
+    .advanced-toggle.open i { transform: rotate(90deg); }
+    .advanced-section { display: none; padding-top: 14px; }
+    .advanced-section.visible { display: block; }
+
+    /* ── Optional field note ── */
+    .optional-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #94a3b8;
+      background: #f1f5f9;
+      border-radius: 4px;
+      padding: 1px 5px;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <!-- Header -->
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ CALCULATOR</div>
+    </div>
+
+    <!-- Safety Disclaimer -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 20px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Field Use Disclaimer</div>
+        This calculator checks continuous-current and temperature derating only. It does not verify short-circuit protection, interrupting rating, coordination, voltage rating, time-current curves, cable protection, fuse holder rating, enclosure heating, or code compliance. Final fuse selection must follow approved project documents, local electrical code, fuse manufacturer data, equipment manuals, and protection coordination studies.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 6px 0; font-size: 1.75rem;">Fuse Derating Calculator</h1>
+    <p style="color: var(--text-secondary); font-size: 0.93rem; margin-bottom: 22px;">
+      Check whether a selected fuse rating is acceptable after applying continuous-current adjustment and temperature derating. Suitable for PV strings, BESS DC circuits, inverter inputs, combiner boxes, and AC/DC auxiliary circuits.
+    </p>
+
+    <!-- Mode Toggle -->
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="mode-check-btn" onclick="setMode('check')">
+        <i class="fas fa-check-circle"></i> Mode 1 — Check Selected Fuse
+      </button>
+      <button class="mode-btn" id="mode-recommend-btn" onclick="setMode('recommend')">
+        <i class="fas fa-search"></i> Mode 2 — Recommend Minimum Fuse Size
+      </button>
+    </div>
+
+    <!-- INPUT FORM -->
+    <div class="form-card">
+      <div class="section-title"><i class="fas fa-tag"></i> Project / Circuit Identification <span class="optional-tag">Optional</span></div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="site-name">Site / Project Name</label>
+          <input type="text" id="site-name" placeholder="e.g. Sunridge Solar Plant">
+        </div>
+        <div class="input-group">
+          <label for="circuit-id">Circuit Name / Equipment ID</label>
+          <input type="text" id="circuit-id" placeholder="e.g. CB-01 String 12">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="section-title"><i class="fas fa-bolt"></i> Circuit Parameters</div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="circuit-type">Circuit Type <span class="required">*</span></label>
+          <select id="circuit-type" style="width:100%; height:42px; border:1px solid var(--border-light); border-radius:var(--border-radius-sm); padding:10px;">
+            <option value="pv-string">PV String</option>
+            <option value="pv-combiner">PV Combiner</option>
+            <option value="inverter-dc">Inverter DC Input</option>
+            <option value="bess-dc">BESS DC Circuit</option>
+            <option value="ac-auxiliary">AC Auxiliary Circuit</option>
+            <option value="dc-auxiliary">DC Auxiliary Circuit</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="load-type">Load Type <span class="required">*</span></label>
+          <select id="load-type" style="width:100%; height:42px; border:1px solid var(--border-light); border-radius:var(--border-radius-sm); padding:10px;">
+            <option value="continuous">Continuous</option>
+            <option value="non-continuous">Non-Continuous</option>
+            <option value="mixed">Mixed / Review Required</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="load-current">Load Current <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="load-current" placeholder="e.g. 80" step="any" min="0.001">
+            <div class="input-unit">A</div>
+          </div>
+          <div class="field-note">Maximum expected operating current for this circuit.</div>
+        </div>
+        <div class="input-group">
+          <label for="cc-factor">Continuous-Current Factor <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="cc-factor" value="1.25" step="0.01" min="1.0">
+            <div class="input-unit">×</div>
+          </div>
+          <div class="field-note">Default 1.25 per common design practice. Adjust per project basis.</div>
+        </div>
+      </div>
+
+      <!-- Mode 1 specific: selected fuse -->
+      <div id="fuse-select-group" class="input-row">
+        <div class="input-group">
+          <label for="fuse-rating">Selected Fuse Rating <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="fuse-rating" placeholder="e.g. 125" step="any" min="0.001">
+            <div class="input-unit">A</div>
+          </div>
+          <div class="field-note">Nameplate current rating of the fuse being evaluated.</div>
+        </div>
+        <div class="input-group">
+          <label for="fuse-type">Fuse Type</label>
+          <select id="fuse-type" style="width:100%; height:42px; border:1px solid var(--border-light); border-radius:var(--border-radius-sm); padding:10px;">
+            <option value="gPV">gPV (PV Fuse)</option>
+            <option value="gG-gL">gG / gL</option>
+            <option value="aR">aR (Semiconductor backup)</option>
+            <option value="class-j">Class J</option>
+            <option value="class-t">Class T</option>
+            <option value="NH">NH</option>
+            <option value="semiconductor">Semiconductor Fuse</option>
+            <option value="other">Other / Unknown</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="section-title"><i class="fas fa-thermometer-half"></i> Derating Factors</div>
+
+      <div class="input-row-3">
+        <div class="input-group">
+          <label for="ambient-temp">Ambient Temperature</label>
+          <div class="input-with-unit">
+            <input type="number" id="ambient-temp" placeholder="e.g. 40" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+          <div class="field-note">Site or enclosure ambient temperature.</div>
+        </div>
+        <div class="input-group">
+          <label for="temp-derating">Temperature Derating Factor <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-derating" value="1.00" step="0.01" min="0.01" max="1.5">
+            <div class="input-unit">×</div>
+          </div>
+          <div class="field-note">From fuse manufacturer datasheet. Default 1.00 = no derating applied.</div>
+        </div>
+        <div class="input-group">
+          <label for="add-derating">Additional Derating Factor <span class="optional-tag">Optional</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="add-derating" value="1.00" step="0.01" min="0.01" max="1.5">
+            <div class="input-unit">×</div>
+          </div>
+          <div class="field-note">Grouping, altitude, or other site-specific factors.</div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="design-margin">Safety / Design Margin <span class="optional-tag">Optional</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="design-margin" value="0" step="0.1" min="0">
+            <div class="input-unit">%</div>
+          </div>
+          <div class="field-note">Additional margin above adjusted required current (e.g. 5 = 5%).</div>
+        </div>
+        <div class="input-group">
+          <label for="holder-notes">Fuse Holder / Enclosure Notes <span class="optional-tag">Optional</span></label>
+          <input type="text" id="holder-notes" placeholder="e.g. DIN rail holder, 1000V DC rated">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="mfr-notes">Manufacturer / Source Notes <span class="optional-tag">Optional</span></label>
+        <input type="text" id="mfr-notes" placeholder="e.g. Mersen, Littelfuse, Bussmann — from datasheet dated 2024">
+      </div>
+    </div>
+
+    <!-- Advanced Inputs -->
+    <div class="form-card">
+      <div class="advanced-toggle" id="advanced-toggle" onclick="toggleAdvanced()">
+        <i class="fas fa-chevron-right"></i>
+        <span>Advanced / Optional Inputs</span>
+      </div>
+      <div class="advanced-section" id="advanced-section">
+        <div class="input-row">
+          <div class="input-group">
+            <label for="fuses-grouped">Number of Fuses Grouped Together <span class="optional-tag">Optional</span></label>
+            <input type="number" id="fuses-grouped" placeholder="e.g. 4" step="1" min="1">
+            <div class="field-note">Used for documentation only — apply grouping derating via Additional Derating Factor.</div>
+          </div>
+          <div class="input-group">
+            <label for="enclosure-temp">Enclosure Temperature <span class="optional-tag">Optional</span></label>
+            <div class="input-with-unit">
+              <input type="number" id="enclosure-temp" placeholder="e.g. 55" step="any">
+              <div class="input-unit">°C</div>
+            </div>
+            <div class="field-note">If known, may differ from ambient. For documentation only.</div>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="system-voltage">System Voltage <span class="optional-tag">Optional</span></label>
+            <div class="input-with-unit">
+              <input type="number" id="system-voltage" placeholder="e.g. 1000" step="any">
+              <div class="input-unit">V</div>
+            </div>
+            <div class="field-note">For documentation. Fuse voltage rating must be verified separately.</div>
+          </div>
+          <div class="input-group">
+            <label for="ac-dc">AC / DC <span class="optional-tag">Optional</span></label>
+            <select id="ac-dc" style="width:100%; height:42px; border:1px solid var(--border-light); border-radius:var(--border-radius-sm); padding:10px;">
+              <option value="">Select if applicable</option>
+              <option value="DC">DC</option>
+              <option value="AC">AC</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="isc-note">Available Short-Circuit Current Note <span class="optional-tag">Optional</span></label>
+            <input type="text" id="isc-note" placeholder="e.g. ~12 kA at main combiner terminals">
+            <div class="field-note">Documentation only. This tool does not verify interrupting rating or coordination.</div>
+          </div>
+          <div class="input-group">
+            <label for="coord-notes">Coordination Notes <span class="optional-tag">Optional</span></label>
+            <input type="text" id="coord-notes" placeholder="e.g. Upstream 250A OCPD — verify TCC curves">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Validation Error -->
+    <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.88rem; margin-bottom: 12px; display: none; padding: 10px 14px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 6px;"></div>
+
+    <!-- Buttons -->
+    <div class="btn-row">
+      <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+      <button id="calculate-btn"><i class="fas fa-calculator"></i> Calculate</button>
+    </div>
+
+    <!-- RESULT PANEL -->
+    <div id="result-panel" style="display: none; margin-top: 24px;">
+
+      <!-- Status Header -->
+      <div id="result-status-card" class="result-panel">
+        <div class="result-header">
+          <div class="result-header-title"><i class="fas fa-clipboard-check"></i> Derating Evaluation</div>
+          <span id="status-badge" class="status-badge-lg status-pass-lg"><i class="fas fa-check-circle"></i> PASS</span>
+        </div>
+
+        <!-- Primary Results -->
+        <div class="result-row">
+          <span class="result-row-label">Adjusted Required Current</span>
+          <div style="text-align: right;">
+            <div class="result-value" id="res-adj-current">— A</div>
+            <div class="result-sub">Load Current × CC Factor (× Margin)</div>
+          </div>
+        </div>
+        <div class="result-row">
+          <span class="result-row-label">Derated Fuse Current</span>
+          <div style="text-align: right;">
+            <div class="result-value" id="res-derated">— A</div>
+            <div class="result-sub" id="res-derated-sub">Fuse Rating × Temp Factor × Add. Factor</div>
+          </div>
+        </div>
+        <div class="result-row">
+          <span class="result-row-label">Margin (Derated − Adjusted Required)</span>
+          <div style="text-align: right;">
+            <div class="result-value" id="res-margin">— A</div>
+          </div>
+        </div>
+
+        <!-- Loading Bar -->
+        <div style="margin-top: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.85rem; font-weight: 600; color: #374151;">Fuse Loading (Load / Derated)</span>
+            <span id="res-loading-pct" style="font-family: 'Outfit'; font-weight: 700; font-size: 0.95rem;">—</span>
+          </div>
+          <div class="loading-bar-wrapper">
+            <div id="loading-bar" class="loading-bar-fill fill-green" style="width: 0%;"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+            <span style="font-size: 0.78rem; color: #64748b;">Adjusted Loading (Adj. Required / Derated)</span>
+            <span id="res-adj-loading-pct" style="font-size: 0.82rem; font-weight: 600; color: #374151;">—</span>
+          </div>
+        </div>
+
+        <!-- Recommended Fuse (Mode 2 / always shown) -->
+        <div id="rec-fuse-wrapper" class="rec-fuse-card" style="display:none;">
+          <div class="rec-fuse-label"><i class="fas fa-lightbulb"></i> Recommended Minimum Fuse Size</div>
+          <div class="rec-fuse-value" id="rec-fuse-value">—</div>
+          <div class="rec-fuse-note" id="rec-fuse-note">
+            Smallest generic rating where: Fuse Rating × Temp Factor × Add. Factor ≥ Adjusted Required Current.<br>
+            <strong>Generic selectable ratings only.</strong> Not every rating is available for every fuse type, voltage, manufacturer, or application. Verify availability with manufacturer data.
+          </div>
+        </div>
+
+        <!-- Soft Warnings container -->
+        <div id="soft-warnings"></div>
+
+        <!-- Copyable Summary -->
+        <div style="margin-top: 18px;">
+          <div style="font-size: 0.82rem; font-weight: 600; color: #374151; margin-bottom: 6px;"><i class="fas fa-align-left"></i> Field Summary</div>
+          <div class="summary-box" id="summary-text"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-row">
+          <button id="copy-summary-btn" class="button-secondary"><i class="fas fa-copy"></i> Copy Summary</button>
+          <button id="export-json-btn" class="button-secondary"><i class="fas fa-file-export"></i> Export JSON</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assumptions / Warnings Card -->
+    <div class="assumptions-box" style="margin-top: 24px;">
+      <div class="assumptions-title"><i class="fas fa-info-circle" style="color:#64748b;"></i> Engineering Assumptions &amp; Limitations</div>
+      <ul class="assumptions-list">
+        <li>This calculator checks <strong>current derating only</strong>. It does not replace a full protection coordination study.</li>
+        <li>It does not verify: short-circuit protection, interrupting rating, coordination, voltage rating, time-current curves, cable protection, fuse holder rating, or enclosure heating.</li>
+        <li>Temperature derating factors must come from the <strong>actual fuse manufacturer datasheet</strong> for the specific fuse type and installation conditions.</li>
+        <li>The continuous-current factor (default 1.25) is user-editable and must match the applicable project design basis.</li>
+        <li>Final fuse selection must follow: approved project documents, local electrical code, fuse manufacturer data, equipment manuals, and protection coordination studies.</li>
+        <li>The generic fuse size list is for selection reference only. Not all ratings are available for every fuse type, voltage rating, or manufacturer.</li>
+        <li>No NEC, IEC, UL, OEM, or project compliance is claimed by this tool.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+      </div>
+      <div class="footer-logo">
+        <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+        <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/fuse-derating-calculator.js"></script>
+</body>
+</html>

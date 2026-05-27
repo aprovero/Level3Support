@@ -481,7 +481,8 @@
                 <th>Bolt / Terminal</th>
                 <th>Torque Value</th>
                 <th>Notes</th>
-                <th>Source / Status</th>
+                <th>Source Document</th>
+                <th>Data Confidence</th>
               </tr>
             </thead>
             <tbody id="eq-tbody">
@@ -669,67 +670,79 @@
   // ═══════════════════════════════════════════
   const EQUIPMENT_SPECS = [
     // ── Inverters ──────────────────────────────────
-    { type:'Inverter', manufacturer:'Sungrow', model:'SG3125HV / SG3600HV', component:'AC Output Terminal', conn:'Busbar', bolt:'M12', torque:'45 Nm', notes:'Use Belleville washer. Copper-paste on joint.', status:'Reference' },
-    { type:'Inverter', manufacturer:'Sungrow', model:'SG3125HV / SG3600HV', component:'DC Input Terminal', conn:'Busbar', bolt:'M8', torque:'18 Nm', notes:'Torque in sequence: inner to outer.', status:'Reference' },
-    { type:'Inverter', manufacturer:'Sungrow', model:'SG3125HV / SG3600HV', component:'Grounding Lug', conn:'Grounding/bonding', bolt:'M10', torque:'22 Nm', notes:'Use two-hole lug.', status:'Reference' },
-    { type:'Inverter', manufacturer:'Huawei', model:'SUN2000-100KTL / 185KTL', component:'AC Terminal Block', conn:'Terminal block', bolt:'M10', torque:'25 Nm', notes:'Aluminum cable: apply anti-oxidant.', status:'Reference' },
-    { type:'Inverter', manufacturer:'Huawei', model:'SUN2000-185KTL', component:'DC Input Busbar', conn:'Busbar', bolt:'M8', torque:'16–20 Nm', notes:'', status:'Reference' },
-    { type:'Inverter', manufacturer:'FIMER / ABB', model:'PVS-175 / TRIO-TM', component:'AC Output Copper Palm', conn:'Busbar', bolt:'M12', torque:'50 Nm', notes:'Torque with calibrated ratchet.', status:'Reference' },
-    { type:'Inverter', manufacturer:'SMA', model:'CORE1 / SUNNY CENTRAL', component:'AC Connection Terminal', conn:'Busbar', bolt:'M10', torque:'30 Nm', notes:'', status:'Sample' },
-    { type:'Inverter', manufacturer:'Fronius', model:'Symo GEN24 / Tauro', component:'AC Output Terminal', conn:'Terminal block', bolt:'M8', torque:'18 Nm', notes:'', status:'Sample' },
-    { type:'Inverter', manufacturer:'Solaredge', model:'SE100K / SE250K', component:'AC Output Lug', conn:'Lug', bolt:'M10', torque:'22–28 Nm', notes:'Refer to OEM Quick Guide per SKU.', status:'Sample' },
-    { type:'Inverter', manufacturer:'General', model:'All string inverters', component:'DC Fuse / String Input', conn:'Lug', bolt:'M6', torque:'4–6 Nm', notes:'Verify against fuse holder manufacturer.', status:'Reference' },
+    // Status key:
+    //  'Standard Ref' = derived from published bolt-grade standards (ISO/DIN/SAE)
+    //  'OEM Estimate'  = plausible for bolt size/grade but NOT line-verified vs. current OEM IOM
+    //  'Field Verified'= confirmed by engineer against a real project document
+
+    { type:'Inverter', manufacturer:'Sungrow', model:'SG3125HV / SG3600HV', component:'AC Output Terminal', conn:'Busbar', bolt:'M12', torque:'45 Nm', notes:'Use Belleville washer. Copper-paste on joint.', source:'SG3125HV Quick Installation Manual — verify rev.', status:'OEM Estimate' },
+    { type:'Inverter', manufacturer:'Sungrow', model:'SG3125HV / SG3600HV', component:'DC Input Terminal', conn:'Busbar', bolt:'M8', torque:'18 Nm', notes:'Torque in sequence: inner to outer.', source:'SG3125HV Quick Installation Manual — verify rev.', status:'OEM Estimate' },
+    { type:'Inverter', manufacturer:'Sungrow', model:'SG3125HV / SG3600HV', component:'Grounding Lug (PE)', conn:'Grounding/bonding', bolt:'M10', torque:'22 Nm', notes:'Two-hole Cu lug. ISO 898-1 Gr 8.8 basis.', source:'ISO 898-1 (M10 Gr 8.8 dry)', status:'Standard Ref' },
+    { type:'Inverter', manufacturer:'Huawei', model:'SUN2000-100KTL / 185KTL', component:'AC Terminal Block', conn:'Terminal block', bolt:'M10', torque:'25 Nm', notes:'Aluminum cable: apply anti-oxidant.', source:'Huawei SUN2000-185KTL IOM v3 — verify rev.', status:'OEM Estimate' },
+    { type:'Inverter', manufacturer:'Huawei', model:'SUN2000-185KTL', component:'DC Input Busbar', conn:'Busbar', bolt:'M8', torque:'16–20 Nm', notes:'Typical range for M8 Gr 8.8 busbar connection.', source:'ISO 898-1 (M8 Gr 8.8 dry)', status:'Standard Ref' },
+    { type:'Inverter', manufacturer:'FIMER / ABB', model:'PVS-175 / TRIO-TM', component:'AC Output Copper Palm', conn:'Busbar', bolt:'M12', torque:'50 Nm', notes:'Use calibrated ratchet.', source:'FIMER PVS-175 IOM — verify against current rev.', status:'OEM Estimate' },
+    { type:'Inverter', manufacturer:'SMA', model:'CORE1 / SUNNY CENTRAL', component:'AC Connection Terminal', conn:'Busbar', bolt:'M10', torque:'30 Nm', notes:'Confirm against SMA CORE1 IOM for site-specific firmware.', source:'Estimate — M10 Gr 8.8 dry (~49 Nm max); 30 Nm is conservative.', status:'OEM Estimate' },
+    { type:'Inverter', manufacturer:'Fronius', model:'Symo GEN24 / Tauro', component:'AC Output Terminal', conn:'Terminal block', bolt:'M8', torque:'18 Nm', notes:'', source:'Estimate based on M8 Gr 8.8. Verify in Fronius Tauro IOM.', status:'OEM Estimate' },
+    { type:'Inverter', manufacturer:'SolarEdge', model:'SE100K / SE250K', component:'AC Output Lug', conn:'Lug', bolt:'M10', torque:'22–28 Nm', notes:'Refer to OEM Quick Guide for specific SKU.', source:'Estimate. Check SolarEdge installation guide for model.', status:'OEM Estimate' },
+    { type:'Inverter', manufacturer:'General', model:'All string inverters', component:'DC Fuse / String Input', conn:'Lug', bolt:'M6', torque:'4–6 Nm', notes:'Always verify against fuse holder manufacturer spec.', source:'ISO 898-1 (M6 Gr 8.8 = ~10 Nm max; 4–6 Nm is conservative)', status:'Standard Ref' },
 
     // ── BESS / Battery ─────────────────────────────
-    { type:'BESS', manufacturer:'CATL', model:'EnerOne / EnerC', component:'Module-to-Module Busbar', conn:'Battery terminal', bolt:'M8', torque:'9 Nm', notes:'Clean terminal surfaces. Cu paste optional per OEM.', status:'Reference' },
-    { type:'BESS', manufacturer:'CATL', model:'EnerOne / EnerC', component:'Battery Rack Main Busbar', conn:'Busbar', bolt:'M12', torque:'35–40 Nm', notes:'Use torque wrench. Do not impact-gun.', status:'Reference' },
-    { type:'BESS', manufacturer:'BYD', model:'Battery-Box Premium LVS / HVS', component:'Cell-to-Cell Connector', conn:'Battery terminal', bolt:'M6', torque:'5 Nm', notes:'Strict limit — do not exceed.', status:'Reference' },
-    { type:'BESS', manufacturer:'BYD', model:'Battery-Box Premium LVS / HVS', component:'Stack Main Terminal', conn:'Busbar', bolt:'M10', torque:'22 Nm', notes:'', status:'Reference' },
-    { type:'BESS', manufacturer:'Fluence / Saft', model:'Gridstack', component:'Cabinet Output Busbar', conn:'Busbar', bolt:'M12', torque:'45 Nm', notes:'Belleville washer required.', status:'Sample' },
-    { type:'BESS', manufacturer:'General BESS', model:'All containers', component:'Cabinet Grounding Stud', conn:'Grounding/bonding', bolt:'M10', torque:'22–25 Nm', notes:'Ground straps require two-hole lug.', status:'Reference' },
+    { type:'BESS', manufacturer:'CATL', model:'EnerOne / EnerC', component:'Module-to-Module Busbar', conn:'Battery terminal', bolt:'M8', torque:'9 Nm', notes:'Clean terminal surfaces. Cu paste per OEM instructions.', source:'CATL EnerOne Installation Manual (commonly cited). Verify vs. site-specific delivery doc.', status:'OEM Estimate' },
+    { type:'BESS', manufacturer:'CATL', model:'EnerOne / EnerC', component:'Battery Rack Main Busbar', conn:'Busbar', bolt:'M12', torque:'35–40 Nm', notes:'Use torque wrench. Do NOT use impact gun.', source:'Estimate based on M12 Gr 8.8 (ISO 898-1 = 86 Nm max; 35–40 Nm is a typical conservative busbar spec).', status:'OEM Estimate' },
+    { type:'BESS', manufacturer:'BYD', model:'Battery-Box Premium LVS / HVS', component:'Cell-to-Cell Connector', conn:'Battery terminal', bolt:'M6', torque:'5 Nm', notes:'Strict limit — do not exceed.', source:'BYD Battery-Box HVS Installation Manual. Verify against site delivery documentation.', status:'OEM Estimate' },
+    { type:'BESS', manufacturer:'BYD', model:'Battery-Box Premium LVS / HVS', component:'Stack Main Terminal', conn:'Busbar', bolt:'M10', torque:'22 Nm', notes:'', source:'Estimate based on M10 Gr 8.8 (ISO 898-1). Verify in BYD IOM.', status:'OEM Estimate' },
+    { type:'BESS', manufacturer:'Fluence / Saft', model:'Gridstack', component:'Cabinet Output Busbar', conn:'Busbar', bolt:'M12', torque:'45 Nm', notes:'Belleville washer required.', source:'Estimate only. Fluence Gridstack IOM required.', status:'OEM Estimate' },
+    { type:'BESS', manufacturer:'General BESS', model:'All containers', component:'Cabinet Grounding Stud (PE)', conn:'Grounding/bonding', bolt:'M10', torque:'22–25 Nm', notes:'Ground straps require two-hole lug.', source:'ISO 898-1 (M10 Gr 8.8 dry = ~49 Nm max; 22–25 Nm conservative)', status:'Standard Ref' },
 
     // ── Transformer / MV ───────────────────────────
-    { type:'Transformer', manufacturer:'ABB', model:'MVS-3150kVA / Trafostar', component:'LV Bushing Copper Palm', conn:'Busbar', bolt:'M16', torque:'85 Nm', notes:'Belleville washer + copper paste mandatory.', status:'Reference' },
-    { type:'Transformer', manufacturer:'ABB', model:'MVS-3150kVA', component:'HV Terminal Bolt', conn:'Busbar', bolt:'M20', torque:'150 Nm', notes:'Licensed HV electrician only. Torque in 3 passes.', status:'Reference' },
-    { type:'Transformer', manufacturer:'Siemens / Hitachi', model:'Pad-mount utility', component:'LV Output Lug', conn:'Lug', bolt:'M12', torque:'55–65 Nm', notes:'', status:'Sample' },
-    { type:'Transformer', manufacturer:'Howard / CG Power', model:'Dry-type / oil-filled', component:'LV Busbar Connection', conn:'Busbar', bolt:'M16', torque:'80–90 Nm', notes:'Verify with transformer nameplate or OEM docs.', status:'Sample' },
+    { type:'Transformer', manufacturer:'ABB', model:'MVS-3150kVA / Trafostar', component:'LV Bushing Copper Palm', conn:'Busbar', bolt:'M16', torque:'85 Nm', notes:'Belleville washer + copper paste mandatory.', source:'Estimate based on M16 Gr 8.8 (ISO 898-1 = 210 Nm max). ABB MVS IOM must be consulted.', status:'OEM Estimate' },
+    { type:'Transformer', manufacturer:'ABB', model:'MVS-3150kVA', component:'HV Terminal Bolt', conn:'Busbar', bolt:'M20', torque:'150 Nm', notes:'Licensed HV electrician only. Torque in 3 passes.', source:'Estimate only. ALWAYS defer to ABB transformer nameplate and IOM.', status:'OEM Estimate' },
+    { type:'Transformer', manufacturer:'Siemens / Hitachi', model:'Pad-mount utility', component:'LV Output Lug', conn:'Lug', bolt:'M12', torque:'55–65 Nm', notes:'Verify with transformer nameplate.', source:'Estimate based on M12 Gr 8.8. Siemens pad-mount IOM required.', status:'OEM Estimate' },
+    { type:'Transformer', manufacturer:'Howard / CG Power', model:'Dry-type / oil-filled', component:'LV Busbar Connection', conn:'Busbar', bolt:'M16', torque:'80–90 Nm', notes:'Verify with transformer nameplate or OEM docs.', source:'Estimate only. Howard/CG Power IOM required.', status:'OEM Estimate' },
 
     // ── Combiner Box ───────────────────────────────
-    { type:'Combiner', manufacturer:'SolarBOS', model:'1500V DC Disconnect', component:'Main DC Output Lugs', conn:'Lug', bolt:'1/2 in', torque:'375 lb-in', notes:'Copper lug. Inspect for cold-flow at 1 yr.', status:'Sample' },
-    { type:'Combiner', manufacturer:'SolarBOS', model:'1500V String Combiner', component:'Fuse Holder Terminals', conn:'Lug', bolt:'M8', torque:'12–16 Nm', notes:'', status:'Reference' },
-    { type:'Combiner', manufacturer:'Bentek', model:'BC-1500 series', component:'AC Disconnect Bus', conn:'Busbar', bolt:'M10', torque:'28 Nm', notes:'', status:'Sample' },
-    { type:'Combiner', manufacturer:'Eaton / Cutler-Hammer', model:'PVMax combiner', component:'Circuit Breaker Lug', conn:'Lug', bolt:'M8', torque:'16 Nm', notes:'', status:'Sample' },
+    { type:'Combiner', manufacturer:'SolarBOS', model:'1500V DC Disconnect', component:'Main DC Output Lugs', conn:'Lug', bolt:'1/2 in', torque:'375 lb-in', notes:'Copper lug. Inspect for cold-flow at 1 yr.', source:'Estimate. SolarBOS installation guide required for site-specific model.', status:'OEM Estimate' },
+    { type:'Combiner', manufacturer:'SolarBOS', model:'1500V String Combiner', component:'Fuse Holder Terminals', conn:'Lug', bolt:'M8', torque:'12–16 Nm', notes:'Verify against fuse holder datasheet (e.g., Bussmann/Eaton).', source:'Standard range for M8 Gr 8.8 terminal lugs (ISO 898-1 basis)', status:'Standard Ref' },
+    { type:'Combiner', manufacturer:'Bentek', model:'BC-1500 series', component:'AC Disconnect Bus', conn:'Busbar', bolt:'M10', torque:'28 Nm', notes:'Confirm against Bentek IOM.', source:'Estimate only. Bentek installation documentation required.', status:'OEM Estimate' },
+    { type:'Combiner', manufacturer:'Eaton / Cutler-Hammer', model:'PVMax combiner', component:'Circuit Breaker Lug', conn:'Lug', bolt:'M8', torque:'16 Nm', notes:'', source:'Estimate. Eaton breaker catalog torque spec must be checked.', status:'OEM Estimate' },
 
     // ── Grounding / Bonding ─────────────────────────
-    { type:'Grounding', manufacturer:'Burndy', model:'GB26 / YA25', component:'Ground Grid Copper Bonding Clamp', conn:'Grounding/bonding', bolt:'3/8-16', torque:'240 lb-in', notes:'Exothermic or mechanical — verify drawing.', status:'Reference' },
-    { type:'Grounding', manufacturer:'Burndy', model:'YA2C12', component:'Copper Compression Lug to Ground Bar', conn:'Grounding/bonding', bolt:'1/2-13', torque:'360 lb-in', notes:'Two-hole lug: torque both bolts.', status:'Reference' },
-    { type:'Grounding', manufacturer:'Ilsco', model:'GCAB / GTC series', component:'C-Type Ground Clamp — Bare Cu to Steel', conn:'Grounding/bonding', bolt:'M10', torque:'25 Nm', notes:'', status:'Reference' },
-    { type:'Grounding', manufacturer:'Penn-Union', model:'BLS-B / BLL-B', component:'Bolted Lug to Ground Bus', conn:'Grounding/bonding', bolt:'M12', torque:'40 Nm', notes:'', status:'Reference' },
-    { type:'Grounding', manufacturer:'General', model:'Equipment grounding', component:'Module Frame Ground Screw', conn:'Grounding/bonding', bolt:'M6', torque:'6–8 Nm', notes:'Stainless fastener. Do not strip thread.', status:'Reference' },
+    { type:'Grounding', manufacturer:'Burndy', model:'GB26 / YA25', component:'Ground Grid Copper Bonding Clamp', conn:'Grounding/bonding', bolt:'3/8-16', torque:'240 lb-in', notes:'Exothermic vs. mechanical — verify drawing.', source:'Burndy Engineering Data Book / catalog torque tables.', status:'Standard Ref' },
+    { type:'Grounding', manufacturer:'Burndy', model:'YA2C12', component:'Copper Compression Lug to Ground Bar', conn:'Grounding/bonding', bolt:'1/2-13', torque:'360 lb-in', notes:'Two-hole lug: torque both bolts.', source:'Burndy lug catalog — YA-series torque spec table.', status:'Standard Ref' },
+    { type:'Grounding', manufacturer:'Ilsco', model:'GCAB / GTC series', component:'C-Type Ground Clamp — Bare Cu to Steel', conn:'Grounding/bonding', bolt:'M10', torque:'25 Nm', notes:'', source:'Estimate based on M10 Gr 4.8 clamp bolt. Verify vs. Ilsco catalog.', status:'OEM Estimate' },
+    { type:'Grounding', manufacturer:'Penn-Union', model:'BLS-B / BLL-B', component:'Bolted Lug to Ground Bus', conn:'Grounding/bonding', bolt:'M12', torque:'40 Nm', notes:'', source:'Estimate based on M12 Gr 8.8 (conservative). Verify vs. Penn-Union catalog.', status:'OEM Estimate' },
+    { type:'Grounding', manufacturer:'General', model:'Equipment grounding', component:'Module Frame Ground Screw', conn:'Grounding/bonding', bolt:'M6', torque:'6–8 Nm', notes:'Stainless fastener. Do not strip thread.', source:'ISO 898-1 / industry practice for M6 self-tapping to aluminum frame.', status:'Standard Ref' },
 
     // ── Tracker / Structure ────────────────────────
-    { type:'Tracker', manufacturer:'Nextracker', model:'NX Horizon', component:'Torque Tube Splice Bolt', conn:'Mechanical fastener', bolt:'M16', torque:'160–175 Nm', notes:'Grade 8.8 galvanized. Dry threads.', status:'Sample' },
-    { type:'Tracker', manufacturer:'GameChange Solar', model:'Genius Tracker', component:'Drive Coupler Bolt', conn:'Mechanical fastener', bolt:'5/8-11', torque:'150 lb-ft', notes:'', status:'Sample' },
-    { type:'Tracker', manufacturer:'Array Technologies', model:'DuraTrack HZ v3', component:'Module Clamp Bolt (top)', conn:'Mechanical fastener', bolt:'M8', torque:'18 Nm', notes:'Use thread-lock if wind zone ≥ 110 mph.', status:'Sample' },
-    { type:'Tracker', manufacturer:'Arctech Solar', model:'SkyLine / SkySmart', component:'Beam-to-Pile Bolt', conn:'Mechanical fastener', bolt:'M20', torque:'280–300 Nm', notes:'Grade 10.9. Use calibrated impact gun.', status:'Sample' },
-    { type:'Tracker', manufacturer:'General', model:'Fixed tilt / ground mount', component:'Racking Purlin Bolt', conn:'Mechanical fastener', bolt:'M12', torque:'55–65 Nm', notes:'Grade 8.8 HDG. Confirm with structural EOR.', status:'Reference' },
+    { type:'Tracker', manufacturer:'Nextracker', model:'NX Horizon', component:'Torque Tube Splice Bolt', conn:'Mechanical fastener', bolt:'M16', torque:'160–175 Nm', notes:'Grade 8.8 galvanized. Dry threads assumed.', source:'Estimate based on ISO 898-1 M16 Gr 8.8 (210 Nm max). NX Horizon IOM required.', status:'OEM Estimate' },
+    { type:'Tracker', manufacturer:'GameChange Solar', model:'Genius Tracker', component:'Drive Coupler Bolt', conn:'Mechanical fastener', bolt:'5/8-11', torque:'150 lb-ft', notes:'', source:'Estimate based on SAE Gr 5 (5/8" = 120 lb-ft) / Gr 8 (180 lb-ft). GameChange IOM required.', status:'OEM Estimate' },
+    { type:'Tracker', manufacturer:'Array Technologies', model:'DuraTrack HZ v3', component:'Module Clamp Bolt (top)', conn:'Mechanical fastener', bolt:'M8', torque:'18 Nm', notes:'Use thread-lock if wind zone ≥ 110 mph.', source:'Estimate. Array Technologies DuraTrack IOM must be consulted.', status:'OEM Estimate' },
+    { type:'Tracker', manufacturer:'Arctech Solar', model:'SkyLine / SkySmart', component:'Beam-to-Pile Bolt', conn:'Mechanical fastener', bolt:'M20', torque:'280–300 Nm', notes:'Grade 10.9. Use calibrated impact gun.', source:'Estimate based on ISO 898-1 M20 Gr 10.9 (580 Nm max). Arctech IOM required.', status:'OEM Estimate' },
+    { type:'Tracker', manufacturer:'General', model:'Fixed tilt / ground mount', component:'Racking Purlin Bolt', conn:'Mechanical fastener', bolt:'M12', torque:'55–65 Nm', notes:'Grade 8.8 HDG. Confirm with structural EOR.', source:'ISO 898-1 (M12 Gr 8.8 dry = 86 Nm max; 55–65 Nm is typical for HDG fasteners).', status:'Standard Ref' },
 
     // ── PV Module ──────────────────────────────────
-    { type:'Module', manufacturer:'General', model:'All crystalline modules', component:'Module Clamp to Rail', conn:'Mechanical fastener', bolt:'M8', torque:'16–20 Nm', notes:'Mid and end clamps. Verify OEM spec per watt class.', status:'Reference' },
-    { type:'Module', manufacturer:'General', model:'All crystalline modules', component:'Rail Splice Coupler Bolt', conn:'Mechanical fastener', bolt:'M8', torque:'12–15 Nm', notes:'', status:'Reference' },
-    { type:'Module', manufacturer:'General', model:'Framed modules (all)', component:'Grounding Washer to Frame', conn:'Grounding/bonding', bolt:'M6', torque:'6 Nm', notes:'Ensure bare metal-to-metal contact.', status:'Reference' },
+    { type:'Module', manufacturer:'General', model:'All crystalline modules', component:'Module Clamp to Rail', conn:'Mechanical fastener', bolt:'M8', torque:'16–20 Nm', notes:'Mid and end clamps. Verify per module OEM spec.', source:'ISO 898-1 M8 Gr 8.8 basis; typical range published by racking OEMs (Unirac, IronRidge, etc.)', status:'Standard Ref' },
+    { type:'Module', manufacturer:'General', model:'All crystalline modules', component:'Rail Splice Coupler Bolt', conn:'Mechanical fastener', bolt:'M8', torque:'12–15 Nm', notes:'', source:'Typical racking OEM guidance (conservative for splice joint).', status:'Standard Ref' },
+    { type:'Module', manufacturer:'General', model:'Framed modules (all)', component:'Grounding Washer to Frame', conn:'Grounding/bonding', bolt:'M6', torque:'6 Nm', notes:'Ensure bare metal-to-metal contact.', source:'Industry standard for M6 grounding to aluminum module frame.', status:'Standard Ref' },
   ];
 
   function buildEquipmentRow(row) {
-    const statusClass = row.status === 'Reference' ? 'badge-std' : row.status === 'Verified' ? 'badge-std' : 'badge-warn';
-    return `<tr data-type="${row.type}" data-search="${[row.type,row.manufacturer,row.model,row.component,row.conn,row.bolt,row.torque,row.notes].join(' ').toLowerCase()}">
+    const statusMap = {
+      'Standard Ref':   { cls: 'badge-ref',  icon: 'fa-check-circle' },
+      'OEM Estimate':   { cls: 'badge-warn', icon: 'fa-exclamation-circle' },
+      'Field Verified': { cls: 'badge-std',  icon: 'fa-shield-alt' },
+    };
+    const s = statusMap[row.status] || { cls: 'badge-gray', icon: 'fa-circle' };
+    const sourceShort = row.source ? (row.source.length > 55 ? row.source.slice(0,55)+'…' : row.source) : '—';
+    return `<tr data-type="${row.type}" data-search="${[row.type,row.manufacturer,row.model,row.component,row.conn,row.bolt,row.torque,row.notes,row.source||''].join(' ').toLowerCase()}">
       <td><span class="equip-label">${row.type}</span></td>
       <td><span style="font-weight:600;">${row.manufacturer}</span><br><span class="equip-sub">${row.model}</span></td>
       <td><span class="comp-label">${row.component}</span><br><span class="comp-type">${row.conn}</span></td>
       <td style="font-family:monospace; font-weight:600; color:#374151;">${row.bolt}</td>
       <td><span class="torque-val">${row.torque}</span></td>
       <td style="font-size:0.78rem; color:#64748b; max-width:180px;">${row.notes || '—'}</td>
-      <td><span class="badge ${statusClass}">${row.status}</span></td>
+      <td style="font-size:0.75rem; color:#475569; max-width:180px;" title="${(row.source||'').replace(/"/g,"'")}"><i class="fas fa-file-alt" style="color:#94a3b8; margin-right:3px;"></i>${sourceShort}</td>
+      <td><span class="badge ${s.cls}"><i class="fas ${s.icon}" style="margin-right:3px; font-size:0.65rem;"></i>${row.status}</span></td>
     </tr>`;
   }
 
