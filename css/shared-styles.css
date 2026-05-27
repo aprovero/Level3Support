@@ -2257,4 +2257,28 @@ button:disabled, .submit-button:disabled {
     text-decoration: underline;
 }
 
+/* Standardized Mobile Footer Styles */
+@media (max-width: 768px) {
+    .footer, .main-footer {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding: 1.25rem 1rem !important;
+        margin: 2rem auto 1rem auto !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+        max-width: calc(100% - 20px) !important;
+        box-sizing: border-box !important;
+        border-radius: 8px !important;
+    }
+    .footer-text, .footer p {
+        text-align: center !important;
+        margin-bottom: 0.25rem !important;
+    }
+    .footer-logo, .powered-by-wrapper {
+        margin-top: 0.25rem !important;
+        justify-content: center !important;
+    }
+}
+
 
