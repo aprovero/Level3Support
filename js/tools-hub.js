@@ -694,10 +694,11 @@ function renderHomeView() {
         favGrid.innerHTML = '';
         const starredList = allTools.filter(t => favoriteTools.includes(t.id));
         
+        const favSection = document.getElementById('favorites-section');
         if (starredList.length === 0) {
-            favEmpty.style.display = 'block';
-            favGrid.style.display = 'none';
+            if (favSection) favSection.style.display = 'none';
         } else {
+            if (favSection) favSection.style.display = 'block';
             favEmpty.style.display = 'none';
             favGrid.style.display = 'grid';
             starredList.forEach(tool => {
