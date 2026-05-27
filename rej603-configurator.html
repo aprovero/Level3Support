@@ -11,8 +11,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <!-- Portal frame styles -->
-    <link href="css/shared-styles.css?v=19" rel="stylesheet">
-    <link href="css/rej603-configurator.css?v=19" rel="stylesheet">
+    <link href="css/shared-styles.css?v=24" rel="stylesheet">
+    <link href="css/rej603-configurator.css?v=24" rel="stylesheet">
 
     <style>
         .placeholder-container {
@@ -148,58 +148,72 @@
                         <div class="card-title"><i class="fas fa-edit"></i> Basic Settings</div>
                     
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Transformer Current (Is):</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW1 (1-4)</div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="number" id="transformerCurrent" min="8" max="448" step="1" placeholder="8A min - 448A max" style="flex: 1; max-width: 300px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Transformer Current (Is):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW1 (1-4)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                            <input type="number" id="transformerCurrent" min="8" max="448" step="1" placeholder="8A min - 448A max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">A</span>
                         </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Earth Fault Measurement (Io>):</label>
-                        <div style="display: flex; gap: 15px; align-items: center;">
-                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
-                                <input type="radio" name="earthFault" value="internal" checked style="accent-color: var(--primary-color);"> Internal
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Earth Fault Measurement (Io>):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW1-5</span>
+                        </div>
+                        <div style="display: flex; gap: 15px; align-items: center; width: 100%; max-width: 250px;">
+                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
+                                <input type="radio" name="earthFault" value="internal" checked style="accent-color: var(--primary-color); margin: 0;"> Internal
                             </label>
-                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
-                                <input type="radio" name="earthFault" value="external" style="accent-color: var(--primary-color);"> External
+                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
+                                <input type="radio" name="earthFault" value="external" style="accent-color: var(--primary-color); margin: 0;"> External
                             </label>
                         </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">HMI:</label>
-                        <div style="display: flex; gap: 15px; align-items: center;">
-                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
-                                <input type="radio" name="hmi" value="disabled" checked style="accent-color: var(--primary-color);"> No (DIP switches only)
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">HMI:</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW1-6</span>
+                        </div>
+                        <div style="display: flex; gap: 15px; align-items: center; width: 100%; max-width: 250px;">
+                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
+                                <input type="radio" name="hmi" value="disabled" checked style="accent-color: var(--primary-color); margin: 0;"> No (DIP switches only)
                             </label>
-                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
-                                <input type="radio" name="hmi" value="enabled" style="accent-color: var(--primary-color);"> Yes (DIP + HMI fine)
+                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
+                                <input type="radio" name="hmi" value="enabled" style="accent-color: var(--primary-color); margin: 0;"> Yes (DIP + HMI fine)
                             </label>
                         </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Frequency (Fn):</label>
-                        <div style="display: flex; gap: 15px; align-items: center;">
-                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
-                                <input type="radio" name="frequency" value="50Hz" style="accent-color: var(--primary-color);"> 50 Hz
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Frequency (Fn):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW1-7</span>
+                        </div>
+                        <div style="display: flex; gap: 15px; align-items: center; width: 100%; max-width: 250px;">
+                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
+                                <input type="radio" name="frequency" value="50Hz" style="accent-color: var(--primary-color); margin: 0;"> 50 Hz
                             </label>
-                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
-                                <input type="radio" name="frequency" value="60Hz" checked style="accent-color: var(--primary-color);"> 60 Hz
+                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
+                                <input type="radio" name="frequency" value="60Hz" checked style="accent-color: var(--primary-color); margin: 0;"> 60 Hz
                             </label>
                         </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Failsafe (Fs):</label>
-                        <div style="display: flex; gap: 15px; align-items: center;">
-                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
-                                <input type="radio" name="failsafe" value="disabled" style="accent-color: var(--primary-color);"> Disable
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Failsafe (Fs):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW1-8</span>
+                        </div>
+                        <div style="display: flex; gap: 15px; align-items: center; width: 100%; max-width: 250px;">
+                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
+                                <input type="radio" name="failsafe" value="disabled" style="accent-color: var(--primary-color); margin: 0;"> Disable
                             </label>
-                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px;">
-                                <input type="radio" name="failsafe" value="enabled" checked style="accent-color: var(--primary-color);"> Enable
+                            <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
+                                <input type="radio" name="failsafe" value="enabled" checked style="accent-color: var(--primary-color); margin: 0;"> Enable
                             </label>
                         </div>
                     </div>
@@ -211,52 +225,64 @@
                         <div class="card-title"><i class="fas fa-wave-square"></i> Phase Overcurrent Protection (50/51)</div>
                     
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51 - Pickup Current (I>):</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW3 (1-5)</div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="number" id="phasePickup51" min="0.9" max="2.5" step="0.05" placeholder="0.9min - 2.5max" style="flex: 1; max-width: 300px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
-                            <span style="color: #475569; font-weight: 600; font-size: 14px;">× In</span>
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 51 - Pickup Current (I>):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW3 (1-5)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                            <input type="number" id="phasePickup51" min="0.9" max="2.5" step="0.05" placeholder="0.9min - 2.5max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
+                            <span style="color: #475569; font-weight: 600; font-size: 14px;">&times; In</span>
                         </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51 - Curve Type:</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW3 (6-8)</div>
-                        <select id="phaseCurve51" style="width: 100%; max-width: 320px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #ffffff;">
-                            <option value="NI" selected>Normal Inverse - standard feeder protection</option>
-                            <option value="VI">Very Inverse - faster at high fault current</option>
-                            <option value="EI">Extremely Inverse - coordinates tightly with fuses</option>
-                            <option value="LI">Long-time Inverse - slowest curve, protects cables</option>
-                            <option value="RI">RI-type Inverse - legacy reset-inverse retrofits</option>
-                            <option value="HR">HR-type Fuse - matches high-rupture fuse shape</option>
-                            <option value="FR">FR-type Fuse - matches fast-acting fuse profiles</option>
-                            <option value="DMT">Definite Minimum Time - flat fixed time</option>
-                        </select>
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 51 - Curve Type:</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW3 (6-8)</span>
+                        </div>
+                        <div style="width: 100%; max-width: 250px;">
+                            <select id="phaseCurve51" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #ffffff;">
+                                <option value="NI" selected>Normal Inverse - standard protection</option>
+                                <option value="VI">Very Inverse - fast at high currents</option>
+                                <option value="EI">Extremely Inverse - coordinates fuses</option>
+                                <option value="LI">Long-time Inverse - slowest curve</option>
+                                <option value="RI">RI-type Inverse - legacy reset</option>
+                                <option value="HR">HR-type Fuse - fuse shape</option>
+                                <option value="FR">FR-type Fuse - fast profiles</option>
+                                <option value="DMT">Definite Minimum Time - fixed time</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51 - Time Constant (t>):</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW2 (1-4)</div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="number" id="phaseTime51" min="0.05" max="3" step="0.05" placeholder="0.05min - 3max" style="flex: 1; max-width: 300px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 51 - Time Constant (t>):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW2 (1-4)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                            <input type="number" id="phaseTime51" min="0.05" max="3" step="0.05" placeholder="0.05min - 3max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">s</span>
                         </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 50 - Pickup Current (I>>):</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW5 (1-4)</div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="number" id="phasePickup50" min="1" max="20" step="0.1" placeholder="1min - 20max" style="flex: 1; max-width: 300px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
-                            <span style="color: #475569; font-weight: 600; font-size: 14px;">× In</span>
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 50 - Pickup Current (I>>):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW5 (1-4)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                            <input type="number" id="phasePickup50" min="1" max="20" step="0.1" placeholder="1min - 20max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
+                            <span style="color: #475569; font-weight: 600; font-size: 14px;">&times; In</span>
                         </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 50 - Definite Time (t>>):</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW5 (5-8)</div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="number" id="phaseTime50" min="0.04" max="3" step="0.01" placeholder="0.04min - 3max" style="flex: 1; max-width: 300px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 50 - Definite Time (t>>):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW5 (5-8)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                            <input type="number" id="phaseTime50" min="0.04" max="3" step="0.01" placeholder="0.04min - 3max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">s</span>
                         </div>
                     </div>
@@ -268,52 +294,64 @@
                         <div class="card-title"><i class="fas fa-globe"></i> Earth Fault Protection (50N/51N)</div>
                     
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51N - Pickup Current (Io>):</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW4 (1-5)</div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="number" id="earthPickup51N" min="0.1" max="1.0" step="0.025" placeholder="0.1min - 1.0max" style="flex: 1; max-width: 300px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
-                            <span style="color: #475569; font-weight: 600; font-size: 14px;">× Is</span>
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 51N - Pickup Current (Io>):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW4 (1-5)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                            <input type="number" id="earthPickup51N" min="0.1" max="1.0" step="0.025" placeholder="0.1min - 1.0max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
+                            <span style="color: #475569; font-weight: 600; font-size: 14px;">&times; Is</span>
                         </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51N - Curve Type:</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW4 (6-8)</div>
-                        <select id="earthCurve51N" style="width: 100%; max-width: 320px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #ffffff;">
-                            <option value="NI" selected>Normal Inverse - standard feeder protection</option>
-                            <option value="VI">Very Inverse - faster at high fault current</option>
-                            <option value="EI">Extremely Inverse - coordinates tightly with fuses</option>
-                            <option value="LI">Long-time Inverse - slowest curve, protects cables</option>
-                            <option value="RI">RI-type Inverse - legacy reset-inverse shape</option>
-                            <option value="HR">HR-type Fuse - matches high-rupture fuse shape</option>
-                            <option value="FR">FR-type Fuse - matches fast-acting fuse profile</option>
-                            <option value="DMT">Definite Minimum Time - flat fixed time</option>
-                        </select>
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 51N - Curve Type:</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW4 (6-8)</span>
+                        </div>
+                        <div style="width: 100%; max-width: 250px;">
+                            <select id="earthCurve51N" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #ffffff;">
+                                <option value="NI" selected>Normal Inverse - standard protection</option>
+                                <option value="VI">Very Inverse - fast at high currents</option>
+                                <option value="EI">Extremely Inverse - coordinates fuses</option>
+                                <option value="LI">Long-time Inverse - slowest curve</option>
+                                <option value="RI">RI-type Inverse - legacy reset shape</option>
+                                <option value="HR">HR-type Fuse - fuse shape</option>
+                                <option value="FR">FR-type Fuse - fast profiles</option>
+                                <option value="DMT">Definite Minimum Time - fixed time</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 51N - Time Constant (to>):</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW2 (5-8)</div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="number" id="earthTime51N" min="0.05" max="3" step="0.05" placeholder="0.05min - 3max" style="flex: 1; max-width: 300px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 51N - Time Constant (to>):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW2 (5-8)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                            <input type="number" id="earthTime51N" min="0.05" max="3" step="0.05" placeholder="0.05min - 3max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">s</span>
                         </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 50N - Pickup Current (Io>>):</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW6 (1-4)</div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="number" id="earthPickup50N" min="1" max="20" step="0.01" placeholder="1min - 20max" style="flex: 1; max-width: 300px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
-                            <span style="color: #475569; font-weight: 600; font-size: 14px;">× Is</span>
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 50N - Pickup Current (Io>>):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW6 (1-4)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                            <input type="number" id="earthPickup50N" min="1" max="20" step="0.01" placeholder="1min - 20max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
+                            <span style="color: #475569; font-weight: 600; font-size: 14px;">&times; Is</span>
                         </div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 6px; display:block;">Function 50N - Definite Time (to>>):</label>
-                        <div style="color: #64748b; font-size: 0.75rem; font-style: italic; margin-bottom: 8px;">SW6 (5-8)</div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="number" id="earthTime50N" min="0.04" max="3" step="0.01" placeholder="0.04min - 3max" style="flex: 1; max-width: 300px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 50N - Definite Time (to>>):</label>
+                            <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW6 (5-8)</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                            <input type="number" id="earthTime50N" min="0.04" max="3" step="0.01" placeholder="0.04min - 3max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">s</span>
                         </div>
                     </div>
