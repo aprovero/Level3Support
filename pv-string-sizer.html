@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PV String Sizer & VOC Calculator — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 850px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-pass { background: #dcfce7; color: #15803d; }
+    .status-warn { background: #fef3c7; color: #92400e; }
+    .status-fail { background: #fee2e2; color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ PV CALCULATOR</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety & Professional Use Disclaimer</div>
+        This is a preliminary string sizing calculator. Final engineering designs must strictly follow approved project documents, manufacturer module/inverter datasheets, local electrical codes (NEC/IEC), site extreme weather data, and site-specific engineering procedures. This tool does not check current limits, fuse sizing, wire sizing, clipping, or inverter-specific array rules.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">PV String Sizer & VOC Calculator</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Calculate temperature-adjusted PV string voltages at extreme conditions and verify configurations against inverter DC input and MPPT voltage windows.
+    </p>
+
+    <!-- Form Section -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="project-name">Project / Site Name <span style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">(Optional)</span></label>
+          <input type="text" id="project-name" placeholder="e.g. Desert Star PV">
+        </div>
+        <div class="input-group">
+          <label for="module-model">PV Module Model <span style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">(Optional)</span></label>
+          <input type="text" id="module-model" placeholder="e.g. Premium 550W Bifacial">
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Module STC Specifications</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="module-voc">Module Open-Circuit Voltage (Voc) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="module-voc" placeholder="e.g. 49.5" step="any" required>
+            <div class="input-unit">V</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="module-vmp">Module Max Power Voltage (Vmp) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="module-vmp" placeholder="e.g. 41.5" step="any" required>
+            <div class="input-unit">V</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="module-isc">Module Short-Circuit Current (Isc) <span style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">(Optional)</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="module-isc" placeholder="e.g. 13.5" step="any">
+            <div class="input-unit">A</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="module-imp">Module Max Power Current (Imp) <span style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">(Optional)</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="module-imp" placeholder="e.g. 12.8" step="any">
+            <div class="input-unit">A</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="voc-coeff">Voc Temp Coefficient (&beta;) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="voc-coeff" placeholder="e.g. -0.27" step="any" required>
+            <div class="input-unit">%/°C</div>
+          </div>
+          <div class="field-note">Negative values are allowed (e.g. -0.27).</div>
+        </div>
+        <div class="input-group">
+          <label for="vmp-coeff">Vmp Temp Coefficient (&gamma;) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="vmp-coeff" placeholder="e.g. -0.35" step="any" required>
+            <div class="input-unit">%/°C</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Extreme Ambient Site Temperatures</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="temp-min">Minimum Expected Cell Temp <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-min" placeholder="e.g. -10" step="any" required>
+            <div class="input-unit">°C</div>
+          </div>
+          <div class="field-note">Extreme cold condition (often ambient or ambient minus margin).</div>
+        </div>
+        <div class="input-group">
+          <label for="temp-max">Maximum Expected Cell Temp <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-max" placeholder="e.g. 70" step="any" required>
+            <div class="input-unit">°C</div>
+          </div>
+          <div class="field-note">Extreme hot condition (e.g. ambient + 25°C or 30°C solar gain).</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Inverter Electrical DC Constraints</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="inv-vmax">Inverter Max DC Input Voltage <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="inv-vmax" placeholder="e.g. 1500" step="any" required>
+            <div class="input-unit">V</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="inv-mppt-min">Inverter Min MPPT Voltage <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="inv-mppt-min" placeholder="e.g. 600" step="any" required>
+            <div class="input-unit">V</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="inv-mppt-max">Inverter Max MPPT Voltage <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="inv-mppt-max" placeholder="e.g. 1400" step="any" required>
+            <div class="input-unit">V</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="series-modules">Proposed Modules in Series <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="series-modules" placeholder="e.g. 26" step="1" min="1" required>
+            <div class="input-unit">modules</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="sizing-notes">DC Array / Sizing Notes <span style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">(Optional)</span></label>
+        <textarea id="sizing-notes" placeholder="Specify any site variables, combiner groups, or inverter configs..."></textarea>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <div style="display:flex; gap:8px;">
+          <button id="sample-btn" class="button-secondary" style="margin-top:0;"><i class="fas fa-magic"></i> Load Sample</button>
+          <button id="calculate-btn" style="flex:1; margin-top:0;"><i class="fas fa-calculator"></i> Sizer Calculation</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Panel -->
+    <div id="result-panel" class="result-panel" style="display: none; margin-top: 24px;">
+      <div class="result-header">
+        <span>Sizing Assessment Summary</span>
+        <span id="overall-status-badge" class="status-badge-inline status-pass">Acceptable</span>
+      </div>
+
+      <div class="result-row">
+        <span>Cold Cell Temperature module adjusted Voc:</span>
+        <span id="res-module-voc-cold" style="font-weight: 700;">-- V</span>
+      </div>
+      <div class="result-row">
+        <span>Hot Cell Temperature module adjusted Vmp:</span>
+        <span id="res-module-vmp-hot" style="font-weight: 700;">-- V</span>
+      </div>
+      <div class="result-row">
+        <span><strong>String Voc at Minimum Temperature:</strong></span>
+        <span id="res-string-voc-cold" style="font-weight: 700;">-- V</span>
+      </div>
+      <div class="result-row">
+        <span><strong>String Vmp at Maximum Temperature:</strong></span>
+        <span id="res-string-vmp-hot" style="font-weight: 700;">-- V</span>
+      </div>
+      <div class="result-row">
+        <span>String Max DC Voltage limit check:</span>
+        <span id="res-limit-vmax-check" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>String MPPT Voltage range check:</span>
+        <span id="res-limit-mppt-check" style="font-weight: 600;">--</span>
+      </div>
+
+      <h3 style="margin-top: 16px; margin-bottom: 12px; font-family:'Outfit'; font-size:1.1rem; border-top: 1px solid var(--border-color); padding-top:14px;">Calculated String Configurations</h3>
+      
+      <div class="result-row">
+        <span>Max Modules per String by Inverter Max DC Voltage:</span>
+        <span id="res-est-max-voc" style="font-weight: 700; color: var(--primary-color);">-- modules</span>
+      </div>
+      <div class="result-row">
+        <span>Min Modules per String by Inverter Min MPPT Window:</span>
+        <span id="res-est-min-vmp" style="font-weight: 700;">-- modules</span>
+      </div>
+      <div class="result-row">
+        <span>Max Modules per String by Inverter Max MPPT Window:</span>
+        <span id="res-est-max-mppt" style="font-weight: 700;">-- modules</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Summary</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px;">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions & Formulas</div>
+      <ul class="assumptions-list">
+        <li>Adjusted Module Voc at $T_{min}$ = $Voc_{STC} \times [1 + \frac{\beta}{100} \times (T_{min} - 25)]$.</li>
+        <li>Adjusted Module Vmp at $T_{max}$ = $Vmp_{STC} \times [1 + \frac{\gamma}{100} \times (T_{max} - 25)]$.</li>
+        <li>String extreme Voc = Module adjusted Voc $\times$ Proposed Modules in Series.</li>
+        <li>String extreme Vmp = Module adjusted Vmp $\times$ Proposed Modules in Series.</li>
+        <li>Max modules by cold Voc = $\lfloor \text{Inverter Max DC Input Voltage} / \text{Module adjusted Voc} \rfloor$.</li>
+        <li>Min modules by hot Vmp = $\lceil \text{Inverter Min MPPT Voltage} / \text{Module adjusted Vmp} \rceil$.</li>
+        <li>Max modules by hot Vmp & MPPT Max = $\lfloor \text{Inverter Max MPPT Voltage} / \text{Module adjusted Vmp} \rfloor$.</li>
+        <li>STC cell temperature baseline is fixed at 25°C per international solar standard testing.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.75';">
+        </div>
+    </footer>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/pv-string-sizer.js"></script>
+</body>
+</html>

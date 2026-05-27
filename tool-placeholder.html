@@ -627,6 +627,22 @@
         const urlParams = new URLSearchParams(window.location.search);
         const toolKey = urlParams.get('tool');
 
+        // Redirect mapped completed tools to their dedicated pages to ensure backwards-compatibility
+        const completedRedirects = {
+            'pv-string-sizer': 'pv-string-sizer.html',
+            'bess-cable-sizer': 'bess-cable-sizer.html',
+            'pv-megger-tester': 'pv-megger-tester.html',
+            'bess-cell-imbalance': 'bess-cell-imbalance.html',
+            'ttr-form': 'ttr-form.html',
+            'loto-checklist': 'loto-checklist.html',
+            'arc-flash': 'arc-flash.html',
+            'daily-progress': 'daily-progress.html'
+        };
+
+        if (toolKey && completedRedirects[toolKey]) {
+            window.location.replace(completedRedirects[toolKey]);
+        }
+
         if (toolKey && toolsContext[toolKey]) {
             const context = toolsContext[toolKey];
             document.getElementById('tool-name').innerText = context.name;

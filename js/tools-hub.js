@@ -47,13 +47,16 @@ const WORKFLOW_PACKS = [
         tags: ["Solar PV", "Commissioning"],
         tools: [
             { name: "Inverter Start-Up Checklist", route: "inverter-startup.html", desc: "Structured digital checklist for visual and electrical checks." },
+            { name: "PV String Sizer & VOC Calculator", route: "pv-string-sizer.html", desc: "Verify panel temperatures and maximum series string count." },
             { name: "DC Voltage Sanity Check Tool", route: "dc-voltage-sanity.html", desc: "Verify actual measured open circuit voltages." },
+            { name: "PV Insulation Resistance Tester", route: "pv-megger-tester.html", desc: "Log array insulation and dry Megger resistance checks." },
             { name: "String Current Imbalance Calculator", route: "string-imbalance.html", desc: "Compare solar string outputs against the group average." },
             { name: "IV Curve Test Result Log", route: "iv-curve-log.html", desc: "Log and catalog IV curve measurement outputs." },
             { name: "SG1+x Parameter Comparison Tool", route: "parameter-comparison.html", desc: "Validate that unit configurations match target parameters." },
             { name: "SCADA Tag QA/QC Checklist", route: "scada-tag-qaqc.html", desc: "Verify Modbus registers and historian tag scaling." },
             { name: "Fuse Derating Calculator", route: "fuse-derating-calculator.html", desc: "Verify continuous current and temperature derating factors." },
             { name: "Commissioning Punchlist Builder", route: "commissioning-punchlist.html", desc: "Build punchlist items for tracking corrections." },
+            { name: "Daily Commissioning Progress Report", route: "daily-progress.html", desc: "Generate structured daily field shift progress handovers." },
             { name: "Customer Site Visit Report Generator", route: "site-visit-report.html", desc: "Compile client-ready commissioning handovers." }
         ]
     },
@@ -63,14 +66,18 @@ const WORKFLOW_PACKS = [
         purpose: "Complete safety audits, rack inspection, energy capacity tests, and thermal verification for energy storage containers.",
         tags: ["BESS", "Testing", "Safety"],
         tools: [
+            { name: "LOTO Verification Checklist", route: "loto-checklist.html", desc: "Confirm lockout and energy isolations before energized tests." },
             { name: "BESS Pre-Energization Checklist", route: "bess-pre-energization.html", desc: "Verify isolation, grounding, and warning labels." },
+            { name: "BESS Cable Sizing Calculator", route: "bess-cable-sizer.html", desc: "Sanity check ampacity and voltage drop margins for BESS auxiliary feeds." },
             { name: "Battery Rack Container Inspection", route: "bess-rack-inspection.html", desc: "Audit container seal integrity, HVAC, and cell spreads." },
             { name: "BESS Capacity / Energy Test Form", route: "bess-capacity-test.html", desc: "Record charge/discharge cycles and calculate efficiency." },
+            { name: "BESS Cell Voltage Imbalance Calculator", route: "bess-cell-imbalance.html", desc: "Evaluate cell and module balancing distributions across battery racks." },
             { name: "Fuse Derating Calculator", route: "fuse-derating-calculator.html", desc: "Check auxiliary AC/DC and battery container circuit fuse margins." },
             { name: "Battery SOC Imbalance Analyzer", route: "battery-soc-imbalance-analyzer.html", desc: "Check battery rack state-of-charge balance spreads." },
             { name: "Battery Temperature Spread Analyzer", route: "battery-temperature-spread.html", desc: "Analyze thermal variations across racks." },
             { name: "HVAC Delta-T Calculator", route: "hvac-delta-t.html", desc: "Sanity check container heating and cooling efficiency." },
             { name: "Alarm / Fault Event Timeline Builder", route: "alarm-timeline.html", desc: "Compile alarm sequence logs to review startup faults." },
+            { name: "Daily Commissioning Progress Report", route: "daily-progress.html", desc: "Generate structured daily field shift progress handovers." },
             { name: "RCA Template Builder", route: "rca-template-builder.html", desc: "Draft a Root Cause Analysis for initial startup failures." }
         ]
     },
@@ -98,6 +105,7 @@ const WORKFLOW_PACKS = [
         tags: ["BESS", "O&M", "Thermal"],
         tools: [
             { name: "Battery Rack Container Inspection", route: "bess-rack-inspection.html", desc: "Check visual cell configurations and container setups." },
+            { name: "BESS Cell Voltage Imbalance Calculator", route: "bess-cell-imbalance.html", desc: "Evaluate cell and module balancing distributions across battery racks." },
             { name: "Battery SOC Imbalance Analyzer", route: "battery-soc-imbalance-analyzer.html", desc: "Locate specific cells causing string BMS faults." },
             { name: "Battery Temperature Spread Analyzer", route: "battery-temperature-spread.html", desc: "Pinpoint thermal hot pockets or fan blockages." },
             { name: "HVAC Delta-T Calculator", route: "hvac-delta-t.html", desc: "Check cooling capacity under high ambient temperatures." },
@@ -117,6 +125,8 @@ const WORKFLOW_PACKS = [
             { name: "Interactive Power Triangle Tool", route: "power-triangle.html", desc: "Visualize apparent, active, and reactive vectors." },
             { name: "Inverter Capability Curve Check", route: "inverter-capability-curve-check.html", desc: "Check operating points against power factor capability limits." },
             { name: "Grid Event Voltage/Freq Excursion Log", route: "grid-event-excursion-log.html", desc: "Track voltage / frequency excursions during PPC steps." },
+            { name: "Transformer Turns Ratio (TTR) Form", route: "ttr-form.html", desc: "Verify turns ratios and calculate winding deviation tolerances." },
+            { name: "PV Insulation Resistance Tester", route: "pv-megger-tester.html", desc: "Log array insulation and dry Megger resistance checks." },
             { name: "CT/PT Ratio Verification Tool", route: "electrical-test-forms.html?tool=ct-pt-ratio", desc: "Compare meter outputs against substation relay specs." },
             { name: "Relay Settings Checklist", route: "electrical-test-forms.html?tool=relay-checklist", desc: "Confirm setpoints have been properly loaded and validated." },
             { name: "ABB REJ603 Relay Configuration Tool", route: "rej603-configurator.html", desc: "Program, edit, and decode settings for REJ603 protection." },
@@ -158,8 +168,11 @@ const WORKFLOW_PACKS = [
         purpose: "Finalize field tests, track residual punchlist actions, draft Root Cause incident forms, and bundle customer packages.",
         tags: ["Closeout", "Reports"],
         tools: [
+            { name: "LOTO Verification Checklist", route: "loto-checklist.html", desc: "Confirm lockout and energy isolations before energized tests." },
+            { name: "Arc Flash Boundary Calculator", route: "arc-flash.html", desc: "Verify shock approach limits and necessary PPE safety wear." },
             { name: "Commissioning Punchlist Builder", route: "commissioning-punchlist.html", desc: "Export unresolved punchlist items for correction." },
             { name: "Corrective Action Tracker / CAPA Log", route: "capa-tracker.html", desc: "Log and assign corrective actions from tests." },
+            { name: "Daily Commissioning Progress Report", route: "daily-progress.html", desc: "Generate structured daily field shift progress handovers." },
             { name: "Customer Site Visit Report Generator", route: "site-visit-report.html", desc: "Compile comprehensive customer visit reports." },
             { name: "RCA Template Builder", route: "rca-template-builder.html", desc: "Assemble technical Root Cause Investigation templates." },
             { name: "Soiling Customer Report Generator", route: "soiling-customer-report.html", desc: "Generate custom panel clean reports." },

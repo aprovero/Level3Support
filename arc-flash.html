@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arc Flash Boundary Documentation Helper — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 850px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .input-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row, .input-row-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      align-items: center;
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .status-pass { background: #dcfce7; color: #15803d; }
+    .status-warn { background: #fef3c7; color: #92400e; }
+    .status-fail { background: #fee2e2; color: #b91c1c; }
+
+    /* PPE Placard style */
+    .ppe-placard {
+      border: 4px solid #f97316;
+      border-radius: var(--border-radius-md);
+      padding: 16px;
+      background: #fff;
+      margin-top: 16px;
+    }
+    .ppe-header {
+      background: #f97316;
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      text-align: center;
+      padding: 8px;
+      font-size: 1.3rem;
+      margin: -16px -16px 16px -16px;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">🛡 HSE & SAFETY</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-shield-alt"></i>
+      <div>
+        <div class="warning-title">Critical Safety & Non-Engineering Calculator Disclaimer</div>
+        This tool is a **Boundary & PPE Documentation Helper** for safety planning. It does NOT perform an engineering arc flash study, calculate incident energies from first principles, or replace certified IEEE 1584 / NFPA 70E short-circuit analysis. Always refer directly to approved plant arc flash labels and safety-critical documentation prior to energized work.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Arc Flash Boundary Calculator</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Log and summarize arc flash boundaries, PPE requirements, and shock protection thresholds from certified equipment labels for field risk assessments.
+    </p>
+
+    <!-- Form Section -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="site-name">Project / Site Name</label>
+          <input type="text" id="site-name" placeholder="e.g. Red Mesa Substation">
+        </div>
+        <div class="input-group">
+          <label for="eq-id">Equipment ID / Label Name <span class="required">*</span></label>
+          <input type="text" id="eq-id" placeholder="e.g. SWG-A (Main MV Switchgear)" required>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="eq-type">Equipment Type</label>
+          <select id="eq-type" style="width: 100%; height: 42px;">
+            <option value="Switchgear">Switchgear</option>
+            <option value="Inverter">Inverter</option>
+            <option value="Transformer">Transformer</option>
+            <option value="Combiner">Combiner</option>
+            <option value="MCC">MCC</option>
+            <option value="Panelboard">Panelboard</option>
+            <option value="BESS container">BESS container</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="nominal-voltage">Nominal Voltage (V) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="nominal-voltage" placeholder="e.g. 480" step="any" required>
+            <div class="input-unit">V</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="fault-current">Available Fault Current <span style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">(Optional Note)</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="fault-current" placeholder="e.g. 25" step="any">
+            <div class="input-unit">kA</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="clearing-time">Clearing Time <span style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">(Optional Note)</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="clearing-time" placeholder="e.g. 0.1" step="any">
+            <div class="input-unit">seconds</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Study Incident Energy & Boundaries</h3>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="incident-energy">Incident Energy (from approved study) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="incident-energy" placeholder="e.g. 4.2" step="any" required>
+            <div class="input-unit">cal/cm²</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="arc-boundary">Arc Flash Boundary (from approved study) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="arc-boundary" placeholder="e.g. 1.2" step="any" required>
+            <div class="input-unit">
+              <select id="boundary-unit" style="border: none; background: transparent; font-weight: 600; color: var(--text-secondary); width: auto;">
+                <option value="m">meters</option>
+                <option value="ft">feet</option>
+                <option value="inches">inches</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="limited-boundary">Limited Approach Boundary <span style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">(Optional)</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="limited-boundary" placeholder="e.g. 1.0" step="any">
+            <div class="input-unit">meters</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="restricted-boundary">Restricted Approach Boundary <span style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">(Optional)</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="restricted-boundary" placeholder="e.g. 0.3" step="any">
+            <div class="input-unit">meters</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">PPE & Safety Administration</h3>
+
+      <div class="input-row-3">
+        <div class="input-group">
+          <label for="ppe-category">PPE Category / Level <span class="required">*</span></label>
+          <select id="ppe-category" style="width: 100%; height: 42px;">
+            <option value="">-- Select Category --</option>
+            <option value="Category 1 (>= 1.2 and < 4 cal/cm²)">Category 1 (Min 4 cal/cm²)</option>
+            <option value="Category 2 (>= 4 and < 8 cal/cm²)" selected>Category 2 (Min 8 cal/cm²)</option>
+            <option value="Category 3 (>= 8 and < 25 cal/cm²)">Category 3 (Min 25 cal/cm²)</option>
+            <option value="Category 4 (>= 25 and < 40 cal/cm²)">Category 4 (Min 40 cal/cm²)</option>
+            <option value="Dangerous (>= 40 cal/cm² - Energized Work Prohibited)">DANGEROUS (>= 40 cal/cm²)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="permit-required">Energized Work Permit Required?</label>
+          <select id="permit-required" style="width: 100%; height: 42px;">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Review required">Review required</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="worker-task">Worker Core Task</label>
+          <input type="text" id="worker-task" placeholder="e.g. Voltage measurement" style="height:42px;">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="study-rev">Study Revision / Reference</label>
+          <input type="text" id="study-rev" placeholder="e.g. Rev 2.1">
+        </div>
+        <div class="input-group">
+          <label for="label-date">Label Print / Study Date</label>
+          <input type="date" id="label-date">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="safety-notes">Safety & PPE Notes</label>
+        <textarea id="safety-notes" placeholder="Verify standby technician is present, insulation gloves checked, full face shield required..."></textarea>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <div style="display:flex; gap:8px;">
+          <button id="sample-btn" class="button-secondary" style="margin-top:0;"><i class="fas fa-magic"></i> Load Sample</button>
+          <button id="calculate-btn" style="flex:1; margin-top:0;"><i class="fas fa-calculator"></i> Build Reference Card</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Panel -->
+    <div id="result-panel" class="result-panel" style="display: none; margin-top: 24px;">
+      <div class="result-header" style="background:#f97316;">
+        <span>Electrical Safety Reference Summary</span>
+        <span id="overall-status-badge" class="status-badge-inline status-pass">Approved Study Data</span>
+      </div>
+
+      <!-- PPE Placard -->
+      <div class="ppe-placard">
+        <div class="ppe-header" id="res-ppe-header">Category 2 Minimum</div>
+        <div class="result-row">
+          <span>Target Equipment ID:</span>
+          <span id="res-eq" style="font-weight: 700;">--</span>
+        </div>
+        <div class="result-row">
+          <span>System Voltage / Level:</span>
+          <span id="res-voltage" style="font-weight: 700;">--</span>
+        </div>
+        <div class="result-row">
+          <span><strong>Arc Flash boundary (Safety line):</strong></span>
+          <span id="res-boundary" style="font-weight: 700; color: #f97316; font-size: 1.1rem;">--</span>
+        </div>
+        <div class="result-row">
+          <span>Incident Energy at working distance:</span>
+          <span id="res-energy" style="font-weight: 700;">-- cal/cm²</span>
+        </div>
+        <div class="result-row">
+          <span>Shock Approach Boundaries:</span>
+          <span id="res-approach" style="font-weight: 600;">--</span>
+        </div>
+        <div class="result-row">
+          <span>Energized Work Permit Status:</span>
+          <span id="res-permit" style="font-weight: 700;">--</span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Safety Summary</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px;">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Safety Rules & Standards Reference</div>
+      <ul class="assumptions-list">
+        <li>PPE Category 1 requires arc-rated clothing of min **4 cal/cm²**.</li>
+        <li>PPE Category 2 requires arc-rated clothing of min **8 cal/cm²** along with arc-rated face shield or hood.</li>
+        <li>PPE Category 3 requires arc-rated hood system of min **25 cal/cm²**.</li>
+        <li>PPE Category 4 requires arc-rated hood system of min **40 cal/cm²**.</li>
+        <li>Any incident energy **>= 40 cal/cm²** is extremely dangerous; energized maintenance work is strictly prohibited under standard safety protocols.</li>
+      </ul>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.75';">
+        </div>
+    </footer>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/arc-flash.js"></script>
+</body>
+</html>

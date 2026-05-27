@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Commissioning Progress Report — Level3Support</title>
+  <link rel="stylesheet" href="css/shared-styles.css?v=15" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 1000px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .dynamic-table-wrapper {
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      overflow-x: auto;
+    }
+    .dynamic-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .dynamic-table th {
+      background: var(--background-dark);
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+    .dynamic-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .dynamic-table tr:last-child td { border-bottom: none; }
+    .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
+      margin-bottom: 0;
+      padding: 4px 8px;
+      height: 32px;
+      font-size: 0.82rem;
+    }
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-action {
+      width: auto;
+      min-height: unset;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      margin-top: 0;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .status-pass { background: #dcfce7; color: #15803d; }
+    .status-warn { background: #fef3c7; color: #92400e; }
+    .status-fail { background: #fee2e2; color: #b91c1c; }
+
+    @media print {
+      body { background: white; color: black; }
+      .calc-container { box-shadow: none; padding: 0; margin: 0; max-width: 100%; }
+      .back-link, .btn-row, .btn-add-row, td button, .print-hide { display: none !important; }
+      .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
+        border: none !important;
+        background: transparent !important;
+        pointer-events: none !important;
+        padding: 0 !important;
+      }
+      .dynamic-table th { background: #eee !important; color: black !important; }
+      .form-section { border: 1px solid #000 !important; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ REPORT TEMPLATE</div>
+    </div>
+
+    <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box print-hide" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Daily Commissioning Progress Guidelines</div>
+        Daily commissioning logs are formal, legally auditable progress reports. Maintain a professional, objective, and factual tone. Detail completed quantities precisely and log all safety checks, permit clearances, and engineering blockers cleanly.
+      </div>
+    </div>
+
+    <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">Daily Commissioning Progress Report</h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
+      Compile site status, testing metrics, blocker logs, safety notes, and shift handovers in a clean structured format ready to copy or export.
+    </p>
+
+    <!-- Header Section -->
+    <div class="form-section">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-file-invoice" style="color:var(--primary-color);"></i> 1. Report Header & Site Scope</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="site-name">Project / Site Name <span class="required">*</span></label>
+          <input type="text" id="site-name" placeholder="e.g. Red Mesa Solar" required>
+        </div>
+        <div class="input-group">
+          <label for="customer">Customer / Owner</label>
+          <input type="text" id="customer" placeholder="Customer name">
+        </div>
+        <div class="input-group">
+          <label for="report-date">Report Date <span class="required">*</span></label>
+          <input type="date" id="report-date" required>
+        </div>
+        <div class="input-group">
+          <label for="prepared-by">Prepared By <span class="required">*</span></label>
+          <input type="text" id="prepared-by" placeholder="Your name" required>
+        </div>
+      </div>
+      
+      <div class="input-row" style="margin-bottom:0;">
+        <div class="input-group" style="margin-bottom:0;">
+          <label for="supervisor">Site Supervisor</label>
+          <input type="text" id="supervisor" placeholder="Supervisor name" style="margin-bottom:0;">
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+          <label for="weather">Weather / Soil Conditions</label>
+          <input type="text" id="weather" placeholder="e.g. Dry, Sunny 32°C" style="margin-bottom:0;">
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+          <label for="crew-count">Crew Count</label>
+          <input type="number" id="crew-count" placeholder="Total workers" style="margin-bottom:0;">
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+          <label for="safety-meeting">Safety Meeting Completed?</label>
+          <select id="safety-meeting" style="margin-bottom:0; height:42px;">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="N/A">N/A</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Work Performed -->
+    <div class="form-section" style="margin-top: 20px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-toolbox" style="color:var(--primary-color);"></i> 2. Mechanical / Electrical Work Performed</h3>
+      
+      <div class="dynamic-table-wrapper">
+        <table class="dynamic-table">
+          <thead>
+            <tr>
+              <th style="width: 180px;">Area / System</th>
+              <th style="width: 150px;">Equipment ID</th>
+              <th>Work Activity / Scope</th>
+              <th style="width: 120px;">Qty Completed</th>
+              <th style="width: 130px;">Status</th>
+              <th>Observations / Notes</th>
+              <th style="width: 40px;" class="print-hide"></th>
+            </tr>
+          </thead>
+          <tbody id="work-tbody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <button type="button" class="button-secondary btn-add-row" id="add-work-btn" style="margin-top:0; width:auto; padding: 6px 14px; font-size:0.82rem;"><i class="fas fa-plus"></i> Add Work Activity</button>
+    </div>
+
+    <!-- Section 3: Commissioning Progress -->
+    <div class="form-section" style="margin-top: 20px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-clipboard-check" style="color:var(--primary-color);"></i> 3. Testing & Commissioning Progress Metrics</h3>
+      
+      <div class="dynamic-table-wrapper">
+        <table class="dynamic-table">
+          <thead>
+            <tr>
+              <th style="width: 180px;">Test / Procedure</th>
+              <th style="width: 150px;">Equipment / System</th>
+              <th style="width: 80px;">Planned</th>
+              <th style="width: 80px;">Completed</th>
+              <th style="width: 80px;">Passed</th>
+              <th style="width: 80px;">Failed</th>
+              <th style="width: 80px;">Blocked</th>
+              <th>Verification Notes</th>
+              <th style="width: 40px;" class="print-hide"></th>
+            </tr>
+          </thead>
+          <tbody id="test-tbody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <button type="button" class="button-secondary btn-add-row" id="add-test-btn" style="margin-top:0; width:auto; padding: 6px 14px; font-size:0.82rem;"><i class="fas fa-plus"></i> Add Test Metric</button>
+    </div>
+
+    <!-- Section 4: Issues / Blockers -->
+    <div class="form-section" style="margin-top: 20px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-road-barrier" style="color:var(--primary-color);"></i> 4. Open Field Issues & Technical Blockers</h3>
+      
+      <div class="dynamic-table-wrapper">
+        <table class="dynamic-table">
+          <thead>
+            <tr>
+              <th style="width: 200px;">Issue Description</th>
+              <th style="width: 130px;">Category</th>
+              <th style="width: 110px;">Severity</th>
+              <th style="width: 120px;">Owner</th>
+              <th>Required Action / Solution</th>
+              <th style="width: 110px;">Status</th>
+              <th style="width: 40px;" class="print-hide"></th>
+            </tr>
+          </thead>
+          <tbody id="issue-tbody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <button type="button" class="button-secondary btn-add-row" id="add-issue-btn" style="margin-top:0; width:auto; padding: 6px 14px; font-size:0.82rem;"><i class="fas fa-plus"></i> Add Blocker / Issue</button>
+    </div>
+
+    <!-- Section 5: HSE Observations -->
+    <div class="form-section" style="margin-top: 20px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-hard-hat" style="color:var(--primary-color);"></i> 5. HSE Observations & Audits</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="hse-positive">Positive Safety Observations</label>
+          <input type="text" id="hse-positive" placeholder="e.g. Excellent lock audit custody">
+        </div>
+        <div class="input-group">
+          <label for="hse-unsafe">Unsafe Conditions / Actions Observed</label>
+          <input type="text" id="hse-unsafe" placeholder="e.g. Missing grounding strap on inverter frame">
+        </div>
+      </div>
+      <div class="input-row" style="margin-bottom:0;">
+        <div class="input-group" style="margin-bottom:0;">
+          <label for="hse-incidents">Incidents / Near Misses</label>
+          <input type="text" id="hse-incidents" value="None" style="margin-bottom:0;">
+        </div>
+        <div class="input-group" style="margin-bottom:0;">
+          <label for="hse-corrective">Immediate Corrective Actions</label>
+          <input type="text" id="hse-corrective" placeholder="e.g. Grounding strap fitted immediately" style="margin-bottom:0;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 6: Tomorrow Shift Plan -->
+    <div class="form-section" style="margin-top: 20px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-arrow-right" style="color:var(--primary-color);"></i> 6. Next Shift / Tomorrow Plan</h3>
+      
+      <div class="dynamic-table-wrapper">
+        <table class="dynamic-table">
+          <thead>
+            <tr>
+              <th style="width: 250px;">Planned Activity</th>
+              <th style="width: 200px;">Area / Equipment Target</th>
+              <th>Required Support / Prerequisites</th>
+              <th>Risks / Potential Blockers</th>
+              <th style="width: 40px;" class="print-hide"></th>
+            </tr>
+          </thead>
+          <tbody id="plan-tbody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <button type="button" class="button-secondary btn-add-row" id="add-plan-btn" style="margin-top:0; width:auto; padding: 6px 14px; font-size:0.82rem;"><i class="fas fa-plus"></i> Add Plan Row</button>
+    </div>
+
+    <!-- Section 7: Photos Evidence -->
+    <div class="form-section" style="margin-top: 20px;">
+      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-camera" style="color:var(--primary-color);"></i> 7. Photos & Field Evidence references</h3>
+      
+      <div class="dynamic-table-wrapper">
+        <table class="dynamic-table">
+          <thead>
+            <tr>
+              <th style="width: 200px;">Photo Reference ID</th>
+              <th style="width: 200px;">Location / Compartment</th>
+              <th>Description of Evidence</th>
+              <th>Notes / Status</th>
+              <th style="width: 40px;" class="print-hide"></th>
+            </tr>
+          </thead>
+          <tbody id="photo-tbody">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <button type="button" class="button-secondary btn-add-row" id="add-photo-btn" style="margin-top:0; width:auto; padding: 6px 14px; font-size:0.82rem;"><i class="fas fa-plus"></i> Add Photo Reference</button>
+    </div>
+
+    <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+    <!-- Results Panel -->
+    <div id="result-panel" class="result-panel" style="display: none; margin-top: 24px;">
+      <div class="result-header">
+        <span>Commissioning Shift Handover Summary</span>
+        <span id="overall-status-badge" class="status-badge-inline status-pass">Completed Daily Log</span>
+      </div>
+
+      <div style="padding: 16px 0 0 0;">
+        <div class="result-row">
+          <span>Overall Shift Testing Completion:</span>
+          <span id="res-test-totals" style="font-weight: 700;">-- / -- passed</span>
+        </div>
+        <div class="result-row">
+          <span>Active Critical/High Blockers logged:</span>
+          <span id="res-blocker-totals" style="font-weight: 700;">0 blockers</span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Briefing Summary</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="btn-row">
+      <div class="btn-group">
+        <button type="button" id="compile-btn" class="button-secondary btn-action" style="background:var(--primary-color); color:white; border-color:var(--primary-hover); font-weight:700;"><i class="fas fa-sync"></i> Compile Shift Metrics</button>
+      </div>
+      <div class="btn-group">
+        <button type="button" id="print-btn" class="button-secondary btn-action" onclick="window.print()"><i class="fas fa-print"></i> Print Shift Report</button>
+        <button type="button" id="sample-btn" class="button-secondary btn-action"><i class="fas fa-magic"></i> Load Sample</button>
+        <button type="button" id="reset-btn" class="button-secondary btn-action btn-danger-action" style="background:#fee2e2; color:#b91c1c; border-color:#fecaca;"><i class="fas fa-undo"></i> Reset Report</button>
+      </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.75';">
+        </div>
+    </footer>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/daily-progress.js"></script>
+</body>
+</html>
