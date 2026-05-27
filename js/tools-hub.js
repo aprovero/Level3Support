@@ -876,7 +876,23 @@ function renderWorkflowGrid() {
 function viewWorkflowDetail(wfId) {
     const wf = WORKFLOW_PACKS.find(w => w.id === wfId);
     if (!wf) return;
-    
+
+    // If we're not already on the workflows view, navigate there first
+    // then open the panel after the view transition settles.
+    const workflowsSection = document.getElementById('view-workflows');
+    const isWorkflowsActive = workflowsSection && workflowsSection.classList.contains('active');
+    if (!isWorkflowsActive) {
+        // Switch to the workflows view
+        window.location.hash = 'workflows';
+        // Open the panel after a short delay to let the DOM settle
+        setTimeout(() => _openWorkflowPanel(wf), 80);
+        return;
+    }
+
+    _openWorkflowPanel(wf);
+}
+
+function _openWorkflowPanel(wf) {
     const panel = document.getElementById('workflow-detail-panel');
     const body = document.getElementById('workflow-detail-body');
     if (!panel || !body) return;
