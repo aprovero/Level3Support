@@ -508,6 +508,90 @@
     ═══════════════════════════════════════════════════ -->
     <div class="tab-panel active" id="panel-bolts">
 
+      <!-- Dynamic Bolt Torque and Pre-load Calculator Card -->
+      <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); text-align:left;">
+        <h3 style="font-family:'Outfit',sans-serif; font-size:1.25rem; font-weight:700; color:#1e293b; margin:0 0 1rem 0; display:flex; align-items:center; gap:0.5rem;">
+          <i class="fas fa-calculator" style="color:#2563eb;"></i> Torque &amp; Bolted Connection Calculator
+        </h3>
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:1.25rem;">
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:4px; text-transform:uppercase;">Bolt Standard &amp; Size</label>
+            <select id="calc-size" onchange="calculateBoltTorque()" style="width:100%; height:36px; padding:6px; border:1px solid #cbd5e1; border-radius:6px; background:#fff; font-size:0.88rem;">
+              <optgroup label="Metric (ISO)">
+                <option value="M4" data-pitch="0.7" data-dia="4" selected>M4 (Pitch 0.7mm)</option>
+                <option value="M5" data-pitch="0.8" data-dia="5">M5 (Pitch 0.8mm)</option>
+                <option value="M6" data-pitch="1.0" data-dia="6">M6 (Pitch 1.0mm)</option>
+                <option value="M8" data-pitch="1.25" data-dia="8">M8 (Pitch 1.25mm)</option>
+                <option value="M10" data-pitch="1.5" data-dia="10">M10 (Pitch 1.5mm)</option>
+                <option value="M12" data-pitch="1.75" data-dia="12">M12 (Pitch 1.75mm)</option>
+                <option value="M14" data-pitch="2.0" data-dia="14">M14 (Pitch 2.0mm)</option>
+                <option value="M16" data-pitch="2.0" data-dia="16">M16 (Pitch 2.0mm)</option>
+                <option value="M18" data-pitch="2.5" data-dia="18">M18 (Pitch 2.5mm)</option>
+                <option value="M20" data-pitch="2.5" data-dia="20">M20 (Pitch 2.5mm)</option>
+                <option value="M22" data-pitch="2.5" data-dia="22">M22 (Pitch 2.5mm)</option>
+                <option value="M24" data-pitch="3.0" data-dia="24">M24 (Pitch 3.0mm)</option>
+                <option value="M27" data-pitch="3.0" data-dia="27">M27 (Pitch 3.0mm)</option>
+                <option value="M30" data-pitch="3.5" data-dia="30">M30 (Pitch 3.5mm)</option>
+              </optgroup>
+              <optgroup label="Imperial (SAE)">
+                <option value="1/4" data-pitch="20" data-dia="6.35">1/4"-20 tpi</option>
+                <option value="5/16" data-pitch="18" data-dia="7.94">5/16"-18 tpi</option>
+                <option value="3/8" data-pitch="16" data-dia="9.53">3/8"-16 tpi</option>
+                <option value="7/16" data-pitch="14" data-dia="11.11">7/16"-14 tpi</option>
+                <option value="1/2" data-pitch="13" data-dia="12.70">1/2"-13 tpi</option>
+                <option value="9/16" data-pitch="12" data-dia="14.29">9/16"-12 tpi</option>
+                <option value="5/8" data-pitch="11" data-dia="15.88">5/8"-11 tpi</option>
+                <option value="3/4" data-pitch="10" data-dia="19.05">3/4"-10 tpi</option>
+                <option value="7/8" data-pitch="9" data-dia="22.23">7/8"-9 tpi</option>
+                <option value="1" data-pitch="8" data-dia="25.40">1"-8 tpi</option>
+              </optgroup>
+            </select>
+          </div>
+          
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:4px; text-transform:uppercase;">Grade / Material Strength</label>
+            <select id="calc-grade" onchange="calculateBoltTorque()" style="width:100%; height:36px; padding:6px; border:1px solid #cbd5e1; border-radius:6px; background:#fff; font-size:0.88rem;">
+              <option value="8.8" data-tensile="800" data-yield="640">ISO Grade 8.8 (Standard Field)</option>
+              <option value="10.9" data-tensile="1040" data-yield="940">ISO Grade 10.9 (High Tensile)</option>
+              <option value="12.9" data-tensile="1220" data-yield="1100">ISO Grade 12.9 (Alloy Steel)</option>
+              <option value="SAE-2" data-tensile="510" data-yield="390">SAE Grade 2 (Low Strength)</option>
+              <option value="SAE-5" data-tensile="825" data-yield="630">SAE Grade 5 (Medium Strength)</option>
+              <option value="SAE-8" data-tensile="1030" data-yield="820">SAE Grade 8 (High Strength)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:4px; text-transform:uppercase;">Thread Lubrication Condition</label>
+            <select id="calc-lubrication" onchange="calculateBoltTorque()" style="width:100%; height:36px; padding:6px; border:1px solid #cbd5e1; border-radius:6px; background:#fff; font-size:0.88rem;">
+              <option value="0.20" selected>Dry threads / Clean (K = 0.20)</option>
+              <option value="0.15">Lightly Oiled (K = 0.15)</option>
+              <option value="0.18">Zinc Plated (K = 0.18)</option>
+              <option value="0.12">Copper Paste / Anti-Seize (K = 0.12)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Calculator Output Box -->
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:1.25rem; display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:1.5rem; text-align:center;">
+          <div>
+            <div style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:4px;">Target Bolt Tension (Preload)</div>
+            <div id="calc-out-tension" style="font-size:1.75rem; font-weight:800; color:#0f172a; font-family:'Outfit',sans-serif;">—</div>
+            <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">kN (75% of Yield Strength)</div>
+          </div>
+          <div>
+            <div style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:4px;">Recommended Target Torque</div>
+            <div id="calc-out-torque" style="font-size:1.75rem; font-weight:800; color:#2563eb; font-family:'Outfit',sans-serif;">—</div>
+            <div id="calc-out-torque-alt" style="font-size:0.8rem; font-weight:600; color:#64748b; margin-top:2px;">—</div>
+          </div>
+          <div>
+            <div style="font-size:0.75rem; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:4px;">Tensile / Yield Limit</div>
+            <div id="calc-out-limits" style="font-size:0.95rem; font-weight:700; color:#0f172a; margin-top:0.35rem;">—</div>
+            <div style="font-size:0.72rem; color:#64748b; margin-top:2px;">Ultimate Tensile Basis</div>
+          </div>
+        </div>
+      </div>
+
       <div class="search-filter-row">
         <div class="search-wrapper">
           <i class="fas fa-search"></i>
@@ -926,11 +1010,55 @@
     document.getElementById('elec-count').textContent = `Showing ${count} of ${ELECTRICAL_SPECS.length} terminal specs`;
   }
 
+  // ═══════════════════════════════════════════
+  // DYNAMIC BOLT PRE-LOAD & TORQUE CALCULATOR
+  // ═══════════════════════════════════════════
+  function calculateBoltTorque() {
+    const sizeSelect = document.getElementById('calc-size');
+    const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+    const d = parseFloat(selectedOption.getAttribute('data-dia')); // Nominal diameter in mm
+    
+    const gradeSelect = document.getElementById('calc-grade');
+    const selectedGrade = gradeSelect.options[gradeSelect.selectedIndex];
+    const tensileLimit = parseFloat(selectedGrade.getAttribute('data-tensile')); // MPa
+    const yieldLimit = parseFloat(selectedGrade.getAttribute('data-yield')); // MPa
+
+    const K = parseFloat(document.getElementById('calc-lubrication').value); // Friction coefficient
+
+    // Thread/Stress Area approximation (As ≈ 0.78 * d^2 basis or derived standard pitch correction)
+    // As = (pi / 4) * (d - 0.938194 * p)^2
+    let p = parseFloat(selectedOption.getAttribute('data-pitch'));
+    let stressArea = 0;
+    if (selectedOption.parentNode.label === "Imperial (SAE)") {
+      // For imperial, pitch is tpi, so pitch distance = 25.4 / tpi
+      const pitchDistance = 25.4 / p;
+      stressArea = 0.7854 * Math.pow(d - (0.9743 * pitchDistance), 2);
+    } else {
+      stressArea = 0.7854 * Math.pow(d - (0.9382 * p), 2);
+    }
+
+    // Force Limit basis: 75% of Yield Limit (Proof load representation)
+    const preloadForceN = stressArea * (yieldLimit * 0.75); // Newtons
+    const preloadForceKN = preloadForceN / 1000;
+
+    // Torque formula: T = K * D * F
+    // T in N-m, D in meters, F in Newtons
+    const torqueNm = K * (d / 1000) * preloadForceN;
+    const torqueLbFt = torqueNm * 0.73756;
+
+    // Set UI values
+    document.getElementById('calc-out-tension').textContent = preloadForceKN.toFixed(1);
+    document.getElementById('calc-out-torque').textContent = `${torqueNm.toFixed(1)} N-m`;
+    document.getElementById('calc-out-torque-alt').textContent = `approx. ${torqueLbFt.toFixed(1)} lb-ft`;
+    document.getElementById('calc-out-limits').textContent = `${yieldLimit} / ${tensileLimit} MPa`;
+  }
+
   // ── Init ─────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     filterEquipment();
     renderBolts();
     filterElectrical();
+    calculateBoltTorque(); // Run initial calculation
   });
   </script>
 </body>

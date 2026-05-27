@@ -102,13 +102,13 @@
     },
     {
       "id": 11,
-      "name": "Torque & Bolted Connection Calculator",
-      "category": "Calculators",
+      "name": "Torque Spec Finder & Connection Calculator",
+      "category": "Reference Guides",
       "status": "Active",
-      "description": "Lookup target bolt pre-loads and recommended mechanical torques based on size, grade, and lubrication.",
+      "description": "Searchable torque specification reference tool for solar array and battery rack connections with target bolt pre-loads calculator.",
       "url": "torque-spec-finder.html",
-      "tags": ["PV", "BESS", "Mechanical", "Torque"],
-      "notes": "Merged with Torque Spec Finder."
+      "tags": ["Torque", "Electrical", "Mechanical", "QA/QC", "Reference", "Calculators"],
+      "notes": "Merged standard torque specification finder with mechanical bolt tension calculator."
     },
     {
       "id": 12,
@@ -350,15 +350,6 @@
         "description": "Build chronological alarm and fault timelines to analyze cascading faults, repeated codes, and trigger times.",
         "url": "alarm-timeline.html",
         "tags": ["RCA", "Troubleshooting", "Alarms", "Events", "SCADA", "BESS", "PV"]
-    },
-    {
-        "id": 37,
-        "name": "Torque Spec Finder",
-        "category": "Reference Guides",
-        "status": "Active",
-        "description": "Searchable torque specification reference tool for solar array and battery rack connections.",
-        "url": "torque-spec-finder.html",
-        "tags": ["Torque", "Electrical", "Mechanical", "QA/QC", "Reference"]
     },
     {
         "id": 38,

@@ -1060,11 +1060,12 @@ function _renderResourcesCard(pageSlug) {
 
     const resource = window.TOOL_RESOURCES[pageSlug];
     let htmlContent = '';
+    const topColor = resource ? (resource.basisClass === 'basis-safety' ? '#dc2626' : (resource.basisClass === 'basis-standard' ? '#ef4444' : (resource.basisClass === 'basis-oem' ? '#6366f1' : '#f59e0b'))) : '#cbd5e1';
 
     if (!resource) {
         // Fallback card
         htmlContent = `
-            <div id="tool-resources-card-section" class="tool-resources-card">
+            <div id="tool-resources-card-section" class="tool-resources-card" style="border-top: 4px solid #cbd5e1;">
                 <div class="resources-card-header">
                     <h3 class="resources-card-title"><i class="fas fa-book"></i> Resources</h3>
                     <span class="resources-basis-badge basis-field">Review Required</span>
@@ -1087,12 +1088,12 @@ function _renderResourcesCard(pageSlug) {
         `).join('');
 
         htmlContent = `
-            <div id="tool-resources-card-section" class="tool-resources-card">
+            <div id="tool-resources-card-section" class="tool-resources-card" style="border-top: 4px solid ${topColor};">
                 <div class="resources-card-header">
                     <h3 class="resources-card-title"><i class="fas fa-book"></i> Resources</h3>
                     <span class="resources-basis-badge ${resource.basisClass || 'basis-field'}">${resource.basis}</span>
                 </div>
-                <div style="font-size:0.88rem; font-weight:700; color:#334155; margin-bottom:0.5rem;"><i class="fas fa-bookmark" style="color:#6366f1; margin-right:4px;"></i> Key References:</div>
+                <div style="font-size:0.88rem; font-weight:700; color:#334155; margin-bottom:0.5rem;"><i class="fas fa-bookmark" style="color:${topColor}; margin-right:4px;"></i> Key References:</div>
                 <ul class="resources-list">
                     ${referencesHTML}
                 </ul>
@@ -1107,12 +1108,22 @@ function _renderResourcesCard(pageSlug) {
         `;
     }
 
-    // Insert resources card before the footer element inside the container
-    const footer = container.querySelector('.footer, .main-footer');
-    if (footer) {
-        footer.insertAdjacentHTML('beforebegin', htmlContent);
+    // Target right sidebar (second column of .tool-body-grid) first
+    const grid = document.querySelector('.tool-body-grid');
+    let target = null;
+    if (grid && grid.children.length >= 2) {
+        target = grid.children[1];
+    }
+
+    if (target) {
+        target.insertAdjacentHTML('beforeend', htmlContent);
     } else {
-        container.insertAdjacentHTML('beforeend', htmlContent);
+        const footer = container.querySelector('.footer, .main-footer');
+        if (footer) {
+            footer.insertAdjacentHTML('beforebegin', htmlContent);
+        } else {
+            container.insertAdjacentHTML('beforeend', htmlContent);
+        }
     }
 }
 
@@ -1122,7 +1133,7 @@ function _renderFallbackCard(pageSlug) {
     if (document.getElementById('tool-resources-card-section')) return;
 
     const htmlContent = `
-        <div id="tool-resources-card-section" class="tool-resources-card">
+        <div id="tool-resources-card-section" class="tool-resources-card" style="border-top: 4px solid #cbd5e1;">
             <div class="resources-card-header">
                 <h3 class="resources-card-title"><i class="fas fa-book"></i> Resources</h3>
                 <span class="resources-basis-badge basis-field">Review Required</span>
@@ -1137,10 +1148,20 @@ function _renderFallbackCard(pageSlug) {
         </div>
     `;
 
-    const footer = container.querySelector('.footer, .main-footer');
-    if (footer) {
-        footer.insertAdjacentHTML('beforebegin', htmlContent);
+    const grid = document.querySelector('.tool-body-grid');
+    let target = null;
+    if (grid && grid.children.length >= 2) {
+        target = grid.children[1];
+    }
+
+    if (target) {
+        target.insertAdjacentHTML('beforeend', htmlContent);
     } else {
-        container.insertAdjacentHTML('beforeend', htmlContent);
+        const footer = container.querySelector('.footer, .main-footer');
+        if (footer) {
+            footer.insertAdjacentHTML('beforebegin', htmlContent);
+        } else {
+            container.insertAdjacentHTML('beforeend', htmlContent);
+        }
     }
 }
