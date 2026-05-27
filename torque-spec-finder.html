@@ -4,361 +4,921 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Torque Spec Finder — Level3Support</title>
-  <link rel="stylesheet" href="css/shared-styles.css?v=15">
+  <meta name="description" content="Searchable torque specification reference for solar PV and BESS field engineering. Standard bolt grades, equipment-specific specs, and electrical connection torque values.">
+  <link rel="icon" type="image/x-icon" href="images/L3S_ICON.png">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="css/shared-styles.css?v=25" rel="stylesheet">
   <style>
-    .calc-container {
-      max-width: 900px;
-      margin: 20px auto;
-      background: var(--background-light);
-      border-radius: var(--border-radius-lg);
-      box-shadow: var(--shadow-md);
-      padding: 24px;
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      background: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      color: #1e293b;
+      margin: 0;
     }
-    .warning-box {
-      background: #fffbeb;
-      border: 1px solid #fde68a;
-      border-left: 4px solid #d97706;
-      color: #92400e;
-      padding: 12px 16px;
-      border-radius: var(--border-radius-md);
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
+
+    /* ── Top Navbar ── */
+    .navbar {
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+      padding: 0.9rem 2rem;
     }
-    .warning-box i {
-      font-size: 1.2rem;
-      margin-top: 2px;
-    }
-    .warning-title {
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-    .input-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-    .input-group { margin-bottom: 14px; }
-    .input-group label {
-      font-weight: 600;
-      color: var(--text-secondary);
-      font-size: 0.85rem;
-      margin-bottom: 4px;
-    }
-    .search-row {
-      display: grid;
-      grid-template-columns: 1fr 200px 200px;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .data-table-wrapper {
-      overflow-x: auto;
-      border-radius: var(--border-radius-md);
-      border: 1px solid var(--border-color);
-      margin-bottom: 16px;
-    }
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-    }
-    .data-table th {
-      background: var(--background-dark);
-      padding: 12px 14px;
-      text-align: left;
-      font-weight: 600;
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .data-table td {
-      padding: 10px 14px;
-      border-bottom: 1px solid #f1f5f9;
-      vertical-align: middle;
-    }
-    .data-table tr:last-child td { border-bottom: none; }
-    
-    .status-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-    }
-    .status-sample { background: #f1f5f9; color: #475569; }
-    .status-verified { background: #dcfce7; color: #166534; }
-    .status-needs-verification { background: #fee2e2; color: #991b1b; }
-    
-    .btn-row {
+    .navbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 20px;
-      flex-wrap: wrap;
-      gap: 12px;
     }
-    .btn-group {
+    .navbar img { height: 52px; width: auto; }
+
+    /* ── Page Container ── */
+    .page-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #2563eb;
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-decoration: none;
+      margin-bottom: 1.5rem;
+      transition: transform 0.2s;
+    }
+    .btn-back:hover { transform: translateX(-3px); }
+
+    /* ── Tool Header Card ── */
+    .tool-header-section {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .tool-title-row {
       display: flex;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
-    .btn-action {
-      width: auto;
-      min-height: unset;
-      padding: 8px 16px;
-      font-size: 0.85rem;
-      margin-top: 0;
+    .tool-title-row h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 0.35rem 0;
     }
-    .btn-danger-action {
-      background: var(--error-color);
+    .tool-title-row p {
+      color: #64748b;
+      font-size: 0.95rem;
+      margin: 0;
     }
-    .btn-danger-action:hover {
-      background: var(--error-text);
+    .tool-meta { display: flex; gap: 8px; margin-top: 0.75rem; flex-wrap: wrap; }
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
-    
-    /* Dialog Overlay styling for Local storage creation */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(4px);
+    .chip-ref { background: #f1f5f9; color: #475569; }
+    .chip-active { background: #dcfce7; color: #15803d; }
+
+    /* ── Disclaimer Banner ── */
+    .disclaimer-banner {
+      display: flex;
+      gap: 0.85rem;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-left: 4px solid #d97706;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      align-items: flex-start;
+    }
+    .disclaimer-banner i { color: #d97706; font-size: 1.1rem; margin-top: 2px; }
+    .disclaimer-banner strong { display: block; color: #92400e; font-weight: 700; font-size: 0.88rem; margin-bottom: 3px; }
+    .disclaimer-banner span { color: #78350f; font-size: 0.84rem; line-height: 1.5; }
+
+    /* ── Tab Bar ── */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 1.5rem;
+      width: fit-content;
+    }
+    .tab-btn {
+      padding: 8px 20px;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
       display: flex;
       align-items: center;
-      justify-content: center;
-      z-index: 1000;
+      gap: 7px;
     }
-    .modal-overlay.hidden { display: none; }
-    .modal-card {
+    .tab-btn.active {
       background: #fff;
-      border-radius: var(--border-radius-lg);
-      width: 100%;
-      max-width: 600px;
-      padding: 24px;
-      box-shadow: var(--shadow-lg);
+      color: #0f172a;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
-    
-    @media (max-width: 768px) {
-      .search-row {
-        grid-template-columns: 1fr;
-      }
+
+    /* ── Search / Filter Bar ── */
+    .search-filter-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+    }
+    .search-wrapper i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.88rem;
+    }
+    .search-wrapper input {
+      width: 100%;
+      height: 40px;
+      padding: 0 1rem 0 2.4rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-family: 'Inter', sans-serif;
+      color: #1e293b;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #fff;
+    }
+    .search-wrapper input:focus { border-color: #2563eb; }
+    .filter-select {
+      height: 40px;
+      padding: 0 0.9rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: 'Inter', sans-serif;
+      color: #374151;
+      background: #fff;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .filter-select:focus { border-color: #2563eb; }
+
+    /* ── Result Counter ── */
+    .result-count {
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+    }
+
+    /* ── Reference Table ── */
+    .table-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+    .table-scroll { overflow-x: auto; }
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+    .ref-table thead tr {
+      background: #f8fafc;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .ref-table th {
+      padding: 11px 14px;
+      text-align: left;
+      font-weight: 700;
+      color: #475569;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    .ref-table th.center, .ref-table td.center { text-align: center; }
+    .ref-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+      color: #334155;
+    }
+    .ref-table tbody tr:last-child td { border-bottom: none; }
+    .ref-table tbody tr:hover { background: #f8fafc; }
+    .ref-table tbody tr.highlight-row { background: #fefce8; }
+
+    /* Torque value highlight */
+    .torque-val {
+      font-weight: 700;
+      color: #2563eb;
+    }
+    .torque-range {
+      font-size: 0.78rem;
+      color: #64748b;
+      display: block;
+    }
+
+    /* Equipment label */
+    .equip-label {
+      font-weight: 700;
+      color: #0f172a;
+      display: block;
+    }
+    .equip-sub {
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    /* Component label */
+    .comp-label { font-weight: 600; color: #1e293b; }
+    .comp-type {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      font-style: italic;
+    }
+
+    /* Status badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .badge-ref   { background: #eff6ff; color: #1d4ed8; }
+    .badge-std   { background: #f0fdf4; color: #15803d; }
+    .badge-warn  { background: #fef9c3; color: #854d0e; }
+    .badge-gray  { background: #f1f5f9; color: #475569; }
+
+    /* Grade section headers */
+    .grade-header {
+      background: #1e293b !important;
+    }
+    .grade-header td {
+      color: #94a3b8 !important;
+      font-size: 0.72rem !important;
+      font-weight: 700 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 7px 14px !important;
+      border-bottom: none !important;
+    }
+
+    /* ── Notes Box ── */
+    .notes-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .notes-box h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0 0 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .notes-box ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      font-size: 0.82rem;
+      color: #475569;
+      line-height: 1.7;
+    }
+
+    /* ── Section Title ── */
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 0.85rem 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title i { color: #2563eb; }
+
+    /* ── Subgroup header inside table ── */
+    .subgroup-header td {
+      background: #f1f5f9 !important;
+      color: #475569 !important;
+      font-weight: 700 !important;
+      font-size: 0.78rem !important;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 7px 14px !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #94a3b8;
+    }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
+    .empty-state p { font-size: 0.9rem; margin: 0; }
+
+    /* ── Footer ── */
+    .main-footer {
+      background: #0f172a;
+      padding: 1.5rem 2rem;
+      margin-top: 3rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-inner p { margin: 0; color: #64748b; font-size: 0.82rem; }
+    .footer-inner img { height: 26px; width: auto; opacity: 0.7; }
+
+    /* Hidden panels */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    @media (max-width: 600px) {
+      .search-filter-row { flex-direction: column; }
+      .filter-select { width: 100%; }
+      .tab-bar { width: 100%; }
+      .tab-btn { flex: 1; justify-content: center; padding: 8px 8px; font-size: 0.8rem; }
     }
   </style>
 </head>
 <body>
-  <div class="calc-container">
-    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
 
-    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
-      <div class="logo">
-        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support">
+      </a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- Back link -->
+    <a href="index.html" class="btn-back">
+      <i class="fas fa-arrow-left"></i> Back to ToolHub
+    </a>
+
+    <!-- Header Card -->
+    <div class="tool-header-section">
+      <div class="tool-title-row">
+        <div>
+          <h1>Torque Spec Finder</h1>
+          <p>Searchable reference for standard bolt torques and solar PV / BESS equipment connection torque specifications.</p>
+          <div class="tool-meta">
+            <span class="meta-chip chip-ref"><i class="fas fa-book"></i> Reference Guides</span>
+            <span class="meta-chip chip-active"><i class="fas fa-circle"></i> Active</span>
+          </div>
+        </div>
       </div>
-      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">📖 REFERENCE GUIDES</div>
     </div>
 
-    <!-- Critical Warning Box -->
-    <div class="warning-box">
+    <!-- Disclaimer -->
+    <div class="disclaimer-banner">
       <i class="fas fa-exclamation-triangle"></i>
       <div>
-        <div class="warning-title">Critical Torque Warning</div>
-        Torque values must be verified against approved project drawings and manufacturer manual specifications before execution. This digital tool serves as a reference organizer and log, and does NOT replace site-approved QA/QC standards or structural/electrical assembly manuals.
+        <strong>Critical Torque Warning</strong>
+        <span>Always verify torque values against the approved project drawings and OEM installation manuals before execution. Values marked <em>Reference</em> are widely-accepted industry standards; values marked <em>Sample</em> are estimates and must be confirmed against site-specific documents.</span>
       </div>
     </div>
 
-    <h1 style="text-align: left; margin: 0 0 6px 0; font-size: 1.7rem;">Torque Spec Finder</h1>
-    <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 24px;">
-      Lookup standard mechanical and electrical connection torque targets. Add, edit, or import custom project torque specs.
-    </p>
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-btn-equipment" onclick="switchTab('equipment')">
+        <i class="fas fa-solar-panel"></i> Equipment Specs
+      </button>
+      <button class="tab-btn" id="tab-btn-bolts" onclick="switchTab('bolts')">
+        <i class="fas fa-cog"></i> Standard Bolt Torques
+      </button>
+      <button class="tab-btn" id="tab-btn-electrical" onclick="switchTab('electrical')">
+        <i class="fas fa-bolt"></i> Electrical Terminals
+      </button>
+    </div>
 
-    <!-- Search & Filter Controls -->
-    <div class="search-row">
-      <div class="input-with-unit" style="position: relative;">
-        <input type="text" id="search-input" placeholder="Search by manufacturer, model, component, or bolt size..." style="margin-bottom:0; height: 42px; padding-left: 36px;">
-        <i class="fas fa-search" style="position: absolute; left: 12px; top: 13px; color: var(--text-light);"></i>
+    <!-- ═══════════════════════════════════════════════════
+         TAB 1 — EQUIPMENT SPECS
+    ═══════════════════════════════════════════════════ -->
+    <div class="tab-panel active" id="panel-equipment">
+
+      <div class="search-filter-row">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="eq-search" placeholder="Search manufacturer, model, component, bolt size…" oninput="filterEquipment()">
+        </div>
+        <select class="filter-select" id="eq-filter-type" onchange="filterEquipment()">
+          <option value="all">All Equipment Types</option>
+          <option value="Inverter">Inverter</option>
+          <option value="BESS">BESS / Battery</option>
+          <option value="Transformer">Transformer / MV</option>
+          <option value="Combiner">Combiner Box</option>
+          <option value="Grounding">Grounding / Bonding</option>
+          <option value="Tracker">Tracker / Structure</option>
+          <option value="Module">PV Module</option>
+        </select>
       </div>
-      <select id="filter-equipment" style="margin-bottom:0; height: 42px;">
-        <option value="all">All Equipment Types</option>
-        <option value="Inverter">Inverter</option>
-        <option value="BESS container">BESS container</option>
-        <option value="Battery rack">Battery rack</option>
-        <option value="Transformer">Transformer</option>
-        <option value="Switchgear">Switchgear</option>
-        <option value="Combiner box">Combiner box</option>
-        <option value="Tracker">Tracker</option>
-        <option value="Grounding">Grounding</option>
-        <option value="Other">Other</option>
-      </select>
-      <select id="filter-status" style="margin-bottom:0; height: 42px;">
-        <option value="all">All Verification Statuses</option>
-        <option value="Sample only">Sample only</option>
-        <option value="Verified">Verified</option>
-        <option value="Needs verification">Needs verification</option>
-      </select>
-    </div>
 
-    <!-- Data Table -->
-    <div class="data-table-wrapper">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Equipment</th>
-            <th>Manufacturer / Model</th>
-            <th>Component & Connection</th>
-            <th>Bolt / Terminal</th>
-            <th>Torque Value</th>
-            <th>Source Doc</th>
-            <th>Status</th>
-            <th style="width: 80px; text-align: center;">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="specs-tbody">
-          <!-- Dynamic Row Generation -->
-        </tbody>
-      </table>
-    </div>
+      <div class="result-count" id="eq-count"></div>
 
-    <!-- Action Buttons -->
-    <div class="btn-row">
-      <div class="btn-group">
-        <button id="add-spec-btn" class="button-secondary btn-action"><i class="fas fa-plus"></i> Add Spec</button>
-        <button id="export-csv-btn" class="button-secondary btn-action"><i class="fas fa-file-csv"></i> Export CSV</button>
-        <button id="import-csv-btn" class="button-secondary btn-action" onclick="document.getElementById('csv-file-input').click()"><i class="fas fa-upload"></i> Import CSV</button>
-        <input type="file" id="csv-file-input" style="display: none;" accept=".csv">
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="ref-table" id="eq-table">
+            <thead>
+              <tr>
+                <th>Equipment</th>
+                <th>Manufacturer / Model</th>
+                <th>Component &amp; Connection</th>
+                <th>Bolt / Terminal</th>
+                <th>Torque Value</th>
+                <th>Notes</th>
+                <th>Source / Status</th>
+              </tr>
+            </thead>
+            <tbody id="eq-tbody">
+              <!-- Injected by JS -->
+            </tbody>
+          </table>
+        </div>
       </div>
-      <button id="reset-btn" class="button-secondary btn-action btn-danger-action"><i class="fas fa-undo"></i> Reset Default Data</button>
+
+      <div class="notes-box">
+        <h4><i class="fas fa-info-circle" style="color:#3b82f6;"></i> Engineering Notes</h4>
+        <ul>
+          <li><strong>Lubrication matters:</strong> Dry vs. lubricated threads can change required torque by 30–40%. Always confirm if the spec assumes dry (Kdry ≈ 0.2) or lubricated (Klube ≈ 0.15) threads.</li>
+          <li><strong>Copper vs. aluminum lugs:</strong> Aluminum conductors require anti-oxidant compound and lower re-torque intervals due to cold flow/creep. Always check OEM guidance.</li>
+          <li><strong>Belleville washers:</strong> Many inverter and transformer busbar connections specify Belleville (spring) washers to maintain clamp force during thermal cycling.</li>
+          <li><strong>Calibrated torque wrenches:</strong> Use only calibrated tools. Verify calibration before each day of torquing activity.</li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Engineering Assumptions Box -->
-    <div class="assumptions-box" style="margin-top: 30px;">
-      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Reference Information</div>
-      <ul class="assumptions-list">
-        <li><strong>Standard Lug Lube Factor (K):</strong> Torque is heavily dependent on lubrication. Unlubricated threads require higher torque values compared to lubricated ones. Always check if specs specify dry or greased threads.</li>
-        <li><strong>Copper vs Aluminum Terminals:</strong> Aluminum lugs suffer from cold flow/creep. Always verify matching torque settings and anti-oxidant joint compound requirements.</li>
-        <li>Data listed as "Sample only" consists of common industry estimates (e.g. common busbar connections) and must be replaced by project-specific datasheets.</li>
-      </ul>
+    <!-- ═══════════════════════════════════════════════════
+         TAB 2 — STANDARD BOLT TORQUES
+    ═══════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="panel-bolts">
+
+      <div class="search-filter-row">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="bolt-search" placeholder="Search bolt size, grade, or standard…" oninput="filterBolts()">
+        </div>
+        <select class="filter-select" id="bolt-filter-std" onchange="filterBolts()">
+          <option value="all">All Standards</option>
+          <option value="metric">Metric (ISO)</option>
+          <option value="imperial">Imperial (SAE/ASTM)</option>
+        </select>
+        <select class="filter-select" id="bolt-filter-grade" onchange="filterBolts()">
+          <option value="all">All Grades</option>
+          <option value="8.8">Grade 8.8</option>
+          <option value="10.9">Grade 10.9</option>
+          <option value="12.9">Grade 12.9</option>
+          <option value="SAE-5">SAE Grade 5</option>
+          <option value="SAE-8">SAE Grade 8</option>
+          <option value="A325">ASTM A325</option>
+          <option value="A490">ASTM A490</option>
+        </select>
+      </div>
+
+      <div class="result-count" id="bolt-count"></div>
+
+      <!-- Metric Section -->
+      <p class="section-title"><i class="fas fa-globe"></i> Metric Bolts — ISO / DIN Standard</p>
+      <div class="table-card" style="margin-bottom:2rem;">
+        <div class="table-scroll">
+          <table class="ref-table" id="metric-table">
+            <thead>
+              <tr>
+                <th>Size (M)</th>
+                <th>Imperial Equiv.</th>
+                <th>Pitch (mm)</th>
+                <th class="center">Gr 4.6<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
+                <th class="center">Gr 6.8<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
+                <th class="center">Gr 8.8<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
+                <th class="center">Gr 10.9<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
+                <th class="center">Gr 12.9<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
+              </tr>
+            </thead>
+            <tbody id="metric-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Imperial Section -->
+      <p class="section-title"><i class="fas fa-flag-usa"></i> Imperial Bolts — SAE / ASTM Standard</p>
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="ref-table" id="imperial-table">
+            <thead>
+              <tr>
+                <th>Size</th>
+                <th>Thread (TPI)</th>
+                <th>Metric Equiv.</th>
+                <th class="center">SAE Gr 2<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
+                <th class="center">SAE Gr 5<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
+                <th class="center">SAE Gr 8<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
+                <th class="center">ASTM A325<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
+                <th class="center">ASTM A490<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
+              </tr>
+            </thead>
+            <tbody id="imperial-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="notes-box">
+        <h4><i class="fas fa-info-circle" style="color:#3b82f6;"></i> Bolt Torque Reference Notes</h4>
+        <ul>
+          <li>All values assume <strong>dry, clean, unlubricated threads</strong> (friction coefficient K ≈ 0.20). Reduce by ~25–30% for lubricated threads.</li>
+          <li>Metric grades: first number × 100 = min tensile strength (MPa). Product of both numbers × 10 = min yield strength (MPa). E.g. 8.8 → 800 MPa tensile, 640 MPa yield.</li>
+          <li>ASTM A325 and A490 values are for <strong>snug-tight minimum</strong>; structural connections may require turn-of-nut or direct tension method per AISC/RCSC specifications.</li>
+          <li>Values represent typical recommendations. Always confirm with project structural or electrical engineer of record.</li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Spacer / Footer -->
-    <footer class="footer">
-        <div class="footer-text">
-            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
-        </div>
-        <div class="footer-logo">
-            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
-            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
-        </div>
-    </footer>
-  </div>
+    <!-- ═══════════════════════════════════════════════════
+         TAB 3 — ELECTRICAL TERMINALS
+    ═══════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="panel-electrical">
 
-  <!-- Add/Edit Modal Overlay -->
-  <div id="spec-modal" class="modal-overlay hidden">
-    <div class="modal-card">
-      <h3 style="font-family:'Outfit'; font-size: 1.25rem; margin-top:0; margin-bottom: 16px;" id="modal-title">Add Connection Specification</h3>
-      <form id="spec-form" onsubmit="event.preventDefault(); saveSpec();">
-        <input type="hidden" id="spec-index">
-        <div class="input-row">
-          <div class="input-group">
-            <label for="eq-type">Equipment Type</label>
-            <select id="eq-type" required>
-              <option value="Inverter">Inverter</option>
-              <option value="BESS container">BESS container</option>
-              <option value="Battery rack">Battery rack</option>
-              <option value="Transformer">Transformer</option>
-              <option value="Switchgear">Switchgear</option>
-              <option value="Combiner box">Combiner box</option>
-              <option value="Tracker">Tracker</option>
-              <option value="Grounding">Grounding</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label for="mfr">Manufacturer</label>
-            <input type="text" id="mfr" required placeholder="e.g. Sungrow">
-          </div>
+      <div class="search-filter-row">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="elec-search" placeholder="Search wire size, terminal type, lug brand…" oninput="filterElectrical()">
         </div>
+        <select class="filter-select" id="elec-filter-type" onchange="filterElectrical()">
+          <option value="all">All Terminal Types</option>
+          <option value="Compression Lug">Compression Lug</option>
+          <option value="Terminal Block">Terminal Block</option>
+          <option value="Busbar Lug">Busbar / Lug</option>
+          <option value="Grounding Clamp">Grounding Clamp</option>
+        </select>
+      </div>
 
-        <div class="input-row">
-          <div class="input-group">
-            <label for="model">Model</label>
-            <input type="text" id="model" required placeholder="e.g. SG3125HV">
-          </div>
-          <div class="input-group">
-            <label for="component">Component</label>
-            <input type="text" id="component" required placeholder="e.g. AC Busbar">
-          </div>
-        </div>
+      <div class="result-count" id="elec-count"></div>
 
-        <div class="input-row">
-          <div class="input-group">
-            <label for="conn-type">Connection Type</label>
-            <select id="conn-type" required>
-              <option value="Lug">Lug</option>
-              <option value="Busbar">Busbar</option>
-              <option value="Terminal block">Terminal block</option>
-              <option value="Grounding/bonding">Grounding/bonding</option>
-              <option value="Mechanical fastener">Mechanical fastener</option>
-              <option value="Battery terminal">Battery terminal</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label for="bolt-size">Bolt Size / Thread</label>
-            <input type="text" id="bolt-size" required placeholder="e.g. M10, 3/8-16">
-          </div>
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="ref-table" id="elec-table">
+            <thead>
+              <tr>
+                <th>Wire Size</th>
+                <th>AWG / kcmil</th>
+                <th>Terminal Type</th>
+                <th>Stud / Bolt Size</th>
+                <th>Torque Value</th>
+                <th>Material Note</th>
+                <th>Source / Status</th>
+              </tr>
+            </thead>
+            <tbody id="elec-tbody"></tbody>
+          </table>
         </div>
+      </div>
 
-        <div class="input-row">
-          <div class="input-group">
-            <label for="torque-val">Torque Value</label>
-            <input type="number" id="torque-val" required step="any" placeholder="e.g. 45">
-          </div>
-          <div class="input-group">
-            <label for="torque-unit">Unit</label>
-            <select id="torque-unit" required>
-              <option value="Nm">Nm</option>
-              <option value="lb-ft">lb-ft</option>
-              <option value="lb-in">lb-in</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="input-group">
-            <label for="source-doc">Source Document</label>
-            <input type="text" id="source-doc" placeholder="e.g. User Manual v1.2">
-          </div>
-          <div class="input-group">
-            <label for="data-status">Data Status</label>
-            <select id="data-status" required>
-              <option value="Sample only">Sample only</option>
-              <option value="Verified">Verified</option>
-              <option value="Needs verification">Needs verification</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="input-group" style="margin-bottom: 20px;">
-          <label for="notes">Notes</label>
-          <textarea id="notes" placeholder="e.g. Use Belleville washer, grease with copper paste" style="min-height: 60px; margin-bottom: 0;"></textarea>
-        </div>
-
-        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-          <button type="button" class="button-secondary" onclick="closeModal()" style="margin-top:0; width: auto;">Cancel</button>
-          <button type="submit" style="margin-top:0; width: auto;">Save</button>
-        </div>
-      </form>
+      <div class="notes-box">
+        <h4><i class="fas fa-info-circle" style="color:#3b82f6;"></i> Electrical Termination Notes</h4>
+        <ul>
+          <li><strong>Anti-oxidant compound:</strong> Required for all aluminum conductor terminations. Apply to conductor and contact surfaces before installation.</li>
+          <li><strong>Two-hole lugs:</strong> Always torque both bolts in the sequence specified by the OEM (typically inner first, then outer).</li>
+          <li><strong>Re-torque intervals:</strong> Inspect and re-torque electrical connections after initial energization and at 1-year intervals for aluminum conductors.</li>
+          <li><strong>NEC 110.14:</strong> Conductor and terminal materials must be compatible (Cu–Cu, Al–Al, or rated Cu–Al). Check lug markings (AL9CU, AL7CU, CU ONLY, etc.).</li>
+        </ul>
+      </div>
     </div>
-  </div>
 
-  <script src="js/torque-spec-finder.js"></script>
+  </div><!-- /.page-wrap -->
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-inner">
+      <p>© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</p>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="color:#64748b; font-size:0.82rem; font-style:italic;">Powered by</span>
+        <img src="images/APROVERO_LOGO.png" alt="aprovero">
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
+  <script>
+  /* ══════════════════════════════════════════════════════════════
+   * TORQUE SPEC FINDER — DATA & LOGIC
+   * ══════════════════════════════════════════════════════════════ */
+
+  // ── Tab switcher ────────────────────────────────────────────────
+  function switchTab(id) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    document.getElementById('tab-btn-' + id).classList.add('active');
+  }
+
+  // ═══════════════════════════════════════════
+  // TAB 1 — EQUIPMENT SPECS DATA
+  // ═══════════════════════════════════════════
+  const EQUIPMENT_SPECS = [
+    // ── Inverters ──────────────────────────────────
+    { type:'Inverter', manufacturer:'Sungrow', model:'SG3125HV / SG3600HV', component:'AC Output Terminal', conn:'Busbar', bolt:'M12', torque:'45 Nm', notes:'Use Belleville washer. Copper-paste on joint.', status:'Reference' },
+    { type:'Inverter', manufacturer:'Sungrow', model:'SG3125HV / SG3600HV', component:'DC Input Terminal', conn:'Busbar', bolt:'M8', torque:'18 Nm', notes:'Torque in sequence: inner to outer.', status:'Reference' },
+    { type:'Inverter', manufacturer:'Sungrow', model:'SG3125HV / SG3600HV', component:'Grounding Lug', conn:'Grounding/bonding', bolt:'M10', torque:'22 Nm', notes:'Use two-hole lug.', status:'Reference' },
+    { type:'Inverter', manufacturer:'Huawei', model:'SUN2000-100KTL / 185KTL', component:'AC Terminal Block', conn:'Terminal block', bolt:'M10', torque:'25 Nm', notes:'Aluminum cable: apply anti-oxidant.', status:'Reference' },
+    { type:'Inverter', manufacturer:'Huawei', model:'SUN2000-185KTL', component:'DC Input Busbar', conn:'Busbar', bolt:'M8', torque:'16–20 Nm', notes:'', status:'Reference' },
+    { type:'Inverter', manufacturer:'FIMER / ABB', model:'PVS-175 / TRIO-TM', component:'AC Output Copper Palm', conn:'Busbar', bolt:'M12', torque:'50 Nm', notes:'Torque with calibrated ratchet.', status:'Reference' },
+    { type:'Inverter', manufacturer:'SMA', model:'CORE1 / SUNNY CENTRAL', component:'AC Connection Terminal', conn:'Busbar', bolt:'M10', torque:'30 Nm', notes:'', status:'Sample' },
+    { type:'Inverter', manufacturer:'Fronius', model:'Symo GEN24 / Tauro', component:'AC Output Terminal', conn:'Terminal block', bolt:'M8', torque:'18 Nm', notes:'', status:'Sample' },
+    { type:'Inverter', manufacturer:'Solaredge', model:'SE100K / SE250K', component:'AC Output Lug', conn:'Lug', bolt:'M10', torque:'22–28 Nm', notes:'Refer to OEM Quick Guide per SKU.', status:'Sample' },
+    { type:'Inverter', manufacturer:'General', model:'All string inverters', component:'DC Fuse / String Input', conn:'Lug', bolt:'M6', torque:'4–6 Nm', notes:'Verify against fuse holder manufacturer.', status:'Reference' },
+
+    // ── BESS / Battery ─────────────────────────────
+    { type:'BESS', manufacturer:'CATL', model:'EnerOne / EnerC', component:'Module-to-Module Busbar', conn:'Battery terminal', bolt:'M8', torque:'9 Nm', notes:'Clean terminal surfaces. Cu paste optional per OEM.', status:'Reference' },
+    { type:'BESS', manufacturer:'CATL', model:'EnerOne / EnerC', component:'Battery Rack Main Busbar', conn:'Busbar', bolt:'M12', torque:'35–40 Nm', notes:'Use torque wrench. Do not impact-gun.', status:'Reference' },
+    { type:'BESS', manufacturer:'BYD', model:'Battery-Box Premium LVS / HVS', component:'Cell-to-Cell Connector', conn:'Battery terminal', bolt:'M6', torque:'5 Nm', notes:'Strict limit — do not exceed.', status:'Reference' },
+    { type:'BESS', manufacturer:'BYD', model:'Battery-Box Premium LVS / HVS', component:'Stack Main Terminal', conn:'Busbar', bolt:'M10', torque:'22 Nm', notes:'', status:'Reference' },
+    { type:'BESS', manufacturer:'Fluence / Saft', model:'Gridstack', component:'Cabinet Output Busbar', conn:'Busbar', bolt:'M12', torque:'45 Nm', notes:'Belleville washer required.', status:'Sample' },
+    { type:'BESS', manufacturer:'General BESS', model:'All containers', component:'Cabinet Grounding Stud', conn:'Grounding/bonding', bolt:'M10', torque:'22–25 Nm', notes:'Ground straps require two-hole lug.', status:'Reference' },
+
+    // ── Transformer / MV ───────────────────────────
+    { type:'Transformer', manufacturer:'ABB', model:'MVS-3150kVA / Trafostar', component:'LV Bushing Copper Palm', conn:'Busbar', bolt:'M16', torque:'85 Nm', notes:'Belleville washer + copper paste mandatory.', status:'Reference' },
+    { type:'Transformer', manufacturer:'ABB', model:'MVS-3150kVA', component:'HV Terminal Bolt', conn:'Busbar', bolt:'M20', torque:'150 Nm', notes:'Licensed HV electrician only. Torque in 3 passes.', status:'Reference' },
+    { type:'Transformer', manufacturer:'Siemens / Hitachi', model:'Pad-mount utility', component:'LV Output Lug', conn:'Lug', bolt:'M12', torque:'55–65 Nm', notes:'', status:'Sample' },
+    { type:'Transformer', manufacturer:'Howard / CG Power', model:'Dry-type / oil-filled', component:'LV Busbar Connection', conn:'Busbar', bolt:'M16', torque:'80–90 Nm', notes:'Verify with transformer nameplate or OEM docs.', status:'Sample' },
+
+    // ── Combiner Box ───────────────────────────────
+    { type:'Combiner', manufacturer:'SolarBOS', model:'1500V DC Disconnect', component:'Main DC Output Lugs', conn:'Lug', bolt:'1/2 in', torque:'375 lb-in', notes:'Copper lug. Inspect for cold-flow at 1 yr.', status:'Sample' },
+    { type:'Combiner', manufacturer:'SolarBOS', model:'1500V String Combiner', component:'Fuse Holder Terminals', conn:'Lug', bolt:'M8', torque:'12–16 Nm', notes:'', status:'Reference' },
+    { type:'Combiner', manufacturer:'Bentek', model:'BC-1500 series', component:'AC Disconnect Bus', conn:'Busbar', bolt:'M10', torque:'28 Nm', notes:'', status:'Sample' },
+    { type:'Combiner', manufacturer:'Eaton / Cutler-Hammer', model:'PVMax combiner', component:'Circuit Breaker Lug', conn:'Lug', bolt:'M8', torque:'16 Nm', notes:'', status:'Sample' },
+
+    // ── Grounding / Bonding ─────────────────────────
+    { type:'Grounding', manufacturer:'Burndy', model:'GB26 / YA25', component:'Ground Grid Copper Bonding Clamp', conn:'Grounding/bonding', bolt:'3/8-16', torque:'240 lb-in', notes:'Exothermic or mechanical — verify drawing.', status:'Reference' },
+    { type:'Grounding', manufacturer:'Burndy', model:'YA2C12', component:'Copper Compression Lug to Ground Bar', conn:'Grounding/bonding', bolt:'1/2-13', torque:'360 lb-in', notes:'Two-hole lug: torque both bolts.', status:'Reference' },
+    { type:'Grounding', manufacturer:'Ilsco', model:'GCAB / GTC series', component:'C-Type Ground Clamp — Bare Cu to Steel', conn:'Grounding/bonding', bolt:'M10', torque:'25 Nm', notes:'', status:'Reference' },
+    { type:'Grounding', manufacturer:'Penn-Union', model:'BLS-B / BLL-B', component:'Bolted Lug to Ground Bus', conn:'Grounding/bonding', bolt:'M12', torque:'40 Nm', notes:'', status:'Reference' },
+    { type:'Grounding', manufacturer:'General', model:'Equipment grounding', component:'Module Frame Ground Screw', conn:'Grounding/bonding', bolt:'M6', torque:'6–8 Nm', notes:'Stainless fastener. Do not strip thread.', status:'Reference' },
+
+    // ── Tracker / Structure ────────────────────────
+    { type:'Tracker', manufacturer:'Nextracker', model:'NX Horizon', component:'Torque Tube Splice Bolt', conn:'Mechanical fastener', bolt:'M16', torque:'160–175 Nm', notes:'Grade 8.8 galvanized. Dry threads.', status:'Sample' },
+    { type:'Tracker', manufacturer:'GameChange Solar', model:'Genius Tracker', component:'Drive Coupler Bolt', conn:'Mechanical fastener', bolt:'5/8-11', torque:'150 lb-ft', notes:'', status:'Sample' },
+    { type:'Tracker', manufacturer:'Array Technologies', model:'DuraTrack HZ v3', component:'Module Clamp Bolt (top)', conn:'Mechanical fastener', bolt:'M8', torque:'18 Nm', notes:'Use thread-lock if wind zone ≥ 110 mph.', status:'Sample' },
+    { type:'Tracker', manufacturer:'Arctech Solar', model:'SkyLine / SkySmart', component:'Beam-to-Pile Bolt', conn:'Mechanical fastener', bolt:'M20', torque:'280–300 Nm', notes:'Grade 10.9. Use calibrated impact gun.', status:'Sample' },
+    { type:'Tracker', manufacturer:'General', model:'Fixed tilt / ground mount', component:'Racking Purlin Bolt', conn:'Mechanical fastener', bolt:'M12', torque:'55–65 Nm', notes:'Grade 8.8 HDG. Confirm with structural EOR.', status:'Reference' },
+
+    // ── PV Module ──────────────────────────────────
+    { type:'Module', manufacturer:'General', model:'All crystalline modules', component:'Module Clamp to Rail', conn:'Mechanical fastener', bolt:'M8', torque:'16–20 Nm', notes:'Mid and end clamps. Verify OEM spec per watt class.', status:'Reference' },
+    { type:'Module', manufacturer:'General', model:'All crystalline modules', component:'Rail Splice Coupler Bolt', conn:'Mechanical fastener', bolt:'M8', torque:'12–15 Nm', notes:'', status:'Reference' },
+    { type:'Module', manufacturer:'General', model:'Framed modules (all)', component:'Grounding Washer to Frame', conn:'Grounding/bonding', bolt:'M6', torque:'6 Nm', notes:'Ensure bare metal-to-metal contact.', status:'Reference' },
+  ];
+
+  function buildEquipmentRow(row) {
+    const statusClass = row.status === 'Reference' ? 'badge-std' : row.status === 'Verified' ? 'badge-std' : 'badge-warn';
+    return `<tr data-type="${row.type}" data-search="${[row.type,row.manufacturer,row.model,row.component,row.conn,row.bolt,row.torque,row.notes].join(' ').toLowerCase()}">
+      <td><span class="equip-label">${row.type}</span></td>
+      <td><span style="font-weight:600;">${row.manufacturer}</span><br><span class="equip-sub">${row.model}</span></td>
+      <td><span class="comp-label">${row.component}</span><br><span class="comp-type">${row.conn}</span></td>
+      <td style="font-family:monospace; font-weight:600; color:#374151;">${row.bolt}</td>
+      <td><span class="torque-val">${row.torque}</span></td>
+      <td style="font-size:0.78rem; color:#64748b; max-width:180px;">${row.notes || '—'}</td>
+      <td><span class="badge ${statusClass}">${row.status}</span></td>
+    </tr>`;
+  }
+
+  function filterEquipment() {
+    const search = document.getElementById('eq-search').value.toLowerCase();
+    const type = document.getElementById('eq-filter-type').value;
+    const tbody = document.getElementById('eq-tbody');
+    let html = '';
+    let count = 0;
+    EQUIPMENT_SPECS.forEach(row => {
+      const matchType = type === 'all' || row.type === type;
+      const matchSearch = !search || row.type.toLowerCase().includes(search) ||
+        row.manufacturer.toLowerCase().includes(search) ||
+        row.model.toLowerCase().includes(search) ||
+        row.component.toLowerCase().includes(search) ||
+        row.conn.toLowerCase().includes(search) ||
+        row.bolt.toLowerCase().includes(search) ||
+        row.torque.toLowerCase().includes(search) ||
+        row.notes.toLowerCase().includes(search);
+      if (matchType && matchSearch) { html += buildEquipmentRow(row); count++; }
+    });
+    tbody.innerHTML = html || `<tr><td colspan="7"><div class="empty-state"><i class="fas fa-search"></i><p>No specs match your search.</p></div></td></tr>`;
+    document.getElementById('eq-count').textContent = `Showing ${count} of ${EQUIPMENT_SPECS.length} specs`;
+  }
+
+  // ═══════════════════════════════════════════
+  // TAB 2 — STANDARD BOLT TORQUES DATA
+  // ═══════════════════════════════════════════
+  const METRIC_BOLTS = [
+    // size, imperialEquiv, pitch, gr46, gr68, gr88, gr109, gr129
+    { size:'M4',  equiv:'5/32"',  pitch:'0.7',  g46:'1.4',  g68:'2.3',  g88:'3.0',    g109:'4.2',    g129:'5.0'    },
+    { size:'M5',  equiv:'3/16"',  pitch:'0.8',  g46:'2.8',  g68:'4.6',  g88:'6.0',    g109:'8.5',    g129:'10'     },
+    { size:'M6',  equiv:'1/4"',   pitch:'1.0',  g46:'4.8',  g68:'7.9',  g88:'10',     g109:'14',     g129:'17'     },
+    { size:'M8',  equiv:'5/16"',  pitch:'1.25', g46:'12',   g68:'19',   g88:'25',     g109:'35',     g129:'41'     },
+    { size:'M10', equiv:'3/8"',   pitch:'1.5',  g46:'23',   g68:'38',   g88:'49',     g109:'69',     g129:'82'     },
+    { size:'M12', equiv:'1/2"',   pitch:'1.75', g46:'40',   g68:'66',   g88:'86',     g109:'120',    g129:'145'    },
+    { size:'M14', equiv:'9/16"',  pitch:'2.0',  g46:'63',   g68:'105',  g88:'137',    g109:'192',    g129:'230'    },
+    { size:'M16', equiv:'5/8"',   pitch:'2.0',  g46:'99',   g68:'163',  g88:'210',    g109:'295',    g129:'355'    },
+    { size:'M18', equiv:'3/4"',   pitch:'2.5',  g46:'136',  g68:'224',  g88:'290',    g109:'405',    g129:'485'    },
+    { size:'M20', equiv:'3/4"',   pitch:'2.5',  g46:'192',  g68:'317',  g88:'410',    g109:'580',    g129:'695'    },
+    { size:'M22', equiv:'7/8"',   pitch:'2.5',  g46:'262',  g68:'432',  g88:'560',    g109:'790',    g129:'945'    },
+    { size:'M24', equiv:'1"',     pitch:'3.0',  g46:'331',  g68:'547',  g88:'710',    g109:'1000',   g129:'1200'   },
+    { size:'M27', equiv:'1-1/16"',pitch:'3.0',  g46:'490',  g68:'808',  g88:'1050',   g109:'1480',   g129:'1770'   },
+    { size:'M30', equiv:'1-1/8"', pitch:'3.5',  g46:'666',  g68:'1098', g88:'1420',   g109:'2000',   g129:'2400'   },
+  ];
+
+  const IMPERIAL_BOLTS = [
+    // size, tpi, metricEquiv, gr2, gr5, gr8, a325, a490
+    { size:'1/4"',    tpi:'20', equiv:'M6',    gr2:'4',    gr5:'7',    gr8:'10',   a325:'—',  a490:'—'  },
+    { size:'5/16"',   tpi:'18', equiv:'M8',    gr2:'8',    gr5:'14',   gr8:'20',   a325:'—',  a490:'—'  },
+    { size:'3/8"',    tpi:'16', equiv:'M10',   gr2:'15',   gr5:'25',   gr8:'37',   a325:'—',  a490:'—'  },
+    { size:'7/16"',   tpi:'14', equiv:'M11',   gr2:'24',   gr5:'40',   gr8:'60',   a325:'—',  a490:'—'  },
+    { size:'1/2"',    tpi:'13', equiv:'M12',   gr2:'37',   gr5:'60',   gr8:'90',   a325:'85', a490:'107' },
+    { size:'9/16"',   tpi:'12', equiv:'M14',   gr2:'53',   gr5:'88',   gr8:'132',  a325:'—',  a490:'—'  },
+    { size:'5/8"',    tpi:'11', equiv:'M16',   gr2:'73',   gr5:'120',  gr8:'180',  a325:'162',a490:'203' },
+    { size:'3/4"',    tpi:'10', equiv:'M20',   gr2:'125',  gr5:'200',  gr8:'295',  a325:'229',a490:'287' },
+    { size:'7/8"',    tpi:'9',  equiv:'M22',   gr2:'190',  gr5:'325',  gr8:'473',  a325:'354',a490:'454' },
+    { size:'1"',      tpi:'8',  equiv:'M24',   gr2:'280',  gr5:'480',  gr8:'710',  a325:'509',a490:'642' },
+    { size:'1-1/8"',  tpi:'7',  equiv:'M27',   gr2:'—',    gr5:'680',  gr8:'1000', a325:'643',a490:'808' },
+    { size:'1-1/4"',  tpi:'7',  equiv:'M30',   gr2:'—',    gr5:'950',  gr8:'1430', a325:'848',a490:'1060' },
+    { size:'1-3/8"',  tpi:'6',  equiv:'M33',   gr2:'—',    gr5:'1250', gr8:'1900', a325:'—',  a490:'—'  },
+    { size:'1-1/2"',  tpi:'6',  equiv:'M36',   gr2:'—',    gr5:'1650', gr8:'2450', a325:'1263',a490:'1584' },
+  ];
+
+  function renderBolts() {
+    const search = document.getElementById('bolt-search').value.toLowerCase();
+    const std = document.getElementById('bolt-filter-std').value;
+    const grade = document.getElementById('bolt-filter-grade').value;
+
+    let metricHtml = '';
+    METRIC_BOLTS.forEach(b => {
+      if (std === 'imperial') return;
+      if (grade !== 'all' && !['8.8','10.9','12.9'].includes(grade) && std !== 'all') return;
+      const s = `${b.size} ${b.equiv} ${b.pitch} ${b.g46} ${b.g68} ${b.g88} ${b.g109} ${b.g129}`.toLowerCase();
+      if (search && !s.includes(search)) return;
+      // Grade filter
+      if (grade === '8.8' || grade === '10.9' || grade === '12.9') {
+        if (!['8.8','10.9','12.9','all'].includes(grade)) return;
+      }
+      metricHtml += `<tr>
+        <td style="font-weight:700; color:#0f172a;">${b.size}</td>
+        <td style="color:#64748b;">${b.equiv}</td>
+        <td style="color:#64748b;">${b.pitch}</td>
+        <td class="center">${b.g46}</td>
+        <td class="center">${b.g68}</td>
+        <td class="center torque-val">${b.g88}</td>
+        <td class="center torque-val" style="color:#1d4ed8;">${b.g109}</td>
+        <td class="center torque-val" style="color:#7c3aed;">${b.g129}</td>
+      </tr>`;
+    });
+
+    let imperialHtml = '';
+    IMPERIAL_BOLTS.forEach(b => {
+      if (std === 'metric') return;
+      const s = `${b.size} ${b.tpi} ${b.equiv} ${b.gr2} ${b.gr5} ${b.gr8} ${b.a325} ${b.a490}`.toLowerCase();
+      if (search && !s.includes(search)) return;
+      imperialHtml += `<tr>
+        <td style="font-weight:700; color:#0f172a;">${b.size}</td>
+        <td style="color:#64748b;">${b.tpi}</td>
+        <td style="color:#64748b;">${b.equiv}</td>
+        <td class="center">${b.gr2}</td>
+        <td class="center torque-val">${b.gr5}</td>
+        <td class="center torque-val" style="color:#1d4ed8;">${b.gr8}</td>
+        <td class="center torque-val" style="color:#059669;">${b.a325}</td>
+        <td class="center torque-val" style="color:#7c3aed;">${b.a490}</td>
+      </tr>`;
+    });
+
+    document.getElementById('metric-tbody').innerHTML = metricHtml || `<tr><td colspan="8"><div class="empty-state" style="padding:1.5rem;"><i class="fas fa-search"></i><p>No matching bolt sizes.</p></div></td></tr>`;
+    document.getElementById('imperial-tbody').innerHTML = imperialHtml || `<tr><td colspan="8"><div class="empty-state" style="padding:1.5rem;"><i class="fas fa-search"></i><p>No matching bolt sizes.</p></div></td></tr>`;
+
+    const metricCount = (metricHtml.match(/<tr>/g)||[]).length;
+    const impCount = (imperialHtml.match(/<tr>/g)||[]).length;
+    document.getElementById('bolt-count').textContent = `Showing ${metricCount} metric + ${impCount} imperial bolt sizes`;
+  }
+
+  function filterBolts() { renderBolts(); }
+
+  // ═══════════════════════════════════════════
+  // TAB 3 — ELECTRICAL TERMINALS DATA
+  // ═══════════════════════════════════════════
+  const ELECTRICAL_SPECS = [
+    // Compression Lugs
+    { wire:'14 AWG – 10 AWG',  awg:'14–10 AWG',   type:'Compression Lug', stud:'#10 / #12 screw', torque:'20–35 lb-in', material:'Cu or Al conductor, Cu lug',     status:'Reference' },
+    { wire:'8 AWG – 4 AWG',    awg:'8–4 AWG',     type:'Compression Lug', stud:'1/4" bolt',       torque:'35–60 lb-in', material:'Cu or Al conductor',               status:'Reference' },
+    { wire:'2 AWG – 1/0 AWG',  awg:'2–1/0 AWG',   type:'Compression Lug', stud:'3/8" bolt',       torque:'90–120 lb-in', material:'Cu or Al lug (check AL9CU rating)', status:'Reference' },
+    { wire:'2/0 AWG – 4/0 AWG',awg:'2/0–4/0 AWG', type:'Compression Lug', stud:'1/2" bolt',       torque:'150–220 lb-in', material:'Cu or Al, two-hole preferred',    status:'Reference' },
+    { wire:'250 kcmil',        awg:'250 kcmil',   type:'Compression Lug', stud:'1/2" bolt',       torque:'200–240 lb-in', material:'Two-hole Cu lug recommended',      status:'Reference' },
+    { wire:'350 kcmil',        awg:'350 kcmil',   type:'Compression Lug', stud:'1/2" bolt',       torque:'250–280 lb-in', material:'Two-hole Cu lug required at ≥250k', status:'Reference' },
+    { wire:'500 kcmil',        awg:'500 kcmil',   type:'Compression Lug', stud:'5/8" bolt',       torque:'320–375 lb-in', material:'Two-hole; anti-oxidant mandatory if Al', status:'Reference' },
+    { wire:'750 kcmil',        awg:'750 kcmil',   type:'Compression Lug', stud:'3/4" bolt',       torque:'450–520 lb-in', material:'Two-hole; aluminum: re-torque at 1 yr', status:'Reference' },
+
+    // Terminal Blocks
+    { wire:'22 AWG – 14 AWG',  awg:'22–14 AWG',   type:'Terminal Block',  stud:'Screw terminal',  torque:'4–6 lb-in',    material:'Rated Cu. Check block listing.',   status:'Reference' },
+    { wire:'12 AWG – 10 AWG',  awg:'12–10 AWG',   type:'Terminal Block',  stud:'Screw terminal',  torque:'7–10 lb-in',   material:'',                                  status:'Reference' },
+    { wire:'8 AWG – 6 AWG',    awg:'8–6 AWG',     type:'Terminal Block',  stud:'Screw terminal',  torque:'15–20 lb-in',  material:'',                                  status:'Reference' },
+    { wire:'4 AWG – 2 AWG',    awg:'4–2 AWG',     type:'Terminal Block',  stud:'Screw terminal',  torque:'25–35 lb-in',  material:'Use ferrule for stranded wire.',     status:'Reference' },
+
+    // Busbar / Lug
+    { wire:'All large conductors', awg:'250–750 kcmil', type:'Busbar Lug',   stud:'1/2" or 5/8" bolt', torque:'250–400 lb-in', material:'Belleville washer; copper paste on Cu–Al interface', status:'Reference' },
+    { wire:'MV transformer LV',   awg:'N/A',           type:'Busbar Lug',   stud:'M16',               torque:'85–100 Nm',     material:'Copper palm; confirm with transformer datasheet', status:'Sample' },
+    { wire:'Inverter AC output',  awg:'N/A',           type:'Busbar Lug',   stud:'M12',               torque:'40–55 Nm',      material:'Check OEM IOM for specific model.',              status:'Sample' },
+
+    // Grounding Clamps
+    { wire:'6 AWG – 2/0 ground',  awg:'6–2/0 AWG',    type:'Grounding Clamp', stud:'5/16" – 3/8"',   torque:'120–180 lb-in', material:'Bare Cu ground conductor to steel structure.',   status:'Reference' },
+    { wire:'4/0 AWG ground',       awg:'4/0 AWG',      type:'Grounding Clamp', stud:'1/2" bolt',       torque:'200–240 lb-in', material:'Grid connection; exothermic vs. mechanical — per drawing.', status:'Reference' },
+    { wire:'PV module ground',     awg:'6–10 AWG',     type:'Grounding Clamp', stud:'M6',               torque:'6–8 Nm',       material:'Ensure bare metal contact. Stainless preferred.', status:'Reference' },
+  ];
+
+  function buildElecRow(row) {
+    const statusClass = row.status === 'Reference' ? 'badge-std' : 'badge-warn';
+    return `<tr data-type="${row.type}" data-search="${[row.wire,row.awg,row.type,row.stud,row.torque,row.material].join(' ').toLowerCase()}">
+      <td style="font-weight:600;">${row.wire}</td>
+      <td style="font-family:monospace; color:#374151;">${row.awg}</td>
+      <td><span class="comp-label">${row.type}</span></td>
+      <td style="font-family:monospace; color:#374151;">${row.stud}</td>
+      <td><span class="torque-val">${row.torque}</span></td>
+      <td style="font-size:0.78rem; color:#64748b; max-width:200px;">${row.material || '—'}</td>
+      <td><span class="badge ${statusClass}">${row.status}</span></td>
+    </tr>`;
+  }
+
+  function filterElectrical() {
+    const search = document.getElementById('elec-search').value.toLowerCase();
+    const type = document.getElementById('elec-filter-type').value;
+    const tbody = document.getElementById('elec-tbody');
+    let html = '';
+    let count = 0;
+    ELECTRICAL_SPECS.forEach(row => {
+      const matchType = type === 'all' || row.type === type;
+      const matchSearch = !search ||
+        row.wire.toLowerCase().includes(search) ||
+        row.awg.toLowerCase().includes(search) ||
+        row.type.toLowerCase().includes(search) ||
+        row.stud.toLowerCase().includes(search) ||
+        row.torque.toLowerCase().includes(search) ||
+        row.material.toLowerCase().includes(search);
+      if (matchType && matchSearch) { html += buildElecRow(row); count++; }
+    });
+    tbody.innerHTML = html || `<tr><td colspan="7"><div class="empty-state"><i class="fas fa-search"></i><p>No specs match your search.</p></div></td></tr>`;
+    document.getElementById('elec-count').textContent = `Showing ${count} of ${ELECTRICAL_SPECS.length} terminal specs`;
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    filterEquipment();
+    renderBolts();
+    filterElectrical();
+  });
+  </script>
 </body>
 </html>
