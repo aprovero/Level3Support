@@ -27,13 +27,13 @@
             </div>
             <nav class="sidebar-nav">
                 <a href="#home" class="nav-item active" data-view="home">
-                    <i class="fas fa-home"></i> <span>Home</span>
+                    <i class="fas fa-th-large"></i> <span>Dashboard</span>
                 </a>
                 <a href="#tools" class="nav-item" data-view="tools">
-                    <i class="fas fa-tools"></i> <span>Tool Library</span>
+                    <i class="fas fa-toolbox"></i> <span>Tool Library</span>
                 </a>
                 <a href="#workflows" class="nav-item" data-view="workflows">
-                    <i class="fas fa-project-diagram"></i> <span>Workflows</span>
+                    <i class="fas fa-route"></i> <span>Workflows</span>
                 </a>
                 <a href="#reference" class="nav-item" data-view="reference">
                     <i class="fas fa-book-open"></i> <span>Reference</span>
@@ -46,14 +46,16 @@
                 </a>
             </nav>
             <div class="sidebar-footer">
-                <div class="version-tag">v1.3.0</div>
+                <div class="version-tag">v2.1.0</div>
+                <div class="sidebar-powered">
+                    <span>Powered by</span>
+                    <img src="images/APROVERO_LOGO.png" alt="aprovero" class="sidebar-partner-logo">
+                </div>
             </div>
         </aside>
 
         <!-- Main Content Area -->
         <div class="main-content-area">
-            <!-- Mobile Navbar Header -->
-
             <!-- Mobile Navbar Header -->
             <nav class="mobile-navbar">
                 <div class="mobile-navbar-brand">
@@ -64,30 +66,41 @@
             <!-- Dynamic Views Container -->
             <main class="views-container">
                 
-                <!-- 1. HOME VIEW -->
+                <!-- 1. HOME VIEW (DASHBOARD) -->
                 <section id="view-home" class="view-section active">
                     <div class="view-header">
-                        <h1 class="view-title">Level3Support ToolHub</h1>
-                        <p class="view-subtitle">Solar PV, BESS, Grid, SCADA, and field engineering operating system</p>
+                        <div class="view-header-left">
+                            <h1 class="view-title">Dashboard</h1>
+                            <p class="view-subtitle">Solar PV, BESS, Grid, SCADA and field engineering tools</p>
+                        </div>
+                        <div class="view-header-right">
+                            <div class="global-search-wrapper">
+                                <i class="fas fa-search global-search-icon"></i>
+                                <input type="text" id="global-search-input" class="global-search-input" placeholder="Search tools, tags, or aliases...">
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Global Search -->
-                    <div class="global-search-container">
-                        <div class="global-search-wrapper">
-                            <i class="fas fa-search global-search-icon"></i>
-                            <input type="text" id="global-search-input" class="global-search-input" placeholder="Search 50+ tools, workflows, tags, or aliases (e.g., megger, hex, reactive)...">
+                    <!-- Field Use Notice Card -->
+                    <div class="field-use-notice">
+                        <div class="notice-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="notice-body">
+                            <h4 class="notice-title">Field use notice</h4>
+                            <p class="notice-text">This ToolHub assists field engineers but does not replace approved project documents, OEM manuals, local codes or site-specific HSE procedures.</p>
                         </div>
                     </div>
 
                     <!-- Favorites Section -->
                     <div class="home-section" id="favorites-section">
-                        <h2 class="home-section-title"><i class="fas fa-star text-warning"></i> My Starred Tools</h2>
+                        <h2 class="home-section-title"><i class="fas fa-star text-warning"></i> Starred Tools</h2>
                         <div id="favorites-grid" class="tools-grid">
                             <!-- Starred tools injected dynamically -->
                         </div>
-                        <div id="favorites-empty-state" class="empty-state-card">
+                        <div id="favorites-empty-state" class="empty-state-compact">
                             <i class="far fa-star"></i>
-                            <p>No favorites yet. Star tools to pin them here for rapid field access.</p>
+                            <span>No starred tools yet. Star tools from the Tool Library to pin them here.</span>
                         </div>
                     </div>
 
@@ -119,31 +132,34 @@
                     </div>
                 </section>
 
-                <!-- 2. TOOLS VIEW -->
+                <!-- 2. TOOLS VIEW (LIBRARY) -->
                 <section id="view-tools" class="view-section">
                     <div class="view-header">
-                        <h1 class="view-title">Tool Library</h1>
-                        <p class="view-subtitle">Search, filter, and access all active solar, battery, SCADA, and grid tools.</p>
+                        <div class="view-header-left">
+                            <h1 class="view-title">Tool Library</h1>
+                            <p class="view-subtitle">Search, filter, and access all active solar, battery, SCADA, and grid tools.</p>
+                        </div>
+                        <div class="view-header-right">
+                            <div class="global-search-wrapper">
+                                <i class="fas fa-search global-search-icon"></i>
+                                <input type="text" id="library-search-input" class="global-search-input" placeholder="Search by name, description, tags...">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="library-filter-panel">
                         <div class="library-search-row">
-                            <div class="search-container" style="flex: 1; position: relative;">
-                                <i class="fas fa-search search-icon"></i>
-                                <input type="text" id="library-search-input" class="search-input" placeholder="Search tool name, description, alias, or tags...">
+                            <!-- Category Scrolling Chips -->
+                            <div class="category-chips-scroller" style="flex: 1;">
+                                <div class="chips-container" id="category-chips-container">
+                                    <!-- Generated Dynamically -->
+                                </div>
                             </div>
                             
                             <!-- Toggle Advanced Filters -->
                             <button id="toggle-adv-filters" class="filter-toggle-btn">
                                 <i class="fas fa-sliders-h"></i> <span>Filters</span>
                             </button>
-                        </div>
-
-                        <!-- Category Scrolling Chips -->
-                        <div class="category-chips-scroller">
-                            <div class="chips-container" id="category-chips-container">
-                                <!-- Generated Dynamically -->
-                            </div>
                         </div>
 
                         <!-- Advanced Filters Drawer -->
@@ -199,13 +215,15 @@
 
                 <!-- 3. WORKFLOWS VIEW -->
                 <section id="view-workflows" class="view-section">
-                    <div class="view-header">
-                        <h1 class="view-title">Field Workflow Packs</h1>
-                        <p class="view-subtitle">Organized checklist sequences combining multiple calculator, report, and diagnostic tools to complete field milestones.</p>
+                    <div class="view-header" style="border-bottom: 1px solid #cbd5e1; padding-bottom: 1.5rem;">
+                        <div class="view-header-left">
+                            <h1 class="view-title">Field Workflow Packs</h1>
+                            <p class="view-subtitle">Organized checklist sequences combining multiple calculator, report, and diagnostic tools to complete field milestones.</p>
+                        </div>
                     </div>
 
                     <!-- Workflows Main Grid -->
-                    <div id="workflows-grid" class="workflows-main-grid">
+                    <div id="workflows-grid" class="workflows-main-grid" style="margin-top: 2rem;">
                         <!-- Injected dynamically -->
                     </div>
 
@@ -224,15 +242,19 @@
                 <!-- 4. REFERENCE VIEW -->
                 <section id="view-reference" class="view-section">
                     <div class="view-header">
-                        <h1 class="view-title">Reference Guides & Converters</h1>
-                        <p class="view-subtitle">Quick lookup tools, torque tables, protocol analyzers, base converters, and training material lists.</p>
+                        <div class="view-header-left">
+                            <h1 class="view-title">Reference Guides & Converters</h1>
+                            <p class="view-subtitle">Quick lookup tools, torque tables, protocol decoders, base converters, and reference searches.</p>
+                        </div>
+                        <div class="view-header-right">
+                            <div class="global-search-wrapper">
+                                <i class="fas fa-search global-search-icon"></i>
+                                <input type="text" id="reference-search-input" class="global-search-input" placeholder="Search reference tools...">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="library-filter-panel">
-                        <div class="search-container" style="position: relative; margin-bottom: 1rem;">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" id="reference-search-input" class="search-input" placeholder="Search reference tools (e.g. torque, base converter, MODBUS)...">
-                        </div>
                         <div class="category-chips-scroller">
                             <div class="chips-container" id="reference-chips-container">
                                 <!-- Chips for reference sub-categories -->
@@ -248,15 +270,19 @@
                 <!-- 5. REPORTS VIEW -->
                 <section id="view-reports" class="view-section">
                     <div class="view-header">
-                        <h1 class="view-title">Field Reports & Forms</h1>
-                        <p class="view-subtitle">Standardized testing templates, site reports, JHA builders, punchlist makers, and CAPA trackers.</p>
+                        <div class="view-header-left">
+                            <h1 class="view-title">Field Reports & Forms</h1>
+                            <p class="view-subtitle">Standardized testing templates, site reports, JHA builders, punchlist makers, and CAPA trackers.</p>
+                        </div>
+                        <div class="view-header-right">
+                            <div class="global-search-wrapper">
+                                <i class="fas fa-search global-search-icon"></i>
+                                <input type="text" id="reports-search-input" class="global-search-input" placeholder="Search reports & forms...">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="library-filter-panel">
-                        <div class="search-container" style="position: relative; margin-bottom: 1rem;">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" id="reports-search-input" class="search-input" placeholder="Search reports & forms (e.g. site visit, TTR, LOTO, JHA)...">
-                        </div>
                         <div class="category-chips-scroller">
                             <div class="chips-container" id="reports-chips-container">
                                 <!-- Chips for reports filters -->
@@ -271,17 +297,19 @@
 
                 <!-- 6. LEGACY / ADMIN VIEW -->
                 <section id="view-legacy" class="view-section">
-                    <div class="view-header">
-                        <h1 class="view-title">Legacy / Admin Center</h1>
-                        <p class="view-subtitle">Historical support requests, training logs, and active tool registry auditing tools.</p>
+                    <div class="view-header" style="border-bottom: 1px solid #cbd5e1; padding-bottom: 1.5rem;">
+                        <div class="view-header-left">
+                            <h1 class="view-title">Legacy / Admin Center</h1>
+                            <p class="view-subtitle">Historical support requests, training logs, and active tool registry auditing tools.</p>
+                        </div>
                     </div>
 
                     <!-- Warning Alert Banner -->
-                    <div class="warning-banner">
+                    <div class="warning-banner" style="margin-top: 2rem;">
                         <div class="warning-banner-icon"><i class="fas fa-exclamation-triangle"></i></div>
                         <div class="warning-banner-content">
-                            <h4 style="margin: 0 0 0.25rem 0; color: #7f1d1d; font-weight: 700;">Preserved Legacy Environment</h4>
-                            <p style="margin: 0; color: #991b1b; font-size: 0.85rem;">These modules are kept for historical support, database inquiries, and archived compliance. They are not active field tools.</p>
+                            <h4 style="margin: 0 0 0.25rem 0; color: #b45309; font-weight: 700;">Preserved Legacy Environment</h4>
+                            <p style="margin: 0; color: #d97706; font-size: 0.85rem;">These modules are kept for historical support, database inquiries, and archived compliance. They are not active field tools.</p>
                         </div>
                     </div>
 
@@ -324,39 +352,26 @@
                     </div>
                 </section>
             </main>
-            <!-- Announcement Disclaimer Bar at bottom -->
-            <div class="top-disclaimer-bar" style="border-top: 1px solid #fecaca; border-bottom: none; margin-top: 2rem;">
-                <span class="disclaimer-badge">DISCLAIMER</span>
-                <span class="disclaimer-text">This ToolHub assists field engineers but does not replace approved project documents, manuals, local codes, or site-specific HSE.</span>
-            </div>
 
-            <!-- Desktop Footer -->
-            <footer class="main-footer">
-                <div class="footer-container-inner">
-                    <p class="footer-copy-text">
-                        <span>&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</span>
-                        <span class="footer-version-tag">v1.3.0</span>
-                    </p>
-                    <div class="powered-by-wrapper">
-                        <span class="powered-by-label">Powered by</span>
-                        <img src="images/APROVERO_LOGO.png" alt="aprovero" class="footer-partner-logo">
-                    </div>
-                </div>
+            <!-- Muted Mobile-Only Footer -->
+            <footer class="mobile-only-footer">
+                <div class="mobile-footer-text">&copy; 2026 LEVEL3SUPPORT. v2.1.0</div>
+                <div class="mobile-footer-powered">Powered by aprovero</div>
             </footer>
         </div>
 
         <!-- Mobile Bottom Icon Navigation -->
         <nav class="mobile-bottom-nav">
             <a href="#home" class="bottom-nav-item active" data-view="home">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
+                <i class="fas fa-th-large"></i>
+                <span>Dashboard</span>
             </a>
             <a href="#tools" class="bottom-nav-item" data-view="tools">
-                <i class="fas fa-tools"></i>
+                <i class="fas fa-toolbox"></i>
                 <span>Tools</span>
             </a>
             <a href="#workflows" class="bottom-nav-item" data-view="workflows">
-                <i class="fas fa-project-diagram"></i>
+                <i class="fas fa-route"></i>
                 <span>Workflows</span>
             </a>
             <a href="#reference" class="bottom-nav-item" data-view="reference">
@@ -371,7 +386,7 @@
     </div>
 
     <!-- Embed Font & Styling and Router CSS -->
-    <link href="css/shared-styles.css?v=20" rel="stylesheet">
+    <link href="css/shared-styles.css?v=21" rel="stylesheet">
     <style>
         /* ── Unified OS-Style ToolHub Layout CSS ── */
         :root {
@@ -393,7 +408,7 @@
         }
 
         body {
-            background-color: #f1f5f9;
+            background-color: #f8fafc;
             overflow-x: hidden;
             margin: 0;
             padding: 0;
@@ -407,7 +422,7 @@
             position: relative;
         }
 
-        /* ── Desktop Sidebar ── */
+        /* ── Desktop Sidebar (White Premium) ── */
         .desktop-sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -436,7 +451,7 @@
 
         .sidebar-brand-full {
             height: auto;
-            max-height: 48px;
+            max-height: 44px;
             width: 100%;
             object-fit: contain;
         }
@@ -504,19 +519,40 @@
         }
 
         .sidebar-footer {
-            padding: 1rem;
+            padding: 1.25rem 1rem;
             border-top: 1px solid #cbd5e1;
-            text-align: center;
             background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
         }
 
         .version-tag {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: #64748b;
             background: #e2e8f0;
-            padding: 0.2rem 0.5rem;
+            padding: 0.15rem 0.4rem;
             border-radius: 4px;
             display: inline-block;
+            font-weight: 600;
+        }
+
+        .sidebar-powered {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.72rem;
+            color: #64748b;
+        }
+
+        .sidebar-partner-logo {
+            height: 20px;
+            width: auto;
+            border-radius: 4px;
+            background: #ffffff;
+            padding: 2px 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         /* ── Main Content Area ── */
@@ -529,32 +565,6 @@
             width: calc(100% - var(--sidebar-width));
             background: #f8fafc;
             position: relative;
-        }
-
-        /* Disclaimer bar */
-        .top-disclaimer-bar {
-            background: #fef2f2;
-            border-bottom: 1px solid #fecaca;
-            color: #991b1b;
-            font-size: 0.78rem;
-            font-weight: 550;
-            text-align: center;
-            padding: 0.6rem 1.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            z-index: 90;
-        }
-
-        .disclaimer-badge {
-            background: #ef4444;
-            color: #ffffff;
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 0.15rem 0.4rem;
-            border-radius: 4px;
-            letter-spacing: 0.5px;
         }
 
         /* Mobile Top Navbar */
@@ -572,7 +582,7 @@
         }
 
         .mobile-logo {
-            height: 38px;
+            height: 34px;
             width: auto;
         }
 
@@ -601,81 +611,134 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* ── Compact Header Grid ── */
         .view-header {
-            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.75rem;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 1.25rem;
+        }
+
+        .view-header-left {
+            flex: 1 1 300px;
+            text-align: left;
         }
 
         .view-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.2rem;
+            font-size: 1.85rem;
             font-weight: 700;
             color: #0f172a;
-            margin: 0 0 0.5rem 0;
+            margin: 0 0 0.25rem 0;
             text-align: left;
         }
 
         .view-subtitle {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             color: #475569;
             margin: 0;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
-        /* ── Global Search Home ── */
-        .global-search-container {
-            margin-bottom: 2.5rem;
+        .view-header-right {
+            flex: 0 1 360px;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
         }
 
+        /* ── Compact SaaS Search Bar ── */
         .global-search-wrapper {
             position: relative;
             width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
         }
 
         .global-search-input {
             width: 100%;
-            padding: 1rem 1.5rem 1rem 3.5rem !important;
-            font-size: 1.1rem !important;
+            padding: 0.6rem 1rem 0.6rem 2.6rem !important;
+            font-size: 0.88rem !important;
             font-family: 'Inter', sans-serif;
-            border-radius: 9999px !important;
-            height: 58px !important;
+            border-radius: 8px !important;
+            height: 38px !important;
             border: 1px solid #cbd5e1 !important;
             background: #ffffff !important;
-            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05) !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: none !important;
+            transition: all 0.2s ease !important;
             box-sizing: border-box;
         }
 
         .global-search-input:focus {
             outline: none !important;
             border-color: #2563eb !important;
-            box-shadow: 0 4px 24px rgba(37, 99, 235, 0.15), 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
         }
 
         .global-search-icon {
             position: absolute;
-            left: 1.5rem;
+            left: 0.95rem;
             top: 50%;
             transform: translateY(-50%);
             color: #94a3b8;
-            font-size: 1.3rem;
+            font-size: 0.9rem;
+        }
+
+        /* ── Subtle Field Use Notice Card ── */
+        .field-use-notice {
+            display: flex;
+            gap: 0.75rem;
+            background-color: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 0.85rem 1.25rem;
+            margin-bottom: 2rem;
+            text-align: left;
+            align-items: flex-start;
+        }
+
+        .notice-icon {
+            color: #d97706;
+            font-size: 1.1rem;
+            margin-top: 0.1rem;
+        }
+
+        .notice-body {
+            flex: 1;
+        }
+
+        .notice-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #b45309;
+            margin: 0 0 0.15rem 0;
+            text-align: left;
+        }
+
+        .notice-text {
+            margin: 0;
+            font-size: 0.82rem;
+            color: #b45309;
+            line-height: 1.4;
         }
 
         /* ── Home Page Sections ── */
         .home-section {
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
 
         .home-section-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.35rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: #1e293b;
-            margin: 0 0 1.25rem 0;
+            margin: 0 0 1rem 0;
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: 0.5rem;
             text-transform: none;
             letter-spacing: normal;
         }
@@ -684,7 +747,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
         }
 
         .section-header-flex .home-section-title {
@@ -692,12 +755,12 @@
         }
 
         .view-all-link {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
             color: #2563eb;
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.35rem;
             text-decoration: none;
             transition: var(--transition-quick);
         }
@@ -707,44 +770,43 @@
             text-decoration: underline;
         }
 
-        /* ── Starred empty state ── */
-        .empty-state-card {
+        /* ── Compact Favorites State ── */
+        .empty-state-compact {
             background: #ffffff;
-            border: 1px dashed #cbd5e1;
-            border-radius: 12px;
-            padding: 2.5rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
             text-align: center;
             color: #64748b;
-        }
-
-        .empty-state-card i {
-            font-size: 2.2rem;
-            margin-bottom: 0.75rem;
-            color: #94a3b8;
-        }
-
-        .empty-state-card p {
-            margin: 0;
-            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            font-size: 0.85rem;
             font-weight: 500;
+        }
+
+        .empty-state-compact i {
+            font-size: 1rem;
+            color: #94a3b8;
         }
 
         /* ── Tool Library Filters ── */
         .library-filter-panel {
             background: #ffffff;
             border: 1px solid #cbd5e1;
-            border-radius: 16px;
-            padding: 1.25rem;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
             margin-bottom: 2rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .library-search-row {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             width: 100%;
         }
 
@@ -752,48 +814,37 @@
             background: #f1f5f9;
             color: #475569;
             border: 1px solid #cbd5e1;
-            border-radius: 9999px;
-            padding: 0 1.5rem;
+            border-radius: 8px;
+            padding: 0 1.25rem;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            height: 46px;
+            height: 38px;
             margin-top: 0;
             width: auto;
             min-height: auto;
-        }
-
-        .filter-toggle-btn:hover {
-            background: #e2e8f0;
-            color: #0f172a;
-        }
-
-        .filter-toggle-btn.active {
-            background: #2563eb;
-            color: #ffffff;
-            border-color: #2563eb;
         }
 
         /* Category chips */
         .category-chips-scroller {
             overflow-x: auto;
             width: 100%;
-            scrollbar-width: none; /* Hide standard Firefox scrollbar */
-            -ms-overflow-style: none; /* Hide IE scrollbar */
-            padding: 2px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 1px 0;
         }
 
         .category-chips-scroller::-webkit-scrollbar {
-            display: none; /* Hide Chrome/Safari scrollbars */
+            display: none;
         }
 
         .chips-container {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.4rem;
             white-space: nowrap;
             width: max-content;
         }
@@ -804,35 +855,34 @@
             justify-content: center;
             background: #ffffff;
             border: 1px solid #cbd5e1;
-            border-radius: 9999px;
-            padding: 0.4rem 1.1rem;
-            font-size: 0.85rem;
+            border-radius: 6px;
+            padding: 0.35rem 0.95rem;
+            font-size: 0.82rem;
             font-weight: 600;
             color: #475569;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             user-select: none;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
 
         .category-chip:hover {
             color: #2563eb;
-            border-color: #2563eb;
-            background: #f8fafc;
+            border-color: #cbd5e1;
+            background: #f1f5f9;
         }
 
         .category-chip.active {
             background-color: #2563eb !important;
             color: #ffffff !important;
             border-color: #2563eb !important;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15);
         }
 
         /* Advanced Drawer */
         .filters-drawer {
-            border-top: 1px solid #e2e8f0;
-            padding-top: 1rem;
-            margin-top: 0.25rem;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 0.75rem;
+            margin-top: 0.1rem;
             transition: all 0.3s ease;
         }
 
@@ -843,17 +893,17 @@
         .drawer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 0.4rem;
+            gap: 0.35rem;
         }
 
         .filter-group label {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             color: #475569;
             text-transform: uppercase;
@@ -863,42 +913,42 @@
 
         .filter-group select {
             width: 100%;
-            height: 40px;
+            height: 36px;
             border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 0 0.75rem;
-            font-size: 0.9rem;
+            border-radius: 6px;
+            padding: 0 0.5rem;
+            font-size: 0.85rem;
             background-color: #f8fafc;
             color: #1e293b;
             margin-bottom: 0;
             cursor: pointer;
         }
 
-        /* ── Tools Grid Premium styling ── */
+        /* ── Tools Grid Standardized SaaS styling ── */
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
             margin-bottom: 1.5rem;
         }
 
         .tool-tile {
             background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.03);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.01), 0 2px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            height: 100%;
             display: flex;
             flex-direction: column;
+            height: 100%;
         }
 
         .tool-tile:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.03);
-            border-color: #cbd5e1;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.06);
+            border-color: #94a3b8;
         }
 
         .tile-content {
@@ -915,34 +965,34 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.85rem;
             width: 100%;
         }
 
         .status-badge {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 700;
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
 
-        .status-active { background: #dcfce7; color: #15803d; }
-        .status-in-progress { background: #fef3c7; color: #b45309; }
+        .status-active { background: #e8f5e9; color: #2e7d32; }
+        .status-in-progress { background: #fff8e1; color: #f57f17; }
         .status-legacy { background: #f1f5f9; color: #475569; }
-        .status-disabled { background: #fee2e2; color: #b91c1c; }
+        .status-disabled { background: #ffebee; color: #c62828; }
         .status-admin-only { background: #f3e8ff; color: #6b21a8; }
 
         .tile-category {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 700;
             color: #64748b;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             background: #f1f5f9;
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
             position: static;
         }
 
@@ -950,7 +1000,7 @@
             background: transparent;
             border: none;
             color: #cbd5e1;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             cursor: pointer;
             transition: all 0.2s ease;
             width: auto;
@@ -973,28 +1023,27 @@
 
         .tile-main {
             display: flex;
-            gap: 1rem;
+            gap: 0.85rem;
             align-items: flex-start;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
             flex: 1;
         }
 
         .tile-icon-wrapper {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
             background: #eff6ff;
             color: #2563eb;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
             transition: all 0.2s ease;
         }
 
         .tool-tile:hover .tile-icon-wrapper {
-            transform: scale(1.05);
             background: #2563eb;
             color: #ffffff;
         }
@@ -1006,19 +1055,19 @@
 
         .tile-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.05rem;
+            font-size: 0.98rem;
             font-weight: 700;
             color: #0f172a;
-            margin: 0 0 0.35rem 0;
-            line-height: 1.3;
+            margin: 0 0 0.25rem 0;
+            line-height: 1.35;
             text-align: left;
         }
 
         .tile-description {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: #475569;
             margin: 0;
-            line-height: 1.45;
+            line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
@@ -1030,22 +1079,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid #f1f5f9;
-            padding-top: 0.85rem;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 0.75rem;
             margin-top: auto;
         }
 
         .tile-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.3rem;
+            gap: 0.25rem;
             max-width: 80%;
         }
 
         .tag-badge {
-            font-size: 0.65rem;
-            font-weight: 550;
-            padding: 0.1rem 0.4rem;
+            font-size: 0.62rem;
+            font-weight: 600;
+            padding: 0.1rem 0.35rem;
             border-radius: 4px;
             background: #f8fafc;
             color: #64748b;
@@ -1054,33 +1103,33 @@
 
         .tile-action-indicator {
             color: #cbd5e1;
-            font-size: 0.9rem;
+            font-size: 0.82rem;
             transition: all 0.2s ease;
         }
 
         .tool-tile:hover .tile-action-indicator {
-            transform: translateX(3px);
+            transform: translateX(2px);
             color: #2563eb;
         }
 
         /* ── Workflows Grid Premium ── */
         .workflows-main-grid, .workflows-home-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
             margin-bottom: 2rem;
         }
 
         .workflows-home-grid {
-            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
         }
 
         .workflow-card {
             background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
             transition: all 0.25s ease;
             cursor: pointer;
             text-align: left;
@@ -1092,8 +1141,8 @@
         }
 
         .workflow-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(16, 185, 129, 0.06), 0 4px 12px rgba(16, 185, 129, 0.02);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(16, 185, 129, 0.05);
             border-color: #a7f3d0;
         }
 
@@ -1101,22 +1150,22 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1rem;
+            margin-bottom: 0.85rem;
         }
 
         .workflow-badge {
             background: #e6f7f0;
             color: #10b981;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 700;
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .workflow-step-count {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 600;
             color: #64748b;
             background: #f1f5f9;
@@ -1126,38 +1175,38 @@
 
         .workflow-card-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             font-weight: 700;
             color: #0f172a;
-            margin: 0 0 0.5rem 0;
-            line-height: 1.3;
+            margin: 0 0 0.35rem 0;
+            line-height: 1.35;
         }
 
         .workflow-card-desc {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: #475569;
-            margin: 0 0 1.25rem 0;
-            line-height: 1.45;
+            margin: 0 0 1rem 0;
+            line-height: 1.4;
         }
 
         .workflow-card-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 1px solid #f1f5f9;
-            padding-top: 0.85rem;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 0.75rem;
             margin-top: auto;
         }
 
         .workflow-tags {
             display: flex;
-            gap: 0.3rem;
+            gap: 0.25rem;
         }
 
         .workflow-tag {
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 600;
-            padding: 0.1rem 0.4rem;
+            padding: 0.1rem 0.35rem;
             border-radius: 4px;
             background: #f0fdf4;
             color: #166534;
@@ -1165,12 +1214,12 @@
         }
 
         .workflow-action-btn {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #10b981;
             display: flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.25rem;
         }
 
         /* ── Workflow Detail Panel Slider ── */
@@ -1250,18 +1299,18 @@
         .workflow-steps-list {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.85rem;
             margin: 1.5rem 0;
         }
 
         .step-item {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem;
+            gap: 0.85rem;
+            padding: 0.85rem;
             background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
             text-decoration: none;
             transition: all 0.2s ease;
             cursor: pointer;
@@ -1270,19 +1319,19 @@
         .step-item:hover {
             background: #f0fdf4;
             border-color: #a7f3d0;
-            transform: translateX(4px);
+            transform: translateX(3px);
         }
 
         .step-number {
-            width: 30px;
-            height: 30px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             background: #10b981;
             color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 0.82rem;
             font-weight: 700;
             flex-shrink: 0;
         }
@@ -1295,12 +1344,12 @@
         .step-name {
             font-weight: 700;
             color: #0f172a;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin: 0 0 0.15rem 0;
         }
 
         .step-desc {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #64748b;
             margin: 0;
             line-height: 1.35;
@@ -1308,47 +1357,52 @@
 
         .step-action-arrow {
             color: #cbd5e1;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .step-item:hover .step-action-arrow {
             color: #10b981;
         }
 
-        /* ── Legacy Banner & Audit Card ── */
+        /* ── Legacy Warning Alert Banner ── */
         .warning-banner {
-            background: #fff5f5;
-            border: 1px solid #fee2e2;
-            border-radius: 12px;
-            padding: 1.25rem;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             margin-bottom: 2rem;
             align-items: flex-start;
             text-align: left;
         }
 
         .warning-banner-icon {
-            color: #ef4444;
-            font-size: 1.4rem;
+            color: #d97706;
+            font-size: 1.1rem;
             flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .warning-banner-content {
+            flex: 1;
         }
 
         .audit-dashboard-card {
             background: #ffffff;
             border: 1px solid #cbd5e1;
-            border-radius: 16px;
-            padding: 1.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
             text-align: left;
         }
 
         .audit-card-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 700;
             color: #0f172a;
-            margin: 0 0 1.25rem 0;
+            margin: 0 0 1rem 0;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -1357,28 +1411,28 @@
         .audit-stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            gap: 0.85rem;
+            margin-bottom: 1.25rem;
         }
 
         .audit-stat-item {
             background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0.85rem;
             text-align: center;
         }
 
         .audit-stat-number {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #2563eb;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.2rem;
         }
 
         .audit-stat-label {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 600;
             color: #64748b;
         }
@@ -1388,85 +1442,35 @@
             color: #38bdf8;
             font-family: 'Courier New', Courier, monospace;
             padding: 1rem;
-            border-radius: 8px;
-            max-height: 180px;
+            border-radius: 6px;
+            max-height: 160px;
             overflow-y: auto;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             line-height: 1.4;
             border: 1px solid #1e293b;
         }
 
-        /* ── Desktop/Mobile Footer ── */
-        .main-footer {
-            background: #0f172a !important;
-            padding: 1.5rem 2.5rem !important;
-            border-top: 1px solid #1e293b !important;
-            margin-top: 4rem !important;
+        /* ── Muted Mobile-Only Footer ── */
+        .mobile-only-footer {
+            display: none;
+            padding: 1.5rem 1rem 6rem 1rem;
+            text-align: center;
+            border-top: 1px solid #cbd5e1;
+            margin-top: 2rem;
             box-sizing: border-box;
-            width: 100%;
         }
 
-        .footer-container-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            width: 100%;
-        }
-
-        .footer-copy-text {
-            margin: 0;
+        .mobile-footer-text {
+            font-size: 0.75rem;
             color: #64748b;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            justify-content: center;
+            margin-bottom: 0.25rem;
+            font-weight: 555;
         }
 
-        .footer-version-tag {
-            padding: 0.15rem 0.4rem;
-            background: #1e293b;
-            border-radius: 4px;
+        .mobile-footer-powered {
+            font-size: 0.7rem;
             color: #94a3b8;
-            font-size: 0.72rem;
-            font-weight: 600;
-            border: 1px solid #334155;
-            letter-spacing: 0.5px;
-        }
-
-        .powered-by-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .powered-by-label {
             font-style: italic;
-            font-weight: 400;
-            color: #64748b;
-            font-size: 0.85rem;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .footer-partner-logo {
-            height: 34px;
-            width: auto;
-            border-radius: 6px;
-            background: #ffffff;
-            padding: 4px 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: inline-block;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            box-sizing: border-box;
-        }
-
-        .footer-partner-logo:hover {
-            transform: scale(1.04);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
         }
 
         /* ── Mobile Bottom Navigation ── */
@@ -1508,7 +1512,7 @@
         }
 
         .bottom-nav-item i {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             transition: all 0.2s ease;
         }
 
@@ -1523,13 +1527,16 @@
         }
 
         .bottom-nav-item.active i {
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         /* ── Responsive Rules ── */
         @media (max-width: 1024px) {
             .tools-grid {
-                grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .workflows-main-grid, .workflows-home-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -1551,48 +1558,54 @@
                 display: flex;
             }
 
+            .mobile-only-footer {
+                display: block;
+            }
+
             .views-container {
                 padding: 1.25rem 1rem;
-                padding-bottom: calc(var(--bottom-nav-height) + 1.5rem); /* Prevents bottom bar covering content */
+                padding-bottom: calc(var(--bottom-nav-height) + 1rem);
+            }
+
+            .view-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                border-bottom: 1px solid #cbd5e1;
+                padding-bottom: 1rem;
+            }
+
+            .view-header-right {
+                flex: 1 1 100%;
+                justify-content: flex-start;
             }
 
             .view-title {
-                font-size: 1.75rem;
+                font-size: 1.6rem;
             }
 
             .view-subtitle {
-                font-size: 0.95rem;
+                font-size: 0.88rem;
             }
 
             .global-search-input {
-                height: 48px !important;
-                font-size: 0.95rem !important;
-                padding-left: 2.8rem !important;
+                height: 38px !important;
+                font-size: 0.88rem !important;
+                padding-left: 2.6rem !important;
             }
 
             .global-search-icon {
-                font-size: 1.1rem;
-                left: 1.1rem;
+                font-size: 0.9rem;
+                left: 0.95rem;
             }
 
             .tools-grid {
-                grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+                grid-template-columns: 1fr;
                 gap: 1rem;
             }
 
             .workflows-main-grid, .workflows-home-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .main-footer {
-                padding: 1rem 1rem 5.5rem 1rem !important; /* Extra bottom padding for mobile bottom nav */
-                text-align: center;
-            }
-
-            .footer-container-inner {
-                flex-direction: column;
-                align-items: center;
                 gap: 1rem;
             }
 
@@ -1604,14 +1617,13 @@
     </style>
 
     <!-- Load refactored OS-Style javascript router & behavior -->
-    <script src="js/tools-hub.js?v=20"></script>
+    <script src="js/tools-hub.js?v=21"></script>
     <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js?v=20')
+        navigator.serviceWorker.register('/sw.js?v=21')
         .then(reg => console.log('SW registered ✅', reg))
         .catch(err => console.error('SW registration failed ❌', err));
     }
     </script>
 </body>
-</html>
 </html>
