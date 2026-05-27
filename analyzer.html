@@ -16,7 +16,7 @@
 
     <style>
         .placeholder-container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1.5rem;
         }
@@ -50,13 +50,14 @@
             transform: translateX(-4px);
             color: var(--primary-hover);
         }
-        .tool-body-grid {
+        .top-body-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
+            margin-bottom: 2rem;
         }
         @media (min-width: 768px) {
-            .tool-body-grid {
+            .top-body-grid {
                 grid-template-columns: 3fr 2fr;
             }
         }
@@ -67,6 +68,9 @@
             padding: 1.5rem;
             box-shadow: var(--shadow-sm);
             margin-bottom: 1.5rem;
+        }
+        .card-panel:last-child {
+            margin-bottom: 0;
         }
         .card-title {
             font-family: 'Outfit', sans-serif;
@@ -84,7 +88,7 @@
 </head>
 <body>
     <nav class="navbar" style="background:#ffffff; box-shadow:0 1px 3px rgba(0,0,0,0.06); padding:1rem 2rem;">
-        <div style="max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center;">
+        <div style="max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center;">
             <a href="index.html">
                 <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height:60px; width:auto;">
             </a>
@@ -122,10 +126,10 @@
             </div>
         </div>
 
-        <!-- Grid Body -->
-        <div class="tool-body-grid">
-            <!-- Left Column: Inputs & Tables/Charts -->
-            <div>
+        <!-- Top Section: Inputs & Reference Info -->
+        <div class="top-body-grid">
+            <!-- Left Side of Top: Inputs -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                 <!-- CSV Upload Card -->
                 <div class="card-panel">
                     <div class="card-title"><i class="fas fa-cloud-upload-alt"></i> Upload CSV Files</div>
@@ -156,43 +160,12 @@
                         </select>
                     </section>
                 </div>
-
-                <!-- Chart Card -->
-                <div class="card-panel">
-                    <div class="card-title"><i class="fas fa-chart-line"></i> Power Chart</div>
-                    <section class="chart-section" style="margin:0; padding:0; border:none; box-shadow:none;">
-                        <div id="chart-container" class="chart-container" style="position:relative; height:320px; width:100%;">
-                            <canvas id="chart-canvas" height="300"></canvas>
-                        </div>
-                    </section>
-                    
-                    <!-- Export Button Below Chart -->
-                    <div class="mt-4 flex justify-center">
-                        <button id="export-chart" class="chart-export" style="background:var(--primary-color); color:white; padding:8px 16px; border-radius:6px; font-weight:600; cursor:pointer; font-size:0.9rem; transition:background 0.2s;"><i class="fas fa-file-image"></i> Export as PNG</button>
-                    </div>
-                </div>
-
-                <!-- Events Card -->
-                <div class="card-panel">
-                    <div class="card-title"><i class="fas fa-list-ul"></i> Event Log Timelines</div>
-                    <section class="event-summary" style="margin:0; padding:0; border:none; box-shadow:none;">
-                        <div id="event-summary" class="summary-box" style="background:#f8fafc; border:1px solid #cbd5e1; padding:12px; border-radius:8px; font-size:0.85rem; font-style:italic; color:#64748b;">No events loaded yet.</div>
-                    </section>
-                </div>
-                
-                <!-- Dynamic Results Diagnostics Panels -->
-                <div id="diagnostics-results" class="card-panel" style="display: none;">
-                    <div class="card-title"><i class="fas fa-stethoscope"></i> Central Inverter Diagnostics</div>
-                    <div class="results-content">
-                        <!-- Filled dynamically by analyzer.js -->
-                    </div>
-                </div>
             </div>
 
-            <!-- Right Column: Safety & Assumptions -->
-            <div>
+            <!-- Right Side of Top: Safety & Assumptions -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                 <!-- Assumptions Panel -->
-                <div class="assumptions-box">
+                <div class="assumptions-box" style="margin:0;">
                     <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Engineering Reference</div>
                     <ul class="assumptions-list">
                         <li>Visual charts map history files for active power, reactive power, and cell temperatures.</li>
@@ -201,7 +174,7 @@
                     </ul>
                 </div>
 
-                <div class="card-panel" style="border-top:4px solid var(--primary-color); margin-top:1.5rem;">
+                <div class="card-panel" style="border-top:4px solid var(--primary-color); margin:0;">
                     <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
                     <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
                         This module analyzes Central Inverter SCADA outputs and logs.
@@ -212,6 +185,40 @@
                         <strong>Status:</strong> Active
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section: Full-Width Chart, Timeline & Diagnostics -->
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <!-- Chart Card -->
+            <div class="card-panel" style="margin-bottom:0;">
+                <div class="card-title"><i class="fas fa-chart-line"></i> Power Chart</div>
+                <section class="chart-section" style="margin:0; padding:0; border:none; box-shadow:none;">
+                    <div id="chart-container" class="chart-container" style="position:relative; height:400px; width:100%;">
+                        <canvas id="chart-canvas" height="380"></canvas>
+                    </div>
+                </section>
+                
+                <!-- Export Button Below Chart -->
+                <div class="mt-4 flex justify-center">
+                    <button id="export-chart" class="chart-export" style="background:var(--primary-color); color:white; padding:8px 16px; border-radius:6px; font-weight:600; cursor:pointer; font-size:0.9rem; transition:background 0.2s;"><i class="fas fa-file-image"></i> Export as PNG</button>
+                </div>
+            </div>
+
+            <!-- Dynamic Results Diagnostics Panels -->
+            <div id="diagnostics-results" class="card-panel" style="display: none; margin-bottom:0;">
+                <div class="card-title"><i class="fas fa-stethoscope"></i> Central Inverter Diagnostics</div>
+                <div class="results-content">
+                    <!-- Filled dynamically by analyzer.js -->
+                </div>
+            </div>
+
+            <!-- Events Card -->
+            <div class="card-panel" style="margin-bottom:0;">
+                <div class="card-title"><i class="fas fa-list-ul"></i> Event Log Timelines</div>
+                <section class="event-summary" style="margin:0; padding:0; border:none; box-shadow:none;">
+                    <div id="event-summary" class="summary-box" style="background:#f8fafc; border:1px solid #cbd5e1; padding:12px; border-radius:8px; font-size:0.85rem; font-style:italic; color:#64748b;">No events loaded yet.</div>
+                </section>
             </div>
         </div>
     </div>

@@ -384,6 +384,15 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
+    /* Highlighted cells when filtered */
+    .ref-table td.highlight-cell {
+      background-color: #f0fdf4 !important;
+      color: #15803d !important;
+      font-weight: 800 !important;
+      border-left: 2px solid #86efac !important;
+      border-right: 2px solid #86efac !important;
+    }
+
     @media (max-width: 600px) {
       .search-filter-row { flex-direction: column; }
       .filter-select { width: 100%; }
@@ -435,6 +444,9 @@
 
     <!-- Tab Bar -->
     <div class="tab-bar">
+      <button class="tab-btn" id="tab-btn-calculator" onclick="switchTab('calculator')">
+        <i class="fas fa-calculator"></i> Calculator
+      </button>
       <button class="tab-btn active" id="tab-btn-bolts" onclick="switchTab('bolts')">
         <i class="fas fa-cog"></i> Standard Bolt Torques
       </button>
@@ -447,67 +459,9 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════
-         TAB 1 — EQUIPMENT SPECS
+         TAB 1 — CALCULATOR WIDGET
     ═══════════════════════════════════════════════════ -->
-    <div class="tab-panel" id="panel-equipment">
-
-      <div class="search-filter-row">
-        <div class="search-wrapper">
-          <i class="fas fa-search"></i>
-          <input type="text" id="eq-search" placeholder="Search manufacturer, model, component, bolt size…" oninput="filterEquipment()">
-        </div>
-        <select class="filter-select" id="eq-filter-type" onchange="filterEquipment()">
-          <option value="all">All Equipment Types</option>
-          <option value="Inverter">Inverter</option>
-          <option value="BESS">BESS / Battery</option>
-          <option value="Transformer">Transformer / MV</option>
-          <option value="Combiner">Combiner Box</option>
-          <option value="Grounding">Grounding / Bonding</option>
-          <option value="Tracker">Tracker / Structure</option>
-          <option value="Module">PV Module</option>
-        </select>
-      </div>
-
-      <div class="result-count" id="eq-count"></div>
-
-      <div class="table-card">
-        <div class="table-scroll">
-          <table class="ref-table" id="eq-table">
-            <thead>
-              <tr>
-                <th>Equipment</th>
-                <th>Manufacturer / Model</th>
-                <th>Component &amp; Connection</th>
-                <th>Bolt / Terminal</th>
-                <th>Torque Value</th>
-                <th>Notes</th>
-                <th>Source Document</th>
-                <th>Data Confidence</th>
-              </tr>
-            </thead>
-            <tbody id="eq-tbody">
-              <!-- Injected by JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="notes-box">
-        <h4><i class="fas fa-info-circle" style="color:#3b82f6;"></i> Engineering Notes</h4>
-        <ul>
-          <li><strong>Lubrication matters:</strong> Dry vs. lubricated threads can change required torque by 30–40%. Always confirm if the spec assumes dry (Kdry ≈ 0.2) or lubricated (Klube ≈ 0.15) threads.</li>
-          <li><strong>Copper vs. aluminum lugs:</strong> Aluminum conductors require anti-oxidant compound and lower re-torque intervals due to cold flow/creep. Always check OEM guidance.</li>
-          <li><strong>Belleville washers:</strong> Many inverter and transformer busbar connections specify Belleville (spring) washers to maintain clamp force during thermal cycling.</li>
-          <li><strong>Calibrated torque wrenches:</strong> Use only calibrated tools. Verify calibration before each day of torquing activity.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════
-         TAB 2 — STANDARD BOLT TORQUES
-    ═══════════════════════════════════════════════════ -->
-    <div class="tab-panel active" id="panel-bolts">
-
+    <div class="tab-panel" id="panel-calculator">
       <!-- Dynamic Bolt Torque and Pre-load Calculator Card -->
       <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); text-align:left;">
         <h3 style="font-family:'Outfit',sans-serif; font-size:1.25rem; font-weight:700; color:#1e293b; margin:0 0 1rem 0; display:flex; align-items:center; gap:0.5rem;">
@@ -591,6 +545,12 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         TAB 2 — STANDARD BOLT TORQUES
+    ═══════════════════════════════════════════════════ -->
+    <div class="tab-panel active" id="panel-bolts">
 
       <div class="search-filter-row">
         <div class="search-wrapper">
@@ -617,50 +577,54 @@
       <div class="result-count" id="bolt-count"></div>
 
       <!-- Metric Section -->
-      <p class="section-title"><i class="fas fa-globe"></i> Metric Bolts — ISO / DIN Standard</p>
-      <div class="table-card" style="margin-bottom:2rem;">
-        <div class="table-scroll">
-          <table class="ref-table" id="metric-table">
-            <thead>
-              <tr>
-                <th>Size (M)</th>
-                <th>Imperial Equiv.</th>
-                <th>Pitch (mm)</th>
-                <th class="center">Gr 4.6<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
-                <th class="center">Gr 6.8<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
-                <th class="center">Gr 8.8<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
-                <th class="center">Gr 10.9<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
-                <th class="center">Gr 12.9<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
-              </tr>
-            </thead>
-            <tbody id="metric-tbody"></tbody>
-          </table>
+      <div id="metric-section">
+        <p class="section-title"><i class="fas fa-globe"></i> Metric Bolts — ISO / DIN Standard</p>
+        <div class="table-card" style="margin-bottom:2rem;">
+          <div class="table-scroll">
+            <table class="ref-table" id="metric-table">
+              <thead>
+                <tr>
+                  <th>Size (M)</th>
+                  <th>Imperial Equiv.</th>
+                  <th>Pitch (mm)</th>
+                  <th class="center col-gr46">Gr 4.6<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
+                  <th class="center col-gr68">Gr 6.8<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
+                  <th class="center col-gr88">Gr 8.8<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
+                  <th class="center col-gr109">Gr 10.9<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
+                  <th class="center col-gr129">Gr 12.9<br><span style="font-weight:400; font-size:0.7rem;">(Nm)</span></th>
+                </tr>
+              </thead>
+              <tbody id="metric-tbody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       <!-- Imperial Section -->
-      <p class="section-title"><i class="fas fa-flag-usa"></i> Imperial Bolts — SAE / ASTM Standard</p>
-      <div class="table-card">
-        <div class="table-scroll">
-          <table class="ref-table" id="imperial-table">
-            <thead>
-              <tr>
-                <th>Size</th>
-                <th>Thread (TPI)</th>
-                <th>Metric Equiv.</th>
-                <th class="center">SAE Gr 2<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
-                <th class="center">SAE Gr 5<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
-                <th class="center">SAE Gr 8<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
-                <th class="center">ASTM A325<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
-                <th class="center">ASTM A490<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
-              </tr>
-            </thead>
-            <tbody id="imperial-tbody"></tbody>
-          </table>
+      <div id="imperial-section">
+        <p class="section-title"><i class="fas fa-flag-usa"></i> Imperial Bolts — SAE / ASTM Standard</p>
+        <div class="table-card">
+          <div class="table-scroll">
+            <table class="ref-table" id="imperial-table">
+              <thead>
+                <tr>
+                  <th>Size</th>
+                  <th>Thread (TPI)</th>
+                  <th>Metric Equiv.</th>
+                  <th class="center col-sae2">SAE Gr 2<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
+                  <th class="center col-sae5">SAE Gr 5<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
+                  <th class="center col-sae8">SAE Gr 8<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
+                  <th class="center col-a325">ASTM A325<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
+                  <th class="center col-a490">ASTM A490<br><span style="font-weight:400; font-size:0.7rem;">(lb-ft)</span></th>
+                </tr>
+              </thead>
+              <tbody id="imperial-tbody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      <div class="notes-box">
+      <div class="notes-box" style="margin-top: 1.5rem;">
         <h4><i class="fas fa-info-circle" style="color:#3b82f6;"></i> Bolt Torque Reference Notes</h4>
         <ul>
           <li>All values assume <strong>dry, clean, unlubricated threads</strong> (friction coefficient K ≈ 0.20). Reduce by ~25–30% for lubricated threads.</li>
@@ -720,6 +684,62 @@
           <li><strong>NEC 110.14:</strong> Conductor and terminal materials must be compatible (Cu–Cu, Al–Al, or rated Cu–Al). Check lug markings (AL9CU, AL7CU, CU ONLY, etc.).</li>
         </ul>
       </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         TAB 4 — EQUIPMENT SPECS
+    ═══════════════════════════════════════════════════ -->
+    <div class="tab-panel" id="panel-equipment">
+
+      <div class="search-filter-row">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="eq-search" placeholder="Search manufacturer, model, component, bolt size…" oninput="filterEquipment()">
+        </div>
+        <select class="filter-select" id="eq-filter-type" onchange="filterEquipment()">
+          <option value="all">All Equipment Types</option>
+          <option value="Inverter">Inverter</option>
+          <option value="BESS">BESS / Battery</option>
+          <option value="Transformer">Transformer / MV</option>
+          <option value="Combiner">Combiner Box</option>
+          <option value="Grounding">Grounding / Bonding</option>
+          <option value="Tracker">Tracker / Structure</option>
+          <option value="Module">PV Module</option>
+        </select>
+      </div>
+
+      <div class="result-count" id="eq-count"></div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="ref-table" id="eq-table">
+            <thead>
+              <tr>
+                <th>Equipment</th>
+                <th>Manufacturer / Model</th>
+                <th>Component &amp; Connection</th>
+                <th>Bolt / Terminal</th>
+                <th>Torque Value</th>
+                <th>Notes</th>
+                <th>Source Document</th>
+                <th>Data Confidence</th>
+              </tr>
+            </thead>
+            <tbody id="eq-tbody">
+              <!-- Injected by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="notes-box">
+        <h4><i class="fas fa-info-circle" style="color:#3b82f6;"></i> Engineering Notes</h4>
+        <ul>
+          <li><strong>Lubrication matters:</strong> Dry vs. lubricated threads can change required torque by 30–40%. Always confirm if the spec assumes dry (Kdry ≈ 0.2) or lubricated (Klube ≈ 0.15) threads.</li>
+          <li><strong>Copper vs. aluminum lugs:</strong> Aluminum conductors require anti-oxidant compound and lower re-torque intervals due to cold flow/creep. Always check OEM guidance.</li>
+          <li><strong>Belleville washers:</strong> Many inverter and transformer busbar connections specify Belleville (spring) washers to maintain clamp force during thermal cycling.</li>
+          <li><strong>Calibrated torque wrenches:</strong> Use only calibrated tools. Verify calibration before each day of torquing activity.</li>
+        </ul>
     </div>
 
   </div><!-- /.page-wrap -->
@@ -896,50 +916,106 @@
     const std = document.getElementById('bolt-filter-std').value;
     const grade = document.getElementById('bolt-filter-grade').value;
 
-    let metricHtml = '';
-    METRIC_BOLTS.forEach(b => {
-      if (std === 'imperial') return;
-      if (grade !== 'all' && !['8.8','10.9','12.9'].includes(grade) && std !== 'all') return;
-      const s = `${b.size} ${b.equiv} ${b.pitch} ${b.g46} ${b.g68} ${b.g88} ${b.g109} ${b.g129}`.toLowerCase();
-      if (search && !s.includes(search)) return;
-      // Grade filter
-      if (grade === '8.8' || grade === '10.9' || grade === '12.9') {
-        if (!['8.8','10.9','12.9','all'].includes(grade)) return;
+    // Determine visibility of tables based on standard & grade selection
+    let showMetric = std === 'all' || std === 'metric';
+    let showImperial = std === 'all' || std === 'imperial';
+
+    // If standard is "all" but user chose a specific grade, show only the relevant table!
+    if (std === 'all' && grade !== 'all') {
+      if (['8.8', '10.9', '12.9'].includes(grade)) {
+        showImperial = false;
+      } else if (['SAE-5', 'SAE-8', 'A325', 'A490'].includes(grade)) {
+        showMetric = false;
       }
-      metricHtml += `<tr>
-        <td style="font-weight:700; color:#0f172a;">${b.size}</td>
-        <td style="color:#64748b;">${b.equiv}</td>
-        <td style="color:#64748b;">${b.pitch}</td>
-        <td class="center">${b.g46}</td>
-        <td class="center">${b.g68}</td>
-        <td class="center torque-val">${b.g88}</td>
-        <td class="center torque-val" style="color:#1d4ed8;">${b.g109}</td>
-        <td class="center torque-val" style="color:#7c3aed;">${b.g129}</td>
-      </tr>`;
-    });
+    }
 
+    // Now render Metric tbody
+    let metricHtml = '';
+    if (showMetric) {
+      METRIC_BOLTS.forEach(b => {
+        const s = `${b.size} ${b.equiv} ${b.pitch} ${b.g46} ${b.g68} ${b.g88} ${b.g109} ${b.g129}`.toLowerCase();
+        if (search && !s.includes(search)) return;
+
+        // Determine if cells should be hidden
+        const hide46 = grade !== 'all' && grade !== '4.6';
+        const hide68 = grade !== 'all' && grade !== '6.8';
+        const hide88 = grade !== 'all' && grade !== '8.8';
+        const hide109 = grade !== 'all' && grade !== '10.9';
+        const hide129 = grade !== 'all' && grade !== '12.9';
+
+        metricHtml += `<tr>
+          <td style="font-weight:700; color:#0f172a;">${b.size}</td>
+          <td style="color:#64748b;">${b.equiv}</td>
+          <td style="color:#64748b;">${b.pitch}</td>
+          <td class="center col-gr46" ${hide46 ? 'style="display:none;"' : ''}>${b.g46}</td>
+          <td class="center col-gr68" ${hide68 ? 'style="display:none;"' : ''}>${b.g68}</td>
+          <td class="center col-gr88 torque-val ${grade === '8.8' ? 'highlight-cell' : ''}" ${hide88 ? 'style="display:none;"' : ''}>${b.g88}</td>
+          <td class="center col-gr109 torque-val ${grade === '10.9' ? 'highlight-cell' : ''}" style="color:#1d4ed8; ${hide109 ? 'display:none;' : ''}">${b.g109}</td>
+          <td class="center col-gr129 torque-val ${grade === '12.9' ? 'highlight-cell' : ''}" style="color:#7c3aed; ${hide129 ? 'display:none;' : ''}">${b.g129}</td>
+        </tr>`;
+      });
+    }
+
+    // Now render Imperial tbody
     let imperialHtml = '';
-    IMPERIAL_BOLTS.forEach(b => {
-      if (std === 'metric') return;
-      const s = `${b.size} ${b.tpi} ${b.equiv} ${b.gr2} ${b.gr5} ${b.gr8} ${b.a325} ${b.a490}`.toLowerCase();
-      if (search && !s.includes(search)) return;
-      imperialHtml += `<tr>
-        <td style="font-weight:700; color:#0f172a;">${b.size}</td>
-        <td style="color:#64748b;">${b.tpi}</td>
-        <td style="color:#64748b;">${b.equiv}</td>
-        <td class="center">${b.gr2}</td>
-        <td class="center torque-val">${b.gr5}</td>
-        <td class="center torque-val" style="color:#1d4ed8;">${b.gr8}</td>
-        <td class="center torque-val" style="color:#059669;">${b.a325}</td>
-        <td class="center torque-val" style="color:#7c3aed;">${b.a490}</td>
-      </tr>`;
-    });
+    if (showImperial) {
+      IMPERIAL_BOLTS.forEach(b => {
+        const s = `${b.size} ${b.tpi} ${b.equiv} ${b.gr2} ${b.gr5} ${b.gr8} ${b.a325} ${b.a490}`.toLowerCase();
+        if (search && !s.includes(search)) return;
 
-    document.getElementById('metric-tbody').innerHTML = metricHtml || `<tr><td colspan="8"><div class="empty-state" style="padding:1.5rem;"><i class="fas fa-search"></i><p>No matching bolt sizes.</p></div></td></tr>`;
-    document.getElementById('imperial-tbody').innerHTML = imperialHtml || `<tr><td colspan="8"><div class="empty-state" style="padding:1.5rem;"><i class="fas fa-search"></i><p>No matching bolt sizes.</p></div></td></tr>`;
+        const hideSae2 = grade !== 'all' && grade !== 'SAE-2';
+        const hideSae5 = grade !== 'all' && grade !== 'SAE-5';
+        const hideSae8 = grade !== 'all' && grade !== 'SAE-8';
+        const hideA325 = grade !== 'all' && grade !== 'A325';
+        const hideA490 = grade !== 'all' && grade !== 'A490';
 
-    const metricCount = (metricHtml.match(/<tr>/g)||[]).length;
-    const impCount = (imperialHtml.match(/<tr>/g)||[]).length;
+        imperialHtml += `<tr>
+          <td style="font-weight:700; color:#0f172a;">${b.size}</td>
+          <td style="color:#64748b;">${b.tpi}</td>
+          <td style="color:#64748b;">${b.equiv}</td>
+          <td class="center col-sae2" ${hideSae2 ? 'style="display:none;"' : ''}>${b.gr2}</td>
+          <td class="center col-sae5 torque-val ${grade === 'SAE-5' ? 'highlight-cell' : ''}" ${hideSae5 ? 'style="display:none;"' : ''}>${b.gr5}</td>
+          <td class="center col-sae8 torque-val ${grade === 'SAE-8' ? 'highlight-cell' : ''}" style="color:#1d4ed8; ${hideSae8 ? 'display:none;' : ''}">${b.gr8}</td>
+          <td class="center col-a325 torque-val ${grade === 'A325' ? 'highlight-cell' : ''}" style="color:#059669; ${hideA325 ? 'display:none;' : ''}">${b.a325}</td>
+          <td class="center col-a490 torque-val ${grade === 'A490' ? 'highlight-cell' : ''}" style="color:#7c3aed; ${hideA490 ? 'display:none;' : ''}">${b.a490}</td>
+        </tr>`;
+      });
+    }
+
+    // Toggle Table containers and titles
+    const metricSection = document.getElementById('metric-section');
+    const imperialSection = document.getElementById('imperial-section');
+    
+    if (showMetric) {
+      metricSection.style.display = 'block';
+      document.getElementById('metric-tbody').innerHTML = metricHtml || `<tr><td colspan="8"><div class="empty-state" style="padding:1.5rem;"><i class="fas fa-search"></i><p>No matching bolt sizes.</p></div></td></tr>`;
+      
+      // Update header visibility
+      document.querySelectorAll('#metric-table .col-gr46').forEach(el => el.style.display = (grade === 'all' || grade === '4.6') ? '' : 'none');
+      document.querySelectorAll('#metric-table .col-gr68').forEach(el => el.style.display = (grade === 'all' || grade === '6.8') ? '' : 'none');
+      document.querySelectorAll('#metric-table .col-gr88').forEach(el => el.style.display = (grade === 'all' || grade === '8.8') ? '' : 'none');
+      document.querySelectorAll('#metric-table .col-gr109').forEach(el => el.style.display = (grade === 'all' || grade === '10.9') ? '' : 'none');
+      document.querySelectorAll('#metric-table .col-gr129').forEach(el => el.style.display = (grade === 'all' || grade === '12.9') ? '' : 'none');
+    } else {
+      metricSection.style.display = 'none';
+    }
+
+    if (showImperial) {
+      imperialSection.style.display = 'block';
+      document.getElementById('imperial-tbody').innerHTML = imperialHtml || `<tr><td colspan="8"><div class="empty-state" style="padding:1.5rem;"><i class="fas fa-search"></i><p>No matching bolt sizes.</p></div></td></tr>`;
+      
+      // Update header visibility
+      document.querySelectorAll('#imperial-table .col-sae2').forEach(el => el.style.display = (grade === 'all' || grade === 'SAE-2') ? '' : 'none');
+      document.querySelectorAll('#imperial-table .col-sae5').forEach(el => el.style.display = (grade === 'all' || grade === 'SAE-5') ? '' : 'none');
+      document.querySelectorAll('#imperial-table .col-sae8').forEach(el => el.style.display = (grade === 'all' || grade === 'SAE-8') ? '' : 'none');
+      document.querySelectorAll('#imperial-table .col-a325').forEach(el => el.style.display = (grade === 'all' || grade === 'A325') ? '' : 'none');
+      document.querySelectorAll('#imperial-table .col-a490').forEach(el => el.style.display = (grade === 'all' || grade === 'A490') ? '' : 'none');
+    } else {
+      imperialSection.style.display = 'none';
+    }
+
+    const metricCount = showMetric ? (metricHtml.match(/<tr>/g)||[]).length : 0;
+    const impCount = showImperial ? (imperialHtml.match(/<tr>/g)||[]).length : 0;
     document.getElementById('bolt-count').textContent = `Showing ${metricCount} metric + ${impCount} imperial bolt sizes`;
   }
 

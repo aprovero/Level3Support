@@ -1,7 +1,7 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'level3support-cache-v27';
+const CACHE_NAME = 'level3support-cache-v29';
 
 const ASSETS_TO_CACHE = [
   '/index.html', '/404.html', '/offline.html',
@@ -23,6 +23,7 @@ const ASSETS_TO_CACHE = [
   '/js/battery-temperature-spread.js',
   '/js/number-base-converter.js',
   '/js/fuse-derating-calculator.js',
+  '/js/analyzer.js',
 
   // HTML files for new tools
   '/clipping-curtailment-check.html',
@@ -37,9 +38,11 @@ const ASSETS_TO_CACHE = [
   '/battery-temperature-spread.html',
   '/number-base-converter.html',
   '/fuse-derating-calculator.html',
+  '/torque-spec-finder.html',
+  '/analyzer.html',
 
   // CSS files
-  '/css/parameter-comparison.css', '/css/rej603-configurator.css', '/css/shared-styles.css',
+  '/css/parameter-comparison.css', '/css/rej603-configurator.css', '/css/shared-styles.css', '/css/analyzer.css',
 
   // Icons
   '/icons/icon-72.png', '/icons/icon-96.png', '/icons/icon-128.png',

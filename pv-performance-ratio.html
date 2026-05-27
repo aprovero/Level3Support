@@ -160,7 +160,7 @@
         <div class="input-group">
           <label for="dc-capacity">Installed DC Capacity <span class="required">*</span></label>
           <div class="input-with-unit">
-            <input type="number" id="dc-capacity" placeholder="e.g. 5000" step="any">
+            <input type="number" id="dc-capacity" placeholder="e.g. 280" step="any">
             <div class="input-unit">
               <select id="dc-capacity-unit">
                 <option value="kWp">kWp</option>
@@ -170,6 +170,21 @@
           </div>
         </div>
 
+        <div class="input-group">
+          <label for="permit-limit">Grid Permit / Export Limit <span class="field-note">(Optional)</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="permit-limit" placeholder="e.g. 220" step="any">
+            <div class="input-unit">
+              <select id="permit-limit-unit">
+                <option value="kW">kW</option>
+                <option value="MW">MW</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
         <div class="input-group">
           <label for="energy-exported">Energy Exported <span class="required">*</span></label>
           <div class="input-with-unit">
@@ -182,9 +197,7 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="input-row">
         <div class="input-group">
           <label for="poa-irradiance">Plane-of-Array Irradiance (G<sub>POA</sub>) <span class="required">*</span></label>
           <div class="input-with-unit">
@@ -192,7 +205,9 @@
             <div class="input-unit">kWh/m²</div>
           </div>
         </div>
+      </div>
 
+      <div class="input-row">
         <div class="input-group">
           <label for="ref-irradiance">Reference Irradiance (G<sub>Ref</sub>)</label>
           <div class="input-with-unit">
@@ -200,11 +215,11 @@
             <div class="input-unit">W/m²</div>
           </div>
         </div>
-      </div>
 
-      <div class="input-group">
-        <label for="period-label">Reporting Period Label</label>
-        <input type="text" id="period-label" placeholder="e.g. May 2026 Daily Run" value="Daily Performance Run">
+        <div class="input-group">
+          <label for="period-label">Reporting Period Label</label>
+          <input type="text" id="period-label" placeholder="e.g. May 2026 Daily Run" value="Daily Performance Run">
+        </div>
       </div>
 
       <!-- Temperature Correction Toggle -->
@@ -268,6 +283,20 @@
       <div class="result-row">
         <span>Energy Deviation:</span>
         <span id="res-deviation" style="font-weight: 600;">--</span>
+      </div>
+      
+      <!-- Optional Permit-Adjusted Results -->
+      <div id="res-permit-expected-row" class="result-row" style="display: none; border-top: 1px dashed #93c5fd; margin-top: 8px; padding-top: 8px;">
+        <span>Permit-Adjusted expected energy:</span>
+        <span id="res-permit-expected" style="font-weight: 600;">--</span>
+      </div>
+      <div id="res-permit-pr-row" class="result-row" style="display: none;">
+        <span style="font-size: 1.1rem; font-weight: 600; color: var(--primary-color);">Permit-Adjusted PR:</span>
+        <span id="res-permit-pr" class="result-value" style="color: var(--primary-color);">--</span>
+      </div>
+      <div id="res-permit-deviation-row" class="result-row" style="display: none; padding-bottom: 8px;">
+        <span>Permit-Adjusted Deviation:</span>
+        <span id="res-permit-deviation" style="font-weight: 600;">--</span>
       </div>
 
       <div style="display: flex; gap: 8px; margin-top: 16px;">
