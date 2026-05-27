@@ -259,7 +259,7 @@ function loadFallbackData() {
             "id": 44,
             "name": "Inverter Clipping / Curtailment Check Tool",
             "category": "Advanced Field Diagnostics",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Help determine whether reduced inverter output is consistent with inverter clipping or curtailment.",
             "url": "clipping-curtailment-check.html",
             "tags": ["PV", "Inverter", "Clipping", "Curtailment", "Diagnostics"]
@@ -268,7 +268,7 @@ function loadFallbackData() {
             id: 45,
             name: "Irradiance Sensor Cross-Check Tool",
             category: "Advanced Field Diagnostics",
-            status: "Active",
+            status: "Under Review",
             description: "Compare irradiance sensors, reference cells, and nearby inverter behavior to detect dirty, misaligned, drifting, or unreliable measurements.",
             url: "irradiance-sensor-check.html",
             tags: ["PV", "Irradiance", "Sensor", "Calibration", "Diagnostics"]
@@ -277,7 +277,7 @@ function loadFallbackData() {
             id: 46,
             name: "Tracker Angle / Backtracking QA Checklist",
             category: "Advanced Field Diagnostics",
-            status: "Active",
+            status: "Under Review",
             description: "Validate tracker angle behavior, backtracking, mechanical alignment, and wind stow during commissioning or troubleshooting.",
             url: "tracker-angle-qaqc.html",
             tags: ["PV", "Tracker", "Backtracking", "Checklist", "Diagnostics"]
@@ -286,7 +286,7 @@ function loadFallbackData() {
             id: 47,
             name: "Corrective Action Tracker / CAPA Log",
             category: "Reports & Templates",
-            status: "Active",
+            status: "Under Review",
             description: "Track corrective and preventive actions from punchlists, RCAs, inspections, HSE forms, and commissioning findings.",
             url: "capa-tracker.html",
             tags: ["RCA", "CAPA", "Safety", "Punchlist", "Log"]
@@ -295,7 +295,7 @@ function loadFallbackData() {
             "id": 48,
             "name": "Inverter Derating Cause Analyzer",
             "category": "Advanced Field Diagnostics",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Identify whether an inverter is limiting power due to temperature, grid voltage, frequency, reactive power, or protection.",
             "url": "inverter-derating-analyzer.html",
             "tags": ["PV", "Inverter", "Derating", "Temperature", "Grid", "Diagnostics"]
@@ -304,7 +304,7 @@ function loadFallbackData() {
             "id": 49,
             "name": "Interactive Power Triangle Tool",
             "category": "Grid & Controls",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Interactive visual tool showing the relationship between active power P, reactive power Q, apparent power S, power factor, and phase angle.",
             "url": "power-triangle.html",
             "tags": ["Electrical", "Power", "Grid", "Controls", "Visual"]
@@ -313,7 +313,7 @@ function loadFallbackData() {
             "id": 50,
             "name": "Inverter Capability Curve Check",
             "category": "Grid & Controls",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Check whether a requested active/reactive power operating point is within inverter apparent power limits.",
             "url": "inverter-capability-curve-check.html",
             "tags": ["PV", "Inverter", "Capability", "Power Factor", "Grid"]
@@ -322,7 +322,7 @@ function loadFallbackData() {
             "id": 51,
             "name": "Grid Event Voltage/Frequency Excursion Log",
             "category": "Grid & Controls",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Log grid voltage/frequency excursions, calculate deviations, and create structured RCA-ready event timelines.",
             "url": "grid-event-excursion-log.html",
             "tags": ["Grid", "Event", "Voltage", "Frequency", "RCA", "Log"]
@@ -331,7 +331,7 @@ function loadFallbackData() {
             "id": 52,
             "name": "Battery SOC Imbalance Analyzer",
             "category": "BESS Field Tools",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Analyze SOC spread and balancing status across battery racks, strings, containers, or clusters.",
             "url": "battery-soc-imbalance-analyzer.html",
             "tags": ["BESS", "Battery", "SOC", "Imbalance", "Diagnostics"]
@@ -340,7 +340,7 @@ function loadFallbackData() {
             "id": 53,
             "name": "Battery Temperature Spread Analyzer",
             "category": "BESS Field Tools",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Analyze battery temperature variation across racks, modules, or clusters to detect HVAC or fan issues.",
             "url": "battery-temperature-spread.html",
             "tags": ["BESS", "Battery", "Thermal", "HVAC", "Spread"]
@@ -349,7 +349,7 @@ function loadFallbackData() {
             "id": 54,
             "name": "Number Base Converter",
             "category": "SCADA & Diagnostics",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Convert values between binary, decimal, hex, and octal with bit-width, byte-order swaps, and manual register bit viewer.",
             "url": "number-base-converter.html",
             "tags": ["SCADA", "MODBUS", "Relay", "Binary", "Converter"]
@@ -358,7 +358,7 @@ function loadFallbackData() {
             "id": 55,
             "name": "Soiling Loss Estimator",
             "category": "Soiling & PV Performance",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Estimate PV system energy loss due to soiling based on site conditions.",
             "url": "soiling-loss-estimator.html",
             "tags": ["PV", "Soiling", "Performance", "O&M", "Field Check"]
@@ -367,7 +367,7 @@ function loadFallbackData() {
             "id": 56,
             "name": "Clean vs. Soiled String Comparison Tool",
             "category": "Soiling & PV Performance",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Compare electrical output between clean and soiled strings to quantify performance impact.",
             "url": "clean-vs-soiled-strings.html",
             "tags": ["PV", "Soiling", "Performance", "O&M", "Field Check"]
@@ -376,7 +376,7 @@ function loadFallbackData() {
             "id": 57,
             "name": "Cleaning ROI Calculator",
             "category": "Soiling & PV Performance",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Calculate the return on investment for PV array cleaning based on performance gain vs. cleaning costs.",
             "url": "cleaning-roi.html",
             "tags": ["PV", "Soiling", "Performance", "O&M", "Cleaning"]
@@ -385,7 +385,7 @@ function loadFallbackData() {
             "id": 58,
             "name": "Lost Energy from Soiling Calculator",
             "category": "Soiling & PV Performance",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Quantify total lost energy (kWh) attributed to soiling over a specific time period.",
             "url": "soiling-lost-energy.html",
             "tags": ["PV", "Soiling", "Performance", "O&M", "Reporting"]
@@ -394,7 +394,7 @@ function loadFallbackData() {
             "id": 59,
             "name": "Soiling Customer Report Generator",
             "category": "Soiling & PV Performance",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Generate a customer-facing report detailing soiling impacts and recommended cleaning actions.",
             "url": "soiling-customer-report.html",
             "tags": ["PV", "Soiling", "Performance", "O&M", "Reporting"]
@@ -403,7 +403,7 @@ function loadFallbackData() {
             "id": 60,
             "name": "Fuse Continuous Current & Temperature Derating Calculator",
             "category": "Calculators",
-            "status": "Active",
+            "status": "Under Review",
             "description": "Calculate derated continuous current limits and determine appropriate fuse ratings based on ambient temperature and custom derating factors.",
             "url": "fuse-derating-calculator.html",
             "tags": ["Fuse", "Derating", "Continuous Current", "Temperature", "DC", "AC", "Protection", "QA/QC"]
@@ -765,7 +765,7 @@ function renderHomeView() {
         
         if (featuredTools.length === 0) {
             // Dynamic fallback: grab some common active tools
-            featuredTools = allTools.filter(t => ["Active", "In Progress"].includes(t.status) && t.status !== "Legacy").slice(0, 6);
+            featuredTools = allTools.filter(t => ["Active", "In Progress", "Under Review"].includes(t.status) && t.status !== "Legacy").slice(0, 6);
         }
         
         featuredTools.forEach(tool => {
@@ -859,7 +859,7 @@ function filterLibrary() {
         // 5. Development Status filter
         let matchesStatus = true;
         if (selectStatus === 'active-only') {
-            matchesStatus = ["Active", "In Progress"].includes(tool.status);
+            matchesStatus = ["Active", "In Progress", "Under Review"].includes(tool.status);
         } else if (selectStatus !== 'all') {
             matchesStatus = tool.status === selectStatus;
         }
