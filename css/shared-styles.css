@@ -2081,4 +2081,62 @@ button:disabled, .submit-button:disabled {
     }
 }
 
+/* ==========================================================================
+   Tool Page Flat-Style Global Refactoring (ABB Relay Style)
+   ========================================================================== */
+.container, .calc-container, .container-tool {
+    max-width: 900px !important;
+    margin: 2rem auto !important;
+    padding: 0 1.5rem !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
+/* Standardized Flat-Style Footers across all tools */
+.footer, .main-footer {
+    background: #0f172a !important;
+    padding: 1.5rem 2rem !important;
+    border-top: 1px solid #1e293b !important;
+    margin-top: 4rem !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    color: #64748b !important;
+}
+
+.footer-text, .footer p {
+    margin: 0 !important;
+    color: #64748b !important;
+    font-size: 0.85rem !important;
+}
+
+.footer-copyright, .footer-text span {
+    color: #64748b !important;
+    font-weight: 555 !important;
+}
+
+.footer-logo, .powered-by-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    color: #64748b !important;
+    font-size: 0.85rem !important;
+}
+
+.footer-logo img, .powered-by-wrapper img {
+    height: 28px !important;
+    width: auto !important;
+    background: #ffffff !important;
+    padding: 3px 10px !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+    display: inline-block !important;
+}
+
 

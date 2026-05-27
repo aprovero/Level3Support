@@ -46,7 +46,7 @@
                 </a>
             </nav>
             <div class="sidebar-footer">
-                <div class="version-tag">v2.1.1</div>
+                <div class="version-tag">v2.1.2</div>
                 <div class="sidebar-powered">
                     <span>Powered by</span>
                     <img src="images/APROVERO_LOGO.png" alt="aprovero" class="sidebar-partner-logo">
@@ -355,7 +355,7 @@
 
             <!-- Muted Mobile-Only Footer -->
             <footer class="mobile-only-footer">
-                <div class="mobile-footer-text">&copy; 2026 LEVEL3SUPPORT. v2.1.1</div>
+                <div class="mobile-footer-text">&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED. v2.1.2</div>
                 <div class="mobile-footer-powered">Powered by aprovero</div>
             </footer>
         </div>
@@ -439,19 +439,19 @@
         }
 
         .sidebar-brand {
-            padding: 1.5rem 1.25rem;
+            padding: 1.2rem 1.25rem;
             display: flex;
             align-items: center;
             justify-content: center;
             border-bottom: 1px solid #cbd5e1;
             background: #ffffff;
-            height: 80px;
+            height: 96px;
             box-sizing: border-box;
         }
 
         .sidebar-brand-full {
             height: auto;
-            max-height: 44px;
+            max-height: 50px;
             width: 100%;
             object-fit: contain;
         }
@@ -589,7 +589,7 @@
         /* Views Container */
         .views-container {
             flex: 1;
-            padding: 2rem 2.5rem;
+            padding: 1.5rem 2.5rem 2.5rem 2.5rem;
             max-width: 1400px;
             width: 100%;
             margin: 0 auto;
@@ -618,9 +618,9 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 1.5rem;
-            margin-bottom: 1.75rem;
+            margin-bottom: 1.5rem;
             border-bottom: 1px solid #cbd5e1;
-            padding-bottom: 1.25rem;
+            padding-bottom: 0.85rem;
         }
 
         .view-header-left {
@@ -1617,10 +1617,10 @@
     </style>
 
     <!-- Load refactored OS-Style javascript router & behavior -->
-    <script src="js/tools-hub.js?v=22"></script>
+    <script src="js/tools-hub.js?v=23"></script>
     <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js?v=22')
+        navigator.serviceWorker.register('/sw.js?v=23')
         .then(reg => console.log('SW registered ✅', reg))
         .catch(err => console.error('SW registration failed ❌', err));
     }

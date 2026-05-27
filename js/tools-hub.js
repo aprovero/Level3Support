@@ -429,6 +429,14 @@ function initializeRouter() {
  * ── Event Listeners Binding ──
  */
 function setupEventListeners() {
+    // Support horizontal scroll scroller by mouse wheel
+    document.querySelectorAll('.category-chips-scroller').forEach(scroller => {
+        scroller.addEventListener('wheel', (evt) => {
+            evt.preventDefault();
+            scroller.scrollLeft += evt.deltaY;
+        }, { passive: false });
+    });
+
     // Global Home Search
     const globalSearch = document.getElementById('global-search-input');
     if (globalSearch) {
@@ -789,7 +797,12 @@ function filterLibrary() {
 
         // 1. Chip Category check
         const cleanCat = tool.category.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-        const matchesCategory = activeLibraryCategory === 'all' || cleanCat === activeLibraryCategory;
+        let matchesCategory = activeLibraryCategory === 'all' || cleanCat === activeLibraryCategory;
+        
+        // Solar PV chip matches both PV Field Tools and Soiling & PV Performance
+        if (activeLibraryCategory === 'pv-field-tools') {
+            matchesCategory = (cleanCat === 'pv-field-tools' || cleanCat === 'soiling-pv-performance');
+        }
 
         // 2. Search check
         const matchesSearch = searchMatches(tool, searchVal);
