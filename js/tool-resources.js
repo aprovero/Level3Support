@@ -553,12 +553,223 @@ window.TOOL_RESOURCES = {
         basis: "Safety-critical",
         basisClass: "basis-safety",
         references: [
-            { name: "OSHA 1910.147 Lockout/Tagout", type: "Safety" },
-            { name: "NFPA 70E Article 120, type: Safety", type: "Safety" },
-            { name: "Site Energy Isolation Procedure", type: "Project Specific" },
-            { name: "Equipment-Specific Isolation Points", type: "OEM Manual" }
+            { name: "OSHA 1910.147 Lockout/Tagout", type: "Safety", desc: "Control of hazardous energy standard for servicing and maintenance activities." },
+            { name: "OSHA Control of Hazardous Energy Guidance", type: "Safety", desc: "Practical OSHA guidance for employer responsibilities, worker training, lockout/tagout procedures, and verification." },
+            { name: "NFPA 70E Article 120, type: Safety", type: "Safety", desc: "Electrical safety reference for establishing and verifying an electrically safe work condition." },
+            { name: "Site Energy Control Procedure", type: "Project Specific", desc: "Final site-specific procedure for identifying energy sources, isolation points, lock placement, verification, and restoration." },
+            { name: "Equipment-Specific Isolation Plan", type: "OEM Manual", desc: "Source for equipment isolation points, stored energy hazards, discharge requirements, interlocks, and special precautions." },
+            { name: "Single-Line Diagram / Electrical Drawings", type: "Project Specific", desc: "Reference for identifying upstream/downstream sources, backfeed risk, auxiliary power, control power, and stored energy sources." },
+            { name: "Work Permit / Energization Permit", type: "Project Specific", desc: "Field authorization record for work scope, isolation boundary, responsible persons, and approval status." }
         ],
-        note: "LOTO checklists must be validated in the field. Always verify zero energy state before work begins and follow the approved site-specific energy control procedure."
+        note: "A LOTO checklist must be verified in the field. Always identify all energy sources, apply locks/tags, release or restrain stored energy, and verify zero-energy state before work begins. The site-specific energy control procedure and competent-person approval are the final authority."
+    },
+    "loto-checklist": {
+        basis: "Safety-critical",
+        basisClass: "basis-safety",
+        references: [
+            { name: "OSHA 1910.147 Lockout/Tagout", type: "Safety", desc: "Control of hazardous energy standard for servicing and maintenance activities." },
+            { name: "OSHA Control of Hazardous Energy Guidance", type: "Safety", desc: "Practical OSHA guidance for employer responsibilities, worker training, lockout/tagout procedures, and verification." },
+            { name: "NFPA 70E Article 120, type: Safety", type: "Safety", desc: "Electrical safety reference for establishing and verifying an electrically safe work condition." },
+            { name: "Site Energy Control Procedure", type: "Project Specific", desc: "Final site-specific procedure for identifying energy sources, isolation points, lock placement, verification, and restoration." },
+            { name: "Equipment-Specific Isolation Plan", type: "OEM Manual", desc: "Source for equipment isolation points, stored energy hazards, discharge requirements, interlocks, and special precautions." },
+            { name: "Single-Line Diagram / Electrical Drawings", type: "Project Specific", desc: "Reference for identifying upstream/downstream sources, backfeed risk, auxiliary power, control power, and stored energy sources." },
+            { name: "Work Permit / Energization Permit", type: "Project Specific", desc: "Field authorization record for work scope, isolation boundary, responsible persons, and approval status." }
+        ],
+        note: "A LOTO checklist must be verified in the field. Always identify all energy sources, apply locks/tags, release or restrain stored energy, and verify zero-energy state before work begins. The site-specific energy control procedure and competent-person approval are the final authority."
+    },
+    "pv-string-sizer.html": {
+        basis: "Standard-based / Engineering estimate",
+        basisClass: "basis-engineering",
+        references: [
+            { name: "IEC 62548", type: "Standard", desc: "PV array design requirements, including string configuration, array voltage considerations, and DC design requirements." },
+            { name: "NEC / NFPA 70 Article 690", type: "Standard", desc: "PV system requirements including maximum voltage, source circuits, overcurrent protection, and equipment ratings where NEC applies." },
+            { name: "NEC 690.7 Maximum PV System Voltage", type: "Standard", desc: "Reference for calculating maximum PV circuit voltage using module Voc and cold-temperature correction." },
+            { name: "PV Module Datasheet", type: "OEM Manual", desc: "Final source for module Voc, Vmp, Isc, Imp, maximum system voltage, and temperature coefficients." },
+            { name: "Inverter Datasheet / MPPT Specification", type: "OEM Manual", desc: "Final source for maximum DC voltage, MPPT operating range, startup voltage, maximum input current, and string input limits." },
+            { name: "Project Minimum Ambient Temperature / Weather File", type: "Project Specific", desc: "Required input for cold-temperature Voc correction and maximum string length validation." }
+        ],
+        note: "String sizing must verify both cold-temperature maximum Voc and hot-temperature operating Vmp against the inverter DC limits. Final design must confirm module datasheet values, inverter MPPT window, maximum DC voltage, local code, equipment ratings, and project design criteria."
+    },
+    "pv-string-sizer": {
+        basis: "Standard-based / Engineering estimate",
+        basisClass: "basis-engineering",
+        references: [
+            { name: "IEC 62548", type: "Standard", desc: "PV array design requirements, including string configuration, array voltage considerations, and DC design requirements." },
+            { name: "NEC / NFPA 70 Article 690", type: "Standard", desc: "PV system requirements including maximum voltage, source circuits, overcurrent protection, and equipment ratings where NEC applies." },
+            { name: "NEC 690.7 Maximum PV System Voltage", type: "Standard", desc: "Reference for calculating maximum PV circuit voltage using module Voc and cold-temperature correction." },
+            { name: "PV Module Datasheet", type: "OEM Manual", desc: "Final source for module Voc, Vmp, Isc, Imp, maximum system voltage, and temperature coefficients." },
+            { name: "Inverter Datasheet / MPPT Specification", type: "OEM Manual", desc: "Final source for maximum DC voltage, MPPT operating range, startup voltage, maximum input current, and string input limits." },
+            { name: "Project Minimum Ambient Temperature / Weather File", type: "Project Specific", desc: "Required input for cold-temperature Voc correction and maximum string length validation." }
+        ],
+        note: "String sizing must verify both cold-temperature maximum Voc and hot-temperature operating Vmp against the inverter DC limits. Final design must confirm module datasheet values, inverter MPPT window, maximum DC voltage, local code, equipment ratings, and project design criteria."
+    },
+    "bess-cable-sizer.html": {
+        basis: "Standard-based / Engineering estimate",
+        basisClass: "basis-engineering",
+        references: [
+            { name: "NEC / NFPA 70", type: "Standard", desc: "Electrical installation reference for conductor ampacity, overcurrent protection, insulation ratings, grounding, wiring methods, and correction factors where NEC applies." },
+            { name: "NEC Article 706 Energy Storage Systems", type: "Standard", desc: "Reference for ESS installation requirements, disconnecting means, overcurrent protection, conductor sizing, and safety considerations." },
+            { name: "NEC Article 705 Interconnected Electric Power Production Sources", type: "Standard", desc: "Reference for interconnected power sources and output circuit requirements where applicable." },
+            { name: "IEC 62933 Energy Storage System Standards", type: "Standard", desc: "Reference family for electrical energy storage system terminology, planning, safety, and performance." },
+            { name: "Cable Manufacturer Datasheet", type: "OEM Manual", desc: "Final source for conductor material, insulation rating, ampacity, voltage rating, temperature rating, resistance, and installation limitations." },
+            { name: "PCS / Battery OEM Installation Manual", type: "OEM Manual", desc: "Source for terminal ratings, cable size limits, recommended cable types, DC/AC connection requirements, and torque values." },
+            { name: "Project Electrical Design Basis", type: "Project Specific", desc: "Defines installation method, conductor grouping, ambient temperature, tray/conduit routing, voltage drop limits, short-circuit rating, and local design criteria." }
+        ],
+        note: "BESS cable sizing must consider continuous current, charge/discharge duty, DC or AC side location, conductor temperature rating, installation method, grouping, ambient correction, voltage drop, short-circuit withstand, terminal ratings, and overcurrent protection. This tool does not replace stamped electrical design or OEM installation requirements."
+    },
+    "bess-cable-sizer": {
+        basis: "Standard-based / Engineering estimate",
+        basisClass: "basis-engineering",
+        references: [
+            { name: "NEC / NFPA 70", type: "Standard", desc: "Electrical installation reference for conductor ampacity, overcurrent protection, insulation ratings, grounding, wiring methods, and correction factors where NEC applies." },
+            { name: "NEC Article 706 Energy Storage Systems", type: "Standard", desc: "Reference for ESS installation requirements, disconnecting means, overcurrent protection, conductor sizing, and safety considerations." },
+            { name: "NEC Article 705 Interconnected Electric Power Production Sources", type: "Standard", desc: "Reference for interconnected power sources and output circuit requirements where applicable." },
+            { name: "IEC 62933 Energy Storage System Standards", type: "Standard", desc: "Reference family for electrical energy storage system terminology, planning, safety, and performance." },
+            { name: "Cable Manufacturer Datasheet", type: "OEM Manual", desc: "Final source for conductor material, insulation rating, ampacity, voltage rating, temperature rating, resistance, and installation limitations." },
+            { name: "PCS / Battery OEM Installation Manual", type: "OEM Manual", desc: "Source for terminal ratings, cable size limits, recommended cable types, DC/AC connection requirements, and torque values." },
+            { name: "Project Electrical Design Basis", type: "Project Specific", desc: "Defines installation method, conductor grouping, ambient temperature, tray/conduit routing, voltage drop limits, short-circuit rating, and local design criteria." }
+        ],
+        note: "BESS cable sizing must consider continuous current, charge/discharge duty, DC or AC side location, conductor temperature rating, installation method, grouping, ambient correction, voltage drop, short-circuit withstand, terminal ratings, and overcurrent protection. This tool does not replace stamped electrical design or OEM installation requirements."
+    },
+    "pv-megger-tester.html": {
+        basis: "Standard-based / Safety-critical",
+        basisClass: "basis-safety",
+        references: [
+            { name: "IEC 62446-1", type: "Standard", desc: "Reference for PV system testing, documentation, commissioning inspection, and insulation resistance testing requirements." },
+            { name: "IEC 62548", type: "Standard", desc: "PV array design reference that supports understanding of array configuration and insulation requirements." },
+            { name: "NEC / NFPA 70 Article 690", type: "Standard", desc: "PV system installation reference for DC circuits, grounding, bonding, equipment ratings, and safety considerations where NEC applies." },
+            { name: "NFPA 70E", type: "Safety", desc: "Electrical safety work practice reference for shock risk, arc-flash risk, energized work, and establishing safe work conditions." },
+            { name: "Megger / Insulation Tester Manufacturer Manual", type: "OEM Manual", desc: "Final source for test equipment setup, test voltage, connection method, limitations, and safety precautions." },
+            { name: "PV Module and Inverter OEM Manuals", type: "OEM Manual", desc: "Required to confirm permitted insulation test voltage and whether sensitive electronics must be disconnected before testing." },
+            { name: "Project Commissioning Procedure", type: "Project Specific", desc: "Final source for required test method, test voltage, minimum acceptable value, documentation format, and acceptance criteria." }
+        ],
+        note: "Before applying insulation resistance test voltage, confirm that inverters, optimizers, combiner electronics, surge protection devices, meters, and communication equipment are isolated or protected according to OEM instructions. Incorrect megger testing can damage equipment. Use the approved project procedure and OEM manuals as the final authority."
+    },
+    "pv-megger-tester": {
+        basis: "Standard-based / Safety-critical",
+        basisClass: "basis-safety",
+        references: [
+            { name: "IEC 62446-1", type: "Standard", desc: "Reference for PV system testing, documentation, commissioning inspection, and insulation resistance testing requirements." },
+            { name: "IEC 62548", type: "Standard", desc: "PV array design reference that supports understanding of array configuration and insulation requirements." },
+            { name: "NEC / NFPA 70 Article 690", type: "Standard", desc: "PV system installation reference for DC circuits, grounding, bonding, equipment ratings, and safety considerations where NEC applies." },
+            { name: "NFPA 70E", type: "Safety", desc: "Electrical safety work practice reference for shock risk, arc-flash risk, energized work, and establishing safe work conditions." },
+            { name: "Megger / Insulation Tester Manufacturer Manual", type: "OEM Manual", desc: "Final source for test equipment setup, test voltage, connection method, limitations, and safety precautions." },
+            { name: "PV Module and Inverter OEM Manuals", type: "OEM Manual", desc: "Required to confirm permitted insulation test voltage and whether sensitive electronics must be disconnected before testing." },
+            { name: "Project Commissioning Procedure", type: "Project Specific", desc: "Final source for required test method, test voltage, minimum acceptable value, documentation format, and acceptance criteria." }
+        ],
+        note: "Before applying insulation resistance test voltage, confirm that inverters, optimizers, combiner electronics, surge protection devices, meters, and communication equipment are isolated or protected according to OEM instructions. Incorrect megger testing can damage equipment. Use the approved project procedure and OEM manuals as the final authority."
+    },
+    "bess-cell-imbalance.html": {
+        basis: "OEM-based / Safety-critical",
+        basisClass: "basis-safety",
+        references: [
+            { name: "OEM Battery Module Manual", type: "OEM Manual", desc: "Primary reference for cell voltage limits, module operating range, balancing behavior, alarm thresholds, and safety limits." },
+            { name: "OEM BMS Manual", type: "OEM Manual", desc: "Final source for cell voltage measurement behavior, balancing thresholds, warning levels, trip levels, and diagnostic logic." },
+            { name: "IEEE 2686", type: "Standard", desc: "Recommended practice reference for battery management systems in stationary energy storage applications." },
+            { name: "IEC 62933 Energy Storage System Standards", type: "Standard", desc: "Reference family for ESS terminology, planning, safety, and performance." },
+            { name: "NFPA 855", type: "Standard", desc: "Stationary energy storage system safety reference for installation and hazard mitigation." },
+            { name: "UL 9540 / UL 9540A", type: "Standard", desc: "ESS safety and thermal runaway fire propagation references." },
+            { name: "BESS Commissioning Report", type: "Project Specific", desc: "Baseline field record for initial cell/module voltages, SOC, rack readiness, and balancing state." },
+            { name: "SCADA / BMS Export", type: "Project Specific", desc: "Field evidence source for cell voltage spread, rack-level deviations, alarms, and balancing status." }
+        ],
+        note: "Cell voltage imbalance must be interpreted with SOC, rest time, charge/discharge state, temperature, balancing status, rack status, and OEM thresholds. Do not use generic limits for safety decisions. OEM BMS alarm limits and escalation procedures are the final authority."
+    },
+    "bess-cell-imbalance": {
+        basis: "OEM-based / Safety-critical",
+        basisClass: "basis-safety",
+        references: [
+            { name: "OEM Battery Module Manual", type: "OEM Manual", desc: "Primary reference for cell voltage limits, module operating range, balancing behavior, alarm thresholds, and safety limits." },
+            { name: "OEM BMS Manual", type: "OEM Manual", desc: "Final source for cell voltage measurement behavior, balancing thresholds, warning levels, trip levels, and diagnostic logic." },
+            { name: "IEEE 2686", type: "Standard", desc: "Recommended practice reference for battery management systems in stationary energy storage applications." },
+            { name: "IEC 62933 Energy Storage System Standards", type: "Standard", desc: "Reference family for ESS terminology, planning, safety, and performance." },
+            { name: "NFPA 855", type: "Standard", desc: "Stationary energy storage system safety reference for installation and hazard mitigation." },
+            { name: "UL 9540 / UL 9540A", type: "Standard", desc: "ESS safety and thermal runaway fire propagation references." },
+            { name: "BESS Commissioning Report", type: "Project Specific", desc: "Baseline field record for initial cell/module voltages, SOC, rack readiness, and balancing state." },
+            { name: "SCADA / BMS Export", type: "Project Specific", desc: "Field evidence source for cell voltage spread, rack-level deviations, alarms, and balancing status." }
+        ],
+        note: "Cell voltage imbalance must be interpreted with SOC, rest time, charge/discharge state, temperature, balancing status, rack status, and OEM thresholds. Do not use generic limits for safety decisions. OEM BMS alarm limits and escalation procedures are the final authority."
+    },
+    "ttr-form.html": {
+        basis: "Standard-based / Project-specific",
+        basisClass: "basis-project",
+        references: [
+            { name: "NETA ATS / NETA MTS", type: "Standard", desc: "Acceptance and maintenance testing reference for transformers, including turns-ratio testing practices and comparison against calculated ratios." },
+            { name: "IEEE C57 Transformer Standards", type: "Standard", desc: "Transformer reference family covering design, testing, loading, and performance." },
+            { name: "Transformer OEM Manual", type: "OEM Manual", desc: "Primary source for nameplate ratio, vector group, tap changer configuration, winding configuration, test requirements, and acceptable tolerances." },
+            { name: "Transformer Nameplate", type: "Project Specific", desc: "Field reference for rated voltages, tap positions, winding connections, phase relationship, impedance, and serial number." },
+            { name: "Project SAT / Commissioning Procedure", type: "Project Specific", desc: "Final source for test sequence, tap positions to test, acceptance criteria, required evidence, and reporting format." },
+            { name: "TTR Test Set Manufacturer Manual", type: "OEM Manual", desc: "Reference for instrument setup, connection method, excitation voltage, phase selection, and error calculation." }
+        ],
+        note: "TTR testing should be performed on all required tap positions and compared against calculated/nameplate ratios. Acceptance criteria must follow the approved project procedure, OEM documentation, and applicable testing standard. Confirm vector group, winding configuration, tap position, and phase connections before judging the result."
+    },
+    "ttr-form": {
+        basis: "Standard-based / Project-specific",
+        basisClass: "basis-project",
+        references: [
+            { name: "NETA ATS / NETA MTS", type: "Standard", desc: "Acceptance and maintenance testing reference for transformers, including turns-ratio testing practices and comparison against calculated ratios." },
+            { name: "IEEE C57 Transformer Standards", type: "Standard", desc: "Transformer reference family covering design, testing, loading, and performance." },
+            { name: "Transformer OEM Manual", type: "OEM Manual", desc: "Primary source for nameplate ratio, vector group, tap changer configuration, winding configuration, test requirements, and acceptable tolerances." },
+            { name: "Transformer Nameplate", type: "Project Specific", desc: "Field reference for rated voltages, tap positions, winding connections, phase relationship, impedance, and serial number." },
+            { name: "Project SAT / Commissioning Procedure", type: "Project Specific", desc: "Final source for test sequence, tap positions to test, acceptance criteria, required evidence, and reporting format." },
+            { name: "TTR Test Set Manufacturer Manual", type: "OEM Manual", desc: "Reference for instrument setup, connection method, excitation voltage, phase selection, and error calculation." }
+        ],
+        note: "TTR testing should be performed on all required tap positions and compared against calculated/nameplate ratios. Acceptance criteria must follow the approved project procedure, OEM documentation, and applicable testing standard. Confirm vector group, winding configuration, tap position, and phase connections before judging the result."
+    },
+    "arc-flash.html": {
+        basis: "Safety-critical / Engineering estimate",
+        basisClass: "basis-safety",
+        references: [
+            { name: "NFPA 70E", type: "Safety", desc: "Electrical safety work practice reference for shock hazards, arc-flash risk assessment, PPE selection, approach boundaries, labeling, and energized work controls." },
+            { name: "IEEE 1584-2018", type: "Standard", desc: "Guide for performing arc-flash hazard calculations, including incident energy and arc-flash boundary calculation methods." },
+            { name: "Equipment Arc Flash Label", type: "Project Specific", desc: "Field source for available incident energy, arc-flash boundary, working distance, PPE level, nominal voltage, and equipment identification." },
+            { name: "Short-Circuit and Coordination Study", type: "Project Specific", desc: "Engineering source for available fault current, protective device clearing time, equipment configuration, and arc-flash inputs." },
+            { name: "NFPA 70 / NEC", type: "Standard", desc: "Electrical installation reference used with equipment ratings, labeling, and installation requirements where NEC applies." },
+            { name: "Electrical Single-Line Diagram", type: "Project Specific", desc: "Reference for system configuration, source contribution, transformer data, protective devices, and switching arrangement." }
+        ],
+        note: "This calculator must not be treated as a substitute for a formal arc-flash study. Arc-flash results depend on available fault current, clearing time, working distance, enclosure type, electrode configuration, conductor gap, equipment voltage, and system configuration. For real work planning, use the approved arc-flash label, current arc-flash study, NFPA 70E requirements, and site safety procedure."
+    },
+    "arc-flash": {
+        basis: "Safety-critical / Engineering estimate",
+        basisClass: "basis-safety",
+        references: [
+            { name: "NFPA 70E", type: "Safety", desc: "Electrical safety work practice reference for shock hazards, arc-flash risk assessment, PPE selection, approach boundaries, labeling, and energized work controls." },
+            { name: "IEEE 1584-2018", type: "Standard", desc: "Guide for performing arc-flash hazard calculations, including incident energy and arc-flash boundary calculation methods." },
+            { name: "Equipment Arc Flash Label", type: "Project Specific", desc: "Field source for available incident energy, arc-flash boundary, working distance, PPE level, nominal voltage, and equipment identification." },
+            { name: "Short-Circuit and Coordination Study", type: "Project Specific", desc: "Engineering source for available fault current, protective device clearing time, equipment configuration, and arc-flash inputs." },
+            { name: "NFPA 70 / NEC", type: "Standard", desc: "Electrical installation reference used with equipment ratings, labeling, and installation requirements where NEC applies." },
+            { name: "Electrical Single-Line Diagram", type: "Project Specific", desc: "Reference for system configuration, source contribution, transformer data, protective devices, and switching arrangement." }
+        ],
+        note: "This calculator must not be treated as a substitute for a formal arc-flash study. Arc-flash results depend on available fault current, clearing time, working distance, enclosure type, electrode configuration, conductor gap, equipment voltage, and system configuration. For real work planning, use the approved arc-flash label, current arc-flash study, NFPA 70E requirements, and site safety procedure."
+    },
+    "daily-progress.html": {
+        basis: "Field-practice based / Project-specific",
+        basisClass: "basis-field",
+        references: [
+            { name: "Project Commissioning Plan", type: "Project Specific", desc: "Primary reference for commissioning sequence, systems/subsystems, milestones, responsibilities, and acceptance process." },
+            { name: "Project ITP / Quality Plan", type: "Project Specific", desc: "Reference for inspection points, hold points, witness points, required evidence, and quality sign-off." },
+            { name: "OEM Commissioning Checklists", type: "OEM Manual", desc: "Equipment-specific source for required checks, test sequence, open items, and startup dependencies." },
+            { name: "Project Schedule / Lookahead Plan", type: "Project Specific", desc: "Source for planned activities, milestone tracking, constraints, manpower planning, and progress measurement." },
+            { name: "HSE Daily Report / JHA Records", type: "Safety", desc: "Source for safety observations, incidents, toolbox talks, permits, and hazard controls." },
+            { name: "Punchlist / Open Items Register", type: "Project Specific", desc: "Field source for blockers, constraints, defects, pending inspections, owner actions, and closeout tracking." },
+            { name: "Customer Reporting Requirements", type: "Contract Specific", desc: "Final source for report format, required fields, frequency, sign-offs, distribution list, and contractual language." },
+            { name: "Photo Evidence and Test Records", type: "Project Specific", desc: "Supporting evidence for completed work, test status, site conditions, and pending issues." }
+        ],
+        note: "Daily progress reports should clearly separate completed work, work in progress, blockers, safety observations, manpower, equipment status, tests performed, open issues, customer actions, and next-day plan. Avoid making contractual claims unless supported by approved test records, signed inspections, or customer acceptance."
+    },
+    "daily-progress": {
+        basis: "Field-practice based / Project-specific",
+        basisClass: "basis-field",
+        references: [
+            { name: "Project Commissioning Plan", type: "Project Specific", desc: "Primary reference for commissioning sequence, systems/subsystems, milestones, responsibilities, and acceptance process." },
+            { name: "Project ITP / Quality Plan", type: "Project Specific", desc: "Reference for inspection points, hold points, witness points, required evidence, and quality sign-off." },
+            { name: "OEM Commissioning Checklists", type: "OEM Manual", desc: "Equipment-specific source for required checks, test sequence, open items, and startup dependencies." },
+            { name: "Project Schedule / Lookahead Plan", type: "Project Specific", desc: "Source for planned activities, milestone tracking, constraints, manpower planning, and progress measurement." },
+            { name: "HSE Daily Report / JHA Records", type: "Safety", desc: "Source for safety observations, incidents, toolbox talks, permits, and hazard controls." },
+            { name: "Punchlist / Open Items Register", type: "Project Specific", desc: "Field source for blockers, constraints, defects, pending inspections, owner actions, and closeout tracking." },
+            { name: "Customer Reporting Requirements", type: "Contract Specific", desc: "Final source for report format, required fields, frequency, sign-offs, distribution list, and contractual language." },
+            { name: "Photo Evidence and Test Records", type: "Project Specific", desc: "Supporting evidence for completed work, test status, site conditions, and pending issues." }
+        ],
+        note: "Daily progress reports should clearly separate completed work, work in progress, blockers, safety observations, manpower, equipment status, tests performed, open issues, customer actions, and next-day plan. Avoid making contractual claims unless supported by approved test records, signed inspections, or customer acceptance."
     }
 };
 
@@ -566,7 +777,7 @@ window.GLOBAL_HUB_RESOURCES = [
     {
         title: "1. Electrical Installation, Testing & Commissioning",
         description: "References used for PV commissioning, electrical test forms, startup procedures, cable sizing, insulation testing, grounding checks, and punchlist closeout.",
-        tools: ["Inverter Start-Up Checklist", "DC Voltage Sanity Check", "Electrical Test Forms", "Commissioning Punchlist Builder", "Cable Ampacity Calculator", "Voltage Drop Calculator"],
+        tools: ["Inverter Start-Up Checklist", "DC Voltage Sanity Check", "Electrical Test Forms", "Commissioning Punchlist Builder", "Cable Ampacity Calculator", "Voltage Drop Calculator", "PV String Sizer & VOC Calculator", "BESS Cable Sizing Calculator", "PV Insulation Resistance (Megger) Tester", "Transformer Turns Ratio (TTR) Form", "Daily Commissioning Progress Report"],
         references: [
             { name: "IEC 62446-1", type: "Standard", desc: "PV system documentation, commissioning tests, inspection, verification, handover, and periodic testing." },
             { name: "NEC / NFPA 70", type: "Standard", desc: "Electrical installation requirements, conductor sizing, ampacity, overcurrent protection, grounding, bonding, and PV circuit requirements where applicable." },
@@ -580,9 +791,9 @@ window.GLOBAL_HUB_RESOURCES = [
     {
         title: "2. Electrical Safety, LOTO & HSE",
         description: "References used for pre-task planning, LOTO, energized work controls, arc-flash awareness, BESS safety checks, and site safety documentation.",
-        tools: ["BESS Pre-Energization Checklist", "Safety Pre-Task Plan / JHA Form", "LOTO Checklist Generator", "Inverter Start-Up Checklist", "Battery Rack Container Inspection"],
+        tools: ["BESS Pre-Energization Checklist", "Safety Pre-Task Plan / JHA Form", "LOTO Checklist Generator", "Inverter Start-Up Checklist", "Battery Rack Container Inspection", "LOTO Verification Checklist", "Arc Flash Boundary Calculator", "Daily Commissioning Progress Report"],
         references: [
-            { name: "OSHA 1910.147 Lockout/Tagout", type: "Safety", desc: "Hazardous energy control requirements during servicing and maintenance." },
+            { name: "OSHA 1910.147", type: "Safety", desc: "Hazardous energy control requirements during servicing and maintenance." },
             { name: "NFPA 70E", type: "Safety", desc: "Electrical safety-related work practices, shock risk, arc-flash risk, energized work controls, and electrically safe work condition." },
             { name: "OSHA Job Hazard Analysis Guide", type: "Safety", desc: "Reference for breaking a job into steps, identifying hazards, and defining controls." },
             { name: "Site HSE Plan", type: "Project Specific", desc: "Final source for site-specific safety expectations, PPE, emergency response, and escalation requirements." },
@@ -593,7 +804,7 @@ window.GLOBAL_HUB_RESOURCES = [
     {
         title: "3. BESS Safety, Commissioning & Performance",
         description: "References used for BESS inspections, pre-energization checks, battery SOC/temperature diagnostics, capacity testing, RTE, and availability.",
-        tools: ["BESS Pre-Energization Checklist", "Battery Rack Container Inspection", "BESS Capacity / Energy Test Form", "Battery SOC Imbalance Analyzer", "Battery Temperature Spread Analyzer", "BESS Availability Calculator"],
+        tools: ["BESS Pre-Energization Checklist", "Battery Rack Container Inspection", "BESS Capacity / Energy Test Form", "Battery SOC Imbalance Analyzer", "Battery Temperature Spread Analyzer", "BESS Availability Calculator", "BESS Cable Sizing Calculator", "BESS Cell Voltage Imbalance Calculator", "Daily Commissioning Progress Report"],
         references: [
             { name: "NFPA 855", type: "Standard", desc: "Stationary energy storage system installation safety requirements." },
             { name: "UL 9540", type: "Standard", desc: "Energy storage system and equipment safety certification reference." },
@@ -610,7 +821,7 @@ window.GLOBAL_HUB_RESOURCES = [
     {
         title: "4. PV Performance, Testing & Soiling",
         description: "References used for PR calculations, weather correction, irradiance validation, string comparison, I-V curve interpretation, soiling loss, and customer reporting.",
-        tools: ["PV Performance Ratio Calculator", "Weather Correction Calculator for PV Testing", "Irradiance Sensor Cross-Check Tool", "String Current Imbalance Calculator", "IV Curve Test Result Log", "Soiling Loss Estimator", "Clean vs. Soiled String Comparison Tool", "Cleaning ROI Calculator", "Lost Energy from Soiling Calculator", "Soiling Customer Report Generator"],
+        tools: ["PV Performance Ratio Calculator", "Weather Correction Calculator for PV Testing", "Irradiance Sensor Cross-Check Tool", "String Current Imbalance Calculator", "IV Curve Test Result Log", "Soiling Loss Estimator", "Clean vs. Soiled String Comparison Tool", "Cleaning ROI Calculator", "Lost Energy from Soiling Calculator", "Soiling Customer Report Generator", "PV String Sizer & VOC Calculator", "PV Insulation Resistance (Megger) Tester", "Daily Commissioning Progress Report"],
         references: [
             { name: "IEC 61724", type: "Standard", desc: "PV system performance monitoring, irradiance measurement, data quality, and performance indicators." },
             { name: "NREL Weather-Corrected Performance Ratio Method", type: "Engineering Guide", desc: "Reference method for normalizing PV performance against irradiance and temperature conditions." },
@@ -625,7 +836,7 @@ window.GLOBAL_HUB_RESOURCES = [
     {
         title: "5. SCADA, Communications & Data Protocols",
         description: "References used for Modbus decoding, SCADA tag validation, alarm timelines, event reconstruction, data exports, and communication QA/QC.",
-        tools: ["MODBUS Register Decoder", "SCADA Tag QA/QC Checklist", "Alarm / Fault Event Timeline Builder", "Number Base Converter", "UMCG Data Analysis Tool", "Firmware Version Tracker", "Technical Documentation / Reference Search Tool"],
+        tools: ["MODBUS Register Decoder", "SCADA Tag QA/QC Checklist", "Alarm / Fault Event Timeline Builder", "Number Base Converter", "UMCG Data Analysis Tool", "Firmware Version Tracker", "Technical Documentation / Reference Search Tool", "BESS Cell Voltage Imbalance Calculator"],
         references: [
             { name: "MODBUS Application Protocol Specification", type: "Protocol", desc: "Register structure, coils, discrete inputs, input registers, holding registers, and function code behavior." },
             { name: "SunSpec Modbus Models", type: "Protocol", desc: "Standardized DER models for inverters, meters, storage systems, and plant controls." },
@@ -639,7 +850,7 @@ window.GLOBAL_HUB_RESOURCES = [
     {
         title: "6. Grid Controls, Inverter Operation & Capability",
         description: "References used for clipping, curtailment, derating, reactive power, power factor, capability curves, and grid event analysis.",
-        tools: ["Inverter Clipping / Curtailment Check Tool", "Inverter Derating Cause Analyzer", "Interactive Power Triangle Tool", "Inverter Capability Curve Check", "Grid Event Voltage/Frequency Excursion Log", "Irradiance Sensor Cross-Check Tool"],
+        tools: ["Inverter Clipping / Curtailment Check Tool", "Inverter Derating Cause Analyzer", "Interactive Power Triangle Tool", "Inverter Capability Curve Check", "Grid Event Voltage/Frequency Excursion Log", "Irradiance Sensor Cross-Check Tool", "PV String Sizer & VOC Calculator", "Arc Flash Boundary Calculator"],
         references: [
             { name: "IEEE 1547", type: "Standard", desc: "DER interconnection, interoperability, voltage/frequency ride-through, trip behavior, and grid support functions." },
             { name: "OEM Inverter Manual", type: "OEM Manual", desc: "Final reference for inverter operating limits, alarms, derating behavior, active power limits, and reactive power modes." },
@@ -666,7 +877,7 @@ window.GLOBAL_HUB_RESOURCES = [
     {
         title: "8. Reporting, RCA, CAPA & Documentation Control",
         description: "References used for customer reports, RCA, corrective actions, document control, punchlists, and service evidence.",
-        tools: ["Customer Site Visit Report Generator", "RCA Template Builder", "Corrective Action Tracker / CAPA Log", "Commissioning Punchlist Builder", "Technical Documentation / Reference Search Tool"],
+        tools: ["Customer Site Visit Report Generator", "RCA Template Builder", "Corrective Action Tracker / CAPA Log", "Commissioning Punchlist Builder", "Technical Documentation / Reference Search Tool", "Transformer Turns Ratio (TTR) Form", "Daily Commissioning Progress Report"],
         references: [
             { name: "ISO 9001 Corrective Action Concepts", type: "Standard", desc: "Management-system reference for nonconformity, corrective action, effectiveness review, and continuous improvement." },
             { name: "5 Whys Root Cause Analysis Method", type: "Engineering Guide", desc: "Simple RCA method for drilling down from symptom to probable root cause." },
