@@ -585,6 +585,13 @@ function openTool(toolId, url) {
  * Generic Tool Card Renderer
  */
 function buildToolCardHTML(tool) {
+    // Merge any localStorage overrides (from the in-tool gear editor)
+    const _overrides = JSON.parse(localStorage.getItem('toolhub_meta_overrides') || '{}');
+    const _key = (tool.url || '').split('?')[0];
+    if (_overrides[_key]) {
+        tool = { ...tool, ..._overrides[_key] };
+    }
+
     const isStarred = favoriteTools.includes(tool.id);
     const cleanCategory = tool.category.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     const statusText = tool.status || 'Active';

@@ -897,3 +897,334 @@ function wakeUpServer() {
         });
     });
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * 8. Tool Meta Enricher
+ * Runs on every tool page that has a .tool-header-section.
+ * • Fetches tools-data.json to find the registry entry for this page
+ * • Injects workflow pack membership badges into the header
+ * • Adds a ⚙ gear icon that opens a slim status/tags editor
+ * • Saves edits to localStorage so hub cards reflect changes immediately
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+const TOOL_META_OVERRIDES_KEY = 'toolhub_meta_overrides';
+
+// Compact workflow membership map: filename → array of pack names
+// Kept here so common.js stays standalone (no dependency on tools-hub.js)
+const TOOL_WORKFLOW_MAP = {
+    'inverter-startup.html':              ['PV Commissioning Sequence'],
+    'dc-voltage-sanity.html':             ['PV Commissioning Sequence'],
+    'string-imbalance.html':              ['PV Commissioning Sequence'],
+    'iv-curve-log.html':                  ['PV Commissioning Sequence'],
+    'parameter-comparison.html':          ['PV Commissioning Sequence'],
+    'scada-tag-qaqc.html':               ['PV Commissioning Sequence', 'Grid / PPC & Reactive Power Testing', 'SCADA & Comms Troubleshooting'],
+    'commissioning-punchlist.html':       ['PV Commissioning Sequence', 'Reporting / Field Closeout'],
+    'site-visit-report.html':            ['PV Commissioning Sequence', 'Reporting / Field Closeout'],
+    'bess-pre-energization.html':         ['BESS Commissioning Sequence'],
+    'bess-rack-inspection.html':          ['BESS Commissioning Sequence', 'BESS Container Troubleshooting'],
+    'bess-capacity-test.html':            ['BESS Commissioning Sequence'],
+    'battery-soc-imbalance-analyzer.html':['BESS Commissioning Sequence', 'BESS Container Troubleshooting'],
+    'battery-temperature-spread.html':    ['BESS Commissioning Sequence', 'BESS Container Troubleshooting'],
+    'hvac-delta-t.html':                  ['BESS Commissioning Sequence', 'BESS Container Troubleshooting'],
+    'alarm-timeline.html':               ['BESS Commissioning Sequence', 'PV Underperformance Troubleshooting', 'SCADA & Comms Troubleshooting'],
+    'rca-template-builder.html':         ['BESS Commissioning Sequence', 'BESS Container Troubleshooting', 'Reporting / Field Closeout'],
+    'pv-performance-ratio.html':         ['PV Underperformance Troubleshooting'],
+    'pv-weather-correction.html':        ['PV Underperformance Troubleshooting'],
+    'weather-correction.html':           ['PV Underperformance Troubleshooting'],
+    'soiling-loss-estimator.html':       ['PV Underperformance Troubleshooting', 'Soiling Analysis Workflow'],
+    'clean-vs-soiled-strings.html':      ['PV Underperformance Troubleshooting', 'Soiling Analysis Workflow'],
+    'irradiance-sensor-check.html':      ['PV Underperformance Troubleshooting'],
+    'clipping-curtailment-check.html':   ['PV Underperformance Troubleshooting'],
+    'inverter-derating-analyzer.html':   ['PV Underperformance Troubleshooting'],
+    'tracker-angle-qaqc.html':           ['PV Underperformance Troubleshooting'],
+    'soiling-lost-energy.html':          ['Soiling Analysis Workflow'],
+    'cleaning-roi.html':                 ['Soiling Analysis Workflow'],
+    'soiling-customer-report.html':      ['Soiling Analysis Workflow', 'Reporting / Field Closeout'],
+    'bess-availability.html':            ['BESS Container Troubleshooting'],
+    'modbus-decoder.html':               ['BESS Container Troubleshooting', 'Grid / PPC & Reactive Power Testing', 'SCADA & Comms Troubleshooting'],
+    'number-base-converter.html':        ['BESS Container Troubleshooting', 'Grid / PPC & Reactive Power Testing', 'SCADA & Comms Troubleshooting'],
+    'power-triangle.html':               ['Grid / PPC & Reactive Power Testing'],
+    'inverter-capability-curve-check.html':['Grid / PPC & Reactive Power Testing'],
+    'grid-event-excursion-log.html':     ['Grid / PPC & Reactive Power Testing'],
+    'rej603-configurator.html':          ['Grid / PPC & Reactive Power Testing'],
+    'capa-tracker.html':                 ['Reporting / Field Closeout'],
+    'technical-reference-search.html':   ['Reporting / Field Closeout'],
+    'analyzer.html':                     ['SCADA & Comms Troubleshooting'],
+    'fault-interpreter.html':            ['SCADA & Comms Troubleshooting'],
+};
+
+const STATUS_OPTIONS = ['Active', 'In Progress', 'Planned', 'Legacy'];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const headerSection = document.querySelector('.tool-header-section');
+    if (!headerSection) return; // Only run on tool pages
+
+    const pageFile = window.location.pathname.split('/').pop() || 'index.html';
+
+    // Load tool registry and apply enrichment
+    fetch('./tools-data.json')
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(data => {
+            const tools = data.tools || [];
+            const tool = tools.find(t => (t.url || '').split('?')[0] === pageFile);
+            _enrichToolHeader(headerSection, pageFile, tool);
+        })
+        .catch(() => {
+            // Even without JSON, inject workflow badges and gear if we have the page file
+            _enrichToolHeader(headerSection, pageFile, null);
+        });
+});
+
+function _enrichToolHeader(headerSection, pageFile, registryTool) {
+    // Apply any localStorage overrides to the registry tool data
+    const overrides = JSON.parse(localStorage.getItem(TOOL_META_OVERRIDES_KEY) || '{}');
+    const override = overrides[pageFile];
+    const effectiveTool = override ? { ...(registryTool || {}), ...override } : registryTool;
+
+    // ── 1. Inject workflow pack badges ──────────────────────────────────────
+    const packs = TOOL_WORKFLOW_MAP[pageFile] || [];
+    if (packs.length > 0) {
+        const wfRow = document.createElement('div');
+        wfRow.id = 'tool-workflow-badges';
+        wfRow.style.cssText = 'display:flex; flex-wrap:wrap; gap:6px; margin-top:0.85rem; align-items:center;';
+        wfRow.innerHTML = `
+            <span style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-right:2px;">
+                <i class="fas fa-sitemap" style="margin-right:3px;"></i>Part of:
+            </span>
+            ${packs.map(name => `
+                <span style="
+                    display:inline-flex; align-items:center; gap:4px;
+                    background:#eff6ff; color:#1d4ed8;
+                    border:1px solid #bfdbfe; border-radius:20px;
+                    padding:2px 10px; font-size:0.72rem; font-weight:600;
+                    white-space:nowrap;
+                "><i class="fas fa-layer-group" style="font-size:0.65rem;"></i>${name}</span>
+            `).join('')}
+        `;
+
+        // Insert after the .tool-meta div (category/status badges row) or at end of header
+        const metaDiv = headerSection.querySelector('.tool-meta') ||
+                        headerSection.querySelector('.tool-title-row');
+        if (metaDiv) {
+            metaDiv.after ? metaDiv.after(wfRow) : metaDiv.parentNode.insertBefore(wfRow, metaDiv.nextSibling);
+        } else {
+            headerSection.appendChild(wfRow);
+        }
+    }
+
+    // ── 2. Inject gear icon ─────────────────────────────────────────────────
+    const titleRow = headerSection.querySelector('.tool-title-row');
+    if (titleRow) {
+        const gearBtn = document.createElement('button');
+        gearBtn.id = 'tool-gear-btn';
+        gearBtn.title = 'Edit tool status & tags';
+        gearBtn.innerHTML = '<i class="fas fa-cog"></i>';
+        gearBtn.style.cssText = `
+            position:absolute; top:1.25rem; right:1.25rem;
+            background:none; border:none; cursor:pointer;
+            color:#94a3b8; font-size:1.15rem; padding:4px;
+            transition:color 0.2s, transform 0.3s;
+            line-height:1;
+        `;
+        gearBtn.onmouseenter = () => { gearBtn.style.color = '#2563eb'; gearBtn.style.transform = 'rotate(60deg)'; };
+        gearBtn.onmouseleave = () => { gearBtn.style.color = '#94a3b8'; gearBtn.style.transform = 'rotate(0deg)'; };
+        gearBtn.onclick = () => _openGearModal(pageFile, effectiveTool);
+
+        // Make header position relative so absolute gear sits inside it
+        if (getComputedStyle(headerSection).position === 'static') {
+            headerSection.style.position = 'relative';
+        }
+        headerSection.appendChild(gearBtn);
+    }
+
+    // ── 3. Inject gear modal (once) ─────────────────────────────────────────
+    if (!document.getElementById('tool-gear-modal')) {
+        const modal = document.createElement('div');
+        modal.id = 'tool-gear-modal';
+        modal.style.cssText = `
+            display:none; position:fixed; inset:0; z-index:9000;
+            background:rgba(15,23,42,0.45); backdrop-filter:blur(3px);
+            align-items:center; justify-content:center;
+        `;
+        modal.innerHTML = `
+            <div id="tool-gear-panel" style="
+                background:#fff; border-radius:16px; padding:2rem;
+                width:min(440px, 92vw); box-shadow:0 20px 60px rgba(0,0,0,0.2);
+                font-family:'Inter','Outfit',sans-serif;
+            ">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                    <div>
+                        <h3 style="margin:0; font-size:1.1rem; font-weight:700; color:#0f172a; font-family:'Outfit',sans-serif;">
+                            <i class="fas fa-cog" style="color:#2563eb; margin-right:6px;"></i>Edit Tool Metadata
+                        </h3>
+                        <p style="margin:0.2rem 0 0; font-size:0.78rem; color:#64748b;">Saved locally — syncs to hub cards instantly.</p>
+                    </div>
+                    <button onclick="document.getElementById('tool-gear-modal').style.display='none'"
+                        style="background:none; border:none; cursor:pointer; color:#94a3b8; font-size:1.2rem; padding:4px;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Status -->
+                <label style="display:block; font-size:0.8rem; font-weight:700; color:#475569; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">
+                    Status
+                </label>
+                <div id="gear-status-pills" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:1.5rem;"></div>
+
+                <!-- Tags -->
+                <label style="display:block; font-size:0.8rem; font-weight:700; color:#475569; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">
+                    Tags <span style="font-weight:400; text-transform:none; color:#94a3b8;">(comma-separated)</span>
+                </label>
+                <input id="gear-tags-input" type="text"
+                    placeholder="e.g. PV, Inverter, Diagnostics"
+                    style="width:100%; box-sizing:border-box; border:1.5px solid #e2e8f0; border-radius:8px;
+                           padding:0.6rem 0.8rem; font-size:0.88rem; color:#1e293b; outline:none;
+                           transition:border-color 0.2s; margin-bottom:1.5rem;"
+                    onfocus="this.style.borderColor='#2563eb'"
+                    onblur="this.style.borderColor='#e2e8f0'"
+                >
+
+                <!-- Note -->
+                <div style="background:#fafafa; border:1px solid #e2e8f0; border-radius:8px; padding:0.65rem 0.85rem; margin-bottom:1.5rem; font-size:0.78rem; color:#64748b; display:flex; gap:8px; align-items:flex-start;">
+                    <i class="fas fa-info-circle" style="color:#3b82f6; margin-top:1px;"></i>
+                    <span>Changes are stored in your browser. A central database will persist these across devices in a future update.</span>
+                </div>
+
+                <!-- Actions -->
+                <div style="display:flex; gap:10px; justify-content:flex-end;">
+                    <button id="gear-reset-btn"
+                        style="background:#f1f5f9; border:none; border-radius:8px; padding:0.6rem 1.1rem;
+                               font-size:0.85rem; font-weight:600; color:#64748b; cursor:pointer; transition:background 0.2s;"
+                        onmouseenter="this.style.background='#e2e8f0'"
+                        onmouseleave="this.style.background='#f1f5f9'">
+                        <i class="fas fa-undo" style="margin-right:4px;"></i>Reset
+                    </button>
+                    <button id="gear-save-btn"
+                        style="background:#2563eb; border:none; border-radius:8px; padding:0.6rem 1.4rem;
+                               font-size:0.85rem; font-weight:700; color:#fff; cursor:pointer; transition:background 0.2s;"
+                        onmouseenter="this.style.background='#1d4ed8'"
+                        onmouseleave="this.style.background='#2563eb'">
+                        <i class="fas fa-save" style="margin-right:5px;"></i>Save Changes
+                    </button>
+                </div>
+
+                <!-- Toast -->
+                <div id="gear-toast" style="display:none; margin-top:1rem; background:#dcfce7; border:1px solid #86efac;
+                    border-radius:8px; padding:0.55rem 0.85rem; font-size:0.82rem; color:#15803d; font-weight:600;">
+                    <i class="fas fa-check-circle" style="margin-right:5px;"></i>Saved! Hub cards will reflect this change.
+                </div>
+            </div>
+        `;
+        // Close on backdrop click
+        modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+        document.body.appendChild(modal);
+    }
+}
+
+let _gearCurrentFile = null;
+
+function _openGearModal(pageFile, tool) {
+    _gearCurrentFile = pageFile;
+    const modal = document.getElementById('tool-gear-modal');
+    if (!modal) return;
+
+    const overrides = JSON.parse(localStorage.getItem(TOOL_META_OVERRIDES_KEY) || '{}');
+    const current = overrides[pageFile] || {};
+    const currentStatus = current.status || (tool && tool.status) || 'Active';
+    const currentTags  = current.tags  || (tool && tool.tags)  || [];
+
+    // Render status pills
+    const pillContainer = document.getElementById('gear-status-pills');
+    pillContainer.innerHTML = '';
+    const statusColors = {
+        'Active':      { bg: '#dcfce7', color: '#15803d', border: '#86efac' },
+        'In Progress': { bg: '#fef9c3', color: '#854d0e', border: '#fde047' },
+        'Planned':     { bg: '#eff6ff', color: '#1d4ed8', border: '#93c5fd' },
+        'Legacy':      { bg: '#f1f5f9', color: '#475569', border: '#cbd5e1' },
+    };
+    STATUS_OPTIONS.forEach(s => {
+        const c = statusColors[s] || statusColors['Active'];
+        const selected = s === currentStatus;
+        const pill = document.createElement('button');
+        pill.textContent = s;
+        pill.dataset.status = s;
+        pill.style.cssText = `
+            padding:5px 14px; border-radius:20px; font-size:0.8rem; font-weight:700; cursor:pointer;
+            transition:all 0.15s; outline:none;
+            background:${selected ? c.bg : '#f8fafc'};
+            color:${selected ? c.color : '#94a3b8'};
+            border:2px solid ${selected ? c.border : '#e2e8f0'};
+        `;
+        pill.onclick = () => {
+            pillContainer.querySelectorAll('button').forEach(b => {
+                const bc = statusColors[b.dataset.status] || statusColors['Active'];
+                b.style.background = '#f8fafc'; b.style.color = '#94a3b8'; b.style.border = '2px solid #e2e8f0';
+            });
+            const cc = statusColors[s] || statusColors['Active'];
+            pill.style.background = cc.bg; pill.style.color = cc.color; pill.style.border = `2px solid ${cc.border}`;
+        };
+        pillContainer.appendChild(pill);
+    });
+
+    // Pre-fill tags
+    const tagsInput = document.getElementById('gear-tags-input');
+    tagsInput.value = Array.isArray(currentTags) ? currentTags.join(', ') : currentTags;
+
+    // Hide toast
+    document.getElementById('gear-toast').style.display = 'none';
+
+    // Save handler
+    const saveBtn = document.getElementById('gear-save-btn');
+    const resetBtn = document.getElementById('gear-reset-btn');
+
+    // Rebind to avoid duplicate listeners
+    const newSave = saveBtn.cloneNode(true);
+    saveBtn.parentNode.replaceChild(newSave, saveBtn);
+    newSave.onmouseenter = () => newSave.style.background = '#1d4ed8';
+    newSave.onmouseleave = () => newSave.style.background = '#2563eb';
+    newSave.onclick = () => _saveGearChanges(pageFile);
+
+    const newReset = resetBtn.cloneNode(true);
+    resetBtn.parentNode.replaceChild(newReset, resetBtn);
+    newReset.onmouseenter = () => newReset.style.background = '#e2e8f0';
+    newReset.onmouseleave = () => newReset.style.background = '#f1f5f9';
+    newReset.onclick = () => _resetGearChanges(pageFile);
+
+    modal.style.display = 'flex';
+}
+
+function _saveGearChanges(pageFile) {
+    const selectedPill = document.querySelector('#gear-status-pills button[style*="dcfce7"], #gear-status-pills button[style*="fef9c3"], #gear-status-pills button[style*="eff6ff"], #gear-status-pills button[style*="f1f5f9"]:not([style*="f8fafc"])');
+    
+    // Find the actually-selected pill (the one with color != #94a3b8)
+    let selectedStatus = 'Active';
+    document.querySelectorAll('#gear-status-pills button').forEach(b => {
+        if (b.style.color !== 'rgb(148, 163, 184)' && b.style.color !== '#94a3b8') {
+            selectedStatus = b.dataset.status;
+        }
+    });
+
+    const rawTags = document.getElementById('gear-tags-input').value;
+    const tags = rawTags.split(',').map(t => t.trim()).filter(Boolean);
+
+    const overrides = JSON.parse(localStorage.getItem(TOOL_META_OVERRIDES_KEY) || '{}');
+    overrides[pageFile] = { status: selectedStatus, tags };
+    localStorage.setItem(TOOL_META_OVERRIDES_KEY, JSON.stringify(overrides));
+
+    // Show toast
+    const toast = document.getElementById('gear-toast');
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 2500);
+
+    console.log(`[ToolMeta] Override saved for ${pageFile}:`, overrides[pageFile]);
+}
+
+function _resetGearChanges(pageFile) {
+    const overrides = JSON.parse(localStorage.getItem(TOOL_META_OVERRIDES_KEY) || '{}');
+    delete overrides[pageFile];
+    localStorage.setItem(TOOL_META_OVERRIDES_KEY, JSON.stringify(overrides));
+
+    // Close modal
+    document.getElementById('tool-gear-modal').style.display = 'none';
+    console.log(`[ToolMeta] Override reset for ${pageFile}.`);
+}
