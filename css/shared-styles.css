@@ -1669,6 +1669,7 @@ button:disabled, .submit-button:disabled {
     --color-reference-guides: #64748b; /* Slate */
     --color-hse: #ef4444; /* Red */
     --color-legacy-archive: #94a3b8; /* Light Slate */
+    --color-oem-specific: #6366f1; /* Indigo */
 }
 
 /* Global Safety Disclaimer Banner */
@@ -1746,6 +1747,7 @@ button:disabled, .submit-button:disabled {
 .tool-tile[data-category="reference-guides"]::before { background-color: var(--color-reference-guides); }
 .tool-tile[data-category="hse"]::before { background-color: var(--color-hse); }
 .tool-tile[data-category="legacy-archive"]::before { background-color: var(--color-legacy-archive); }
+.tool-tile[data-category="oem-specific"]::before { background-color: var(--color-oem-specific); }
 
 .tile-content {
     padding: 0.85rem 1.25rem 1.15rem 1.25rem;
@@ -1807,6 +1809,7 @@ button:disabled, .submit-button:disabled {
 .tool-tile[data-category="reports-templates"] .tile-category { color: var(--color-reports-templates); background: #ecfeff; }
 .tool-tile[data-category="reference-guides"] .tile-category { color: var(--color-reference-guides); background: #f8fafc; }
 .tool-tile[data-category="hse"] .tile-category { color: var(--color-hse); background: #fef2f2; }
+.tool-tile[data-category="oem-specific"] .tile-category { color: var(--color-oem-specific); background: #e0e7ff; }
 
 /* Status Badges */
 .status-badge {
@@ -1860,6 +1863,7 @@ button:disabled, .submit-button:disabled {
 .tool-tile[data-category="scada-diagnostics"]:hover .tile-icon-wrapper { background: #f5f3ff; color: var(--color-scada-diagnostics); border-color: #ddd6fe; }
 .tool-tile[data-category="reports-templates"]:hover .tile-icon-wrapper { background: #ecfeff; color: var(--color-reports-templates); border-color: #a5f3fc; }
 .tool-tile[data-category="hse"]:hover .tile-icon-wrapper { background: #fef2f2; color: var(--color-hse); border-color: #fecaca; }
+.tool-tile[data-category="oem-specific"]:hover .tile-icon-wrapper { background: #e0e7ff; color: var(--color-oem-specific); border-color: #c7d2fe; }
 
 .tile-info {
     flex: 1;
@@ -2138,6 +2142,121 @@ button:disabled, .submit-button:disabled {
     border-radius: 4px !important;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
     display: inline-block !important;
+}
+
+/* --- Tool Resources Card styles --- */
+.tool-resources-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    text-align: left;
+}
+
+.resources-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.resources-card-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.resources-basis-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+}
+
+.basis-oem { background: #e0e7ff; color: #4f46e5; }
+.basis-standard { background: #fee2e2; color: #dc2626; }
+.basis-protocol { background: #ecfdf5; color: #059669; }
+.basis-engineering { background: #fffbeb; color: #b45309; }
+.basis-field { background: #f1f5f9; color: #475569; }
+.basis-contract { background: #ecfeff; color: #0891b2; }
+.basis-project { background: #fdf2f8; color: #db2777; }
+.basis-safety { background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; }
+
+.resources-list {
+    margin: 0 0 1rem 0;
+    padding-left: 1.25rem;
+    list-style-type: disc;
+    color: #475569;
+    font-size: 0.85rem;
+}
+
+.resources-list li {
+    margin-bottom: 0.35rem;
+}
+
+.resources-ref-type {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    background: #f1f5f9;
+    color: #475569;
+    margin-left: 0.35rem;
+    display: inline-block;
+}
+
+.resources-note-box {
+    background: #f8fafc;
+    border-left: 3px solid #64748b;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #334155;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+.resources-note-title {
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: #475569;
+}
+
+.resources-action-row {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-view-hub-resources {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-view-hub-resources:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
 }
 
 

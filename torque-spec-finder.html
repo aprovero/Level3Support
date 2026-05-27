@@ -435,21 +435,21 @@
 
     <!-- Tab Bar -->
     <div class="tab-bar">
-      <button class="tab-btn active" id="tab-btn-equipment" onclick="switchTab('equipment')">
-        <i class="fas fa-solar-panel"></i> Equipment Specs
-      </button>
-      <button class="tab-btn" id="tab-btn-bolts" onclick="switchTab('bolts')">
+      <button class="tab-btn active" id="tab-btn-bolts" onclick="switchTab('bolts')">
         <i class="fas fa-cog"></i> Standard Bolt Torques
       </button>
       <button class="tab-btn" id="tab-btn-electrical" onclick="switchTab('electrical')">
         <i class="fas fa-bolt"></i> Electrical Terminals
+      </button>
+      <button class="tab-btn" id="tab-btn-equipment" onclick="switchTab('equipment')">
+        <i class="fas fa-solar-panel"></i> Equipment Specs
       </button>
     </div>
 
     <!-- ═══════════════════════════════════════════════════
          TAB 1 — EQUIPMENT SPECS
     ═══════════════════════════════════════════════════ -->
-    <div class="tab-panel active" id="panel-equipment">
+    <div class="tab-panel" id="panel-equipment">
 
       <div class="search-filter-row">
         <div class="search-wrapper">
@@ -506,7 +506,7 @@
     <!-- ═══════════════════════════════════════════════════
          TAB 2 — STANDARD BOLT TORQUES
     ═══════════════════════════════════════════════════ -->
-    <div class="tab-panel" id="panel-bolts">
+    <div class="tab-panel active" id="panel-bolts">
 
       <div class="search-filter-row">
         <div class="search-wrapper">

@@ -43,41 +43,41 @@
     {
       "id": 5,
       "name": "ABB REJ603 Relay Configuration Tool",
-      "category": "SCADA & Diagnostics",
+      "category": "OEM Specific",
       "status": "Active",
-      "description": "Interactive configuration utility for ABB REJ603 protection relays.",
+      "description": "Used to configure ABB REJ603 protection relays. (OEM Specific - ABB)",
       "url": "rej603-configurator.html",
-      "tags": ["Relay", "Protection", "Commissioning"],
+      "tags": ["ABB", "Relay", "Protection", "Commissioning"],
       "notes": "Fully operational field tool."
     },
     {
       "id": 6,
       "name": "SG1+x Parameter Comparison Tool",
-      "category": "SCADA & Diagnostics",
+      "category": "OEM Specific",
       "status": "Active",
-      "description": "Compare SG1+x parameters and settings between multiple field units.",
+      "description": "Compare Sungrow SG1+x inverter parameters side by side. (OEM Specific - Sungrow)",
       "url": "parameter-comparison.html",
-      "tags": ["Inverter", "Parameters", "SCADA"],
+      "tags": ["Sungrow", "Inverter", "Parameters"],
       "notes": "Excellent troubleshooting tool."
     },
     {
       "id": 7,
       "name": "UMCG Data Analysis Tool",
-      "category": "SCADA & Diagnostics",
+      "category": "OEM Specific",
       "status": "In Progress",
-      "description": "Used for analyzing and parsing data logs extracted from UMCG devices.",
+      "description": "Used to analyze data logs downloaded from Sungrow inverters. (OEM Specific - Sungrow)",
       "url": "analyzer.html",
-      "tags": ["UMCG", "Data", "Diagnostics"],
+      "tags": ["Sungrow", "Inverter", "Diagnostics", "Data"],
       "notes": "Development in progress."
     },
     {
       "id": 8,
       "name": "PDP Module Fault Code Interpreter",
-      "category": "SCADA & Diagnostics",
+      "category": "OEM Specific",
       "status": "Active",
-      "description": "Decode and troubleshoot PDP power module status and fault codes.",
+      "description": "Decodes raw diagnostic codes and status faults for Sungrow inverters, providing immediate troubleshooting guides and failure root causes for technicians in the field. (OEM Specific - Sungrow)",
       "url": "fault-interpreter.html",
-      "tags": ["PDP", "Faults", "Troubleshooting"],
+      "tags": ["Sungrow", "Inverter", "Faults", "Troubleshooting"],
       "notes": "Updated with premium styling."
     },
     {
@@ -104,11 +104,11 @@
       "id": 11,
       "name": "Torque & Bolted Connection Calculator",
       "category": "Calculators",
-      "status": "In Progress",
+      "status": "Active",
       "description": "Lookup target bolt pre-loads and recommended mechanical torques based on size, grade, and lubrication.",
-      "url": "tool-placeholder.html?tool=torque-calculator",
+      "url": "torque-spec-finder.html",
       "tags": ["PV", "BESS", "Mechanical", "Torque"],
-      "notes": "Planned for Agent 2"
+      "notes": "Merged with Torque Spec Finder."
     },
     {
       "id": 12,
@@ -557,6 +557,15 @@
         "description": "Generate a customer-facing report detailing soiling impacts and recommended cleaning actions.",
         "url": "soiling-customer-report.html",
         "tags": ["PV", "Soiling", "Performance", "O&M", "Reporting"]
+    },
+    {
+        "id": 60,
+        "name": "Fuse Continuous Current & Temperature Derating Calculator",
+        "category": "Calculators",
+        "status": "Active",
+        "description": "Calculate derated continuous current limits and determine appropriate fuse ratings based on ambient temperature and custom derating factors.",
+        "url": "fuse-derating-calculator.html",
+        "tags": ["Fuse", "Derating", "Continuous Current", "Temperature", "DC", "AC", "Protection", "QA/QC"]
     }
 ]
 }

@@ -38,6 +38,9 @@
                 <a href="#reference" class="nav-item" data-view="reference">
                     <i class="fas fa-book-open"></i> <span>Reference</span>
                 </a>
+                <a href="#resources" class="nav-item" data-view="resources">
+                    <i class="fas fa-book"></i> <span>Hub Resources</span>
+                </a>
                 <a href="#reports" class="nav-item" data-view="reports">
                     <i class="fas fa-file-invoice"></i> <span>Reports & Forms</span>
                 </a>
@@ -46,7 +49,7 @@
                 </a>
             </nav>
             <div class="sidebar-footer">
-                <div class="version-tag">v2.1.5</div>
+                <div class="version-tag">v2.1.6</div>
                 <div class="sidebar-powered">
                     <span>Powered by</span>
                     <img src="images/APROVERO_LOGO.png" alt="aprovero" class="sidebar-partner-logo">
@@ -353,11 +356,65 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- 7. HUB RESOURCES VIEW -->
+                <section id="view-resources" class="view-section">
+                    <div class="view-header">
+                        <div class="view-header-left">
+                            <h1 class="view-title">Hub Resources</h1>
+                            <p class="view-subtitle">Central reference library for the standards, OEM documentation, safety practices, protocols, and engineering guides used across the Tool Hub.</p>
+                        </div>
+                        <div class="view-header-right">
+                            <div class="global-search-wrapper">
+                                <i class="fas fa-search global-search-icon"></i>
+                                <input type="text" id="resources-search-input" class="global-search-input" placeholder="Search references, standards, OEM manuals...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resources Filtering Row -->
+                    <div class="library-filter-panel" style="margin-bottom: 2rem;">
+                        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; padding: 0.5rem 1rem;">
+                            <div class="filter-group" style="margin: 0; flex: 1 1 240px;">
+                                <label style="font-weight:600; font-size:0.8rem; color:#475569; margin-bottom:4px; display:block;">Filter by Reference Type</label>
+                                <select id="filter-resource-type" style="width:100%; height:36px; padding:6px; border:1px solid #cbd5e1; border-radius:6px; background:#ffffff;">
+                                    <option value="all">All Types</option>
+                                    <option value="Standard">Standards Only</option>
+                                    <option value="OEM Manual">OEM Manuals Only</option>
+                                    <option value="Protocol">Protocols Only</option>
+                                    <option value="Safety">Safety Documents Only</option>
+                                    <option value="Engineering Guide">Engineering Guides Only</option>
+                                    <option value="Project Specific">Project Specific Only</option>
+                                    <option value="Contract Specific">Contract Specific Only</option>
+                                </select>
+                            </div>
+                            <div class="filter-group" style="margin: 0; flex: 1 1 240px;">
+                                <label style="font-weight:600; font-size:0.8rem; color:#475569; margin-bottom:4px; display:block;">Filter by Category</label>
+                                <select id="filter-resource-category" style="width:100%; height:36px; padding:6px; border:1px solid #cbd5e1; border-radius:6px; background:#ffffff;">
+                                    <option value="all">All Categories</option>
+                                    <option value="Electrical Installation">Electrical Installation &amp; Commissioning</option>
+                                    <option value="Electrical Safety">Electrical Safety &amp; LOTO</option>
+                                    <option value="BESS Safety">BESS Safety &amp; Performance</option>
+                                    <option value="PV Performance">PV Performance &amp; Soiling</option>
+                                    <option value="SCADA">SCADA, Comms &amp; Data Protocols</option>
+                                    <option value="Grid Controls">Grid Controls &amp; Capability</option>
+                                    <option value="Mechanical">Mechanical, Torque &amp; Quality</option>
+                                    <option value="Reporting">Reporting &amp; RCA</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Categories Container -->
+                    <div id="resources-categories-container" style="display:flex; flex-direction:column; gap:2.5rem; margin-top:2rem;">
+                        <!-- Dynamically generated categories and reference cards -->
+                    </div>
+                </section>
             </main>
 
             <!-- Muted Mobile-Only Footer -->
             <footer class="mobile-only-footer">
-                <div class="mobile-footer-text">&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED. v2.1.5</div>
+                <div class="mobile-footer-text">&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED. v2.1.6</div>
                 <div class="mobile-footer-powered">Powered by aprovero</div>
             </footer>
         </div>
@@ -407,6 +464,7 @@
             --color-hse: #ef4444;
             --color-soiling-pv-performance: #0284c7;
             --color-legacy-archive: #94a3b8;
+            --color-oem-specific: #6366f1;
         }
 
         body {
@@ -1634,6 +1692,7 @@
     </style>
 
     <!-- Load refactored OS-Style javascript router & behavior -->
+    <script src="js/tool-resources.js?v=26"></script>
     <script src="js/tools-hub.js?v=26"></script>
     <script>
     if ('serviceWorker' in navigator) {

@@ -33,7 +33,9 @@ const SEARCH_ALIAS_MAP = {
     "punch": ["commissioning punchlist builder", "corrective action tracker / capa log"],
     "capa": ["corrective action tracker / capa log", "corrective action"],
     "ttr": ["transformer test results form", "transformer turns ratio"],
-    "loto": ["loto checklist generator", "safety pre-task plan / jha form"]
+    "loto": ["loto checklist generator", "safety pre-task plan / jha form"],
+    "fuse": ["fuse continuous current & temperature derating calculator", "fuse derating", "derating", "continuous current", "fuse rating"],
+    "derating": ["fuse continuous current & temperature derating calculator", "inverter derating cause analyzer", "fuse derating"]
 };
 
 // 8 Workflow Pack Definitions (Using tool routes for sequence mapping)
@@ -50,6 +52,7 @@ const WORKFLOW_PACKS = [
             { name: "IV Curve Test Result Log", route: "iv-curve-log.html", desc: "Log and catalog IV curve measurement outputs." },
             { name: "SG1+x Parameter Comparison Tool", route: "parameter-comparison.html", desc: "Validate that unit configurations match target parameters." },
             { name: "SCADA Tag QA/QC Checklist", route: "scada-tag-qaqc.html", desc: "Verify Modbus registers and historian tag scaling." },
+            { name: "Fuse Derating Calculator", route: "fuse-derating-calculator.html", desc: "Verify continuous current and temperature derating factors." },
             { name: "Commissioning Punchlist Builder", route: "commissioning-punchlist.html", desc: "Build punchlist items for tracking corrections." },
             { name: "Customer Site Visit Report Generator", route: "site-visit-report.html", desc: "Compile client-ready commissioning handovers." }
         ]
@@ -63,6 +66,7 @@ const WORKFLOW_PACKS = [
             { name: "BESS Pre-Energization Checklist", route: "bess-pre-energization.html", desc: "Verify isolation, grounding, and warning labels." },
             { name: "Battery Rack Container Inspection", route: "bess-rack-inspection.html", desc: "Audit container seal integrity, HVAC, and cell spreads." },
             { name: "BESS Capacity / Energy Test Form", route: "bess-capacity-test.html", desc: "Record charge/discharge cycles and calculate efficiency." },
+            { name: "Fuse Derating Calculator", route: "fuse-derating-calculator.html", desc: "Check auxiliary AC/DC and battery container circuit fuse margins." },
             { name: "Battery SOC Imbalance Analyzer", route: "battery-soc-imbalance-analyzer.html", desc: "Check battery rack state-of-charge balance spreads." },
             { name: "Battery Temperature Spread Analyzer", route: "battery-temperature-spread.html", desc: "Analyze thermal variations across racks." },
             { name: "HVAC Delta-T Calculator", route: "hvac-delta-t.html", desc: "Sanity check container heating and cooling efficiency." },
@@ -165,7 +169,7 @@ const WORKFLOW_PACKS = [
 ];
 
 // Active State View Navigation Management
-const VIEWS = ["home", "tools", "workflows", "reference", "reports", "legacy"];
+const VIEWS = ["home", "tools", "workflows", "reference", "reports", "legacy", "resources"];
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('[ToolHub Refactor] Core Hub initializing...');
@@ -225,7 +229,10 @@ function runToolHub() {
     // 6. Render Legacy modules
     renderLegacyView();
     
-    // 7. Execute Diagnostics Registry Auditor
+    // 7. Render Hub Resources
+    renderHubResources();
+    
+    // 8. Execute Diagnostics Registry Auditor
     runRegistryAudit();
 }
 
@@ -378,6 +385,15 @@ function loadFallbackData() {
             "description": "Generate a customer-facing report detailing soiling impacts and recommended cleaning actions.",
             "url": "soiling-customer-report.html",
             "tags": ["PV", "Soiling", "Performance", "O&M", "Reporting"]
+        },
+        {
+            "id": 60,
+            "name": "Fuse Continuous Current & Temperature Derating Calculator",
+            "category": "Calculators",
+            "status": "Active",
+            "description": "Calculate derated continuous current limits and determine appropriate fuse ratings based on ambient temperature and custom derating factors.",
+            "url": "fuse-derating-calculator.html",
+            "tags": ["Fuse", "Derating", "Continuous Current", "Temperature", "DC", "AC", "Protection", "QA/QC"]
         }
     ];
 }
@@ -610,7 +626,8 @@ function buildToolCardHTML(tool) {
         'soiling-pv-performance': 'fas fa-broom',
         'legacy-archive': 'fas fa-archive',
         'advanced-field-diagnostics': 'fas fa-stethoscope',
-        'grid-controls': 'fas fa-project-diagram'
+        'grid-controls': 'fas fa-project-diagram',
+        'oem-specific': 'fas fa-industry'
     };
     const iconClass = categoryIcons[cleanCategory] || 'fas fa-wrench';
 
@@ -757,6 +774,7 @@ function renderLibraryChips() {
     const categories = [
         { label: "All Tools", value: "all" },
         { label: "Advanced Diagnostics", value: "advanced-field-diagnostics" },
+        { label: "OEM Specific", value: "oem-specific" },
         { label: "Solar PV", value: "pv-field-tools" },
         { label: "BESS", value: "bess-field-tools" },
         { label: "SCADA & Comms", value: "scada-diagnostics" },
@@ -1194,4 +1212,124 @@ function runRegistryAudit() {
     logs.push(`- Broken References found: ${brokenReferences ? 'YES' : 'NO'}`);
 
     logBox.textContent = logs.join('\n');
+}
+
+/**
+ * ── Hub Resources View Rendering & Filtering System ──
+ */
+function renderHubResources() {
+    const container = document.getElementById('resources-categories-container');
+    if (!container) return;
+
+    // Attach search and filter event listeners
+    const searchInput = document.getElementById('resources-search-input');
+    const filterType = document.getElementById('filter-resource-type');
+    const filterCategory = document.getElementById('filter-resource-category');
+
+    if (searchInput) searchInput.addEventListener('input', filterHubResources);
+    if (filterType) filterType.addEventListener('change', filterHubResources);
+    if (filterCategory) filterCategory.addEventListener('change', filterHubResources);
+
+    filterHubResources();
+}
+
+function filterHubResources() {
+    const container = document.getElementById('resources-categories-container');
+    if (!container) return;
+
+    const searchQuery = (document.getElementById('resources-search-input')?.value || '').toLowerCase().trim();
+    const selectedType = document.getElementById('filter-resource-type')?.value || 'all';
+    const selectedCategory = document.getElementById('filter-resource-category')?.value || 'all';
+
+    container.innerHTML = '';
+
+    const resourcesData = window.GLOBAL_HUB_RESOURCES || [];
+
+    resourcesData.forEach(cat => {
+        // Filter by Category Selection
+        if (selectedCategory !== 'all' && !cat.title.toLowerCase().includes(selectedCategory.toLowerCase())) {
+            return;
+        }
+
+        // Filter individual references
+        const filteredRefs = cat.references.filter(ref => {
+            // Filter by Type
+            if (selectedType !== 'all' && ref.type !== selectedType) {
+                return false;
+            }
+
+            // Filter by Search Query
+            if (searchQuery) {
+                const matchesName = ref.name.toLowerCase().includes(searchQuery);
+                const matchesType = ref.type.toLowerCase().includes(searchQuery);
+                const matchesDesc = (ref.desc || '').toLowerCase().includes(searchQuery);
+                return matchesName || matchesType || matchesDesc;
+            }
+
+            return true;
+        });
+
+        // Skip category if it has no matching references after filters
+        if (filteredRefs.length === 0) return;
+
+        // Render Category block
+        const categorySection = document.createElement('div');
+        categorySection.style.cssText = 'background:#ffffff; border:1px solid #cbd5e1; border-radius:16px; padding:1.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);';
+        
+        const toolsHTML = cat.tools.map(tool => `<span style="background:#f1f5f9; color:#475569; font-size:0.75rem; font-weight:600; padding:2px 8px; border-radius:4px; margin-right:4px; display:inline-block; margin-bottom:4px;">${tool}</span>`).join('');
+
+        const referencesHTML = filteredRefs.map(ref => {
+            // Badge styles for type
+            let badgeClass = 'basis-field';
+            if (ref.type === 'Standard') badgeClass = 'basis-standard';
+            if (ref.type === 'OEM Manual') badgeClass = 'basis-oem';
+            if (ref.type === 'Protocol') badgeClass = 'basis-protocol';
+            if (ref.type === 'Safety') badgeClass = 'basis-safety';
+            if (ref.type === 'Engineering Guide') badgeClass = 'basis-engineering';
+            if (ref.type === 'Project Specific') badgeClass = 'basis-project';
+            if (ref.type === 'Contract Specific') badgeClass = 'basis-contract';
+
+            return `
+                <div style="border-bottom:1px solid #f1f5f9; padding:1rem 0; text-align:left;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:0.25rem;">
+                        <span style="font-weight:700; font-size:0.95rem; color:#0f172a;">${ref.name}</span>
+                        <span class="resources-basis-badge ${badgeClass}">${ref.type}</span>
+                    </div>
+                    <div style="font-size:0.82rem; color:#475569; line-height:1.4;">${ref.desc || 'No description available.'}</div>
+                </div>
+            `;
+        }).join('');
+
+        categorySection.innerHTML = `
+            <div style="border-bottom: 2px solid #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.25rem; text-align:left;">
+                <h2 style="font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:700; color:#0f172a; margin:0 0 0.5rem 0;">${cat.title}</h2>
+                <p style="color:#64748b; font-size:0.9rem; margin:0 0 1rem 0; line-height:1.4;">${cat.description}</p>
+                <div>
+                    <span style="font-size:0.75rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:4px;">Supported Tools:</span>
+                    ${toolsHTML}
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                ${referencesHTML}
+            </div>
+
+            <div class="resources-note-box" style="margin: 0; border-left: 3px solid #3b82f6;">
+                <div class="resources-note-title" style="color:#1d4ed8;"><i class="fas fa-info-circle"></i> Engineering &amp; Compliance Note</div>
+                ${cat.note}
+            </div>
+        `;
+
+        container.appendChild(categorySection);
+    });
+
+    if (container.children.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center; padding:3rem; color:#94a3b8;">
+                <i class="fas fa-search" style="font-size:2.5rem; margin-bottom:1rem; display:block;"></i>
+                <h3 style="font-family:'Outfit',sans-serif; font-weight:700; color:#475569; margin:0 0 0.5rem 0;">No Resources Found</h3>
+                <p style="font-size:0.88rem; margin:0;">Try adjusting your filters or search query.</p>
+            </div>
+        `;
+    }
 }
