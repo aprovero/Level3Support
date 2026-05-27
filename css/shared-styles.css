@@ -2097,14 +2097,15 @@ button:disabled, .submit-button:disabled {
 .footer, .main-footer {
     background: #0f172a !important;
     padding: 1.5rem 2rem !important;
-    border-top: 1px solid #1e293b !important;
-    margin-top: 4rem !important;
+    border: 1px solid #1e293b !important;
+    margin: 4rem auto 2rem auto !important;
     border-radius: 8px !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
     flex-wrap: wrap !important;
     gap: 1rem !important;
+    max-width: 900px !important;
     width: 100% !important;
     box-sizing: border-box !important;
     color: #64748b !important;
