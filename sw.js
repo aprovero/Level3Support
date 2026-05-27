@@ -1,7 +1,7 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'level3support-cache-v26';
+const CACHE_NAME = 'level3support-cache-v27';
 
 const ASSETS_TO_CACHE = [
   '/index.html', '/404.html', '/offline.html',
@@ -9,7 +9,7 @@ const ASSETS_TO_CACHE = [
   '/tools-data.json', '/manifest.json',
 
   // JavaScript files
-  '/js/common.js', '/js/papaparse.min.js',
+  '/js/common.js', '/js/papaparse.min.js', '/js/tool-resources.js',
   '/js/parameter-comparison.js', '/js/tools-hub.js',
   '/js/clipping-curtailment-check.js',
   '/js/irradiance-sensor-check.js',

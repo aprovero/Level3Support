@@ -956,40 +956,33 @@ const TOOL_WORKFLOW_MAP = {
 const STATUS_OPTIONS = ['Active', 'In Progress', 'Planned', 'Legacy'];
 
 document.addEventListener('DOMContentLoaded', () => {
-    const headerSection = document.querySelector('.tool-header-section');
-    if (!headerSection) return; // Only run on tool pages
-
     const pageFile = window.location.pathname.split('/').pop() || 'index.html';
+    if (pageFile === 'index.html' || pageFile === '404.html' || pageFile === 'offline.html') return;
 
-    // Load tool registry and apply enrichment
-    fetch('./tools-data.json')
-        .then(r => r.ok ? r.json() : Promise.reject())
-        .then(data => {
-            const tools = data.tools || [];
-            const tool = tools.find(t => (t.url || '').split('?')[0] === pageFile);
-            _enrichToolHeader(headerSection, pageFile, tool);
-            
-            // Build the active tool page slug (with queries if present e.g. electrical test forms)
-            let pageSlug = pageFile;
-            const urlParams = new URLSearchParams(window.location.search);
-            const toolParam = urlParams.get('tool');
-            if (toolParam) {
-                pageSlug = `${pageFile}?tool=${toolParam}`;
-            }
-            _injectToolResourcesCard(pageSlug);
-        })
-        .catch(() => {
-            // Even without JSON, inject workflow badges and gear if we have the page file
-            _enrichToolHeader(headerSection, pageFile, null);
-            
-            let pageSlug = pageFile;
-            const urlParams = new URLSearchParams(window.location.search);
-            const toolParam = urlParams.get('tool');
-            if (toolParam) {
-                pageSlug = `${pageFile}?tool=${toolParam}`;
-            }
-            _injectToolResourcesCard(pageSlug);
-        });
+    const headerSection = document.querySelector('.tool-header-section');
+
+    if (headerSection) {
+        // Load tool registry and apply enrichment
+        fetch('./tools-data.json')
+            .then(r => r.ok ? r.json() : Promise.reject())
+            .then(data => {
+                const tools = data.tools || [];
+                const tool = tools.find(t => (t.url || '').split('?')[0] === pageFile);
+                _enrichToolHeader(headerSection, pageFile, tool);
+            })
+            .catch(() => {
+                _enrichToolHeader(headerSection, pageFile, null);
+            });
+    }
+
+    // Build the active tool page slug (with queries if present e.g. electrical test forms)
+    let pageSlug = pageFile;
+    const urlParams = new URLSearchParams(window.location.search);
+    const toolParam = urlParams.get('tool');
+    if (toolParam) {
+        pageSlug = `${pageFile}?tool=${toolParam}`;
+    }
+    _injectToolResourcesCard(pageSlug);
 });
 
 function _enrichToolHeader(headerSection, pageFile, registryTool) {
@@ -1052,8 +1045,8 @@ function _injectToolResourcesCard(pageSlug) {
 }
 
 function _renderResourcesCard(pageSlug) {
-    const container = document.querySelector('.placeholder-container, .calc-container, .container, .container-tool');
-    if (!container) return;
+    let container = document.querySelector('.placeholder-container, .calc-container, .container, .container-tool, .page-wrap, .page-container');
+    if (!container) container = document.body;
 
     // Check if card is already injected to avoid duplicates
     if (document.getElementById('tool-resources-card-section')) return;
@@ -1128,8 +1121,8 @@ function _renderResourcesCard(pageSlug) {
 }
 
 function _renderFallbackCard(pageSlug) {
-    const container = document.querySelector('.placeholder-container, .calc-container, .container, .container-tool');
-    if (!container) return;
+    let container = document.querySelector('.placeholder-container, .calc-container, .container, .container-tool, .page-wrap, .page-container');
+    if (!container) container = document.body;
     if (document.getElementById('tool-resources-card-section')) return;
 
     const htmlContent = `
