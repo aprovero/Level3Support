@@ -113,14 +113,14 @@
           <label for="ambient-irradiance">Irradiance (Optional)</label>
           <div class="input-with-unit" style="display: flex;">
             <input type="number" id="ambient-irradiance" placeholder="e.g. 650" step="any" style="height: 42px; flex: 1;">
-            <div class="input-unit" style="height: 42px; display: flex; align-items: center; padding: 0 12px; background: var(--background-dark); border: 1px solid var(--border-light); border-left: none;">W/m²</div>
+            <div class="input-unit" style="height: 42px; display: flex;  padding: 0 12px; background: var(--background-dark); border: 1px solid var(--border-light); border-left: none;">W/m²</div>
           </div>
         </div>
         <div class="input-group">
           <label for="module-temp">Module Temp (Optional)</label>
           <div class="input-with-unit" style="display: flex;">
             <input type="number" id="module-temp" placeholder="e.g. 48" step="any" style="height: 42px; flex: 1;">
-            <div class="input-unit" style="height: 42px; display: flex; align-items: center; padding: 0 12px; background: var(--background-dark); border: 1px solid var(--border-light); border-left: none;">°C</div>
+            <div class="input-unit" style="height: 42px; display: flex;  padding: 0 12px; background: var(--background-dark); border: 1px solid var(--border-light); border-left: none;">°C</div>
           </div>
         </div>
       </div>
@@ -160,7 +160,7 @@
                 <label style="margin-top: 0;">Value After Cleaning <span class="required">*</span></label>
                 <div class="input-with-unit" style="display: flex;">
                   <input type="number" id="ref-clean-val" placeholder="Value" step="any" style="height: 42px; flex: 1;">
-                  <div class="input-unit" id="ref-unit-label" style="height: 42px; display: flex; align-items: center; padding: 0 12px; background: white; border: 1px solid var(--border-light); border-left: none;">A</div>
+                  <div class="input-unit" id="ref-unit-label" style="height: 42px; display: flex;  padding: 0 12px; background: white; border: 1px solid var(--border-light); border-left: none;">A</div>
                 </div>
               </div>
               <div style="width: 80px;">
@@ -178,7 +178,7 @@
 
       <!-- Soiled Strings Section -->
       <div style="margin-top: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between;  margin-bottom: 12px;">
           <h3 style="margin: 0; font-family:'Outfit'; font-size: 1.05rem;"><i class="fas fa-filter" style="color: var(--warning-color);"></i> Uncleaned Soiled Strings</h3>
           <button id="add-row-btn" class="button-secondary" style="margin-top: 0; min-height: auto; width: auto; padding: 6px 12px; font-size: 0.85rem;"><i class="fas fa-plus"></i> Add String</button>
         </div>
@@ -259,7 +259,7 @@
 
     <!-- Assumptions Box -->
     <div class="assumptions-box" style="margin-top: 24px; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 16px; background: var(--background-dark);">
-      <div class="assumptions-title" style="font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;"><i class="fas fa-info-circle" style="color: var(--primary-color);"></i> Engineering Assumptions & Limitations</div>
+      <div class="assumptions-title" style="font-weight: 700; margin-bottom: 8px; display: flex;  gap: 6px;"><i class="fas fa-info-circle" style="color: var(--primary-color);"></i> Engineering Assumptions & Limitations</div>
       <ul class="assumptions-list" style="margin-left: 20px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
         <li style="margin-bottom: 6px;">All compared strings must be electrically identical (same model panels, tracker angles, inverter settings).</li>
         <li style="margin-bottom: 6px;">Values are mathematically normalized relative to reference module count if mismatch exists, though matching module count is recommended.</li>

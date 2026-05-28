@@ -31,14 +31,14 @@
         .tool-title-row {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            
             flex-wrap: wrap;
             gap: 1rem;
             margin-bottom: 0rem;
         }
         .btn-back {
             display: inline-flex;
-            align-items: center;
+            
             gap: 0.5rem;
             color: var(--primary-color);
             font-weight: 600;
@@ -54,7 +54,7 @@
             display: grid !important;
             grid-template-columns: 1fr !important;
             gap: 2rem !important;
-            align-items: start !important;
+            
         }
         @media (min-width: 1024px) {
             .tool-body-grid {
@@ -78,7 +78,7 @@
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 0.5rem;
             display: flex;
-            align-items: center;
+            
             gap: 0.5rem;
         }
     </style>
@@ -153,7 +153,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Transformer Current (Is):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW1 (1-4)</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                        <div style="display: flex;  gap: 10px; width: 100%; max-width: 250px;">
                             <input type="number" id="transformerCurrent" min="8" max="448" step="1" placeholder="8A min - 448A max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">A</span>
                         </div>
@@ -164,7 +164,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Earth Fault Measurement (Io>):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW1-5</span>
                         </div>
-                        <div style="display: flex; gap: 15px; align-items: center; width: 100%; max-width: 250px;">
+                        <div style="display: flex; gap: 15px;  width: 100%; max-width: 250px;">
                             <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
                                 <input type="radio" name="earthFault" value="internal" checked style="accent-color: var(--primary-color); margin: 0;"> Internal
                             </label>
@@ -179,7 +179,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">HMI:</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW1-6</span>
                         </div>
-                        <div style="display: flex; flex-wrap: wrap; gap: 8px 15px; align-items: center; width: 100%;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px 15px;  width: 100%;">
                             <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0; white-space: nowrap;">
                                 <input type="radio" name="hmi" value="disabled" checked style="accent-color: var(--primary-color); margin: 0;"> No (DIP switches only)
                             </label>
@@ -194,7 +194,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Frequency (Fn):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW1-7</span>
                         </div>
-                        <div style="display: flex; gap: 15px; align-items: center; width: 100%; max-width: 250px;">
+                        <div style="display: flex; gap: 15px;  width: 100%; max-width: 250px;">
                             <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
                                 <input type="radio" name="frequency" value="50Hz" style="accent-color: var(--primary-color); margin: 0;"> 50 Hz
                             </label>
@@ -209,7 +209,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Failsafe (Fs):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW1-8</span>
                         </div>
-                        <div style="display: flex; gap: 15px; align-items: center; width: 100%; max-width: 250px;">
+                        <div style="display: flex; gap: 15px;  width: 100%; max-width: 250px;">
                             <label style="min-width: auto; font-weight: normal; display:flex; align-items:center; gap:6px; margin: 0;">
                                 <input type="radio" name="failsafe" value="disabled" style="accent-color: var(--primary-color); margin: 0;"> Disable
                             </label>
@@ -230,7 +230,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 51 - Pickup Current (I>):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW3 (1-5)</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                        <div style="display: flex;  gap: 10px; width: 100%; max-width: 250px;">
                             <input type="number" id="phasePickup51" min="0.9" max="2.5" step="0.05" placeholder="0.9min - 2.5max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">&times; In</span>
                         </div>
@@ -260,7 +260,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 51 - Time Constant (t>):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW2 (1-4)</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                        <div style="display: flex;  gap: 10px; width: 100%; max-width: 250px;">
                             <input type="number" id="phaseTime51" min="0.05" max="3" step="0.05" placeholder="0.05min - 3max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">s</span>
                         </div>
@@ -271,7 +271,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 50 - Pickup Current (I>>):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW5 (1-4)</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                        <div style="display: flex;  gap: 10px; width: 100%; max-width: 250px;">
                             <input type="number" id="phasePickup50" min="1" max="20" step="0.1" placeholder="1min - 20max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">&times; In</span>
                         </div>
@@ -282,7 +282,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 50 - Definite Time (t>>):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW5 (5-8)</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                        <div style="display: flex;  gap: 10px; width: 100%; max-width: 250px;">
                             <input type="number" id="phaseTime50" min="0.04" max="3" step="0.01" placeholder="0.04min - 3max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">s</span>
                         </div>
@@ -299,7 +299,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 51N - Pickup Current (Io>):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW4 (1-5)</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                        <div style="display: flex;  gap: 10px; width: 100%; max-width: 250px;">
                             <input type="number" id="earthPickup51N" min="0.1" max="1.0" step="0.025" placeholder="0.1min - 1.0max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">&times; Is</span>
                         </div>
@@ -329,7 +329,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 51N - Time Constant (to>):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW2 (5-8)</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                        <div style="display: flex;  gap: 10px; width: 100%; max-width: 250px;">
                             <input type="number" id="earthTime51N" min="0.05" max="3" step="0.05" placeholder="0.05min - 3max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">s</span>
                         </div>
@@ -340,7 +340,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 50N - Pickup Current (Io>>):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW6 (1-4)</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                        <div style="display: flex;  gap: 10px; width: 100%; max-width: 250px;">
                             <input type="number" id="earthPickup50N" min="1" max="20" step="0.01" placeholder="1min - 20max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">&times; Is</span>
                         </div>
@@ -351,7 +351,7 @@
                             <label style="font-weight: bold; color: #334155; font-size: 0.9rem; margin-bottom: 2px; display:block;">Function 50N - Definite Time (to>>):</label>
                             <span style="color: #64748b; font-size: 0.75rem; font-style: italic; display: block;">SW6 (5-8)</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
+                        <div style="display: flex;  gap: 10px; width: 100%; max-width: 250px;">
                             <input type="number" id="earthTime50N" min="0.04" max="3" step="0.01" placeholder="0.04min - 3max" style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin-bottom: 0;">
                             <span style="color: #475569; font-weight: 600; font-size: 14px;">s</span>
                         </div>
