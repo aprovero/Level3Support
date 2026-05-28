@@ -211,42 +211,7 @@ body {
     transform: scale(1.1);
 }
 
-/* Footer Styles */
-.footer {
-    padding: 20px 30px;
-    margin-top: 40px;
-    border-top: 1px solid var(--border-color);
-    color: var(--text-light);
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.footer-text {
-    text-align: left;
-}
-
-.footer-copyright {
-    color: var(--text-light);
-    margin-bottom: 5px;
-}
-
-.footer-creator {
-    color: var(--text-light);
-    font-size: 13px;
-}
-
-.footer-logo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.footer-logo img {
-    height: 40px;
-    width: auto;
-}
+/* Original Footer styles removed to support standardized dark footers */
 
 /* Adjust Claude logo size */
 .footer-logo img[alt="Claude Logo"] {
