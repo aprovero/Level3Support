@@ -374,6 +374,12 @@ label {
     color: #444;
 }
 
+.input-group {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+}
+
 input, select, textarea {
     width: 100%;
     padding: 10px;
