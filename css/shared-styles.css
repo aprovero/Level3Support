@@ -340,9 +340,9 @@ label {
 }
 
 .input-group {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-end !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 /* Bottom-align grid cells in all input-row variants so inputs line up

@@ -1,7 +1,7 @@
 // =======================
 // 🔁 CACHE VERSIONING
 // =======================
-const CACHE_NAME = 'level3support-cache-v43';
+const CACHE_NAME = 'level3support-cache-v44';
 
 const ASSETS_TO_CACHE = [
   '/index.html', '/404.html', '/offline.html',
