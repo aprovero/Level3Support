@@ -45,28 +45,50 @@ function inputGroup(id, label, placeholder = '', type = 'text', unitOptions = nu
 }
 
 // CSV export – gathers all inputs inside the current form
-function exportFormToCSV() {
+function exportFormToCSV(toolName) {
   const form = document.querySelector('#form-root form');
   if (!form) return;
   const rows = [];
   rows.push(['Field', 'Value']);
   const inputs = form.querySelectorAll('input, select, textarea');
   inputs.forEach(el => {
+    if (!el.id) return;
     const label = (form.querySelector(`label[for="${el.id}"]`) || {}).textContent?.replace(/\*/g, '').trim() || el.id;
-    let value = el.value;
+    let value = el.type === 'checkbox' ? (el.checked ? 'Yes' : 'No') : el.value;
     if (el.id.endsWith('-unit')) {
-      // concatenate with preceding input value
       const related = form.querySelector(`#${el.id.replace('-unit', '')}`);
       if (related) value = related.value + ' ' + value;
     }
     rows.push([label, value]);
   });
-  const csvContent = rows.map(r => r.map(v => `"${v.replace(/"/g, '""')}"`).join(',')) .join('\r\n');
+  const csvContent = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${document.getElementById('form-title').textContent.replace(/\s+/g, '_')}.csv`;
+  a.download = `${(toolName || 'form').replace(/\s+/g, '_')}_export.csv`;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// JSON export
+function exportFormToJSON(toolName) {
+  const form = document.querySelector('#form-root form');
+  if (!form) return;
+  const data = { tool: toolName, exported: new Date().toISOString(), fields: {} };
+  form.querySelectorAll('input, select, textarea').forEach(el => {
+    if (!el.id) return;
+    data.fields[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${(toolName || 'form').replace(/\s+/g, '_')}_export.json`;
   a.style.display = 'none';
   document.body.appendChild(a);
   a.click();
@@ -77,25 +99,24 @@ function exportFormToCSV() {
 // ---------- Form Builders ----------
 
 // 1. Insulation Resistance Test Form
-function insulationResistanceFormBuilder() {
-  const f = el('form');
-  f.appendChild(inputGroup('site-name', 'Site / Substation', 'e.g. Desert Sunrise BESS'));
-  f.appendChild(inputGroup('equipment-id', 'Equipment ID', 'e.g. IR-01'));
-  f.appendChild(inputGroup('min-resistance', 'Minimum Required Resistance', '5', 'number', [{value:'MΩ', label:'MΩ'}], '5'));
-  f.appendChild(inputGroup('measured-resistance', 'Measured Resistance', '', 'number', [{value:'MΩ', label:'MΩ'}]));
-  f.appendChild(inputGroup('allowable-error', 'Allowable Error %', '5', 'number', null, '5'));
-  document.getElementById('form-root').appendChild(f);
+// Full implementation lives in js/insulation-resistance-form.js
+// The builder is exposed as window.insulationResistanceFormBuilder there.
+function insulationResistanceFormBuilderStub() {
+  if (typeof window.insulationResistanceFormBuilder === 'function') {
+    window.insulationResistanceFormBuilder();
+  } else {
+    document.getElementById('form-root').innerHTML = '<p style="color:var(--text-secondary)">Insulation resistance form module not loaded. Please check js/insulation-resistance-form.js.</p>';
+  }
 }
 
 // 2. Transformer Test Results Form
-function transformerTestFormBuilder() {
-  const f = el('form');
-  f.appendChild(inputGroup('site-name', 'Site / Substation', 'e.g. Desert Sunrise BESS'));
-  f.appendChild(inputGroup('transformer-id', 'Transformer ID', 'e.g. TX-01'));
-  f.appendChild(inputGroup('rated-power', 'Rated Power', '10', 'number', [{value:'MVA', label:'MVA'}], '10'));
-  f.appendChild(inputGroup('winding-resistance', 'Winding Resistance', '', 'number', [{value:'Ω', label:'Ω'}]));
-  f.appendChild(inputGroup('turns-ratio', 'Turns Ratio', '', 'text'));
-  document.getElementById('form-root').appendChild(f);
+// Full implementation lives in js/transformer-test-form.js
+function transformerTestFormBuilderStub() {
+  if (typeof window.transformerTestFormBuilder === 'function') {
+    window.transformerTestFormBuilder();
+  } else {
+    document.getElementById('form-root').innerHTML = '<p style="color:var(--text-secondary)">Transformer test form module not loaded. Please check js/transformer-test-form.js.</p>';
+  }
 }
 
 // 3. Grounding Continuity Test Form
@@ -133,11 +154,12 @@ function relayChecklistFormBuilder() {
 }
 
 // Expose builders on window using dash‑compatible keys
-window['insulation-resistanceFormBuilder'] = insulationResistanceFormBuilder;
-window['transformer-testFormBuilder'] = transformerTestFormBuilder;
+window['insulation-resistanceFormBuilder'] = insulationResistanceFormBuilderStub;
+window['transformer-testFormBuilder'] = transformerTestFormBuilderStub;
 window['grounding-continuityFormBuilder'] = groundingContinuityFormBuilder;
 window['ct-pt-ratioFormBuilder'] = ctPtRatioFormBuilder;
 window['relay-checklistFormBuilder'] = relayChecklistFormBuilder;
 
-// Export function reference for the HTML button
+// Export function references for HTML button handlers
 window.exportFormToCSV = exportFormToCSV;
+window.exportFormToJSON = exportFormToJSON;

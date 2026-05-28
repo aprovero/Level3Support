@@ -283,25 +283,30 @@ window.TOOL_RESOURCES = {
 
     // 6. ELECTRICAL FIELD TEST FORMS
     "electrical-test-forms.html?tool=insulation-resistance": {
-        basis: "Standard-based",
-        basisClass: "basis-standard",
+        basis: "Standard-based / Safety-critical",
+        basisClass: "basis-safety",
         references: [
-            { name: "IEC 62446-1", type: "Standard" },
-            { name: "NETA ATS / MTS", type: "Standard" },
-            { name: "OEM Equipment Manual", type: "OEM Manual" }
+            { name: "IEC 62446-1", type: "Standard", desc: "Reference for PV system testing, documentation, commissioning inspection, and insulation resistance testing requirements." },
+            { name: "NETA ATS / NETA MTS", type: "Standard", desc: "Reference for electrical acceptance and maintenance testing practices." },
+            { name: "NFPA 70E", type: "Safety", desc: "Electrical safety work practice reference for shock risk, arc-flash risk, energized work, and safe work conditions." },
+            { name: "Megger / Insulation Tester Manufacturer Manual", type: "OEM Manual", desc: "Final source for test instrument setup, test voltage, connection method, limitations, and safety precautions." },
+            { name: "OEM Equipment Manual", type: "OEM Manual", desc: "Required to confirm permitted insulation test voltage and whether sensitive electronics must be disconnected before testing." },
+            { name: "Project Commissioning Procedure", type: "Project Specific", desc: "Final source for test method, test voltage, minimum acceptable value, documentation format, and acceptance criteria." }
         ],
-        note: "Confirm test voltage before applying insulation resistance tests to connected electronics. Disconnect or protect sensitive devices according to the OEM manual and project procedure."
+        note: "Before applying insulation resistance test voltage, confirm that inverters, optimizers, combiner electronics, surge protection devices, meters, communication equipment, BMS components, and other sensitive devices are isolated or protected according to OEM instructions. Incorrect megger testing can damage equipment."
     },
     "electrical-test-forms.html?tool=transformer-test": {
-        basis: "Standard-based",
+        basis: "Standard-based / Project-specific",
         basisClass: "basis-standard",
         references: [
-            { name: "NETA ATS / MTS", type: "Standard" },
-            { name: "IEEE C57 Transformer Standards", type: "Standard" },
-            { name: "Transformer OEM Manual", type: "OEM Manual" },
-            { name: "Project SAT Procedure", type: "Project Specific" }
+            { name: "NETA ATS / NETA MTS", type: "Standard", desc: "Acceptance and maintenance testing reference for transformers, including turns-ratio testing, winding resistance, insulation resistance, and visual inspection practices." },
+            { name: "IEEE C57 Transformer Standards", type: "Standard", desc: "Transformer reference family covering design, testing, loading, insulation, and performance." },
+            { name: "Transformer OEM Manual", type: "OEM Manual", desc: "Primary source for nameplate ratio, vector group, tap changer configuration, winding configuration, test requirements, and acceptable tolerances." },
+            { name: "Transformer Nameplate", type: "Project Specific", desc: "Field reference for rated voltages, tap positions, winding connections, phase relationship, impedance, and serial number." },
+            { name: "Project SAT / Commissioning Procedure", type: "Project Specific", desc: "Final source for test sequence, tap positions to test, acceptance criteria, required evidence, and reporting format." },
+            { name: "TTR Test Set Manufacturer Manual", type: "OEM Manual", desc: "Reference for instrument setup, connection method, excitation voltage, phase selection, ratio error, and safety limitations." }
         ],
-        note: "Transformer test acceptance should follow the approved SAT procedure and OEM limits. Record environmental conditions, tap position, test equipment, and calibration data."
+        note: "Transformer test acceptance should follow the approved SAT procedure, OEM documentation, project specifications, and applicable testing standard. Confirm vector group, winding configuration, tap position, and phase connections before judging the result."
     },
     "electrical-test-forms.html?tool=grounding-continuity": {
         basis: "Standard-based",
