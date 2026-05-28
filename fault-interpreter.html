@@ -136,9 +136,9 @@
 
         
 
-        <!-- Grid Body -->
-        <div class="tool-body-grid">
-            <!-- Left Column: Inputs & Outputs -->
+        <!-- Single Column Body -->
+        <div>
+            <!-- Inputs & Outputs -->
             <div>
                 <!-- Upload/Inputs Card -->
                 <div class="card-panel">
@@ -183,29 +183,30 @@
                 <div id="binary-output" class="card-panel" style="display: none;"></div>
                 <div id="fault-result" class="card-panel" style="display: none;"></div>
             </div>
+        </div>
 
-            <!-- Right Column: Safety & Assumptions -->
-            <div>
-                <!-- Assumptions Panel -->
-                <div class="assumptions-box">
-                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
-                    <ul class="assumptions-list">
-                        <li>Fault registers match SG3125 and 1+X cooling system specifications.</li>
-                        <li>Supports hexadecimal or decimal fault codes.</li>
-                        <li>Safety limits auto-flag critical alerts based on decoded bit registers.</li>
-                    </ul>
-                </div>
+        <!-- Bottom Reference & Documentation Section -->
+        <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+            <!-- Assumptions Panel -->
+            <div class="assumptions-box" style="margin-top: 0;">
+                <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                <ul class="assumptions-list">
+                    <li>Fault registers match SG3125 and 1+X cooling system specifications.</li>
+                    <li>Supports hexadecimal or decimal fault codes.</li>
+                    <li>Safety limits auto-flag critical alerts based on decoded bit registers.</li>
+                </ul>
+            </div>
 
-                <div class="card-panel" style="border-top:4px solid var(--primary-color); margin-top:1.5rem;">
-                    <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
-                    <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
-                        This module decodes register arrays for fan and cooling diagnostics.
-                    </p>
-                    <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
-                        <strong>Target Hardware:</strong> Sungrow Central Inverters<br>
-                        <strong>API Hook:</strong> Client-Side JS logic<br>
-                        <strong>Status:</strong> Active
-                    </div>
+            <!-- Engineering Module Info Box -->
+            <div class="card-panel" style="border-top:4px solid var(--primary-color); margin-top: 0;">
+                <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
+                <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+                    This module decodes register arrays for fan and cooling diagnostics.
+                </p>
+                <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
+                    <strong>Target Hardware:</strong> Sungrow Central Inverters<br>
+                    <strong>API Hook:</strong> Client-Side JS logic<br>
+                    <strong>Status:</strong> Active
                 </div>
             </div>
         </div>

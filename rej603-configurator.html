@@ -140,9 +140,9 @@
 
         
 
-        <!-- Grid Body -->
-        <div class="tool-body-grid">
-            <!-- Left Column: Inputs & Outputs -->
+        <!-- Single Column Body -->
+        <div>
+            <!-- Inputs & Outputs -->
             <div>
                 <!-- Mode Selector -->
                 <div class="card-panel" style="border-left:4px solid var(--primary-color);">
@@ -436,29 +436,31 @@
                         <button class="reverse-button configurator-button" onclick="reverseEngineerConfiguration()" style="width: 100%; background: var(--primary-color); color:white; padding:12px; border-radius:6px; border:none; font-weight:600; cursor:pointer;"><i class="fas fa-search"></i> Decode Current DIP Settings</button>
                     </div>
                 </div>
+                 </div>
+        </div>
+
+        <!-- Bottom Reference & Documentation Section -->
+        <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+            <!-- Standards & Assumptions Box -->
+            <div class="assumptions-box" style="margin-top: 0;">
+                <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
+                <ul class="assumptions-list">
+                    <li>DIP Switch positions logic reflects official ABB REJ603 manuals.</li>
+                    <li>Compatible CT ranges must support both the phase and earth setting row limits simultaneously (first row or second row constraint).</li>
+                    <li>Overcurrent protection features auto-round upward for maximum safe current loading.</li>
+                </ul>
             </div>
 
-            <!-- Right Column: Safety & Assumptions -->
-            <div>
-                <div class="assumptions-box">
-                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Standards & Assumptions</div>
-                    <ul class="assumptions-list">
-                        <li>DIP Switch positions logic reflects official ABB REJ603 manuals.</li>
-                        <li>Compatible CT ranges must support both the phase and earth setting row limits simultaneously (first row or second row constraint).</li>
-                        <li>Overcurrent protection features auto-round upward for maximum safe current loading.</li>
-                    </ul>
-                </div>
-
-                <div class="card-panel" style="border-top:4px solid var(--primary-color);">
-                    <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
-                    <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
-                        This module calculates discrete protection relay positions with active restriction checks.
-                    </p>
-                    <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
-                        <strong>Device Category:</strong> MV Overcurrent Relay<br>
-                        <strong>API Hook:</strong> Client-Side JS logic<br>
-                        <strong>Status:</strong> Active
-                    </div>
+            <!-- Engineering Module Info Box -->
+            <div class="card-panel" style="border-top:4px solid var(--primary-color); margin-top: 0;">
+                <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
+                <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+                    This module calculates discrete protection relay positions with active restriction checks.
+                </p>
+                <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
+                    <strong>Device Category:</strong> MV Overcurrent Relay<br>
+                    <strong>API Hook:</strong> Client-Side JS logic<br>
+                    <strong>Status:</strong> Active
                 </div>
             </div>
         </div>

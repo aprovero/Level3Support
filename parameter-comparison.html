@@ -136,9 +136,9 @@
 
         
 
-        <!-- Grid Body -->
-        <div class="tool-body-grid">
-            <!-- Left Column: Inputs & Tables -->
+        <!-- Single Column Body -->
+        <div>
+            <!-- Inputs & Tables -->
             <div>
                 <!-- File Upload Card -->
                 <div class="card-panel">
@@ -208,31 +208,32 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Right Column: Safety & Instructions -->
-            <div>
-                <!-- Instructions Panel -->
-                <div id="instructions" class="assumptions-box">
-                    <div class="assumptions-title"><i class="fas fa-info-circle"></i> How to Use This Tool</div>
-                    <ul class="assumptions-list" style="margin-top:0.5rem;">
-                        <li>Upload 2 or 3 CSV files containing system parameters.</li>
-                        <li>The tool will automatically compare all parameters across files.</li>
-                        <li>Use the filter checkbox to isolate differing parameters.</li>
-                        <li>Search parameter names using the search query filter.</li>
-                        <li>Values with differences are highlighted in light amber.</li>
-                    </ul>
-                </div>
+        <!-- Bottom Reference & Documentation Section -->
+        <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+            <!-- Instructions Panel -->
+            <div id="instructions" class="assumptions-box" style="margin-top: 0;">
+                <div class="assumptions-title"><i class="fas fa-info-circle"></i> How to Use This Tool</div>
+                <ul class="assumptions-list" style="margin-top:0.5rem;">
+                    <li>Upload 2 or 3 CSV files containing system parameters.</li>
+                    <li>The tool will automatically compare all parameters across files.</li>
+                    <li>Use the filter checkbox to isolate differing parameters.</li>
+                    <li>Search parameter names using the search query filter.</li>
+                    <li>Values with differences are highlighted in light amber.</li>
+                </ul>
+            </div>
 
-                <div class="card-panel" style="border-top:4px solid var(--primary-color); margin-top:1.5rem;">
-                    <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
-                    <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
-                        This module compares register definitions and settings arrays.
-                    </p>
-                    <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
-                        <strong>Compatibility:</strong> SG1+X Firmware Matrix<br>
-                        <strong>API Hook:</strong> Client-Side JS logic<br>
-                        <strong>Status:</strong> Active
-                    </div>
+            <!-- Engineering Module Info Box -->
+            <div class="card-panel" style="border-top:4px solid var(--primary-color); margin-top: 0;">
+                <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
+                <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+                    This module compares register definitions and settings arrays.
+                </p>
+                <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
+                    <strong>Compatibility:</strong> SG1+X Firmware Matrix<br>
+                    <strong>API Hook:</strong> Client-Side JS logic<br>
+                    <strong>Status:</strong> Active
                 </div>
             </div>
         </div>

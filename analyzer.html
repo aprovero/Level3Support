@@ -140,9 +140,9 @@
 
         
 
-        <!-- Top Section: Inputs & Reference Info -->
-        <div class="top-body-grid">
-            <!-- Left Side of Top: Inputs -->
+        <!-- Single Column Body -->
+        <div>
+            <!-- Inputs -->
             <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                 <!-- CSV Upload Card -->
                 <div class="card-panel">
@@ -175,29 +175,30 @@
                     </section>
                 </div>
             </div>
+        </div>
 
-            <!-- Right Side of Top: Safety & Assumptions -->
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <!-- Assumptions Panel -->
-                <div class="assumptions-box" style="margin:0;">
-                    <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Engineering Reference</div>
-                    <ul class="assumptions-list">
-                        <li>Visual charts map history files for active power, reactive power, and cell temperatures.</li>
-                        <li>Supports central inverter Sungrow CSV structures.</li>
-                        <li>Identifies outliers and schedules event logs chronologically.</li>
-                    </ul>
-                </div>
+        <!-- Bottom Reference & Documentation Section -->
+        <div style="margin-top: 2rem; display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            <!-- Assumptions Panel -->
+            <div class="assumptions-box" style="margin:0;">
+                <div class="assumptions-title"><i class="fas fa-clipboard-list"></i> Engineering Reference</div>
+                <ul class="assumptions-list">
+                    <li>Visual charts map history files for active power, reactive power, and cell temperatures.</li>
+                    <li>Supports central inverter Sungrow CSV structures.</li>
+                    <li>Identifies outliers and schedules event logs chronologically.</li>
+                </ul>
+            </div>
 
-                <div class="card-panel" style="border-top:4px solid var(--primary-color); margin:0;">
-                    <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
-                    <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
-                        This module analyzes Central Inverter SCADA outputs and logs.
-                    </p>
-                    <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
-                        <strong>Target Hardware:</strong> Sungrow Central Inverters<br>
-                        <strong>API Hook:</strong> Client-Side JS logic<br>
-                        <strong>Status:</strong> Active
-                    </div>
+            <!-- Engineering Module Info Panel -->
+            <div class="card-panel" style="border-top:4px solid var(--primary-color); margin:0;">
+                <div class="card-title"><i class="fas fa-laptop-code"></i> Engineering Module Info</div>
+                <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+                    This module analyzes Central Inverter SCADA outputs and logs.
+                </p>
+                <div style="background:#f1f5f9; padding:0.75rem; border-radius:6px; font-size:0.8rem; margin-top:0.75rem;">
+                    <strong>Target Hardware:</strong> Sungrow Central Inverters<br>
+                    <strong>API Hook:</strong> Client-Side JS logic<br>
+                    <strong>Status:</strong> Active
                 </div>
             </div>
         </div>
