@@ -380,6 +380,14 @@ label {
     justify-content: flex-end !important;
 }
 
+/* Bottom-align grid cells in all input-row variants so inputs line up
+   even when labels wrap to different heights — fix applies to all tools */
+.input-row,
+.input-row-3,
+.input-row-three {
+    align-items: end;
+}
+
 input, select, textarea {
     width: 100%;
     padding: 10px;
