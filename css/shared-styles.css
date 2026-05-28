@@ -385,7 +385,7 @@ label {
 .input-row,
 .input-row-3,
 .input-row-three {
-    align-items: end;
+    align-items: end !important;
 }
 
 input, select, textarea {
