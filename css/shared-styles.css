@@ -2092,7 +2092,8 @@ button:disabled, .submit-button:disabled {
 /* ==========================================================================
    Tool Page Flat-Style Global Refactoring (ABB Relay Style)
    ========================================================================== */
-.placeholder-container {
+.placeholder-container,
+.calc-container {
     max-width: 900px !important;
     margin: 2rem auto !important;
     padding: 0 1.5rem !important;
