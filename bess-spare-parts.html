@@ -208,10 +208,24 @@
 
     <div style="display: flex; justify-content: space-between;  flex-wrap: wrap; gap: 12px; margin-bottom: 24px;">
       <div>
-        <h1 style="text-align: left; margin: 0 0 8px 0; font-size: 1.8rem;">BESS Spare Parts Cross-Reference</h1>
-        <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0;">
-          Search compatible parts, review stock levels, filter criticality levels, and import/export CSV parts directories.
-        </p>
+        
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                        BESS Spare Parts Cross-Reference
+                    </h1>
+                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+                        Search compatible parts, review stock levels, filter criticality levels, and import/export CSV parts directories.
+                    </p>
+                </div>
+                <div class="tool-meta">
+                    <span class="tile-category" style="background:#fee2e2; color:#991b1b; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">🔋 BESS Calculator</span>
+                    <span class="status-badge" style="background:#dcfce7; color:#15803d; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Active</span>
+                </div>
+            </div>
+        </div>
       </div>
       <div style="display: flex; gap: 8px;">
         <button id="add-part-btn" style="margin: 0; padding: 8px 16px; font-size: 0.85rem; min-height: auto;"><i class="fas fa-plus"></i> Add Spare Part</button>
