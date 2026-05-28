@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tool Placeholder - Level3Support</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="css/shared-styles.css?v=21" rel="stylesheet">
+    <link href="css/shared-styles.css?v=22" rel="stylesheet">
     <style>
         .placeholder-container {
             max-width: 900px;
@@ -47,14 +47,14 @@
             transform: translateX(-4px);
         }
         .tool-body-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            align-items: start;
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+            align-items: start !important;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 1024px) {
             .tool-body-grid {
-                grid-template-columns: 3fr 2fr;
+                grid-template-columns: 3fr 2fr !important;
             }
         }
         .card-panel {
