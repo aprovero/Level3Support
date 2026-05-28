@@ -240,7 +240,7 @@
 </head>
 <body>
   <div class="etf-container">
-    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to ToolHub</a>
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
 
     <div class="etf-header">
       <div class="logo">
@@ -343,7 +343,7 @@
     if (meta && typeof window[meta.builder] === 'function') {
       window[meta.builder]();
     } else if (!meta) {
-      document.getElementById('form-root').innerHTML = '<p style="color:var(--text-secondary);">No tool selected. Return to <a href="index.html">ToolHub</a> and choose an electrical test form.</p>';
+      document.getElementById('form-root').innerHTML = '<p style="color:var(--text-secondary);">No tool selected. Return to <a href="index.html">Tool Library</a> and choose an electrical test form.</p>';
     } else {
       document.getElementById('form-root').innerHTML = '<p style="color:var(--text-secondary);">Form builder not available for this tool yet.</p>';
     }
