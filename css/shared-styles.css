@@ -2287,4 +2287,18 @@ button:disabled, .submit-button:disabled {
     }
 }
 
+/* Global Tool Body Grid Standardizations */
+.tool-body-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    align-items: start !important;
+}
+
+@media (min-width: 1024px) {
+    .tool-body-grid {
+        grid-template-columns: 3fr 2fr !important;
+    }
+}
+
 
