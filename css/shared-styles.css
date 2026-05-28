@@ -388,6 +388,21 @@ label {
     align-items: end !important;
 }
 
+/* Force standard height and clear standard bottom margins for any inputs 
+   nested inside unit/suffix helper wrappers globally across all tools */
+.input-with-unit {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+
+.input-with-unit input,
+.input-with-unit select,
+.input-with-unit .input-unit {
+    margin-bottom: 0 !important;
+    height: 42px !important;
+}
+
 input, select, textarea {
     width: 100%;
     padding: 10px;
