@@ -2304,4 +2304,10 @@ button:disabled, .submit-button:disabled {
     }
 }
 
+/* Force first card in each column to align perfectly at the top baseline */
+.tool-body-grid > div > :first-child,
+.top-body-grid > div > :first-child {
+    margin-top: 0 !important;
+}
+
 
