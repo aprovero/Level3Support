@@ -1118,6 +1118,8 @@ function _renderResourcesCard(pageSlug) {
             container.insertAdjacentHTML('beforeend', htmlContent);
         }
     }
+    
+    _relocateEngineeringModule();
 }
 
 function _renderFallbackCard(pageSlug) {
@@ -1157,4 +1159,28 @@ function _renderFallbackCard(pageSlug) {
             container.insertAdjacentHTML('beforeend', htmlContent);
         }
     }
+    
+    _relocateEngineeringModule();
+}
+
+function _relocateEngineeringModule() {
+    setTimeout(() => {
+        let engModuleBox = null;
+        const panels = document.querySelectorAll('.card-panel, div');
+        for (const panel of panels) {
+            const cardTitle = panel.querySelector('.card-title');
+            if (cardTitle && cardTitle.textContent.includes('Engineering Module Info')) {
+                engModuleBox = panel;
+                break;
+            }
+        }
+        if (engModuleBox) {
+            const resourcesCard = document.getElementById('tool-resources-card-section');
+            if (resourcesCard) {
+                resourcesCard.parentNode.insertBefore(engModuleBox, resourcesCard.nextSibling);
+                engModuleBox.style.marginTop = '24px';
+                engModuleBox.style.marginBottom = '24px';
+            }
+        }
+    }, 50);
 }
