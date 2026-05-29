@@ -90,7 +90,7 @@ There are two distinct result presentation modes:
     Ideal for solvers, converters, or simulator calculations (e.g., Power Triangle). Uses a modern neutral aesthetic (`background: #f8fafc`) without pass/fail indicators.
 
 ### 6. Assumptions & Sizing Logic Box (`.assumptions-box`)
-A slate-colored card (`.assumptions-box`) placed at the base of the inputs to detail the calculations, mathematical formulas, and scientific standards utilized behind the scenes. Excellent for transparency and engineering reference.
+A standardized premium light-blue card (`.assumptions-box`) featuring an electric-blue left border, placed at the base of the inputs to detail the calculations, mathematical formulas, and scientific standards utilized behind the scenes. Excellent for transparency and engineering reference.
 
 ### 7. Brand Footer (`.footer`)
 Every page wraps up with a high-fidelity dark footer (`background: #0f172a`) that lists:
