@@ -1,0 +1,725 @@
+/**
+ * Level3Support — core.css
+ * Lead Developer: Andres Provero (@aprovero)
+ * © 2026 Level3Support
+ *
+ * Design System: Slate / White / Electric Blue
+ * Layer: Core brand layouts and resets
+ */
+
+/* Google Fonts: Inter (body) + Outfit (headings) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+
+/* Declare CSS Cascade Layer Order */
+@layer core, components;
+
+@layer core {
+    /* ==========================================================================
+       1. CSS Reset & Normalizing
+       ========================================================================== */
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html, body {
+        height: 100%;
+        width: 100%;
+    }
+
+    ul, ol {
+        list-style: none;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    img, picture, video, canvas, svg {
+        display: block;
+        max-width: 100%;
+    }
+
+    input, button, textarea, select {
+        font: inherit;
+    }
+
+    /* ==========================================================================
+       2. Variables
+       ========================================================================== */
+    :root {
+        /* Color Palette — Slate / White / Electric Blue */
+        --primary-color: #2563eb;
+        --primary-hover: #1d4ed8;
+        --primary-light: #dbeafe;
+        --primary-border: #93c5fd;
+        
+        --text-color: #1e293b;
+        --text-secondary: #475569;
+        --text-light: #94a3b8;
+        
+        --background-color: #f8fafc;
+        --background-light: #ffffff;
+        --background-dark: #f1f5f9;
+        
+        --border-color: #e2e8f0;
+        --border-light: #cbd5e1;
+        --border-focus: #2563eb;
+        
+        /* Status Colors */
+        --success-color: #16a34a;
+        --success-light: #dcfce7;
+        --success-border: #bbf7d0;
+        --success-text: #166534;
+        
+        --error-color: #dc2626;
+        --error-light: #fee2e2;
+        --error-border: #fecaca;
+        --error-text: #991b1b;
+        
+        --info-color: #2563eb;
+        --info-light: #dbeafe;
+        --info-border: #93c5fd;
+        --info-text: #1e40af;
+        
+        --warning-color: #d97706;
+        --warning-light: #fef3c7;
+        --warning-border: #fde68a;
+        --warning-text: #92400e;
+        
+        /* System Types */
+        --system-pv-bg: #e8f4f8;
+        --system-pv-text: #0077b6;
+        --system-bess-bg: #e8f8e8;
+        --system-bess-text: #2e8b57;
+        --system-other-bg: #f8e8f8;
+        --system-other-text: #8b2e57;
+        
+        /* Spacing */
+        --space-xs: 5px;
+        --space-sm: 10px;
+        --space-md: 15px;
+        --space-lg: 20px;
+        --space-xl: 30px;
+        --space-xxl: 50px;
+        
+        /* Borders */
+        --border-radius-sm: 4px;
+        --border-radius-md: 8px;
+        --border-radius-lg: 10px;
+        --border-radius-round: 50%;
+        
+        /* Shadows */
+        --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 6px 12px rgba(0, 0, 0, 0.15);
+        
+        /* Animation */
+        --transition-quick: all 0.2s ease;
+        --transition-default: all 0.3s ease;
+
+        /* Hub Categories */
+        --color-calculators: #3b82f6; /* Blue */
+        --color-pv-field-tools: #f59e0b; /* Amber */
+        --color-bess-field-tools: #10b981; /* Emerald */
+        --color-electrical-test-forms: #ec4899; /* Pink */
+        --color-scada-diagnostics: #8b5cf6; /* Purple */
+        --color-reports-templates: #06b6d4; /* Cyan */
+        --color-reference-guides: #64748b; /* Slate */
+        --color-hse: #ef4444; /* Red */
+        --color-legacy-archive: #94a3b8; /* Light Slate */
+        --color-oem-specific: #6366f1; /* Indigo */
+    }
+
+    /* ==========================================================================
+       3. Base & Typography Styles
+       ========================================================================== */
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background-color: var(--background-color);
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        line-height: 1.6;
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+        max-width: 720px;
+        margin: 20px auto;
+        background: var(--background-light);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        padding: 10px;
+        position: relative;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Outfit', sans-serif;
+        line-height: 1.3;
+        font-weight: 600;
+    }
+
+    h1 {
+        text-align: center;
+        color: var(--text-color);
+        margin: 30px 0;
+        font-size: 24px;
+    }
+
+    h2 {
+        color: var(--text-color);
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    h3 {
+        color: var(--text-color);
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        color: var(--text-secondary);
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    p {
+        margin-bottom: 15px;
+    }
+
+    a {
+        color: var(--primary-color);
+        transition: var(--transition-quick);
+    }
+
+    a:hover {
+        color: var(--primary-hover);
+    }
+
+    /* ==========================================================================
+       4. Shell Layout Components
+       ========================================================================== */
+    /* Header */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 0 20px 0;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 20px;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo img {
+        width: 250px;
+        height: auto;
+    }
+
+    .header-icons {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .contact-icon, .training-icon {
+        display: flex;
+        align-items: center;
+    }
+
+    .contact-icon img, .training-icon img {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        background-color: white;
+        padding: 3px;
+        border-radius: var(--border-radius-round);
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-quick);
+    }
+
+    .contact-icon img:hover, .training-icon img:hover {
+        transform: scale(1.1);
+    }
+
+    .footer-logo img[alt="Claude Logo"] {
+        height: 28px;
+        width: auto;
+    }
+      
+    .footer-logo img[alt="Level3Support"] {
+        height: 40px;
+    }
+
+    .back-link {
+        display: inline-block;
+        color: var(--info-color);
+        text-decoration: none;
+        margin-bottom: 20px;
+        font-size: 16px;
+        transition: color 0.3s;
+    }
+
+    .back-link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    /* Standardized Flat-Style Footers across all tools */
+    .footer, .main-footer {
+        background: #0f172a !important;
+        padding: 1.5rem 2rem !important;
+        border: 1px solid #1e293b !important;
+        margin: 4rem auto 2rem auto !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 1rem !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        color: #64748b !important;
+    }
+
+    .footer-text, .footer p {
+        margin: 0 !important;
+        color: #64748b !important;
+        font-size: 0.85rem !important;
+    }
+
+    .footer-copyright, .footer-text span {
+        color: #64748b !important;
+        font-weight: 555 !important;
+    }
+
+    .footer-logo, .powered-by-wrapper {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        color: #64748b !important;
+        font-size: 0.85rem !important;
+    }
+
+    .footer-logo img, .powered-by-wrapper img {
+        height: 28px !important;
+        width: auto !important;
+        background: #ffffff !important;
+        padding: 3px 10px !important;
+        border-radius: 4px !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+        display: inline-block !important;
+    }
+
+    /* Global Tool Body Grid Standardizations */
+    .tool-body-grid,
+    .top-body-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+        align-items: start !important;
+    }
+
+    @media (min-width: 1024px) {
+        .tool-body-grid,
+        .top-body-grid {
+            grid-template-columns: 3fr 2fr !important;
+        }
+    }
+
+    .tool-body-grid > div > :first-child,
+    .top-body-grid > div > :first-child {
+        margin-top: 0 !important;
+    }
+
+    /* Global Unified Tool Header Cards */
+    .tool-header-section {
+        background: #ffffff !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 12px !important;
+        padding: 1.5rem 2rem !important;
+        margin-bottom: 2rem !important;
+        box-shadow: var(--shadow-sm) !important;
+    }
+
+    .tool-title-row {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 1rem !important;
+        margin-bottom: 0rem !important;
+    }
+
+    .tool-meta {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        margin-top: 0.5rem !important;
+    }
+
+    /* Hub Dashboard and Tiles Styles */
+    .global-disclaimer-banner {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border: 1px solid #fecaca;
+        color: #991b1b;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin: 1.5rem auto;
+        max-width: 1400px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .global-disclaimer-banner i {
+        font-size: 1.5rem;
+        color: #dc2626;
+        flex-shrink: 0;
+    }
+
+    .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .tool-tile {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 10px 15px -3px rgba(0,0,0,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 240px;
+    }
+
+    .tool-tile::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 6px;
+        height: 100%;
+        background-color: var(--primary-color);
+        transition: width 0.2s ease;
+    }
+
+    .tool-tile:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 10px 10px -5px rgba(0,0,0,0.02);
+        border-color: #cbd5e1;
+    }
+
+    .tool-tile:hover::before {
+        width: 8px;
+    }
+
+    .tool-tile[data-status="active"]::before { background-color: #15803d; }
+    .tool-tile[data-status="under-review"]::before { background-color: #c2410c; }
+    .tool-tile[data-status="in-progress"]::before { background-color: #b45309; }
+    .tool-tile[data-status="legacy"]::before { background-color: #64748b; }
+
+    .tile-content {
+        padding: 0.85rem 1.25rem 1.15rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        flex: 1;
+    }
+
+    .tile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.6rem;
+    }
+
+    .tool-settings-btn {
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 0;
+        margin: 0;
+        line-height: 1;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    .tool-settings-btn:hover {
+        color: var(--primary-color);
+        background: transparent !important;
+        transform: rotate(360deg);
+    }
+
+    .tile-category {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #64748b;
+        background: #f1f5f9;
+        padding: 0.25rem 0.6rem;
+        border-radius: 9999px;
+        flex-shrink: 0;
+    }
+
+    .tool-tile[data-category="calculators"] .tile-category { color: var(--color-calculators); background: #eff6ff; }
+    .tool-tile[data-category="pv-field-tools"] .tile-category { color: var(--color-pv-field-tools); background: #fffbeb; }
+    .tool-tile[data-category="bess-field-tools"] .tile-category { color: var(--color-bess-field-tools); background: #ecfdf5; }
+    .tool-tile[data-category="electrical-test-forms"] .tile-category { color: var(--color-electrical-test-forms); background: #fdf2f8; }
+    .tool-tile[data-category="scada-diagnostics"] .tile-category { color: var(--color-scada-diagnostics); background: #f5f3ff; }
+    .tool-tile[data-category="reports-templates"] .tile-category { color: var(--color-reports-templates); background: #ecfeff; }
+    .tool-tile[data-category="reference-guides"] .tile-category { color: var(--color-reference-guides); background: #f8fafc; }
+    .tool-tile[data-category="hse"] .tile-category { color: var(--color-hse); background: #fef2f2; }
+    .tool-tile[data-category="oem-specific"] .tile-category { color: var(--color-oem-specific); background: #e0e7ff; }
+
+    .status-badge {
+        font-size: 0.65rem;
+        font-weight: 600;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        flex-shrink: 0;
+    }
+
+    .status-active { background-color: #dcfce7; color: #15803d; }
+    .status-under-review { background-color: #ffedd5; color: #c2410c; }
+    .status-in-progress { background-color: #fef3c7; color: #b45309; }
+    .status-legacy { background-color: #e2e8f0; color: #475569; }
+    .status-disabled { background-color: #fee2e2; color: #b91c1c; }
+    .status-admin-only { background-color: #f3e8ff; color: #6b21a8; }
+
+    .tile-main {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .tile-icon-wrapper {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        color: #475569;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+    }
+
+    .tool-tile:hover .tile-icon-wrapper {
+        background: var(--primary-light);
+        color: var(--primary-color);
+        border-color: var(--primary-border);
+    }
+
+    .tool-tile[data-category="calculators"]:hover .tile-icon-wrapper { background: #eff6ff; color: var(--color-calculators); border-color: #bfdbfe; }
+    .tool-tile[data-category="pv-field-tools"]:hover .tile-icon-wrapper { background: #fffbeb; color: var(--color-pv-field-tools); border-color: #fde68a; }
+    .tool-tile[data-category="bess-field-tools"]:hover .tile-icon-wrapper { background: #ecfdf5; color: var(--color-bess-field-tools); border-color: #a7f3d0; }
+    .tool-tile[data-category="electrical-test-forms"]:hover .tile-icon-wrapper { background: #fdf2f8; color: var(--color-electrical-test-forms); border-color: #fbcfe8; }
+    .tool-tile[data-category="scada-diagnostics"]:hover .tile-icon-wrapper { background: #f5f3ff; color: var(--color-scada-diagnostics); border-color: #ddd6fe; }
+    .tool-tile[data-category="reports-templates"]:hover .tile-icon-wrapper { background: #ecfeff; color: var(--color-reports-templates); border-color: #a5f3fc; }
+    .tool-tile[data-category="hse"]:hover .tile-icon-wrapper { background: #fef2f2; color: var(--color-hse); border-color: #fecaca; }
+    .tool-tile[data-category="oem-specific"]:hover .tile-icon-wrapper { background: #e0e7ff; color: var(--color-oem-specific); border-color: #c7d2fe; }
+
+    .tile-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .tile-title {
+        font-size: 1rem;
+        font-weight: 650;
+        color: #0f172a;
+        margin: 0 0 0.25rem 0;
+        font-family: 'Outfit', sans-serif;
+        line-height: 1.25;
+    }
+
+    .tile-description {
+        font-size: 0.78rem;
+        color: #64748b;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .tile-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #f1f5f9;
+        padding-top: 0.8rem;
+        margin-top: auto;
+    }
+
+    .tile-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .tag-badge {
+        font-size: 0.65rem;
+        font-weight: 500;
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .tag-pv { background-color: #fffbeb; color: #d97706; }
+    .tag-bess { background-color: #ecfdf5; color: #059669; }
+    .tag-scada { background-color: #f5f3ff; color: #7c3aed; }
+    .tag-hse { background-color: #fef2f2; color: #dc2626; }
+    .tag-testing { background-color: #eff6ff; color: #2563eb; }
+
+    .tile-action-indicator {
+        color: #94a3b8;
+        transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .tool-tile:hover .tile-action-indicator {
+        transform: translateX(4px);
+        color: var(--primary-color);
+    }
+
+    .placeholder-container,
+    .calc-container {
+        max-width: 900px !important;
+        margin: 2rem auto !important;
+        padding: 0 1.5rem !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+    }
+
+    /* ==========================================================================
+       5. Media Queries Layout Overrides
+       ========================================================================== */
+    @media (max-width: 768px) {
+        .container {
+            margin: 10px auto;
+            padding: 12px;
+            width: 92%;
+        }
+        
+        .header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .header-icons {
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 200px;
+        }
+        
+        .footer, .main-footer {
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+            padding: 1.25rem 1rem !important;
+            margin: 2rem auto 1rem auto !important;
+            gap: 0.75rem !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+            border-radius: 8px !important;
+        }
+        
+        .footer-text, .footer p {
+            text-align: center !important;
+            margin-bottom: 0.25rem !important;
+        }
+        
+        .footer-logo, .powered-by-wrapper {
+            margin-top: 0.25rem !important;
+            justify-content: center !important;
+        }
+
+        .tool-tile {
+            height: auto !important;
+            min-height: 185px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            margin: 8px auto;
+            padding: 10px;
+            width: calc(100% - 20px);
+            max-width: none;
+        }
+          
+        .logo img {
+            width: 200px;
+        }
+        
+        h1 {
+            font-size: 20px;
+            margin: 20px 0;
+        }
+    }
+
+    @media print {
+        .container {
+            margin: 0;
+            box-shadow: none;
+        }
+        
+        .header-icons, 
+        .back-link {
+            display: none !important;
+        }
+        
+        body {
+            background-color: white;
+        }
+        
+        h1 {
+            font-size: 18px;
+        }
+        
+        .footer {
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+    }
+}
