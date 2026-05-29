@@ -319,14 +319,14 @@
     <div class="assumptions-box" style="margin-top: 24px;">
       <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions & Formulas</div>
       <ul class="assumptions-list">
-        <li>Adjusted Module Voc at $T_{min}$ = $Voc_{STC} \times [1 + \frac{\beta}{100} \times (T_{min} - 25)]$.</li>
-        <li>Adjusted Module Vmp at $T_{max}$ = $Vmp_{STC} \times [1 + \frac{\gamma}{100} \times (T_{max} - 25)]$.</li>
-        <li>String extreme Voc = Module adjusted Voc $\times$ Proposed Modules in Series.</li>
-        <li>String extreme Vmp = Module adjusted Vmp $\times$ Proposed Modules in Series.</li>
-        <li>Max modules by cold Voc = $\lfloor \text{Inverter Max DC Input Voltage} / \text{Module adjusted Voc} \rfloor$.</li>
-        <li>Min modules by hot Vmp = $\lceil \text{Inverter Min MPPT Voltage} / \text{Module adjusted Vmp} \rceil$.</li>
-        <li>Max modules by hot Vmp & MPPT Max = $\lfloor \text{Inverter Max MPPT Voltage} / \text{Module adjusted Vmp} \rfloor$.</li>
-        <li>STC cell temperature baseline is fixed at 25°C per international solar standard testing.</li>
+        <li>Adjusted Module Voc at T<sub>min</sub> = Voc<sub>STC</sub> &times; [1 + (&beta; / 100) &times; (T<sub>min</sub> - 25)].</li>
+        <li>Adjusted Module Vmp at T<sub>max</sub> = Vmp<sub>STC</sub> &times; [1 + (&gamma; / 100) &times; (T<sub>max</sub> - 25)].</li>
+        <li>String extreme Voc = Module adjusted Voc &times; Proposed Modules in Series.</li>
+        <li>String extreme Vmp = Module adjusted Vmp &times; Proposed Modules in Series.</li>
+        <li>Max modules by cold Voc = Inverter Max DC Input Voltage / Module adjusted Voc (rounded down).</li>
+        <li>Min modules by hot Vmp = Inverter Min MPPT Voltage / Module adjusted Vmp (rounded up).</li>
+        <li>Max modules by hot Vmp &amp; MPPT Max = Inverter Max MPPT Voltage / Module adjusted Vmp (rounded down).</li>
+        <li>STC cell temperature baseline is fixed at 25&deg;C per international solar standard testing.</li>
       </ul>
     </div>
 
