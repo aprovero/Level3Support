@@ -68,9 +68,11 @@ graph TD
 *   **Brand Header:** Includes the central Level3Support header logo and a floating text-badge showcasing the category in caps (e.g., `⚡ BESS CALCULATOR` or `⚡ GRID & CONTROLS`).
 
 ### 2. Tool Title Card (`.tool-header-section`)
-A white box with light borders displaying the tool title, a brief one-line value proposition description, and a meta row showing:
+A white box with light borders displaying the tool title, a brief one-line value proposition description, and a dynamic flex meta row at the bottom showing:
 *   Category tag matching the identity system.
-*   System status badge (`Active` [Green], `Under Review` [Amber], `In Progress` [Brown]).
+*   System status badge (`Active` [Green], `Under Review` [Amber], `In Progress` [Brown], `Legacy` [Grey]).
+*   Workflow pack badges ("Part of: [workflow]") dynamically aligned on the right.
+*(Note: These layout properties are automatically enriched and standardized dynamically by the central script on page load, achieving the exact design layout of the **Cleaning ROI Calculator**).*
 
 ### 3. Safety Disclaimer Box (`.warning-box`)
 A colored notification box detailing the limitations of the tool.
