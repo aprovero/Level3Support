@@ -991,41 +991,110 @@ function _enrichToolHeader(headerSection, pageFile, registryTool) {
     const override = overrides[pageFile];
     const effectiveTool = override ? { ...(registryTool || {}), ...override } : registryTool;
 
-    // ── 1. Inject workflow pack badges ──────────────────────────────────────
-    const packs = TOOL_WORKFLOW_MAP[pageFile] || [];
-    if (packs.length > 0) {
-        const wfRow = document.createElement('div');
-        wfRow.id = 'tool-workflow-badges';
-        wfRow.style.cssText = 'display:flex; flex-wrap:wrap; gap:6px; margin-top:0.85rem; align-items:center;';
-        wfRow.innerHTML = `
-            <span style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-right:2px;">
-                <i class="fas fa-sitemap" style="margin-right:3px;"></i>Part of:
-            </span>
-            ${packs.map(name => `
-                <span style="
-                    display:inline-flex; align-items:center; gap:4px;
-                    background:#eff6ff; color:#1d4ed8;
-                    border:1px solid #bfdbfe; border-radius:20px;
-                    padding:2px 10px; font-size:0.72rem; font-weight:600;
-                    white-space:nowrap;
-                "><i class="fas fa-layer-group" style="font-size:0.65rem;"></i>${name}</span>
-            `).join('')}
-        `;
+    // Find h1 (title) and p (description)
+    const titleEl = headerSection.querySelector('h1');
+    const descEl = headerSection.querySelector('p');
 
-        // Insert after the .tool-meta div (category/status badges row) or at end of header
-        const metaDiv = headerSection.querySelector('.tool-meta') ||
-                        headerSection.querySelector('.tool-title-row');
-        if (metaDiv) {
-            metaDiv.after ? metaDiv.after(wfRow) : metaDiv.parentNode.insertBefore(wfRow, metaDiv.nextSibling);
-        } else {
-            headerSection.appendChild(wfRow);
-        }
+    if (!titleEl) return;
+
+    const titleText = titleEl.innerHTML;
+    const descText = descEl ? descEl.innerHTML : '';
+
+    // Extract or build Category Badge HTML
+    let categoryHtml = '';
+    const existingCategory = headerSection.querySelector('.tile-category') || headerSection.querySelector('.category-badge');
+    if (existingCategory) {
+        categoryHtml = existingCategory.outerHTML;
+    } else if (effectiveTool && effectiveTool.category) {
+        categoryHtml = _getCategoryBadgeHtml(effectiveTool.category);
     }
+
+    // Extract or build Status Badge HTML
+    let statusHtml = '';
+    const existingStatus = headerSection.querySelector('.status-badge');
+    if (existingStatus) {
+        statusHtml = existingStatus.outerHTML;
+    } else if (effectiveTool && effectiveTool.status) {
+        statusHtml = _getStatusBadgeHtml(effectiveTool.status);
+    }
+
+    // Extract workflow packs
+    const packs = TOOL_WORKFLOW_MAP[pageFile] || [];
+    let packsHtml = '';
+    if (packs.length > 0) {
+        packsHtml = `
+            <div id="tool-workflow-badges" style="display:flex; align-items:center; gap:6px;">
+                <span style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-right:2px; display:inline-flex; align-items:center; gap:3px;">
+                    <i class="fas fa-sitemap"></i>Part of:
+                </span>
+                ${packs.map(name => `
+                    <span style="
+                        display:inline-flex; align-items:center; gap:4px;
+                        background:#eff6ff; color:#1d4ed8;
+                        border:1px solid #bfdbfe; border-radius:20px;
+                        padding:2px 10px; font-size:0.72rem; font-weight:600;
+                        white-space:nowrap;
+                    "><i class="fas fa-layer-group" style="font-size:0.65rem;"></i>${name}</span>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    // Build the fully standardized title card
+    headerSection.innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; text-align: left; position: relative;">
+            <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; font-weight:700; color:#0f172a; line-height:1.2;">
+                ${titleText}
+            </h1>
+            ${descText ? `<p style="color:var(--text-secondary, #475569); margin:0; font-size:0.95rem; line-height:1.5;">${descText}</p>` : ''}
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 0.5rem; border-top: 1px solid var(--border-color, #e2e8f0); padding-top: 0.75rem;">
+                <div class="tool-meta" style="display: flex; align-items: center; gap: 8px; margin: 0 !important; padding: 0 !important;">
+                    ${categoryHtml}
+                    ${statusHtml}
+                </div>
+                ${packsHtml}
+            </div>
+        </div>
+    `;
 
     // Make header position relative if needed
     if (getComputedStyle(headerSection).position === 'static') {
         headerSection.style.position = 'relative';
     }
+}
+
+function _getCategoryBadgeHtml(category) {
+    if (!category) return '';
+    const norm = category.toLowerCase().trim();
+    let bg = '#f1f5f9';
+    let text = '#64748b';
+    let emoji = '⚙️';
+    
+    if (norm.includes('calculator')) { bg = '#eff6ff'; text = '#3b82f6'; emoji = '🔋'; }
+    else if (norm.includes('pv') || norm.includes('soiling')) { bg = '#fffbeb'; text = '#b45309'; emoji = '☀️'; }
+    else if (norm.includes('bess') || norm.includes('battery')) { bg = '#ecfdf5'; text = '#047857'; emoji = '🔋'; }
+    else if (norm.includes('electrical') || norm.includes('test')) { bg = '#fdf2f8'; text = '#db2777'; emoji = '⚡'; }
+    else if (norm.includes('scada') || norm.includes('diagnostics') || norm.includes('grid')) { bg = '#f5f3ff'; text = '#7c3aed'; emoji = '🌐'; }
+    else if (norm.includes('report') || norm.includes('template')) { bg = '#ecfeff'; text = '#0891b2'; emoji = '📋'; }
+    else if (norm.includes('safety') || norm.includes('hse')) { bg = '#fef2f2'; text = '#dc2626'; emoji = '⚠️'; }
+    else if (norm.includes('oem') || norm.includes('specific')) { bg = '#e0e7ff'; text = '#3730a3'; emoji = '📦'; }
+    
+    return `<span class="tile-category" style="background:${bg}; color:${text}; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">${emoji} ${category}</span>`;
+}
+
+function _getStatusBadgeHtml(status) {
+    if (!status) return '';
+    const norm = status.toLowerCase().trim();
+    let bg = '#e2e8f0';
+    let text = '#475569';
+    
+    if (norm === 'active') { bg = '#dcfce7'; text = '#15803d'; }
+    else if (norm === 'under review') { bg = '#fef3c7'; text = '#92400e'; }
+    else if (norm === 'in progress') { bg = '#fef3c7'; text = '#b45309'; }
+    else if (norm === 'legacy') { bg = '#e2e8f0'; text = '#475569'; }
+    
+    return `<span class="status-badge" style="background:${bg}; color:${text}; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">${status}</span>`;
 }
 
 function _injectToolResourcesCard(pageSlug) {

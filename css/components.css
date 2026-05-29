@@ -1538,4 +1538,38 @@
             display: none !important;
         }
     }
+
+    /* Universal premium back link alignment */
+    .back-link,
+    .btn-back {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 0.5rem !important;
+        text-decoration: none !important;
+        color: var(--primary-color) !important;
+        font-weight: 600 !important;
+        margin-bottom: 1.5rem !important;
+        font-size: 0.95rem !important;
+        transition: transform 0.2s ease !important;
+        line-height: 1 !important;
+    }
+
+    .back-link:hover,
+    .btn-back:hover {
+        transform: translateX(-4px) !important;
+        color: var(--primary-hover) !important;
+        text-decoration: none !important;
+    }
+
+    .back-link i,
+    .btn-back i {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 0.95rem !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 }
