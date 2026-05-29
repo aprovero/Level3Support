@@ -44,6 +44,7 @@
         display: flex !important;
         flex-direction: column !important;
         justify-content: flex-end !important;
+        margin-bottom: 16px !important;
     }
 
     /* Bottom-align grid cells in all input-row variants so inputs line up
@@ -58,25 +59,62 @@
        nested inside unit/suffix helper wrappers globally across all tools */
     .input-with-unit {
         display: flex !important;
-        align-items: center !important;
+        align-items: stretch !important;
         width: 100% !important;
+        margin-bottom: 0 !important;
     }
 
-    .input-with-unit input,
-    .input-with-unit select,
-    .input-with-unit .input-unit {
+    .input-with-unit input {
+        flex: 1 !important;
         margin-bottom: 0 !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
         height: 42px !important;
+        box-sizing: border-box !important;
+    }
+
+    .input-with-unit select {
+        width: auto !important;
+        min-width: 80px !important;
+        margin-bottom: 0 !important;
+        border-left: none !important;
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+        height: 42px !important;
+        box-sizing: border-box !important;
+    }
+
+    .input-with-unit .input-unit {
+        background: var(--background-dark, #f1f5f9) !important;
+        border: 1px solid var(--border-light, #cbd5e1) !important;
+        border-left: none !important;
+        padding: 0 12px !important;
+        height: 42px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 0.9rem !important;
+        color: var(--text-secondary, #64748b) !important;
+        font-weight: 600 !important;
+        border-top-right-radius: var(--border-radius-sm, 4px) !important;
+        border-bottom-right-radius: var(--border-radius-sm, 4px) !important;
+        white-space: nowrap !important;
+        box-sizing: border-box !important;
     }
 
     input, select, textarea {
         width: 100%;
         padding: 10px;
-        margin-bottom: 15px;
+        margin-bottom: 0 !important;
         border: 1px solid var(--border-light);
         border-radius: var(--border-radius-sm);
         font-size: 16px;
         transition: border-color 0.3s;
+        box-sizing: border-box !important;
+    }
+
+    input, select {
+        height: 42px !important;
     }
 
     input:focus, select:focus, textarea:focus {
