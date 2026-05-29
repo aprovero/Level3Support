@@ -26,23 +26,38 @@
     if (!root) return;
     root.innerHTML = '';
 
+    // Inject warning box BEFORE form (template guide §3: .warning-box)
+    root.insertAdjacentHTML('beforeend', buildSafetyWarning());
+
     const form = document.createElement('form');
     form.id = 'ir-form';
     form.noValidate = true;
 
-    form.innerHTML = buildSafetyWarning() +
+    form.innerHTML =
       buildSection1() +
       buildSection2() +
       buildSection3() +
       buildSection4() +
       buildSection5() +
       buildSection6AcceptanceCriteria() +
-      buildSection7TestResultTable() +
       buildSummaryPanel() +
       buildSection8Notes() +
       buildSection9Signoff();
 
     root.appendChild(form);
+
+    // Inject calculations & assumptions box AFTER form (template guide §4: .assumptions-box)
+    const assumptionsBox = document.createElement('div');
+    assumptionsBox.className = 'assumptions-box';
+    assumptionsBox.innerHTML = `
+      <div class="assumptions-title"><i class="fas fa-calculator"></i> Insulation Resistance Standards & Reference Guidelines</div>
+      <ul class="assumptions-list">
+        <li><strong>IEEE Std 43:</strong> Recommended Practice for Testing Insulation Resistance of Rotating Machinery. Outlines test voltages and minimum insulation resistance thresholds.</li>
+        <li><strong>ANSI/NETA MTS-2023:</strong> Table 100.1 specifies nominal test voltage (e.g. 1000V DC for 480V systems, 2500V DC or 5000V DC for medium voltage up to 15kV) and minimum insulation thresholds.</li>
+        <li><strong>Temperature Correction:</strong> Readings should be corrected to a standard reference of 20°C using standard temperature correction coefficients.</li>
+      </ul>
+    `;
+    root.appendChild(assumptionsBox);
 
     // Wire up dynamic table
     document.getElementById('ir-add-row').addEventListener('click', addTestRow);
@@ -66,18 +81,18 @@
 
   function buildSafetyWarning() {
     return `
-    <div class="safety-warning print-hide">
+    <div class="warning-box print-hide">
       <i class="fas fa-exclamation-triangle"></i>
       <div>
-        <div class="safety-warning-title">⚠ Safety Warning — High Voltage Testing</div>
-        <p>Insulation resistance testing applies high DC voltage. Confirm the equipment is de-energized, isolated, discharged, and safe to test before connecting the instrument. Sensitive electronics, surge protection devices, meters, communication equipment, inverters, optimizers, and BMS components may be damaged if tested incorrectly. Always follow the OEM manual, approved test procedure, LOTO requirements, and site safety rules.</p>
+        <div class="warning-title">⚠ Safety Warning — High Voltage Testing</div>
+        <p style="margin:0; font-size:0.85rem; line-height:1.55;">Insulation resistance testing applies high DC voltage. Confirm the equipment is de-energized, isolated, discharged, and safe to test before connecting the instrument. Sensitive electronics, surge protection devices, meters, communication equipment, inverters, optimizers, and BMS components may be damaged if tested incorrectly. Always follow the OEM manual, approved test procedure, LOTO requirements, and site safety rules.</p>
       </div>
     </div>`;
   }
 
   function buildSection1() {
     return `
-    <div class="form-section">
+    <div class="form-section" style="background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-file-alt" style="color:var(--primary-color)"></i> 1. Header / Report Information</h3>
       <div class="input-row">
         <div class="input-group"><label for="ir-report-id">Report ID</label><input type="text" id="ir-report-id" placeholder="e.g. IR-2026-001"></div>
@@ -107,7 +122,7 @@
 
   function buildSection2() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-plug" style="color:var(--primary-color)"></i> 2. Equipment Under Test</h3>
       <div class="input-row">
         <div class="input-group">
@@ -180,7 +195,7 @@
 
   function buildSection3() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-microchip" style="color:var(--primary-color)"></i> 3. Test Instrument Information</h3>
       <div class="input-row">
         <div class="input-group"><label for="ir-inst-mfg">Instrument Manufacturer</label><input type="text" id="ir-inst-mfg" placeholder="e.g. Fluke, Megger, Hioki"></div>
@@ -221,7 +236,7 @@
 
   function buildSection4() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-cloud-sun" style="color:var(--primary-color)"></i> 4. Environmental Conditions</h3>
       <div class="input-row">
         <div class="input-group"><label for="ir-amb-temp">Ambient Temperature (°C)</label><input type="number" id="ir-amb-temp" placeholder="e.g. 28" step="any"></div>
@@ -255,7 +270,7 @@
 
   function buildSection6AcceptanceCriteria() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-sliders-h" style="color:var(--primary-color)"></i> 5. Acceptance Criteria Configuration
         <span class="section-optional-badge">Configurable — Verify against project procedure</span>
       </h3>
@@ -291,7 +306,7 @@
 
   function buildSection5() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-table" style="color:var(--primary-color)"></i> 6. Test Result Table</h3>
       <div class="dynamic-table-wrapper">
         <table class="dynamic-table">
@@ -341,7 +356,7 @@
 
   function buildSection8Notes() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-clipboard" style="color:var(--primary-color)"></i> 7. Notes and Observations</h3>
       <div class="input-row">
         <div class="input-group" style="grid-column:span 2">
@@ -375,7 +390,7 @@
 
   function buildSection9Signoff() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-pen-fancy" style="color:var(--primary-color)"></i> 8. Sign-off</h3>
       <div class="input-row">
         <div class="input-group"><label for="ir-tech-name">Technician Name</label><input type="text" id="ir-tech-name" placeholder="Full name"></div>

@@ -124,10 +124,24 @@ function groundingContinuityFormBuilder() {
   const root = document.getElementById('form-root');
   root.innerHTML = '';
 
+  // --- Safety Disclaimer (template guide §3: .warning-box) ---
+  const disclaimer = el('div', ['warning-box']);
+  disclaimer.innerHTML = `
+    <i class="fas fa-exclamation-triangle"></i>
+    <div>
+      <div class="warning-title">⚠ Safety & Equipment Disclaimer</div>
+      <p style="margin:0; font-size:0.85rem; line-height:1.55;">
+        Grounding continuity testing must be performed by qualified personnel using appropriate PPE and in strict compliance with NFPA 70E and site Lockout/Tagout (LOTO) protocols. Ensure the system under test is completely de-energized and isolated before connecting micro-ohmmeters or high-current test sets to prevent hazardous potential rise or equipment damage.
+      </p>
+    </div>
+  `;
+  root.appendChild(disclaimer);
+
   const f = el('form', [], 'onsubmit="event.preventDefault();"');
 
   // --- Section 1: Site Metadata ---
   const sec1 = el('div', ['form-section']);
+  sec1.style.background = 'var(--background-dark)';
   sec1.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-file-contract" style="color:var(--primary-color);"></i> 1. Site & Test Metadata</h3>
     <div class="input-row">
@@ -153,6 +167,7 @@ function groundingContinuityFormBuilder() {
 
   // --- Section 2: Instrument & Acceptance Limits ---
   const sec2 = el('div', ['form-section']);
+  sec2.style.background = 'var(--background-dark)';
   sec2.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-tools" style="color:var(--primary-color);"></i> 2. Instrument Details & Limit Configuration</h3>
     <div class="input-row">
@@ -181,6 +196,7 @@ function groundingContinuityFormBuilder() {
 
   // --- Section 3: Grounding Continuity Readings ---
   const sec3 = el('div', ['form-section']);
+  sec3.style.background = 'var(--background-dark)';
   sec3.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-list-ul" style="color:var(--primary-color);"></i> 3. Grounding Continuity Readings</h3>
     <div class="dynamic-table-wrapper">
@@ -207,6 +223,7 @@ function groundingContinuityFormBuilder() {
 
   // --- Section 4: Visual Checklist ---
   const sec4 = el('div', ['form-section']);
+  sec4.style.background = 'var(--background-dark)';
   sec4.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-eye" style="color:var(--primary-color);"></i> 4. Visual & Mechanical Checks</h3>
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
@@ -232,6 +249,7 @@ function groundingContinuityFormBuilder() {
 
   // --- Summary Card & Approvals ---
   const sec5 = el('div', ['form-section']);
+  sec5.style.background = 'var(--background-dark)';
   sec5.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-signature" style="color:var(--primary-color);"></i> 5. Verification Sign-Off</h3>
     <div class="summary-card">
@@ -272,6 +290,18 @@ function groundingContinuityFormBuilder() {
   f.appendChild(sec5);
 
   root.appendChild(f);
+
+  // --- Calculations & Assumptions Box (template guide §4: .assumptions-box) ---
+  const assumptionsBox = el('div', ['assumptions-box']);
+  assumptionsBox.innerHTML = `
+    <div class="assumptions-title"><i class="fas fa-calculator"></i> Standards & Grounding Guidelines</div>
+    <ul class="assumptions-list">
+      <li><strong>IEEE Std 80 / Std 142:</strong> Recommends grounding path resistance of less than 0.5 ohms for utility-scale solar/industrial systems, and under 5.0 ohms for standard commercial facilities.</li>
+      <li><strong>Test Method:</strong> High-current low-resistance ohmmeter (Ductor) injection (typically 10A DC) is preferred to overcome contact resistance and paint/corrosion layers.</li>
+      <li><strong>Pass/Fail Criterion:</strong> Connections exceeding 0.50 Ω (or custom threshold) are automatically flagged as FAIL and require terminal disassembly, cleaning, and re-torqueing.</li>
+    </ul>
+  `;
+  root.appendChild(assumptionsBox);
 
   // --- Dynamic Interactions & Logic ---
   let rowCount = 0;
@@ -669,10 +699,24 @@ function relayChecklistFormBuilder() {
   const root = document.getElementById('form-root');
   root.innerHTML = '';
 
+  // --- Safety Disclaimer (template guide §3: .warning-box) ---
+  const disclaimer = el('div', ['warning-box']);
+  disclaimer.innerHTML = `
+    <i class="fas fa-exclamation-triangle"></i>
+    <div>
+      <div class="warning-title">⚠ Safety & Testing Disclaimer</div>
+      <p style="margin:0; font-size:0.85rem; line-height:1.55;">
+        Relay settings verification requires secondary current/voltage injection equipment and must only be conducted by trained electrical protection technicians. Ensure all trip outputs are properly isolated or blocked as required prior to testing to prevent accidental tripping of active substation equipment.
+      </p>
+    </div>
+  `;
+  root.appendChild(disclaimer);
+
   const f = el('form', [], 'onsubmit="event.preventDefault();"');
 
   // --- Section 1: Site Metadata & Feeder ---
   const sec1 = el('div', ['form-section']);
+  sec1.style.background = 'var(--background-dark)';
   sec1.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-file-contract" style="color:var(--primary-color);"></i> 1. Relay Identification & Feeder Metadata</h3>
     <div class="input-row">
@@ -698,6 +742,7 @@ function relayChecklistFormBuilder() {
 
   // --- Section 2: Operational Protection Checklist ---
   const sec2 = el('div', ['form-section']);
+  sec2.style.background = 'var(--background-dark)';
   sec2.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-shield-alt" style="color:var(--primary-color);"></i> 2. Protection Settings Verification</h3>
     <div class="dynamic-table-wrapper">
@@ -725,6 +770,7 @@ function relayChecklistFormBuilder() {
 
   // --- Section 3: Functional Visual Checks ---
   const sec3 = el('div', ['form-section']);
+  sec3.style.background = 'var(--background-dark)';
   sec3.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-check-double" style="color:var(--primary-color);"></i> 3. Functional Visual & Secondary Injection Checks</h3>
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
@@ -750,6 +796,7 @@ function relayChecklistFormBuilder() {
 
   // --- Summary Card & Approvals ---
   const sec4 = el('div', ['form-section']);
+  sec4.style.background = 'var(--background-dark)';
   sec4.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-signature" style="color:var(--primary-color);"></i> 4. Evaluation Summary & Sign-Off</h3>
     <div class="summary-card">
@@ -790,6 +837,18 @@ function relayChecklistFormBuilder() {
   f.appendChild(sec4);
 
   root.appendChild(f);
+
+  // --- Calculations & Assumptions Box (template guide §4: .assumptions-box) ---
+  const assumptionsBox = el('div', ['assumptions-box']);
+  assumptionsBox.innerHTML = `
+    <div class="assumptions-title"><i class="fas fa-calculator"></i> ANSI / IEEE Protection Relay Standards</div>
+    <ul class="assumptions-list">
+      <li><strong>IEEE C37.90:</strong> Standard for Relays and Relay Systems Associated with Electric Power Apparatus. Outlines testing tolerances and operational thresholds.</li>
+      <li><strong>ANSI Protection Codes:</strong> Common codes checked include 50P/50N (Instantaneous Overcurrent), 51P/51N (AC Time Overcurrent), 59 (Overvoltage), and 27 (Undervoltage).</li>
+      <li><strong>Calibration Tolerance:</strong> Measured pickup levels are expected to fall within +/- 5% of the target values set by protection settings coordination studies.</li>
+    </ul>
+  `;
+  root.appendChild(assumptionsBox);
 
   // --- Dynamic Interactions & Logic ---
   let rowCount = 0;

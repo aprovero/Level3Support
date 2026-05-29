@@ -28,12 +28,14 @@
     if (!root) return;
     root.innerHTML = '';
 
+    // Inject warning box BEFORE form (template guide §3: .warning-box)
+    root.insertAdjacentHTML('beforeend', buildSafetyWarning());
+
     const form = document.createElement('form');
     form.id = 'tx-form';
     form.noValidate = true;
 
     form.innerHTML =
-      buildSafetyWarning() +
       buildSection1Header() +
       buildSection2Nameplate() +
       buildSection3VisualInspection() +
@@ -48,6 +50,19 @@
       buildSection12Signoff();
 
     root.appendChild(form);
+
+    // Inject calculations & assumptions box AFTER form (template guide §4: .assumptions-box)
+    const assumptionsBox = document.createElement('div');
+    assumptionsBox.className = 'assumptions-box';
+    assumptionsBox.innerHTML = `
+      <div class="assumptions-title"><i class="fas fa-calculator"></i> Transformer Testing Standards & References</div>
+      <ul class="assumptions-list">
+        <li><strong>IEEE C57.12.90:</strong> Standard Test Code for Liquid-Immersed Distribution, Power, and Regulating Transformers. Guides the winding resistance and insulation tests.</li>
+        <li><strong>IEEE C57.13:</strong> Standard Requirements for Instrument Transformers. Governs ratio, phase angle, and accuracy limits.</li>
+        <li><strong>Acceptance Criteria:</strong> TTR deviation must be within +/- 0.5% of nominal ratio. Winding resistance phase-to-phase deviation should not exceed 2%. Insulation resistance must be temperature-corrected to 20°C and meet minimum specifications (typically > 100 MΩ).</li>
+      </ul>
+    `;
+    root.appendChild(assumptionsBox);
 
     // Wire up TTR table
     document.getElementById('tx-add-ttr-row').addEventListener('click', addTTRRow);
@@ -102,14 +117,14 @@
     updateOverallSummary();
   }
 
-  // ─── Safety Warning ───────────────────────────────────────────────────────────
+  // ─── Safety Warning (template guide §3: .warning-box) ───────────────────────────
   function buildSafetyWarning() {
     return `
-    <div class="safety-warning print-hide">
+    <div class="warning-box print-hide">
       <i class="fas fa-exclamation-triangle"></i>
       <div>
-        <div class="safety-warning-title">⚠ Safety Warning — Transformer Testing</div>
-        <p>Transformer testing can involve stored energy, induced voltage, hazardous test voltages, grounding requirements, and equipment damage risk. Confirm the transformer is de-energized, isolated, discharged, grounded as required, and safe to test. Follow LOTO, NFPA 70E, OEM instructions, and the approved commissioning or maintenance procedure.</p>
+        <div class="warning-title">⚠ Safety Warning — Transformer Testing</div>
+        <p style="margin:0; font-size:0.85rem; line-height:1.55;">Transformer testing can involve stored energy, induced voltage, hazardous test voltages, grounding requirements, and equipment damage risk. Confirm the transformer is de-energized, isolated, discharged, grounded as required, and safe to test. Follow LOTO, NFPA 70E, OEM instructions, and the approved commissioning or maintenance procedure.</p>
       </div>
     </div>`;
   }
@@ -117,7 +132,7 @@
   // ─── Section 1: Header ───────────────────────────────────────────────────────
   function buildSection1Header() {
     return `
-    <div class="form-section">
+    <div class="form-section" style="background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-file-alt" style="color:var(--primary-color)"></i> 1. Header / Report Information</h3>
       <div class="input-row">
         <div class="input-group"><label for="tx-report-id">Report ID</label><input type="text" id="tx-report-id" placeholder="e.g. TX-2026-001"></div>
@@ -148,7 +163,7 @@
   // ─── Section 2: Nameplate Data ───────────────────────────────────────────────
   function buildSection2Nameplate() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-id-card" style="color:var(--primary-color)"></i> 2. Transformer Nameplate Data</h3>
       <div class="input-row">
         <div class="input-group"><label for="tx-tag">Transformer Tag / Equipment ID</label><input type="text" id="tx-tag" placeholder="e.g. TX-01"></div>
@@ -275,7 +290,7 @@
     }).join('');
 
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3">
         <i class="fas fa-search" style="color:var(--primary-color)"></i> 3. Visual / Mechanical Inspection
         <span style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:400;">
@@ -295,7 +310,7 @@
   // ─── Section 4: Instruments ───────────────────────────────────────────────────
   function buildSection4Instruments() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-tools" style="color:var(--primary-color)"></i> 4. Test Instrument Information</h3>
       <div class="dynamic-table-wrapper">
         <table class="dynamic-table">
@@ -359,7 +374,7 @@
   // ─── Section 5: TTR ───────────────────────────────────────────────────────────
   function buildSection5TTR() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3">
         <i class="fas fa-random" style="color:var(--primary-color)"></i> 5. Transformer Turns Ratio (TTR) Test
         <span style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:400;">
@@ -545,7 +560,7 @@
   // ─── Section 6: Winding Resistance ───────────────────────────────────────────
   function buildSection6WindingResistance() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3">
         <i class="fas fa-wave-square" style="color:var(--primary-color)"></i> 6. Winding Resistance
         <span class="section-optional-badge">Optional</span>
@@ -733,7 +748,7 @@
   // ─── Section 7: Insulation Resistance ────────────────────────────────────────
   function buildSection7InsulationResistance() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3">
         <i class="fas fa-shield-alt" style="color:var(--primary-color)"></i> 7. Insulation Resistance
         <span class="section-optional-badge">Optional</span>
@@ -876,7 +891,7 @@
     }).join('');
 
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3">
         <i class="fas fa-check-double" style="color:var(--primary-color)"></i> 8. Functional Checks
         <span style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:400;">
@@ -893,7 +908,7 @@
   // ─── Section 9: Oil / Fluid Test ─────────────────────────────────────────────
   function buildSection9OilTest() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3">
         <i class="fas fa-flask" style="color:var(--primary-color)"></i> 9. Oil / Fluid Test Summary
         <span class="section-optional-badge">Optional</span>
@@ -1048,7 +1063,7 @@
   // ─── Section 11: Notes ────────────────────────────────────────────────────────
   function buildSection11Notes() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-clipboard" style="color:var(--primary-color)"></i> 11. Notes and Corrective Actions</h3>
       <div class="input-row">
         <div class="input-group" style="grid-column:span 2">
@@ -1095,7 +1110,7 @@
   // ─── Section 12: Signoff ──────────────────────────────────────────────────────
   function buildSection12Signoff() {
     return `
-    <div class="form-section" style="margin-top:20px">
+    <div class="form-section" style="margin-top:20px;background:var(--background-dark);">
       <h3 class="section-h3"><i class="fas fa-pen-fancy" style="color:var(--primary-color)"></i> 12. Sign-off</h3>
       <div class="input-row">
         <div class="input-group"><label for="tx-tech-name">Technician Name</label><input type="text" id="tx-tech-name" placeholder="Full name"></div>
