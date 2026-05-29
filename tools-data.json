@@ -996,6 +996,66 @@
         "Protection",
         "QA/QC"
       ]
+    },
+    {
+      "id": 61,
+      "name": "BESS Capacity / Energy Test Form",
+      "category": "BESS Field Tools",
+      "status": "Active",
+      "description": "Record energy charge/discharge metrics, compute actual performance vs. rated energy capacities, and determine round-trip efficiency (RTE).",
+      "url": "bess-capacity-test.html",
+      "tags": [
+        "BESS",
+        "Capacity",
+        "Energy Test",
+        "RTE",
+        "Commissioning"
+      ]
+    },
+    {
+      "id": 62,
+      "name": "BESS Pre-Energization Checklist",
+      "category": "BESS Field Tools",
+      "status": "Active",
+      "description": "Audit and sign off on isolation integrity, grounding bonds, auxiliary system status, communications, and LOTO state prior to introducing utility or DC bus voltage.",
+      "url": "bess-pre-energization.html",
+      "tags": [
+        "BESS",
+        "Pre-Energization",
+        "Checklist",
+        "Safety",
+        "Commissioning"
+      ]
+    },
+    {
+      "id": 63,
+      "name": "BESS Container & Rack Inspection",
+      "category": "BESS Field Tools",
+      "status": "Active",
+      "description": "Verify battery container structural integrity, climate controllers, fire suppression status, and electrical safety bonds prior to unit commissioning.",
+      "url": "bess-rack-inspection.html",
+      "tags": [
+        "BESS",
+        "Rack Inspection",
+        "Container",
+        "Checklist",
+        "Commissioning"
+      ]
+    },
+    {
+      "id": 64,
+      "name": "BESS Spare Parts Cross-Reference",
+      "category": "BESS Field Tools",
+      "status": "Active",
+      "description": "Search compatible parts, review stock levels, filter criticality levels, and import/export CSV parts directories.",
+      "url": "bess-spare-parts.html",
+      "tags": [
+        "BESS",
+        "Spare Parts",
+        "Reference",
+        "Cross-Reference",
+        "O&M"
+      ]
     }
   ]
 }

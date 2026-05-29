@@ -768,7 +768,6 @@
         "use the Safety Pre-Task Plan / JHA Form tool"
       ]
     },
-
     {
       "id": 43,
       "name": "Technical Documentation / Reference Search Tool",
@@ -1097,6 +1096,78 @@
       "aliases": [],
       "useCases": [
         "use the Fuse Continuous Current & Temperature Derating Calculator tool"
+      ]
+    },
+    {
+      "id": 61,
+      "name": "BESS Capacity / Energy Test Form",
+      "category": "BESS Field Tools",
+      "url": "bess-capacity-test.html",
+      "description": "Record energy charge/discharge metrics, compute actual performance vs. rated energy capacities, and determine round-trip efficiency (RTE).",
+      "keywords": [
+        "BESS",
+        "Capacity",
+        "Energy Test",
+        "RTE",
+        "Commissioning"
+      ],
+      "aliases": [],
+      "useCases": [
+        "use the BESS Capacity / Energy Test Form tool"
+      ]
+    },
+    {
+      "id": 62,
+      "name": "BESS Pre-Energization Checklist",
+      "category": "BESS Field Tools",
+      "url": "bess-pre-energization.html",
+      "description": "Audit and sign off on isolation integrity, grounding bonds, auxiliary system status, communications, and LOTO state prior to introducing utility or DC bus voltage.",
+      "keywords": [
+        "BESS",
+        "Pre-Energization",
+        "Checklist",
+        "Safety",
+        "Commissioning"
+      ],
+      "aliases": [],
+      "useCases": [
+        "use the BESS Pre-Energization Checklist tool"
+      ]
+    },
+    {
+      "id": 63,
+      "name": "BESS Container & Rack Inspection",
+      "category": "BESS Field Tools",
+      "url": "bess-rack-inspection.html",
+      "description": "Verify battery container structural integrity, climate controllers, fire suppression status, and electrical safety bonds prior to unit commissioning.",
+      "keywords": [
+        "BESS",
+        "Rack Inspection",
+        "Container",
+        "Checklist",
+        "Commissioning"
+      ],
+      "aliases": [],
+      "useCases": [
+        "use the BESS Container & Rack Inspection tool"
+      ]
+    },
+    {
+      "id": 64,
+      "name": "BESS Spare Parts Cross-Reference",
+      "category": "BESS Field Tools",
+      "url": "bess-spare-parts.html",
+      "description": "Search compatible parts, review stock levels, filter criticality levels, and import/export CSV parts directories.",
+      "keywords": [
+        "BESS",
+        "Spare Parts",
+        "Reference",
+        "Cross-Reference",
+        "O&M"
+      ],
+      "aliases": [],
+      "useCases": [
+        "use the BESS Spare Parts Cross-Reference tool"
       ]
     }
   ]
