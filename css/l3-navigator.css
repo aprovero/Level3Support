@@ -74,6 +74,11 @@
 }
 
 @media (max-width: 768px) {
+    .l3-nav-fab {
+        bottom: calc(65px + 1.25rem);
+        right: 1.25rem;
+    }
+
     .l3-nav-drawer {
         top: auto;
         bottom: -100vh;
@@ -114,6 +119,7 @@
     font-family: 'Outfit', sans-serif;
     font-size: 1.25rem;
     font-weight: 700;
+    color: #ffffff;
     display: flex;
     align-items: center;
     gap: 0.5rem;
