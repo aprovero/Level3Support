@@ -145,8 +145,11 @@
                 <div class="card-panel">
                     <div class="card-title"><i class="fas fa-cloud-upload-alt"></i> Upload CSV Files (2-3 recommended)</div>
                     <div class="upload-section" style="border:none; padding:0; background:transparent;">
-                        <div class="upload-input-container" style="margin-bottom:12px;">
-                            <input type="file" id="file-input" accept=".csv" class="file-input" style="width:100%;">
+                        <div class="upload-input-container" style="margin-bottom:16px;">
+                            <label for="file-input" class="custom-file-upload">
+                                <i class="fas fa-file-csv"></i> Choose CSV Parameter File
+                            </label>
+                            <input type="file" id="file-input" accept=".csv" style="display: none;">
                         </div>
                         <p style="color: var(--primary-color); margin-bottom: 16px; font-size: 0.9rem;">
                             Upload your parameter files to compare settings and identify differences.

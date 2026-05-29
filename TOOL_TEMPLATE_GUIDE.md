@@ -58,7 +58,9 @@ graph TD
     E --> F[Live Canvas / Visual Area *Optional*]
     F --> G[Result Viewport Panel *Pass-Fail or Neutral*]
     G --> H[Assumptions & Math Basis Box]
-    H --> I[Standardized Brand Footer]
+    H --> I[Resources Card *Dynamic*]
+    I --> J[Engineering Module Info Box *Optional*]
+    J --> K[Standardized Brand Footer]
 ```
 
 ### 1. Navigation & Brand Header
@@ -92,7 +94,13 @@ There are two distinct result presentation modes:
 ### 6. Assumptions & Sizing Logic Box (`.assumptions-box`)
 A standardized premium light-blue card (`.assumptions-box`) featuring an electric-blue left border, placed at the base of the inputs to detail the calculations, mathematical formulas, and scientific standards utilized behind the scenes. Excellent for transparency and engineering reference.
 
-### 7. Brand Footer (`.footer`)
+### 7. Dynamic Resources Card (`#tool-resources-card-section`)
+A dynamically injected card containing official references, standards, and safety usage notes for the specific tool. This card is rendered automatically at the bottom of the tool page, keeping the primary interface clean and focused.
+
+### 8. Engineering Module Info Box
+An optional panel containing device metadata, api hooks, hardware compatibility, and deployment status. It is dynamically relocated to sit cleanly at the absolute bottom of the page, immediately *below* the Resources card, to ensure the tool's core operations flow completely uninterrupted.
+
+### 9. Standardized Brand Footer (`.footer`)
 Every page wraps up with a high-fidelity dark footer (`background: #0f172a`) that lists:
 *   Copyright notice.
 *   "Powered by aprovero" logo with interactive hover transparency.
