@@ -237,7 +237,15 @@
       <button id="export-json-btn" class="button-secondary" style="width: auto; margin-top: 0;"><i class="fas fa-file-export"></i> Export JSON</button>
     </div>
 
-        
+        <!-- Assumptions / Engineering Logic Card -->
+    <div class="assumptions-box" style="margin-top: 24px;">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Grid Excursion Ride-Through Standards</div>
+      <ul class="assumptions-list">
+        <li><strong>IEEE 1547-2018:</strong> Standard for Interconnection and Interoperability of Distributed Energy Resources with Associated Transmission Systems Interfaces. Defines standard ride-through and trip requirements.</li>
+        <li><strong>NERC PRC-024-3:</strong> Generator Frequency and Voltage Protective Relay Settings. Ensures generators remain connected during grid voltage and frequency excursions.</li>
+        <li><strong>Deviation Calculation:</strong> Voltage Deviation (%) = ((Measured − Nominal) / Nominal) × 100. Frequency Excursion (Hz) = Measured − Nominal.</li>
+      </ul>
+    </div>
   </div>
 
     <!-- Footer -->

@@ -111,20 +111,6 @@
     .status-fail { background: #fee2e2; color: #b91c1c; }
     .status-review { background: #ede9fe; color: #6d28d9; }
     .status-na { background: #f1f5f9; color: #64748b; }
-    .safety-warning {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-left: 4px solid #f97316;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin-bottom: 20px;
-      display: flex;
-      gap: 12px;
-      
-    }
-    .safety-warning i { color: #ea580c; font-size: 1.1rem; margin-top: 2px; flex-shrink: 0; }
-    .safety-warning-title { font-weight: 700; font-size: 0.9rem; color: #9a3412; margin-bottom: 4px; }
-    .safety-warning p { font-size: 0.85rem; color: #7c2d12; margin: 0; line-height: 1.5; }
     .summary-card {
       background: var(--background-dark);
       border: 1px solid var(--border-color);
@@ -229,7 +215,7 @@
     @media print {
       body { background: white !important; color: black !important; }
       .etf-container { box-shadow: none; padding: 0; margin: 0; max-width: 100%; }
-      .back-link, .btn-row, .btn-add-row, td button, .print-hide, .safety-warning { display: none !important; }
+      .back-link, .btn-row, .btn-add-row, td button, .print-hide, .warning-box { display: none !important; }
       .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
         border: none !important; background: transparent !important;
         pointer-events: none !important; padding: 0 !important;
