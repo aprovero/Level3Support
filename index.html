@@ -49,7 +49,7 @@
                 </a>
             </nav>
             <div class="sidebar-footer">
-                <div class="version-tag">v2.1.9</div>
+                <div class="version-tag">v4.0.1</div>
                 <div class="sidebar-powered">
                     <span>Powered by</span>
                     <img src="images/APROVERO_LOGO.png" alt="aprovero" class="sidebar-partner-logo">
@@ -415,7 +415,7 @@
 
             <!-- Muted Global Footer -->
             <footer class="global-footer">
-                <div class="mobile-footer-text">&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED. v2.1.8</div>
+                <div class="mobile-footer-text">&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED. v4.0.1</div>
                 <div class="mobile-footer-powered">Powered by aprovero</div>
             </footer>
         </div>
@@ -448,6 +448,7 @@
     <!-- Embed Font & Styling and Router CSS -->
     <link rel="stylesheet" href="css/core.css?v=1" />
     <link rel="stylesheet" href="css/components.css?v=1" />
+    <link rel="stylesheet" href="css/l3-navigator.css" />
     <style>
         /* ── Unified OS-Style ToolHub Layout CSS ── */
         :root {
@@ -1751,8 +1752,57 @@
             }
         }
     </style>
+    <!-- L3 Navigator Floating Action Button -->
+    <div id="l3-nav-fab" class="l3-nav-fab" title="L3 Navigator">
+        <i class="fas fa-bolt"></i>
+    </div>
+
+    <!-- L3 Navigator Drawer & Overlay -->
+    <div id="l3-nav-overlay" class="l3-nav-overlay">
+        <div class="l3-nav-drawer" id="l3-nav-drawer">
+            <div class="l3-nav-header">
+                <div class="l3-nav-header-top">
+                    <h3 class="l3-nav-title"><i class="fas fa-bolt"></i> L3 Navigator</h3>
+                    <button class="l3-nav-close" id="l3-nav-close"><i class="fas fa-times"></i></button>
+                </div>
+                <p class="l3-nav-subtitle">Tell me what you're trying to do and I'll point you to the right tool.</p>
+            </div>
+            
+            <div class="l3-nav-body">
+                <!-- Search Input -->
+                <div class="l3-nav-input-wrapper">
+                    <i class="fas fa-magic"></i>
+                    <input type="text" id="l3-nav-input" class="l3-nav-input" placeholder="e.g. I need to size a PV string..." autocomplete="off">
+                </div>
+                
+                <!-- Example Prompts -->
+                <div class="l3-nav-examples" id="l3-nav-examples-container">
+                    <div class="l3-nav-examples-title">Suggested</div>
+                    <div class="l3-nav-chip">I need to size a PV string</div>
+                    <div class="l3-nav-chip">I need to check insulation resistance</div>
+                    <div class="l3-nav-chip">I need a transformer test form</div>
+                    <div class="l3-nav-chip">I need to calculate BESS cable size</div>
+                    <div class="l3-nav-chip">I need a LOTO checklist</div>
+                    <div class="l3-nav-chip">I need a daily commissioning report</div>
+                </div>
+
+                <!-- Results Container -->
+                <div class="l3-nav-results" id="l3-nav-results-container">
+                    <div class="l3-nav-results-title" id="l3-nav-results-title">Top Matches</div>
+                    <div id="l3-nav-results"></div>
+                </div>
+                
+                <!-- Empty State -->
+                <div class="l3-nav-empty" id="l3-nav-empty">
+                    <i class="fas fa-search-minus"></i>
+                    <p>No matching tools found. Try describing what you want to achieve differently.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Load refactored OS-Style javascript router & behavior -->
+    <script src="js/l3-navigator.js"></script>
     <script src="js/tool-resources.js?v=35"></script>
     <script src="js/tools-hub.js?v=35"></script>
     <script>
