@@ -349,7 +349,24 @@ label {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    position: relative;
 }
+
+.input-group .field-note {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 2px !important;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.input-row:has(.field-note),
+.input-row-3:has(.field-note) {
+    margin-bottom: 28px !important;
+}
+
 
 /* Bottom-align grid cells in all input-row variants so inputs line up
    even when labels wrap to different heights — fix applies to all tools */

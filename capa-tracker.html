@@ -116,25 +116,6 @@
     </div>
 
 
-    <!-- Filter Bar -->
-    <div style="background: #f8fafc; padding: 16px; border-radius: var(--border-radius-md); border: 1px solid var(--border-color); margin-bottom: 24px; display: flex; gap: 12px; flex-wrap: wrap; ">
-      <span style="font-weight: bold; font-size: 0.9rem;">Filter actions:</span>
-      <select id="filter-priority" style="width: auto; height: 36px; padding: 4px 8px; margin: 0;">
-        <option value="all">All Priorities</option>
-        <option value="Critical">Critical</option>
-        <option value="High">High</option>
-        <option value="Medium">Medium</option>
-        <option value="Low">Low</option>
-      </select>
-      <select id="filter-status" style="width: auto; height: 36px; padding: 4px 8px; margin: 0;">
-        <option value="all">All Statuses</option>
-        <option value="Open">Open</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Closed">Closed</option>
-        <option value="Verified">Verified</option>
-      </select>
-      <button id="export-csv-btn" class="button-secondary" style="width: auto; margin-top: 0; height: 36px; min-height: auto; padding: 4px 12px;"><i class="fas fa-file-csv"></i> Export CSV</button>
-    </div>
 
     <!-- Action Log Entry Form -->
     <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
@@ -222,7 +203,29 @@
     </div>
 
     <!-- Active Actions Table -->
-    <h3 style="margin-top: 24px; font-family: 'Outfit';">Action Log Summary</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 32px; margin-bottom: 12px;">
+      <h3 style="margin: 0; font-family: 'Outfit';">Action Log Summary</h3>
+      
+      <!-- Filter Bar -->
+      <div style="background: #f8fafc; padding: 8px 16px; border-radius: var(--border-radius-md); border: 1px solid var(--border-color); display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+        <span style="font-weight: bold; font-size: 0.85rem; color: var(--text-secondary);">Filter actions:</span>
+        <select id="filter-priority" style="width: auto; height: 32px; padding: 2px 8px; margin: 0; font-size: 0.8rem;">
+          <option value="all">All Priorities</option>
+          <option value="Critical">Critical</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+        <select id="filter-status" style="width: auto; height: 32px; padding: 2px 8px; margin: 0; font-size: 0.8rem;">
+          <option value="all">All Statuses</option>
+          <option value="Open">Open</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Closed">Closed</option>
+          <option value="Verified">Verified</option>
+        </select>
+        <button id="export-csv-btn" class="button-secondary" style="width: auto; margin-top: 0; height: 32px; min-height: auto; padding: 2px 12px; font-size: 0.8rem;"><i class="fas fa-file-csv"></i> Export CSV</button>
+      </div>
+    </div>
     <div style="overflow-x: auto;">
       <table class="action-table" id="action-table">
         <thead>

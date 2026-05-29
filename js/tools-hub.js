@@ -583,7 +583,7 @@ function toggleFavorite(toolId) {
 function trackRecentTool(toolId) {
     // Only track valid IDs and non-legacy tools
     const tool = allTools.find(t => t.id === toolId);
-    if (!tool || tool.status === "Legacy") return;
+    if (!tool || ["Legacy", "Archived", "Hidden", "Disabled"].includes(tool.status)) return;
 
     // Remove duplicates
     recentTools = recentTools.filter(id => id !== toolId);
@@ -832,7 +832,7 @@ function filterLibrary() {
 
     const filtered = allTools.filter(tool => {
         // Exclude legacy tools entirely from the active Tool Library unless specifically showing Legacy category
-        if (tool.status === "Legacy" && activeLibraryCategory !== "legacy-archive") return false;
+        if (["Legacy", "Archived", "Hidden", "Disabled"].includes(tool.status) && activeLibraryCategory !== "legacy-archive") return false;
 
         // 1. Chip Category check
         const cleanCat = tool.category.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -1040,7 +1040,7 @@ function filterReference() {
     grid.innerHTML = '';
 
     const filtered = allTools.filter(tool => {
-        if (tool.status === "Legacy") return false;
+        if (["Legacy", "Archived", "Hidden", "Disabled"].includes(tool.status)) return false;
 
         // Must be Reference Guides or convert/decode tags
         const isRef = tool.category === "Reference Guides" || 
@@ -1107,7 +1107,7 @@ function filterReports() {
     grid.innerHTML = '';
 
     const filtered = allTools.filter(tool => {
-        if (tool.status === "Legacy") return false;
+        if (["Legacy", "Archived", "Hidden", "Disabled"].includes(tool.status)) return false;
 
         // Must be reports, templates, or electrical test forms
         const isReport = tool.category === "Reports & Templates" || 
