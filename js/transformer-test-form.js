@@ -1111,6 +1111,8 @@
         <div class="input-group"><label for="tx-witness-name">Customer / Witness Name</label><input type="text" id="tx-witness-name" placeholder="Full name"></div>
         <div class="input-group"><label>Witness Signature</label><div class="sig-placeholder">Signature field</div></div>
         <div class="input-group"><label for="tx-witness-date">Date</label><input type="date" id="tx-witness-date"></div>
+      </div>
+      <div class="input-row" style="margin-top:14px;border-top:1px solid var(--border-color);padding-top:14px;">
         <div class="input-group">
           <label for="tx-final-status">Final Status</label>
           <select id="tx-final-status">

@@ -796,7 +796,7 @@ window.GLOBAL_HUB_RESOURCES = [
     {
         title: "2. Electrical Safety, LOTO & HSE",
         description: "References used for pre-task planning, LOTO, energized work controls, arc-flash awareness, BESS safety checks, and site safety documentation.",
-        tools: ["BESS Pre-Energization Checklist", "Safety Pre-Task Plan / JHA Form", "LOTO Checklist Generator", "Inverter Start-Up Checklist", "Battery Rack Container Inspection", "LOTO Verification Checklist", "Arc Flash Boundary Calculator", "Daily Commissioning Progress Report"],
+        tools: ["BESS Pre-Energization Checklist", "Safety Pre-Task Plan / JHA Form", "Inverter Start-Up Checklist", "Battery Rack Container Inspection", "LOTO Verification Checklist", "Arc Flash Boundary Calculator", "Daily Commissioning Progress Report"],
         references: [
             { name: "OSHA 1910.147", type: "Safety", desc: "Hazardous energy control requirements during servicing and maintenance." },
             { name: "NFPA 70E", type: "Safety", desc: "Electrical safety-related work practices, shock risk, arc-flash risk, energized work controls, and electrically safe work condition." },

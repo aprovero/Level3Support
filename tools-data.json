@@ -720,21 +720,7 @@
         "Field Work"
       ]
     },
-    {
-      "id": 42,
-      "name": "LOTO Checklist Generator",
-      "category": "HSE",
-      "status": "Under Review",
-      "description": "Lockout/Tagout energy isolation planning and zero-energy verification checklist aid.",
-      "url": "loto-checklist.html",
-      "tags": [
-        "LOTO",
-        "HSE",
-        "Electrical Safety",
-        "Isolation",
-        "Energization"
-      ]
-    },
+
     {
       "id": 43,
       "name": "Technical Documentation / Reference Search Tool",

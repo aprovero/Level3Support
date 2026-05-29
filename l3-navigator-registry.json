@@ -768,26 +768,7 @@
         "use the Safety Pre-Task Plan / JHA Form tool"
       ]
     },
-    {
-      "id": 42,
-      "name": "LOTO Checklist Generator",
-      "category": "HSE",
-      "url": "loto-checklist.html",
-      "description": "Lockout/Tagout energy isolation planning and zero-energy verification checklist aid.",
-      "keywords": [
-        "LOTO",
-        "HSE",
-        "Electrical Safety",
-        "Isolation",
-        "Energization"
-      ],
-      "aliases": [],
-      "useCases": [
-        "a LOTO checklist",
-        "verify lockout tagout",
-        "zero energy verification"
-      ]
-    },
+
     {
       "id": 43,
       "name": "Technical Documentation / Reference Search Tool",

@@ -99,7 +99,7 @@ HSE permits, punchlist managers, and field event documentation:
 *   **[RCA Template Builder](file:///c:/Users/aprov/OneDrive/Desktop/GitHub/Level3Support/rca-template-builder.html)**: Leads engineering teams through 5-Whys methodology to generate formal Root Cause Analysis incident summaries.
 *   **[Corrective Action Tracker / CAPA Log](file:///c:/Users/aprov/OneDrive/Desktop/GitHub/Level3Support/capa-tracker.html)**: Comprehensive tracker mapping corrective and preventive actions from punchlists, inspections, and audit actions.
 *   **[Safety Pre-Task Plan / JHA Form](file:///c:/Users/aprov/OneDrive/Desktop/GitHub/Level3Support/jha-pre-task-plan.html)**: Job Hazard Analysis wizard to review hazard controls, tool inspections, emergency procedures, and PPE before beginning field tasks.
-*   **[LOTO Checklist Generator](file:///c:/Users/aprov/OneDrive/Desktop/GitHub/Level3Support/loto-checklist.html)**: Custom Lockout-Tagout procedure assistant ensuring robust mechanical and electrical isolation sequences and zero-energy checks.
+*   **[LOTO Verification Checklist](file:///c:/Users/aprov/OneDrive/Desktop/GitHub/Level3Support/loto-checklist.html)**: Field checklist to verify lockout/tagout preparation, isolation points, zero-energy verification, and restoration readiness.
 
 ### 10. 📁 Legacy & References
 Reference frameworks and legacy support utilities preserved for backwards compatibility:

@@ -377,10 +377,24 @@ function ctPtRatioFormBuilder() {
   const root = document.getElementById('form-root');
   root.innerHTML = '';
 
+  // --- Safety Disclaimer (template guide §3: .warning-box) ---
+  const disclaimer = el('div', ['warning-box']);
+  disclaimer.innerHTML = `
+    <i class="fas fa-exclamation-triangle"></i>
+    <div>
+      <div class="warning-title">⚠ Field Use Disclaimer</div>
+      <p style="margin:0; font-size:0.85rem; line-height:1.55;">
+        This tool is a field reference aid only. All CT/PT ratio and polarity measurements must be performed by qualified electrical personnel in strict accordance with IEEE C57.13 and site-specific LOTO/safety procedures. Results do not supersede manufacturer specifications, protection relay settings sheets, or utility interconnection agreements. Always verify all recorded data against official commissioning records before energizing protection circuits.
+      </p>
+    </div>
+  `;
+  root.appendChild(disclaimer);
+
   const f = el('form', [], 'onsubmit="event.preventDefault();"');
 
   // --- Section 1: Site Metadata ---
   const sec1 = el('div', ['form-section']);
+  sec1.style.background = 'var(--background-dark)';
   sec1.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-file-contract" style="color:var(--primary-color);"></i> 1. Site & Nameplate Details</h3>
     <div class="input-row">
@@ -409,6 +423,7 @@ function ctPtRatioFormBuilder() {
 
   // --- Section 2: Limit Settings ---
   const sec2 = el('div', ['form-section']);
+  sec2.style.background = 'var(--background-dark)';
   sec2.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-cog" style="color:var(--primary-color);"></i> 2. Configuration & Tolerance Limits</h3>
     <div class="input-row">
@@ -437,6 +452,7 @@ function ctPtRatioFormBuilder() {
 
   // --- Section 3: Ratio Readings ---
   const sec3 = el('div', ['form-section']);
+  sec3.style.background = 'var(--background-dark)';
   sec3.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-chart-bar" style="color:var(--primary-color);"></i> 3. Test Ratio Measurements</h3>
     <div class="dynamic-table-wrapper">
@@ -465,6 +481,7 @@ function ctPtRatioFormBuilder() {
 
   // --- Summary Card & Approvals ---
   const sec4 = el('div', ['form-section']);
+  sec4.style.background = 'var(--background-dark)';
   sec4.innerHTML = `
     <h3 class="section-h3"><i class="fas fa-clipboard-check" style="color:var(--primary-color);"></i> 4. Evaluation Summary & Sign-Off</h3>
     <div class="summary-card">
@@ -505,6 +522,22 @@ function ctPtRatioFormBuilder() {
   f.appendChild(sec4);
 
   root.appendChild(f);
+
+  // --- Assumptions & Math Basis Box (template guide §6: .assumptions-box) ---
+  const assumptionsBox = el('div', ['assumptions-box']);
+  assumptionsBox.innerHTML = `
+    <div class="assumptions-title"><i class="fas fa-calculator"></i> Calculation Basis &amp; Standards</div>
+    <ul class="assumptions-list">
+      <li><strong>Ratio Error Formula:</strong> Error (%) = |Calculated Ratio &minus; Nominal Ratio| / Nominal Ratio &times; 100</li>
+      <li><strong>Calculated Ratio:</strong> Applied Primary Value &divide; Measured Secondary Value (same units per transformer class)</li>
+      <li><strong>Nominal Ratio:</strong> Nameplate Primary Rating &divide; Nameplate Secondary Rating</li>
+      <li><strong>Polarity Rule:</strong> Subtractive polarity is the standard for power-system instrument transformers. Additive or Reversed polarity is always a FAIL regardless of ratio error.</li>
+      <li><strong>Pass Criteria:</strong> Both conditions must hold &mdash; ratio error &le; tolerance limit AND polarity = Subtractive.</li>
+      <li><strong>Default Tolerance:</strong> 0.5% per IEEE C57.13 accuracy class requirements. Adjust to match the relay settings sheet for the specific protection zone.</li>
+      <li><strong>Acceptance Standard:</strong> IEEE C57.13 &mdash; Standard Requirements for Instrument Transformers (current & voltage classes).</li>
+    </ul>
+  `;
+  root.appendChild(assumptionsBox);
 
   // --- Dynamic Interactions & Logic ---
   let rowCount = 0;
