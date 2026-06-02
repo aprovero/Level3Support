@@ -184,38 +184,76 @@ const WORKFLOW_PACKS = [
 // Active State View Navigation Management
 const VIEWS = ["home", "tools", "workflows", "reference", "reports", "legacy", "resources"];
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('[ToolHub Refactor] Core Hub initializing...');
-    
-    // Load States from LocalStorage
-    favoriteTools = JSON.parse(localStorage.getItem(STORAGE_FAVORITES_KEY)) || [];
-    recentTools = JSON.parse(localStorage.getItem(STORAGE_RECENT_KEY)) || [];
-    
-    // Core Elements Loading
-    fetch('./tools-data.json')
-        .then(response => {
-            if (!response.ok) throw new Error(`Status ${response.status}`);
-            return response.json();
-        })
-        .then(data => {
-            allTools = data.tools || [];
-            console.log(`[Registry] Successfully parsed ${allTools.length} modules.`);
-            
-            // Execute Main Rendering
-            runToolHub();
-        })
-        .catch(error => {
-            console.error('[Registry] Fetch error. Loading fallback registry.', error);
-            loadFallbackData();
-            runToolHub();
-        });
+// LocalStorage key for the Supabase tools cache
+const STORAGE_TOOLS_CACHE_KEY = 'level3support_tools_cache';
+const STORAGE_TOOLS_CACHE_TS = 'level3support_tools_cache_ts';
+const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
-    // Initialize SPA Views Router
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('[ToolHub] Core Hub initializing...');
+
+    // Load user-preference states from LocalStorage
+    favoriteTools = JSON.parse(localStorage.getItem(STORAGE_FAVORITES_KEY)) || [];
+    recentTools   = JSON.parse(localStorage.getItem(STORAGE_RECENT_KEY))    || [];
+
+    // Initialize SPA Views Router & event listeners immediately (no data needed)
     initializeRouter();
-    
-    // Bind Event Listeners
     setupEventListeners();
+
+    // ── Offline-First loading strategy ─────────────────────────────
+    // 1. Serve from cache instantly so the page is never blank
+    const cachedTools = JSON.parse(localStorage.getItem(STORAGE_TOOLS_CACHE_KEY) || 'null');
+    if (cachedTools && cachedTools.length > 0) {
+        allTools = cachedTools;
+        console.log(`[Registry] Served ${allTools.length} tools from cache.`);
+        runToolHub();
+    }
+
+    // 2. Try Supabase (works online, silently updates cache)
+    let supabaseLoaded = false;
+    if (window.supabase) {
+        try {
+            const { data, error } = await supabase
+                .from('tools')
+                .select('*')
+                .order('id', { ascending: true });
+
+            if (!error && data && data.length > 0) {
+                allTools = data;
+                supabaseLoaded = true;
+                console.log(`[Registry] Loaded ${allTools.length} tools from Supabase.`);
+
+                // Persist fresh copy to localStorage for next offline visit
+                localStorage.setItem(STORAGE_TOOLS_CACHE_KEY, JSON.stringify(allTools));
+                localStorage.setItem(STORAGE_TOOLS_CACHE_TS, Date.now().toString());
+
+                // Re-render with fresh data (seamless update if cache was stale)
+                runToolHub();
+            } else if (error) {
+                console.warn('[Registry] Supabase error:', error.message);
+            }
+        } catch (e) {
+            console.warn('[Registry] Supabase unavailable (offline?):', e.message);
+        }
+    }
+
+    // 3. If no cache and no Supabase — fall back to local JSON, then hardcoded data
+    if (!supabaseLoaded && (!cachedTools || cachedTools.length === 0)) {
+        console.log('[Registry] No cache & Supabase unavailable. Trying tools-data.json...');
+        try {
+            const response = await fetch('./tools-data.json');
+            if (!response.ok) throw new Error(`Status ${response.status}`);
+            const data = await response.json();
+            allTools = data.tools || [];
+            console.log(`[Registry] Loaded ${allTools.length} tools from tools-data.json.`);
+        } catch (err) {
+            console.error('[Registry] All sources failed. Loading hardcoded fallback.', err);
+            loadFallbackData();
+        }
+        runToolHub();
+    }
 });
+
 
 /**
  * Main Orchestration of renders
@@ -771,6 +809,22 @@ function renderHomeView() {
         
         featuredTools.forEach(tool => {
             featGrid.innerHTML += buildToolCardHTML(tool);
+        });
+    }
+
+    // E. Render NEW Additions (new: true)
+    const newGrid = document.getElementById('new-additions-grid');
+    if (newGrid) {
+        newGrid.innerHTML = '';
+        let newTools = allTools.filter(t => t.new === true || (t.notes && t.notes.includes("new")));
+        
+        if (newTools.length === 0) {
+            // Dynamic fallback: grab the last 3 active/in progress tools added to the registry
+            newTools = allTools.filter(t => ["Active", "In Progress", "Under Review"].includes(t.status) && t.status !== "Legacy").slice(-3).reverse();
+        }
+        
+        newTools.forEach(tool => {
+            newGrid.innerHTML += buildToolCardHTML(tool);
         });
     }
 }

@@ -782,7 +782,7 @@ window.GLOBAL_HUB_RESOURCES = [
     {
         title: "1. Electrical Installation, Testing & Commissioning",
         description: "References used for PV commissioning, electrical test forms, startup procedures, cable sizing, insulation testing, grounding checks, and punchlist closeout.",
-        tools: ["Inverter Start-Up Checklist", "DC Voltage Sanity Check", "Electrical Test Forms", "Commissioning Punchlist Builder", "Cable Ampacity Calculator", "Voltage Drop Calculator", "PV String Sizer & VOC Calculator", "BESS Cable Sizing Calculator", "PV Insulation Resistance (Megger) Tester", "Transformer Turns Ratio (TTR) Form", "Daily Commissioning Progress Report"],
+        tools: ["Inverter Start-Up Checklist", "DC Voltage Sanity Check", "Electrical Test Forms", "Commissioning Punchlist Builder", "Cable Ampacity Calculator", "Voltage Drop Calculator", "PV String Sizer & VOC Calculator", "BESS Cable Sizing Calculator", "PV Megger Field Log", "Transformer Turns Ratio (TTR) Form", "Daily Commissioning Progress Report"],
         references: [
             { name: "IEC 62446-1", type: "Standard", desc: "PV system documentation, commissioning tests, inspection, verification, handover, and periodic testing." },
             { name: "NEC / NFPA 70", type: "Standard", desc: "Electrical installation requirements, conductor sizing, ampacity, overcurrent protection, grounding, bonding, and PV circuit requirements where applicable." },
@@ -826,7 +826,7 @@ window.GLOBAL_HUB_RESOURCES = [
     {
         title: "4. PV Performance, Testing & Soiling",
         description: "References used for PR calculations, weather correction, irradiance validation, string comparison, I-V curve interpretation, soiling loss, and customer reporting.",
-        tools: ["PV Performance Ratio Calculator", "Weather Correction Calculator for PV Testing", "Irradiance Sensor Cross-Check Tool", "String Current Imbalance Calculator", "IV Curve Test Result Log", "Soiling Loss Estimator", "Clean vs. Soiled String Comparison Tool", "Cleaning ROI Calculator", "Lost Energy from Soiling Calculator", "Soiling Customer Report Generator", "PV String Sizer & VOC Calculator", "PV Insulation Resistance (Megger) Tester", "Daily Commissioning Progress Report"],
+        tools: ["PV Performance Ratio Calculator", "Weather Correction Calculator for PV Testing", "Irradiance Sensor Cross-Check Tool", "String Current Imbalance Calculator", "IV Curve Test Result Log", "Soiling Loss Estimator", "Clean vs. Soiled String Comparison Tool", "Cleaning ROI Calculator", "Lost Energy from Soiling Calculator", "Soiling Customer Report Generator", "PV String Sizer & VOC Calculator", "PV Megger Field Log", "Daily Commissioning Progress Report"],
         references: [
             { name: "IEC 61724", type: "Standard", desc: "PV system performance monitoring, irradiance measurement, data quality, and performance indicators." },
             { name: "NREL Weather-Corrected Performance Ratio Method", type: "Engineering Guide", desc: "Reference method for normalizing PV performance against irradiance and temperature conditions." },

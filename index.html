@@ -128,8 +128,21 @@
 
                     <!-- Featured / Common Field Tools -->
                     <div class="home-section">
-                        <h2 class="home-section-title"><i class="fas fa-fire text-danger"></i> Essential Field Tools</h2>
+                        <div class="section-header-flex">
+                            <h2 class="home-section-title"><i class="fas fa-fire text-danger"></i> Essential Field Tools</h2>
+                            <a href="#tools" class="view-all-link">View All Tools <i class="fas fa-arrow-right"></i></a>
+                        </div>
                         <div id="featured-grid" class="tools-grid">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- NEW Additions -->
+                    <div class="home-section">
+                        <div class="section-header-flex">
+                            <h2 class="home-section-title"><i class="fas fa-star text-info" style="color: #0ea5e9;"></i> NEW Additions</h2>
+                        </div>
+                        <div id="new-additions-grid" class="tools-grid">
                             <!-- Injected dynamically -->
                         </div>
                     </div>
@@ -449,6 +462,9 @@
     <link rel="stylesheet" href="css/core.css?v=1" />
     <link rel="stylesheet" href="css/components.css?v=1" />
     <link rel="stylesheet" href="css/l3-navigator.css" />
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
     <style>
         /* ── Unified OS-Style ToolHub Layout CSS ── */
         :root {

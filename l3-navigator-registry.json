@@ -205,7 +205,7 @@
     },
     {
       "id": 12,
-      "name": "PV Insulation Resistance (Megger) Tester",
+      "name": "PV Megger Field Log",
       "category": "PV Field Tools",
       "url": "pv-megger-tester.html",
       "description": "Record PV insulation resistance test results and provide preliminary pass/fail based on user-entered acceptance criteria.",
@@ -452,7 +452,7 @@
     },
     {
       "id": 23,
-      "name": "Insulation Resistance Test Form",
+      "name": "Insulation Resistance Commissioning Form",
       "category": "Electrical Test Forms",
       "url": "electrical-test-forms.html?tool=insulation-resistance",
       "description": "Record insulation resistance test results for PV, BESS, AC, DC, and transformer circuits.",
