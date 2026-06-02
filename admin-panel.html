@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToolHub Admin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #f1f5f9; min-height: 100vh; }
+
+        /* ── Auth Screen ── */
+        .auth-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .auth-logo {
+            height: 48px;
+            width: auto;
+            margin-bottom: 1.75rem;
+            object-fit: contain;
+        }
+        .auth-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+        .auth-card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0f172a;
+            text-align: center;
+            margin-bottom: 0.4rem;
+        }
+        .auth-card p {
+            font-size: 0.88rem;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 0.4rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        .form-group input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .btn-login {
+            width: 100%;
+            padding: 0.8rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 0.5rem;
+        }
+        .btn-login:hover { background: #1d4ed8; }
+        .btn-login:disabled { background: #94a3b8; cursor: not-allowed; }
+        .error-msg {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            font-size: 0.83rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        /* ── Admin Dashboard ── */
+        .admin-wrapper { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .admin-header-left { display: flex; align-items: center; gap: 1rem; }
+        .admin-header-left img { height: 36px; }
+        .admin-header-left h1 { font-size: 1.3rem; font-weight: 700; color: #0f172a; }
+        .admin-header-left span { font-size: 0.8rem; color: #64748b; }
+        .btn-logout {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-logout:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+
+        .info-bar {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.85rem;
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ── Table ── */
+        .table-wrap {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: #f8fafc; }
+        th {
+            padding: 0.85rem 1.25rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th.center, td.center { text-align: center; }
+        td {
+            padding: 0.9rem 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.88rem;
+            color: #334155;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #f8fafc; }
+        .tool-name { font-weight: 600; color: #0f172a; }
+        .cat-badge {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ── Toggle Switch ── */
+        .toggle { position: relative; display: inline-block; width: 42px; height: 22px; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #cbd5e1;
+            border-radius: 22px;
+            transition: 0.3s;
+        }
+        .slider:before {
+            position: absolute; content: "";
+            height: 16px; width: 16px;
+            left: 3px; bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        input:checked + .slider { background: #10b981; }
+        input:checked + .slider:before { transform: translateX(20px); }
+        .toggle-featured input:checked + .slider { background: #f59e0b; }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- ── Login Screen ── -->
+    <div id="auth-section" class="auth-wrapper">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" class="auth-logo">
+        <div class="auth-card">
+            <h2><i class="fas fa-lock" style="color:#2563eb; font-size:1.1rem;"></i> Admin Login</h2>
+            <p>Log in to manage ToolHub</p>
+            <div class="error-msg" id="login-error"></div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-login" id="login-btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ── Admin Dashboard ── -->
+    <div id="admin-section" class="admin-wrapper hidden">
+        <div class="admin-header">
+            <div class="admin-header-left">
+                <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support">
+                <div>
+                    <h1>Tool Registry Manager</h1>
+                    <span>Changes apply instantly to all users</span>
+                </div>
+            </div>
+            <button class="btn-logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+
+        <div class="info-bar">
+            <i class="fas fa-info-circle"></i>
+            <strong>Essential</strong> tools appear in the Dashboard "Essential Field Tools" section. <strong>NEW</strong> tools appear in the "NEW Additions" section. Changes are live instantly.
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px;">#</th>
+                        <th>Tool Name</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th class="center" style="width:110px;">⭐ Essential</th>
+                        <th class="center" style="width:100px;">🆕 NEW</th>
+                    </tr>
+                </thead>
+                <tbody id="tools-tbody">
+                    <tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:2rem;">Loading tools...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/admin-panel.js"></script>
+</body>
+</html>
