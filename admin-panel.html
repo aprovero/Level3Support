@@ -187,6 +187,24 @@
         input:checked + .slider:before { transform: translateX(20px); }
         .toggle-featured input:checked + .slider { background: #f59e0b; }
 
+        /* ── Sort & Filter ── */
+        th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+        th.sortable:hover { background: #e2e8f0; }
+        .sort-icon { margin-left: 5px; font-size: 0.7rem; opacity: 0.4; }
+        th.sort-asc .sort-icon::after  { content: '▲'; opacity: 1; }
+        th.sort-desc .sort-icon::after { content: '▼'; opacity: 1; }
+        th:not(.sort-asc):not(.sort-desc) .sort-icon::after { content: '⇅'; }
+        .filter-row th { padding: 6px 8px; background: #f8fafc; }
+        .filter-row input, .filter-row select {
+            width: 100%; padding: 5px 8px;
+            border: 1px solid #e2e8f0; border-radius: 6px;
+            font-size: 0.8rem; color: #334155;
+            background: white; outline: none;
+        }
+        .filter-row input:focus, .filter-row select:focus { border-color: #2563eb; }
+        .filter-row select { cursor: pointer; }
+        .results-count { font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem; text-align: right; }
+
         .hidden { display: none; }
     </style>
 </head>
@@ -231,16 +249,52 @@
             <strong>Essential</strong> tools appear in the Dashboard "Essential Field Tools" section. <strong>NEW</strong> tools appear in the "NEW Additions" section. Changes are live instantly.
         </div>
 
+        <div id="results-count" class="results-count"></div>
         <div class="table-wrap">
-            <table>
+            <table id="admin-table">
                 <thead>
-                    <tr>
+                    <!-- Sort row -->
+                    <tr id="sort-row">
                         <th style="width:40px;">#</th>
-                        <th>Tool Name</th>
-                        <th>Category</th>
-                        <th>Status</th>
-                        <th class="center" style="width:110px;">⭐ Essential</th>
-                        <th class="center" style="width:100px;">🆕 NEW</th>
+                        <th class="sortable" data-col="name">Tool Name <span class="sort-icon"></span></th>
+                        <th class="sortable" data-col="category">Category <span class="sort-icon"></span></th>
+                        <th class="sortable" data-col="status">Status <span class="sort-icon"></span></th>
+                        <th class="center sortable" data-col="featured" style="width:110px;">⭐ Essential <span class="sort-icon"></span></th>
+                        <th class="center sortable" data-col="new" style="width:100px;">🆕 NEW <span class="sort-icon"></span></th>
+                    </tr>
+                    <!-- Filter row -->
+                    <tr class="filter-row">
+                        <th></th>
+                        <th><input type="text" id="filter-name" placeholder="🔍 Search name..."></th>
+                        <th>
+                            <select id="filter-category">
+                                <option value="">All Categories</option>
+                            </select>
+                        </th>
+                        <th>
+                            <select id="filter-status">
+                                <option value="">All Statuses</option>
+                                <option value="Active">Active</option>
+                                <option value="Under Review">Under Review</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Legacy">Legacy</option>
+                                <option value="Archived">Archived</option>
+                            </select>
+                        </th>
+                        <th class="center">
+                            <select id="filter-featured">
+                                <option value="">All</option>
+                                <option value="true">⭐ Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </th>
+                        <th class="center">
+                            <select id="filter-new">
+                                <option value="">All</option>
+                                <option value="true">🆕 Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </th>
                     </tr>
                 </thead>
                 <tbody id="tools-tbody">
