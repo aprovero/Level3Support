@@ -8,6 +8,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     const loginError   = document.getElementById('login-error');
     const resultsCount = document.getElementById('results-count');
 
+    // ── Edit Panel Selectors ───────────────────────────────────
+    const editOverlay      = document.getElementById('edit-overlay');
+    const editPanel        = document.getElementById('edit-panel');
+    const editForm         = document.getElementById('edit-tool-form');
+    const btnClosePanel    = document.getElementById('btn-close-panel');
+    const btnCancelEdit    = document.getElementById('btn-cancel-edit');
+    const editToolId       = document.getElementById('edit-tool-id');
+    const editToolIdLabel  = document.getElementById('edit-tool-id-label');
+    const editName         = document.getElementById('edit-name');
+    const editCategory     = document.getElementById('edit-category');
+    const editStatus       = document.getElementById('edit-status');
+    const editDescription  = document.getElementById('edit-description');
+    const editTags         = document.getElementById('edit-tags');
+    const editNotes        = document.getElementById('edit-notes');
+    const saveStatus       = document.getElementById('save-status');
+
     // ── State ──────────────────────────────────────────────────
     let allTools   = [];
     let sortCol    = 'id';
@@ -68,7 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ── 4. Load tools from Supabase ────────────────────────────
     async function loadTools() {
-        toolsTbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:2rem;">Loading tools...</td></tr>';
+        toolsTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:2rem;">Loading tools...</td></tr>';
         try {
             const { data, error } = await supabase.from('tools').select('*').order('id', { ascending: true });
             if (error) throw error;
@@ -77,13 +93,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             bindFiltersAndSort();
             renderTable();
         } catch (err) {
-            toolsTbody.innerHTML = `<tr><td colspan="6" style="color:#dc2626; text-align:center; padding:2rem;">Error: ${err.message}</td></tr>`;
+            toolsTbody.innerHTML = `<tr><td colspan="7" style="color:#dc2626; text-align:center; padding:2rem;">Error: ${err.message}</td></tr>`;
         }
     }
 
     // ── 5. Populate category dropdown dynamically ──────────────
     function populateCategoryFilter() {
         const select = document.getElementById('filter-category');
+        // Clear previous options except the first one
+        select.innerHTML = '<option value="">All Categories</option>';
         const cats = [...new Set(allTools.map(t => t.category))].sort();
         cats.forEach(cat => {
             const opt = document.createElement('option');
@@ -161,7 +179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         if (filtered.length === 0) {
-            toolsTbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:2rem;">No tools match your filters.</td></tr>';
+            toolsTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:2rem;">No tools match your filters.</td></tr>';
             return;
         }
 
@@ -186,6 +204,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <span class="slider"></span>
                     </label>
                 </td>
+                <td>
+                    <button class="btn-edit" onclick="openEditPanel(${tool.id})"><i class="fas fa-edit"></i> Edit</button>
+                </td>
             `;
             toolsTbody.appendChild(tr);
         });
@@ -208,4 +229,91 @@ document.addEventListener('DOMContentLoaded', async () => {
             renderTable();
         }
     };
+
+    // ── 9. Edit Panel Logic ────────────────────────────────────
+    window.openEditPanel = function(id) {
+        const tool = allTools.find(t => t.id === id);
+        if (!tool) return;
+
+        // Clear status
+        saveStatus.className = 'save-status';
+        saveStatus.textContent = '';
+
+        // Fill form
+        editToolId.value = tool.id;
+        editToolIdLabel.textContent = `Tool ID: ${tool.id}`;
+        editName.value = tool.name || '';
+        editCategory.value = tool.category || '';
+        editStatus.value = tool.status || 'Active';
+        editDescription.value = tool.description || '';
+        editTags.value = Array.isArray(tool.tags) ? tool.tags.join(', ') : '';
+        editNotes.value = tool.notes || '';
+
+        // Show panel
+        editOverlay.classList.add('open');
+        editPanel.classList.add('open');
+    };
+
+    function closeEditPanel() {
+        editOverlay.classList.remove('open');
+        editPanel.classList.remove('open');
+    }
+
+    btnClosePanel.addEventListener('click', closeEditPanel);
+    btnCancelEdit.addEventListener('click', closeEditPanel);
+    editOverlay.addEventListener('click', closeEditPanel);
+
+    editForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = parseInt(editToolId.value, 10);
+        if (isNaN(id)) return;
+
+        saveStatus.className = 'save-status';
+        saveStatus.textContent = 'Saving...';
+        document.getElementById('btn-save-tool').disabled = true;
+
+        // Parse comma-separated tags
+        const tagsArray = editTags.value
+            .split(',')
+            .map(t => t.trim())
+            .filter(t => t.length > 0);
+
+        const updateData = {
+            name: editName.value.trim(),
+            category: editCategory.value.trim(),
+            status: editStatus.value,
+            description: editDescription.value.trim(),
+            tags: tagsArray,
+            notes: editNotes.value.trim()
+        };
+
+        try {
+            const { error } = await supabase.from('tools').update(updateData).eq('id', id);
+            if (error) throw error;
+
+            // Update in-memory state
+            const tool = allTools.find(t => t.id === id);
+            if (tool) {
+                Object.assign(tool, updateData);
+            }
+
+            saveStatus.className = 'save-status ok';
+            saveStatus.textContent = 'Changes saved successfully!';
+            
+            // Re-populate category filter list in case category changed
+            populateCategoryFilter();
+            renderTable();
+
+            setTimeout(() => {
+                closeEditPanel();
+            }, 1000);
+
+        } catch (err) {
+            console.error('[Admin] Save failed:', err);
+            saveStatus.className = 'save-status err';
+            saveStatus.textContent = `Error: ${err.message}`;
+        } finally {
+            document.getElementById('btn-save-tool').disabled = false;
+        }
+    });
 });

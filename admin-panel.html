@@ -205,6 +205,94 @@
         .filter-row select { cursor: pointer; }
         .results-count { font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem; text-align: right; }
 
+        /* ── Edit Button ── */
+        .btn-edit {
+            background: #f1f5f9; border: 1px solid #e2e8f0;
+            color: #475569; border-radius: 6px;
+            padding: 4px 10px; font-size: 0.78rem; font-weight: 600;
+            cursor: pointer; transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .btn-edit:hover { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+
+        /* ── Edit Slide Panel ── */
+        .edit-overlay {
+            position: fixed; inset: 0;
+            background: rgba(15,23,42,0.4);
+            z-index: 200;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.25s;
+        }
+        .edit-overlay.open { opacity: 1; pointer-events: all; }
+        .edit-panel {
+            position: fixed; top: 0; right: -520px; width: 480px; max-width: 95vw;
+            height: 100vh; background: white;
+            box-shadow: -8px 0 32px rgba(0,0,0,0.12);
+            z-index: 201; display: flex; flex-direction: column;
+            transition: right 0.3s cubic-bezier(0.4,0,0.2,1);
+            overflow: hidden;
+        }
+        .edit-panel.open { right: 0; }
+        .edit-panel-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex; justify-content: space-between; align-items: center;
+            background: #f8fafc;
+        }
+        .edit-panel-header h3 { font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0; }
+        .edit-panel-header span { font-size: 0.78rem; color: #64748b; }
+        .btn-close-panel {
+            background: none; border: none; font-size: 1.1rem;
+            color: #94a3b8; cursor: pointer; padding: 4px 8px;
+            border-radius: 4px; transition: all 0.15s;
+        }
+        .btn-close-panel:hover { background: #f1f5f9; color: #0f172a; }
+        .edit-panel-body { flex: 1; overflow-y: auto; padding: 1.5rem; }
+        .edit-field { margin-bottom: 1.25rem; }
+        .edit-field label {
+            display: block; font-size: 0.78rem; font-weight: 700;
+            color: #475569; text-transform: uppercase; letter-spacing: 0.04em;
+            margin-bottom: 0.4rem;
+        }
+        .edit-field input, .edit-field select, .edit-field textarea {
+            width: 100%; padding: 0.6rem 0.875rem;
+            border: 1px solid #cbd5e1; border-radius: 8px;
+            font-size: 0.88rem; color: #0f172a;
+            font-family: inherit; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+        .edit-field input:focus, .edit-field select:focus, .edit-field textarea:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+        .edit-field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+        .edit-field .hint { font-size: 0.75rem; color: #94a3b8; margin-top: 0.3rem; }
+        .edit-panel-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex; gap: 0.75rem; justify-content: flex-end;
+            background: #f8fafc;
+        }
+        .btn-save {
+            background: #2563eb; color: white; border: none;
+            border-radius: 8px; padding: 0.6rem 1.5rem;
+            font-size: 0.9rem; font-weight: 600; cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-save:hover { background: #1d4ed8; }
+        .btn-save:disabled { background: #94a3b8; cursor: not-allowed; }
+        .btn-cancel {
+            background: white; color: #475569;
+            border: 1px solid #cbd5e1; border-radius: 8px;
+            padding: 0.6rem 1.25rem; font-size: 0.9rem;
+            font-weight: 600; cursor: pointer; transition: all 0.15s;
+        }
+        .btn-cancel:hover { background: #f1f5f9; }
+        .save-status { font-size: 0.82rem; align-self: center; }
+        .save-status.ok   { color: #10b981; }
+        .save-status.err  { color: #dc2626; }
+
         .hidden { display: none; }
     </style>
 </head>
@@ -261,6 +349,7 @@
                         <th class="sortable" data-col="status">Status <span class="sort-icon"></span></th>
                         <th class="center sortable" data-col="featured" style="width:110px;">⭐ Essential <span class="sort-icon"></span></th>
                         <th class="center sortable" data-col="new" style="width:100px;">🆕 NEW <span class="sort-icon"></span></th>
+                        <th style="width:60px;"></th>
                     </tr>
                     <!-- Filter row -->
                     <tr class="filter-row">
@@ -295,6 +384,7 @@
                                 <option value="false">No</option>
                             </select>
                         </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="tools-tbody">
@@ -302,6 +392,59 @@
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- ── Edit Slide Panel ── -->
+    <div id="edit-overlay" class="edit-overlay"></div>
+    <div id="edit-panel" class="edit-panel">
+        <div class="edit-panel-header">
+            <div>
+                <h3>Edit Tool Info</h3>
+                <span id="edit-tool-id-label">Tool ID: </span>
+            </div>
+            <button class="btn-close-panel" id="btn-close-panel"><i class="fas fa-times"></i></button>
+        </div>
+        <form id="edit-tool-form">
+            <input type="hidden" id="edit-tool-id">
+            <div class="edit-panel-body">
+                <div class="edit-field">
+                    <label for="edit-name">Name</label>
+                    <input type="text" id="edit-name" required>
+                </div>
+                <div class="edit-field">
+                    <label for="edit-category">Category</label>
+                    <input type="text" id="edit-category" required>
+                </div>
+                <div class="edit-field">
+                    <label for="edit-status">Status</label>
+                    <select id="edit-status" required>
+                        <option value="Active">Active</option>
+                        <option value="Under Review">Under Review</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Legacy">Legacy</option>
+                        <option value="Archived">Archived</option>
+                    </select>
+                </div>
+                <div class="edit-field">
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" required></textarea>
+                </div>
+                <div class="edit-field">
+                    <label for="edit-tags">Tags</label>
+                    <input type="text" id="edit-tags" placeholder="e.g. tag1, tag2, tag3">
+                    <div class="hint">Comma-separated tags</div>
+                </div>
+                <div class="edit-field">
+                    <label for="edit-notes">Notes</label>
+                    <textarea id="edit-notes"></textarea>
+                </div>
+            </div>
+            <div class="edit-panel-footer">
+                <span id="save-status" class="save-status"></span>
+                <button type="button" class="btn-cancel" id="btn-cancel-edit">Cancel</button>
+                <button type="submit" class="btn-save" id="btn-save-tool">Save Changes</button>
+            </div>
+        </form>
     </div>
 
     <!-- Supabase -->
