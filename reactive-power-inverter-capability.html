@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reactive Power & Inverter Capability Tool — Level3Support</title>
+  <link rel="stylesheet" href="css/core.css?v=1" />
+  <link rel="stylesheet" href="css/components.css?v=1" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .canvas-container {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      
+      margin-top: 24px;
+      min-height: 250px;
+    }
+    canvas {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="placeholder-container">
+        <a href="index.html#tools" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
+
+<div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+
+    
+
+    
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ GRID & CONTROLS</div>
+    </div>
+
+    
+
+    
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                        Reactive Power & Inverter Capability Tool
+                    </h1>
+                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+                        Interactive solver and live visualization tool showing the relationship between active power P, reactive power Q, apparent power S, power factor PF, and phase angle φ.
+                    </p>
+                </div>
+                <div class="tool-meta">
+                    <span class="tile-category" style="background:#ecfdf5; color:#047857; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">🌐 Grid & Controls</span>
+                    <span class="status-badge" style="background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Under Review</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+
+    <!-- Mode Selector -->
+    <div style="background: #f8fafc; padding: 16px; border-radius: var(--border-radius-md); border: 1px solid var(--border-color); margin-bottom: 24px;">
+      <label for="solve-mode" style="margin-top: 0; font-weight: bold; font-size: 0.95rem;">Solve / Input Method:</label>
+      <select id="solve-mode" style="height: 42px; margin-bottom: 0;">
+        <option value="pq" selected>Solve from Active Power (P) & Reactive Power (Q)</option>
+        <option value="ppf">Solve from Active Power (P) & Power Factor (PF)</option>
+        <option value="spf">Solve from Apparent Power (S) & Power Factor (PF)</option>
+        <option value="pangle">Solve from Active Power (P) & Phase Angle (φ)</option>
+      </select>
+    </div>
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <div class="input-row">
+        <div class="input-group" id="input-p-group">
+          <label for="power-p">Active Power (P)</label>
+          <div class="input-with-unit">
+            <input type="number" id="power-p" placeholder="e.g. 100" step="any" value="100">
+            <select id="power-p-unit" style="width: 80px; border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+              <option value="kW">kW</option>
+              <option value="MW">MW</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group" id="input-q-group">
+          <label for="power-q">Reactive Power (Q)</label>
+          <div class="input-with-unit">
+            <input type="number" id="power-q" placeholder="e.g. 50" step="any" value="50">
+            <select id="power-q-unit" style="width: 80px; border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+              <option value="kvar">kvar</option>
+              <option value="Mvar">Mvar</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group" id="input-s-group" style="display: none;">
+          <label for="power-s">Apparent Power (S)</label>
+          <div class="input-with-unit">
+            <input type="number" id="power-s" placeholder="e.g. 120" step="any">
+            <select id="power-s-unit" style="width: 80px; border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+              <option value="kVA">kVA</option>
+              <option value="MVA">MVA</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group" id="input-pf-group" style="display: none;">
+          <label for="power-pf">Power Factor (PF)</label>
+          <input type="number" id="power-pf" placeholder="e.g. 0.90" step="any" min="0" max="1" value="0.90">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group" id="input-angle-group" style="display: none;">
+          <label for="power-angle">Phase Angle (φ)</label>
+          <div class="input-with-unit">
+            <input type="number" id="power-angle" placeholder="e.g. 25.8" step="any" min="0" max="90">
+            <div class="input-unit">degrees</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="pf-type">Leading / Lagging</label>
+          <select id="pf-type">
+            <option value="lagging">Lagging / Inductive (+Q upward)</option>
+            <option value="leading">Leading / Capacitive (-Q downward)</option>
+          </select>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Optional Three-Phase Current Calculator</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="voltage-ll">Line-to-Line Voltage</label>
+          <div class="input-with-unit">
+            <input type="number" id="voltage-ll" placeholder="e.g. 480" step="any">
+            <select id="voltage-unit" style="width: 80px; border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+              <option value="V">V</option>
+              <option value="kV">kV</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group"></div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+      </div>
+    </div>
+
+    <!-- Live Drawing Visualization -->
+    <div class="canvas-container">
+      <canvas id="triangle-canvas" width="450" height="250"></canvas>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel neutral" style="display: block; margin-top: 24px;">
+      <div class="result-header">
+        <span>Power Triangle Outputs</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Active Power (P):</span>
+        <span id="res-p" style="font-weight: 600;">100.00 kW</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Reactive Power (Q):</span>
+        <span id="res-q" style="font-weight: 600;">50.00 kvar</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Apparent Power (S):</span>
+        <span id="res-s" style="font-weight: 600;">111.80 kVA</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Power Factor (PF):</span>
+        <span id="res-pf" style="font-weight: 600;">0.894 (Lagging)</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Phase Angle (φ):</span>
+        <span id="res-angle" style="font-weight: 600;">26.57°</span>
+      </div>
+      <div id="current-calc-row" class="result-row" style="margin-bottom: 8px; display: none; justify-content: space-between; border-top: 1px dashed var(--border-color); padding-top: 8px; margin-top: 8px;">
+        <span style="font-weight: bold;">Estimated 3-Phase Current (I):</span>
+        <span id="res-current" style="font-weight: bold; color: var(--primary-color);">--</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Summary</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px; background: #f1f5f9; border-radius: var(--border-radius-md); padding: 16px; border: 1px solid var(--border-color);">
+      <div class="assumptions-title" style="font-weight: bold; margin-bottom: 8px;"><i class="fas fa-info-circle"></i> Formulas & Definitions</div>
+      <ul class="assumptions-list" style="margin-left: 20px; font-size: 0.85rem; color: var(--text-secondary);">
+        <li>Apparent Power: <strong>S = &radic;(P² + Q²)</strong>.</li>
+        <li>Power Factor: <strong>PF = P / S = cos(φ)</strong>.</li>
+        <li>Phase Angle: <strong>φ = arccos(PF)</strong> in degrees.</li>
+        <li>Reactive Power: <strong>Q = P &times; tan(φ)</strong>.</li>
+        <li>3-Phase Line Current: <strong>I = S_VA / (&radic;3 &times; V_LL)</strong>.</li>
+      </ul>
+    </div>
+
+        
+  </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+
+
+  <script src="js/common.js"></script>
+  <script src="js/power-triangle.js"></script>
+</body>
+</html>

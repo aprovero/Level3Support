@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PV Performance Verification Tool — Level3Support</title>
+  <link rel="stylesheet" href="css/core.css?v=1" />
+  <link rel="stylesheet" href="css/components.css?v=1" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+    }
+    .input-unit select {
+      background: transparent;
+      border: none;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      font-weight: 600;
+      color: var(--text-secondary);
+      outline: none;
+      cursor: pointer;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .toggle-container {
+      display: flex;
+      
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 22px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #cbd5e1;
+      transition: .3s;
+      border-radius: 22px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--primary-color);
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .status-watch { background: #fef3c7; color: #b45309; }
+    .status-investigate { background: #fee2e2; color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <div class="placeholder-container">
+        <a href="index.html#tools" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
+
+<div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+
+    
+
+    
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">☀️ PV FIELD TOOL</div>
+    </div>
+
+    
+
+    
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                        PV Performance Verification Tool
+                    </h1>
+                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+                        Determine utility-scale solar PV system Performance Ratio (PR) based on exported energy, installed capacity, and plane-of-array irradiance, with optional module temperature correction.
+                    </p>
+                </div>
+                <div class="tool-meta">
+                    <span class="tile-category" style="background:#fee2e2; color:#991b1b; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">🔋 Calculators</span>
+                    <span class="status-badge" style="background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Under Review</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Calculator Inputs</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="dc-capacity">Installed DC Capacity <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="dc-capacity" placeholder="e.g. 280" step="any">
+            <div class="input-unit">
+              <select id="dc-capacity-unit">
+                <option value="kWp">kWp</option>
+                <option value="MWp">MWp</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="permit-limit">Grid Permit / Export Limit <span class="field-note">(Optional)</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="permit-limit" placeholder="e.g. 220" step="any">
+            <div class="input-unit">
+              <select id="permit-limit-unit">
+                <option value="kW">kW</option>
+                <option value="MW">MW</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="energy-exported">Energy Exported <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="energy-exported" placeholder="e.g. 18500" step="any">
+            <div class="input-unit">
+              <select id="energy-exported-unit">
+                <option value="kWh">kWh</option>
+                <option value="MWh">MWh</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="poa-irradiance">Plane-of-Array Irradiance (G<sub>POA</sub>) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="poa-irradiance" placeholder="e.g. 4.8" step="any">
+            <div class="input-unit">kWh/m²</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="ref-irradiance">Reference Irradiance (G<sub>Ref</sub>)</label>
+          <div class="input-with-unit">
+            <input type="number" id="ref-irradiance" value="1000" step="any">
+            <div class="input-unit">W/m²</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="period-label">Reporting Period Label</label>
+          <input type="text" id="period-label" placeholder="e.g. May 2026 Daily Run" value="Daily Performance Run">
+        </div>
+      </div>
+
+      <!-- Temperature Correction Toggle -->
+      <div class="toggle-container">
+        <label class="switch">
+          <input type="checkbox" id="temp-corr-toggle">
+          <span class="slider"></span>
+        </label>
+        <span style="font-weight: 600; font-size: 0.95rem; color: var(--text-color);">Apply Temperature Correction (T<sub>cell</sub>)</span>
+      </div>
+
+      <div id="temp-inputs" class="input-row" style="display: none; border-top: 1px dashed var(--border-color); padding-top: 16px; margin-top: 8px;">
+        <div class="input-group">
+          <label for="module-temp">Average Module Temp (T<sub>mod</sub>)</label>
+          <div class="input-with-unit">
+            <input type="number" id="module-temp" placeholder="e.g. 45" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="temp-coeff">Temperature Coefficient (&gamma;)</label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-coeff" value="-0.35" step="any">
+            <div class="input-unit">%/°C</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Calculate PR</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none;">
+      <div class="result-header">
+        <span>Calculation Results</span>
+        <span id="pr-status-badge" class="status-badge-inline status-normal">Normal</span>
+      </div>
+      
+      <div class="result-row">
+        <span>Reporting Period:</span>
+        <span id="res-period" style="font-weight: 600;">Daily Performance Run</span>
+      </div>
+      <div class="result-row">
+        <span>Uncorrected expected energy:</span>
+        <span id="res-expected-uncorr" style="font-weight: 600;">--</span>
+      </div>
+      <div id="res-expected-corr-row" class="result-row" style="display: none;">
+        <span>Temperature-corrected expected energy:</span>
+        <span id="res-expected-corr" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="border-top: 1px dashed #bbf7d0; margin-top: 8px; padding-top: 8px;">
+        <span style="font-size: 1.1rem; font-weight: 600;">Performance Ratio (PR):</span>
+        <span id="res-pr" class="result-value">--</span>
+      </div>
+      <div class="result-row">
+        <span>Energy Deviation:</span>
+        <span id="res-deviation" style="font-weight: 600;">--</span>
+      </div>
+      
+      <!-- Optional Permit-Adjusted Results -->
+      <div id="res-permit-expected-row" class="result-row" style="display: none; border-top: 1px dashed #93c5fd; margin-top: 8px; padding-top: 8px;">
+        <span>Permit-Adjusted expected energy:</span>
+        <span id="res-permit-expected" style="font-weight: 600;">--</span>
+      </div>
+      <div id="res-permit-pr-row" class="result-row" style="display: none;">
+        <span style="font-size: 1.1rem; font-weight: 600; color: var(--primary-color);">Permit-Adjusted PR:</span>
+        <span id="res-permit-pr" class="result-value" style="color: var(--primary-color);">--</span>
+      </div>
+      <div id="res-permit-deviation-row" class="result-row" style="display: none; padding-bottom: 8px;">
+        <span>Permit-Adjusted Deviation:</span>
+        <span id="res-permit-deviation" style="font-weight: 600;">--</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Results</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions</div>
+      <ul class="assumptions-list">
+        <li>Reference Irradiance (G<sub>Ref</sub>) default is 1000 W/m² (STC standard).</li>
+        <li>Uncorrected PR assumes STC module rating is constant across all operating module temperatures.</li>
+        <li>Temperature-corrected PR uses module/cell temperature coefficient to normalize rating against the STC reference of 25 °C.</li>
+        <li>PR status ranges: <strong>PR &ge; 80%</strong> is Normal, <strong>75% &le; PR < 80%</strong> is Watch (possible soilage or mild inverter curtailment), <strong>PR < 75%</strong> is Investigate.</li>
+      </ul>
+    </div>
+
+        
+  </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+
+
+  <script src="js/common.js"></script>
+  <script src="js/pv-performance-ratio.js"></script>
+</body>
+</html>

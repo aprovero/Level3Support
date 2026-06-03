@@ -63,7 +63,7 @@
     {
       "id": 5,
       "name": "ABB REJ603 Relay Configuration Tool",
-      "category": "OEM Specific",
+      "category": "OEM Specific Diagnostics",
       "url": "rej603-configurator.html",
       "description": "Used to configure ABB REJ603 protection relays. (OEM Specific - ABB)",
       "keywords": [
@@ -80,7 +80,7 @@
     {
       "id": 6,
       "name": "SG1+x Parameter Comparison Tool",
-      "category": "OEM Specific",
+      "category": "OEM Specific Diagnostics",
       "url": "parameter-comparison.html",
       "description": "Compare Sungrow SG1+x inverter parameters side by side. (OEM Specific - Sungrow)",
       "keywords": [
@@ -96,7 +96,7 @@
     {
       "id": 7,
       "name": "UMCG Data Analysis Tool",
-      "category": "OEM Specific",
+      "category": "OEM Specific Diagnostics",
       "url": "analyzer.html",
       "description": "Used to analyze data logs downloaded from Sungrow inverters. (OEM Specific - Sungrow)",
       "keywords": [
@@ -113,7 +113,7 @@
     {
       "id": 8,
       "name": "PDP Module Fault Code Interpreter",
-      "category": "OEM Specific",
+      "category": "OEM Specific Diagnostics",
       "url": "fault-interpreter.html",
       "description": "Decodes raw diagnostic codes and status faults for Sungrow inverters, providing immediate troubleshooting guides and failure root causes for technicians in the field. (OEM Specific - Sungrow)",
       "keywords": [
@@ -129,9 +129,9 @@
     },
     {
       "id": 9,
-      "name": "PV String Sizer & VOC Calculator",
-      "category": "Calculators",
-      "url": "pv-string-sizer.html",
+      "name": "PV String Voltage & Sizing Tool",
+      "category": "PV Commissioning & Performance",
+      "url": "pv-string-voltage-sizing.html",
       "description": "Calculate PV string voltage at different temperatures and help determine minimum/maximum modules per string based on inverter MPPT and maximum DC voltage constraints.",
       "keywords": [
         "PV",
@@ -151,16 +151,14 @@
         "inverter MPPT window"
       ],
       "useCases": [
-        "size a PV string",
-        "calculate VOC",
-        "determine min/max modules per string"
+        "use the PV String Voltage & Sizing Tool tool"
       ]
     },
     {
       "id": 10,
-      "name": "BESS Cable Sizing Calculator",
-      "category": "Calculators",
-      "url": "bess-cable-sizer.html",
+      "name": "Cable Sizing, Ampacity & Voltage Drop Calculator",
+      "category": "Electrical Calculators & Test Forms",
+      "url": "cable-sizing-ampacity-voltage-drop.html",
       "description": "Provide a field-use cable sizing estimate for BESS DC and AC auxiliary circuits using manual ampacity and derating inputs.",
       "keywords": [
         "BESS",
@@ -179,15 +177,13 @@
         "voltage drop"
       ],
       "useCases": [
-        "calculate BESS cable size",
-        "estimate cable ampacity",
-        "calculate battery cable voltage drop"
+        "record cable sizing, ampacity & voltage drop calculator results"
       ]
     },
     {
       "id": 11,
       "name": "Torque Spec Finder & Connection Calculator",
-      "category": "Reference Guides",
+      "category": "In Review",
       "url": "torque-spec-finder.html",
       "description": "Searchable torque specification reference tool for solar array and battery rack connections with target bolt pre-loads calculator.",
       "keywords": [
@@ -205,9 +201,9 @@
     },
     {
       "id": 12,
-      "name": "PV Megger Field Log",
-      "category": "PV Field Tools",
-      "url": "pv-megger-tester.html",
+      "name": "Insulation Resistance Test Form",
+      "category": "Electrical Calculators & Test Forms",
+      "url": "insulation-resistance-test-form.html",
       "description": "Record PV insulation resistance test results and provide preliminary pass/fail based on user-entered acceptance criteria.",
       "keywords": [
         "PV",
@@ -226,16 +222,14 @@
         "PV insulation resistance"
       ],
       "useCases": [
-        "check insulation resistance",
-        "run a megger test",
-        "record ground fault test results"
+        "record insulation resistance test results"
       ]
     },
     {
       "id": 13,
-      "name": "BESS Cell Voltage Imbalance Calculator",
-      "category": "BESS Field Tools",
-      "url": "bess-cell-imbalance.html",
+      "name": "BESS Battery Health Analyzer",
+      "category": "BESS Commissioning & Diagnostics",
+      "url": "bess-battery-health-analyzer.html",
       "description": "Analyze cell/module voltage spread across BESS modules, racks, strings, or clusters to identify imbalance conditions.",
       "keywords": [
         "BESS",
@@ -254,15 +248,14 @@
         "module voltage spread"
       ],
       "useCases": [
-        "check battery cell imbalance",
-        "analyze module voltage spread"
+        "use the BESS Battery Health Analyzer tool"
       ]
     },
     {
       "id": 14,
-      "name": "Transformer Turns Ratio (TTR) Form",
-      "category": "Electrical Test Forms",
-      "url": "ttr-form.html",
+      "name": "Transformer Test & TTR Report",
+      "category": "Electrical Calculators & Test Forms",
+      "url": "transformer-test-ttr-report.html",
       "description": "Record transformer turns ratio test results and calculate ratio error by phase and tap position.",
       "keywords": [
         "Transformer",
@@ -279,15 +272,13 @@
         "transformer test"
       ],
       "useCases": [
-        "record ttr test",
-        "transformer turns ratio test form",
-        "a transformer test form"
+        "record transer test & ttr report results"
       ]
     },
     {
       "id": 15,
       "name": "LOTO Verification Checklist",
-      "category": "HSE",
+      "category": "Reports, HSE & References",
       "url": "loto-checklist.html",
       "description": "Create a field checklist to verify lockout/tagout preparation, isolation points, zero-energy verification, and restoration readiness.",
       "keywords": [
@@ -313,7 +304,7 @@
     {
       "id": 16,
       "name": "Arc Flash Boundary Calculator",
-      "category": "HSE",
+      "category": "Electrical Calculators & Test Forms",
       "url": "arc-flash.html",
       "description": "Provide a safe field reference/planning aid for arc flash boundary documentation using user-provided incident energy and/or boundary values from an approved arc flash study.",
       "keywords": [
@@ -332,13 +323,13 @@
         "approach boundary"
       ],
       "useCases": [
-        "use the Arc Flash Boundary Calculator tool"
+        "record arc flash boundary calculator results"
       ]
     },
     {
       "id": 17,
       "name": "Daily Commissioning Progress Report",
-      "category": "Reports & Templates",
+      "category": "Reports, HSE & References",
       "url": "daily-progress.html",
       "description": "Generate a structured daily commissioning progress report for PV/BESS field work.",
       "keywords": [
@@ -364,7 +355,7 @@
     {
       "id": 18,
       "name": "String Current Imbalance Calculator",
-      "category": "PV Field Tools",
+      "category": "PV Commissioning & Performance",
       "url": "string-imbalance.html",
       "description": "Compare solar string currents against the average and flag abnormal strings above a configurable deviation threshold.",
       "keywords": [
@@ -400,7 +391,7 @@
     {
       "id": 20,
       "name": "Inverter Start-Up Checklist",
-      "category": "PV Field Tools",
+      "category": "PV Commissioning & Performance",
       "url": "inverter-startup.html",
       "description": "Structured digital commissioning checklist covering visual inspection, DC/AC checks, grounding, comms, firmware, and first energization.",
       "keywords": [
@@ -418,7 +409,7 @@
     {
       "id": 21,
       "name": "IV Curve Test Result Log",
-      "category": "PV Field Tools",
+      "category": "PV Commissioning & Performance",
       "url": "iv-curve-log.html",
       "description": "Record and categorize IV curve test results consistently across field teams. Supports defect classification and CSV export.",
       "keywords": [
@@ -435,7 +426,7 @@
     {
       "id": 22,
       "name": "Firmware Version Tracker",
-      "category": "PV Field Tools",
+      "category": "PV Commissioning & Performance",
       "url": "firmware-tracker.html",
       "description": "Track firmware versions across inverters, dataloggers, routers, and other field equipment. Flags devices requiring updates.",
       "keywords": [
@@ -464,7 +455,7 @@
       ],
       "aliases": [],
       "useCases": [
-        "record insulation resistance test results"
+        "record insulation resistance commissioning results"
       ]
     },
     {
@@ -486,7 +477,7 @@
     {
       "id": 25,
       "name": "Grounding Continuity Test Form",
-      "category": "Electrical Test Forms",
+      "category": "Electrical Calculators & Test Forms",
       "url": "electrical-test-forms.html?tool=grounding-continuity",
       "description": "Record grounding and bonding continuity tests with multiple points.",
       "keywords": [
@@ -502,7 +493,7 @@
     {
       "id": 26,
       "name": "CT/PT Ratio Verification Tool",
-      "category": "Electrical Test Forms",
+      "category": "Electrical Calculators & Test Forms",
       "url": "electrical-test-forms.html?tool=ct-pt-ratio",
       "description": "Verify CT and PT ratios against measured values and relay configuration.",
       "keywords": [
@@ -519,7 +510,7 @@
     {
       "id": 27,
       "name": "Relay Settings Checklist",
-      "category": "Electrical Test Forms",
+      "category": "Electrical Calculators & Test Forms",
       "url": "electrical-test-forms.html?tool=relay-checklist",
       "description": "Checklist to confirm relay settings were loaded and verified.",
       "keywords": [
@@ -535,9 +526,9 @@
     },
     {
       "id": 28,
-      "name": "PV Performance Ratio Calculator",
-      "category": "Calculators",
-      "url": "pv-performance-ratio.html",
+      "name": "PV Performance Verification Tool",
+      "category": "PV Commissioning & Performance",
+      "url": "pv-performance-verification.html",
       "description": "Determine utility-scale solar PV system Performance Ratio (PR) with optional temperature correction.",
       "keywords": [
         "PV",
@@ -547,8 +538,7 @@
       ],
       "aliases": [],
       "useCases": [
-        "calculate PR",
-        "pv performance ratio calculator"
+        "use the PV Performance Verification Tool tool"
       ]
     },
     {
@@ -589,7 +579,7 @@
     {
       "id": 31,
       "name": "BESS Availability Calculator",
-      "category": "Calculators",
+      "category": "BESS Commissioning & Diagnostics",
       "url": "bess-availability.html",
       "description": "Calculate simple and adjusted availability for utility-scale battery systems over reporting periods.",
       "keywords": [
@@ -606,7 +596,7 @@
     {
       "id": 32,
       "name": "HVAC Delta-T Calculator",
-      "category": "Calculators",
+      "category": "BESS Commissioning & Diagnostics",
       "url": "hvac-delta-t.html",
       "description": "Sanity check BESS enclosure HVAC cooling and heating performance using supply, return, and ambient readings.",
       "keywords": [
@@ -640,7 +630,7 @@
     {
       "id": 34,
       "name": "SCADA Tag QA/QC Checklist",
-      "category": "SCADA & Diagnostics",
+      "category": "SCADA & Data Diagnostics",
       "url": "scada-tag-qaqc.html",
       "description": "Verify signal list scaling, remote controls, HMI displays, and historian logging for communications handovers.",
       "keywords": [
@@ -656,9 +646,9 @@
     },
     {
       "id": 35,
-      "name": "MODBUS Register Decoder",
-      "category": "SCADA & Diagnostics",
-      "url": "modbus-decoder.html",
+      "name": "Register, Bitmask & Number Decoder",
+      "category": "SCADA & Data Diagnostics",
+      "url": "register-bitmask-number-decoder.html",
       "description": "Decode raw decimal/hex MODBUS registers into engineering values including 16/32-bit types and 32-bit floats.",
       "keywords": [
         "MODBUS",
@@ -668,14 +658,13 @@
       ],
       "aliases": [],
       "useCases": [
-        "decode modbus registers",
-        "modbus troubleshooting"
+        "use the Register, Bitmask & Number Decoder tool"
       ]
     },
     {
       "id": 36,
       "name": "Alarm / Fault Event Timeline Builder",
-      "category": "SCADA & Diagnostics",
+      "category": "SCADA & Data Diagnostics",
       "url": "alarm-timeline.html",
       "description": "Build chronological alarm and fault timelines to analyze cascading faults, repeated codes, and trigger times.",
       "keywords": [
@@ -695,7 +684,7 @@
     {
       "id": 38,
       "name": "Commissioning Punchlist Builder",
-      "category": "Reports & Templates",
+      "category": "Reports, HSE & References",
       "url": "commissioning-punchlist.html",
       "description": "Create, manage, and filter field punchlist items for PV/BESS commissioning and close-out.",
       "keywords": [
@@ -714,7 +703,7 @@
     {
       "id": 39,
       "name": "Customer Site Visit Report Generator",
-      "category": "Reports & Templates",
+      "category": "Reports, HSE & References",
       "url": "site-visit-report.html",
       "description": "Generate a structured, professional, customer-facing field service site visit report.",
       "keywords": [
@@ -733,7 +722,7 @@
     {
       "id": 40,
       "name": "RCA Template Builder",
-      "category": "Reports & Templates",
+      "category": "Reports, HSE & References",
       "url": "rca-template-builder.html",
       "description": "Structured Root Cause Analysis (RCA) report builder for solar and battery plant incidents.",
       "keywords": [
@@ -752,7 +741,7 @@
     {
       "id": 41,
       "name": "Safety Pre-Task Plan / JHA Form",
-      "category": "HSE",
+      "category": "Reports, HSE & References",
       "url": "jha-pre-task-plan.html",
       "description": "Standardized Job Hazard Analysis (JHA) and safety planning form to conduct before field tasks.",
       "keywords": [
@@ -771,7 +760,7 @@
     {
       "id": 43,
       "name": "Technical Documentation / Reference Search Tool",
-      "category": "Reference Guides",
+      "category": "Reports, HSE & References",
       "url": "technical-reference-search.html",
       "description": "Find and view active service bulletins, commissioning manuals, training resources, and datasheets.",
       "keywords": [
@@ -789,9 +778,9 @@
     },
     {
       "id": 44,
-      "name": "Inverter Clipping / Curtailment Check Tool",
-      "category": "Advanced Field Diagnostics",
-      "url": "clipping-curtailment-check.html",
+      "name": "Inverter Power Limitation Analyzer",
+      "category": "Grid & Inverter Controls",
+      "url": "inverter-power-limitation-analyzer.html",
       "description": "Help determine whether reduced inverter output is consistent with inverter clipping, PPC curtailment, export limit, or real underperformance.",
       "keywords": [
         "PV",
@@ -802,13 +791,13 @@
       ],
       "aliases": [],
       "useCases": [
-        "use the Inverter Clipping / Curtailment Check Tool tool"
+        "use the Inverter Power Limitation Analyzer tool"
       ]
     },
     {
       "id": 45,
       "name": "Irradiance Sensor Cross-Check Tool",
-      "category": "Advanced Field Diagnostics",
+      "category": "PV Commissioning & Performance",
       "url": "irradiance-sensor-check.html",
       "description": "Compare irradiance sensors, reference cells, and nearby inverter behavior to detect dirty, misaligned, drifting, or unreliable measurements.",
       "keywords": [
@@ -826,7 +815,7 @@
     {
       "id": 46,
       "name": "Tracker Angle / Backtracking QA Checklist",
-      "category": "Advanced Field Diagnostics",
+      "category": "PV Commissioning & Performance",
       "url": "tracker-angle-qaqc.html",
       "description": "Validate tracker angle behavior, backtracking, mechanical alignment, and wind stow during commissioning or troubleshooting.",
       "keywords": [
@@ -844,7 +833,7 @@
     {
       "id": 47,
       "name": "Corrective Action Tracker / CAPA Log",
-      "category": "Reports & Templates",
+      "category": "Reports, HSE & References",
       "url": "capa-tracker.html",
       "description": "Track corrective and preventive actions from punchlists, RCAs, inspections, HSE forms, and commissioning findings.",
       "keywords": [
@@ -880,9 +869,9 @@
     },
     {
       "id": 49,
-      "name": "Interactive Power Triangle Tool",
-      "category": "Grid & Controls",
-      "url": "power-triangle.html",
+      "name": "Reactive Power & Inverter Capability Tool",
+      "category": "Grid & Inverter Controls",
+      "url": "reactive-power-inverter-capability.html",
       "description": "Interactive visual tool showing the relationship between active power P, reactive power Q, apparent power S, power factor, and phase angle.",
       "keywords": [
         "Electrical",
@@ -893,7 +882,7 @@
       ],
       "aliases": [],
       "useCases": [
-        "use the Interactive Power Triangle Tool tool"
+        "use the Reactive Power & Inverter Capability Tool tool"
       ]
     },
     {
@@ -917,7 +906,7 @@
     {
       "id": 51,
       "name": "Grid Event Voltage/Frequency Excursion Log",
-      "category": "Grid & Controls",
+      "category": "Grid & Inverter Controls",
       "url": "grid-event-excursion-log.html",
       "description": "Log grid voltage/frequency excursions, calculate deviations, and create structured RCA-ready event timelines.",
       "keywords": [
@@ -989,9 +978,9 @@
     },
     {
       "id": 55,
-      "name": "Soiling Loss Estimator",
-      "category": "Soiling & PV Performance",
-      "url": "soiling-loss-estimator.html",
+      "name": "PV Soiling Analysis & Cleaning Decision Tool",
+      "category": "PV Soiling Analysis",
+      "url": "pv-soiling-analysis-cleaning-decision.html",
       "description": "Estimate PV system energy loss due to soiling based on site conditions.",
       "keywords": [
         "PV",
@@ -1002,7 +991,7 @@
       ],
       "aliases": [],
       "useCases": [
-        "use the Soiling Loss Estimator tool"
+        "use the PV Soiling Analysis & Cleaning Decision Tool tool"
       ]
     },
     {
@@ -1080,7 +1069,7 @@
     {
       "id": 60,
       "name": "Fuse Continuous Current & Temperature Derating Calculator",
-      "category": "Calculators",
+      "category": "Electrical Calculators & Test Forms",
       "url": "fuse-derating-calculator.html",
       "description": "Calculate derated continuous current limits and determine appropriate fuse ratings based on ambient temperature and custom derating factors.",
       "keywords": [
@@ -1095,13 +1084,13 @@
       ],
       "aliases": [],
       "useCases": [
-        "use the Fuse Continuous Current & Temperature Derating Calculator tool"
+        "record fuse continuous current & temperature derating calculator results"
       ]
     },
     {
       "id": 61,
       "name": "BESS Capacity / Energy Test Form",
-      "category": "BESS Field Tools",
+      "category": "BESS Commissioning & Diagnostics",
       "url": "bess-capacity-test.html",
       "description": "Record energy charge/discharge metrics, compute actual performance vs. rated energy capacities, and determine round-trip efficiency (RTE).",
       "keywords": [
@@ -1119,7 +1108,7 @@
     {
       "id": 62,
       "name": "BESS Pre-Energization Checklist",
-      "category": "BESS Field Tools",
+      "category": "BESS Commissioning & Diagnostics",
       "url": "bess-pre-energization.html",
       "description": "Audit and sign off on isolation integrity, grounding bonds, auxiliary system status, communications, and LOTO state prior to introducing utility or DC bus voltage.",
       "keywords": [
@@ -1137,7 +1126,7 @@
     {
       "id": 63,
       "name": "BESS Container & Rack Inspection",
-      "category": "BESS Field Tools",
+      "category": "BESS Commissioning & Diagnostics",
       "url": "bess-rack-inspection.html",
       "description": "Verify battery container structural integrity, climate controllers, fire suppression status, and electrical safety bonds prior to unit commissioning.",
       "keywords": [
@@ -1155,7 +1144,7 @@
     {
       "id": 64,
       "name": "BESS Spare Parts Cross-Reference",
-      "category": "BESS Field Tools",
+      "category": "BESS Commissioning & Diagnostics",
       "url": "bess-spare-parts.html",
       "description": "Search compatible parts, review stock levels, filter criticality levels, and import/export CSV parts directories.",
       "keywords": [
