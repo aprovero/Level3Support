@@ -140,7 +140,8 @@
         "VMP",
         "Temperature",
         "Inverter",
-        "DC"
+        "DC",
+        "Consolidated Workspace"
       ],
       "aliases": [
         "string sizer",
@@ -167,7 +168,8 @@
         "Voltage Drop",
         "Temperature Derating",
         "DC",
-        "AC"
+        "AC",
+        "Consolidated Workspace"
       ],
       "aliases": [
         "battery cable sizing",
@@ -212,7 +214,8 @@
         "IR Test",
         "DC",
         "Ground Fault",
-        "Commissioning"
+        "Commissioning",
+        "Consolidated Workspace"
       ],
       "aliases": [
         "megger",
@@ -238,7 +241,9 @@
         "BMS",
         "Battery",
         "Rack",
-        "Module"
+        "Module",
+        "Consolidated Workspace",
+        "Advanced Field Diagnostics"
       ],
       "aliases": [
         "cell imbalance",
@@ -262,7 +267,8 @@
         "TTR",
         "Turns Ratio",
         "Electrical Test",
-        "Commissioning"
+        "Commissioning",
+        "Consolidated Workspace"
       ],
       "aliases": [
         "TTR",
@@ -534,7 +540,8 @@
         "PV",
         "Performance",
         "Commissioning",
-        "O&M"
+        "O&M",
+        "Consolidated Workspace"
       ],
       "aliases": [],
       "useCases": [
@@ -654,7 +661,9 @@
         "MODBUS",
         "Communications",
         "Troubleshooting",
-        "SCADA"
+        "SCADA",
+        "Consolidated Workspace",
+        "Advanced Field Diagnostics"
       ],
       "aliases": [],
       "useCases": [
@@ -787,7 +796,9 @@
         "Inverter",
         "Clipping",
         "Curtailment",
-        "Diagnostics"
+        "Diagnostics",
+        "Consolidated Workspace",
+        "Advanced Field Diagnostics"
       ],
       "aliases": [],
       "useCases": [
@@ -878,7 +889,8 @@
         "Power",
         "Grid",
         "Controls",
-        "Visual"
+        "Visual",
+        "Consolidated Workspace"
       ],
       "aliases": [],
       "useCases": [
@@ -987,7 +999,9 @@
         "Soiling",
         "Performance",
         "O&M",
-        "Field Check"
+        "Field Check",
+        "Consolidated Workspace",
+        "Advanced Field Diagnostics"
       ],
       "aliases": [],
       "useCases": [

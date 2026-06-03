@@ -959,10 +959,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageFile = window.location.pathname.split('/').pop() || 'index.html';
     if (pageFile === 'index.html' || pageFile === '404.html' || pageFile === 'offline.html') return;
 
-    // Inside iframe: hide footers and other non-embeddable page sections
+    // Inside iframe: hide footers, back-links, and other non-embeddable page sections dynamically
     if (window.self !== window.top) {
-        const footers = document.querySelectorAll('.footer, footer, .main-footer');
-        footers.forEach(f => f.style.setProperty('display', 'none', 'important'));
+        const selectors = ['.footer', 'footer', '.main-footer', '.back-link', '.btn-back', '.header', '.tool-header-section', '.warning-box'];
+        selectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => {
+                el.style.setProperty('display', 'none', 'important');
+            });
+        });
     }
 
     // Outside iframe (Parent page with tabs): skip resources card injection

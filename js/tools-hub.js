@@ -1628,7 +1628,7 @@ function renderHomeView() {
         
         if (featuredTools.length === 0) {
             // Dynamic fallback: grab some common active tools
-            featuredTools = allTools.filter(t => ["Active", "In Progress", "Under Review"].includes(t.status) && t.status !== "Legacy").slice(0, 6);
+            featuredTools = allTools.filter(t => ["Active", "In Progress", "Under Review", "In Review"].includes(t.status) && t.status !== "Legacy").slice(0, 6);
         }
         
         featuredTools.forEach(tool => {
@@ -1644,7 +1644,7 @@ function renderHomeView() {
         
         if (newTools.length === 0) {
             // Dynamic fallback: grab the last 3 active/in progress tools added to the registry
-            newTools = allTools.filter(t => ["Active", "In Progress", "Under Review"].includes(t.status) && t.status !== "Legacy").slice(-3).reverse();
+            newTools = allTools.filter(t => ["Active", "In Progress", "Under Review", "In Review"].includes(t.status) && t.status !== "Legacy").slice(-3).reverse();
         }
         
         newTools.forEach(tool => {
@@ -1735,7 +1735,7 @@ function filterLibrary() {
         // 5. Development Status filter
         let matchesStatus = true;
         if (selectStatus === 'active-only') {
-            matchesStatus = ["Active", "In Progress", "Under Review"].includes(tool.status);
+            matchesStatus = ["Active", "In Progress", "Under Review", "In Review"].includes(tool.status);
         } else if (selectStatus !== 'all') {
             matchesStatus = tool.status === selectStatus;
         }
