@@ -321,9 +321,92 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 /**
+ * Dynamically populate advanced filter options from active DB tools data
+ */
+function populateAdvancedFilters() {
+    // 1. Populate Discipline / Field Dropdown
+    const filterDiscipline = document.getElementById('filter-discipline');
+    if (filterDiscipline) {
+        // Filter standard disciplines down to ones that have representation in the DB
+        const disciplines = [
+            { label: "Solar PV", value: "PV" },
+            { label: "BESS / Battery", value: "BESS" },
+            { label: "Grid & Controls", value: "Grid" },
+            { label: "SCADA & Comms", value: "SCADA" },
+            { label: "Electrical Testing", value: "Electrical" },
+            { label: "HSE / Safety", value: "HSE" },
+            { label: "Soiling & PV Performance", value: "Soiling" }
+        ].filter(d => {
+            return allTools.some(tool => 
+                (tool.tags && tool.tags.some(tag => tag.toLowerCase() === d.value.toLowerCase())) ||
+                (tool.category && tool.category.toLowerCase().includes(d.value.toLowerCase()))
+            );
+        });
+
+        const currentValue = filterDiscipline.value || 'all';
+        filterDiscipline.innerHTML = '<option value="all">All Disciplines</option>';
+        disciplines.forEach(d => {
+            filterDiscipline.innerHTML += `<option value="${d.value}">${d.label}</option>`;
+        });
+        filterDiscipline.value = currentValue;
+    }
+
+    // 2. Populate Tool Type Dropdown
+    const filterType = document.getElementById('filter-tool-type');
+    if (filterType) {
+        const types = new Set();
+        allTools.forEach(t => {
+            if (t.toolType) {
+                const splitTypes = t.toolType.split('/');
+                splitTypes.forEach(st => {
+                    const cleanType = st.trim();
+                    if (cleanType) types.add(cleanType);
+                });
+            }
+        });
+
+        const currentValue = filterType.value || 'all';
+        filterType.innerHTML = '<option value="all">All Types</option>';
+        [...types].sort().forEach(t => {
+            // Pluralize labels for cleaner dropdown options
+            let label = t;
+            if (t.toLowerCase() === 'calculator') label = 'Calculators';
+            else if (t.toLowerCase() === 'checklist') label = 'Checklists';
+            else if (t.toLowerCase() === 'test form') label = 'Test Forms';
+            else if (t.toLowerCase() === 'report generator') label = 'Report Generators';
+            else if (t.toLowerCase() === 'diagnostic tool') label = 'Diagnostic Tools';
+            else if (t.toLowerCase() === 'reference guide') label = 'Reference Guides';
+            else if (!t.endsWith('s')) label = t + 's';
+            
+            filterType.innerHTML += `<option value="${t}">${label}</option>`;
+        });
+        filterType.value = currentValue;
+    }
+
+    // 3. Populate Development Status Dropdown
+    const filterStatus = document.getElementById('filter-status');
+    if (filterStatus) {
+        const statuses = [...new Set(allTools.map(t => t.status))].filter(Boolean);
+        const currentValue = filterStatus.value || 'active-only';
+        
+        filterStatus.innerHTML = `
+            <option value="active-only">Active / Under Review (Default)</option>
+            <option value="all">Show All Statuses</option>
+        `;
+        statuses.sort().forEach(s => {
+            if (s !== "Legacy") {
+                filterStatus.innerHTML += `<option value="${s}">${s} Only</option>`;
+            }
+        });
+        filterStatus.value = currentValue;
+    }
+}
+
+/**
  * Main Orchestration of renders
  */
 function runToolHub() {
+    populateAdvancedFilters();
     // 1. Render Home Elements
     renderHomeView();
     
@@ -1579,21 +1662,18 @@ function renderLibraryChips() {
     const container = document.getElementById('category-chips-container');
     if (!container) return;
     
-    // Unique list of active categories
+    // Dynamically build list of categories from active tools in the database
+    const activeTools = allTools.filter(t => !["Legacy", "Archived", "Hidden", "Disabled"].includes(t.status));
+    
+    // Extract unique categories
+    const rawCategories = [...new Set(activeTools.map(t => t.category))].filter(Boolean);
+    
     const categories = [
         { label: "All Tools", value: "all" },
-        { label: "Advanced Diagnostics", value: "advanced-field-diagnostics" },
-        { label: "OEM Specific", value: "oem-specific" },
-        { label: "Solar PV", value: "pv-field-tools" },
-        { label: "BESS", value: "bess-field-tools" },
-        { label: "SCADA & Comms", value: "scada-diagnostics" },
-        { label: "Grid & Controls", value: "grid-controls" },
-        { label: "Calculators", value: "calculators" },
-        { label: "Test Forms", value: "electrical-test-forms" },
-        { label: "Field Reports", value: "reports-templates" },
-        { label: "Reference", value: "reference-guides" },
-        { label: "HSE", value: "hse" },
-        { label: "Soiling", value: "soiling-pv-performance" }
+        ...rawCategories.sort().map(cat => ({
+            label: cat,
+            value: cat.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        }))
     ];
 
     container.innerHTML = '';
