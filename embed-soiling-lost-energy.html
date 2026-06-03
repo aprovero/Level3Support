@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost Energy from Soiling Calculator — Level3Support</title>
+  <link rel="stylesheet" href="css/core.css?v=1" />
+  <link rel="stylesheet" href="css/components.css?v=1" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+  </style>
+
+  <style>
+    .back-link, .btn-back, .header, .footer, footer, .main-footer { display: none !important; }
+    body { padding: 10px !important; background: #ffffff !important; }
+    .placeholder-container, .calc-container, .form-section { max-width: 100% !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
+  </style>
+  
+</head>
+<body>
+  <div class="placeholder-container">
+        <a href="index.html#tools" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
+
+<div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+
+    
+
+    
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">☀️ SOILING & PERFORMANCE</div>
+    </div>
+
+    
+
+    
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                        Lost Energy from Soiling Calculator
+                    </h1>
+                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+                        Quantify the estimated cumulative energy loss (MWh/kWh) and resulting financial loss caused by module soiling over a custom reporting period.
+                    </p>
+                </div>
+                <div class="tool-meta">
+                    <span class="tile-category" style="background:#fffbeb; color:#b45309; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">🍂 Soiling & PV Performance</span>
+                    <span class="status-badge" style="background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Under Review</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Calculator Inputs</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="project-name">Site / Project Name</label>
+          <input type="text" id="project-name" placeholder="e.g. Apollo Solar Plant" style="height: 42px;">
+        </div>
+        <div class="input-group">
+          <label for="estimate-source">Estimate Source Basis</label>
+          <select id="estimate-source" style="height: 42px;">
+            <option value="Soiling Station">Soiling Station Data</option>
+            <option value="Clean vs Soiled String">Clean vs. Soiled String Comparison</option>
+            <option value="PR Deviation">PR Deviation Analysis</option>
+            <option value="Visual Estimate">Visual Estimate</option>
+            <option value="Other">Other Reference</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="period-start">Reporting Period Start</label>
+          <input type="date" id="period-start" style="height: 42px;">
+        </div>
+        <div class="input-group">
+          <label for="period-end">Reporting Period End</label>
+          <input type="date" id="period-end" style="height: 42px;">
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0; grid-column: 1 / 2;">
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Expected Generation <span class="required">*</span></label>
+            <input type="number" id="expected-generation" placeholder="e.g. 1500" step="any" style="height: 42px;">
+          </div>
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Unit</label>
+            <select id="gen-unit" style="height: 42px;">
+              <option value="MWh">MWh</option>
+              <option value="kWh">kWh</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="affected-capacity-pct">Affected Capacity (%) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="affected-capacity-pct" placeholder="e.g. 100" value="100" step="any">
+            <div class="input-unit">%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="soiling-loss-pct">Estimated Soiling Loss (%) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="soiling-loss-pct" placeholder="e.g. 3.2" step="any">
+            <div class="input-unit">%</div>
+          </div>
+        </div>
+        <div class="input-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0;">
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Energy Price (Optional)</label>
+            <input type="number" id="energy-price" placeholder="e.g. 0.075" step="any" style="height: 42px;">
+          </div>
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Currency</label>
+            <select id="currency" style="height: 42px;">
+              <option value="USD">USD ($)</option>
+              <option value="MXN">MXN ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="BRL">BRL (R$)</option>
+              <option value="CLP">CLP ($)</option>
+              <option value="COP">COP ($)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="tool-notes">Field Investigation Notes</label>
+        <input type="text" id="tool-notes" placeholder="e.g. Evaluated period represents the seasonal dry horizon before winter rains." style="height: 42px;">
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Calculate Losses</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel neutral" style="display: none; margin-top: 20px;">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family:'Outfit';">Loss Assessment Results</h3>
+
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span>Reporting Period Duration:</span>
+        <span id="res-duration" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span>Affected Expected Generation:</span>
+        <span id="res-affected-gen" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span>Estimated Lost Energy:</span>
+        <span id="res-lost-energy" style="font-weight: 700; color: var(--error-color); font-size: 1.15rem;">--</span>
+      </div>
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span>Remaining Delivered Energy:</span>
+        <span id="res-delivered-energy" style="font-weight: 600; color: var(--success-color);">--</span>
+      </div>
+      <div id="res-lost-revenue-row" class="result-row" style="display: none; justify-content: space-between; margin-bottom: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px;">
+        <span>Estimated Lost Revenue:</span>
+        <span id="res-lost-revenue" style="font-weight: 700; font-size: 1.15rem;">--</span>
+      </div>
+
+      <!-- Report Ready Text Area -->
+      <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 12px; margin-top: 16px;">
+        <h4 style="margin-top: 0; margin-bottom: 8px; font-family:'Outfit'; font-size: 0.9rem; color: var(--text-secondary);">Report-Ready Summary</h4>
+        <p id="res-summary-text" style="font-size: 0.85rem; font-style: italic; line-height: 1.5; color: var(--text-color); margin-bottom: 0; text-align: left;"></p>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 20px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Report Summary</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 16px; background: var(--background-dark);">
+      <div class="assumptions-title" style="font-weight: 700; margin-bottom: 8px; display: flex;  gap: 6px;"><i class="fas fa-info-circle" style="color: var(--primary-color);"></i> Engineering Assumptions & Limitations</div>
+      <ul class="assumptions-list" style="margin-left: 20px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+        <li style="margin-bottom: 6px;">Calculated energy loss represents a simplified estimation. Accurate contractual metrics require SCADA regression or ASTM E2908 baseline standards.</li>
+        <li style="margin-bottom: 6px;">Expected generation must represent modeled or weather-adjusted clean benchmarks.</li>
+        <li style="margin-bottom: 6px;">This calculator cannot isolate soiling from transformer outages, grid curtailments, tracker angle anomalies, inverter limits, or sub-array failures.</li>
+      </ul>
+    </div>
+
+        
+  </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+
+
+  <script src="js/common.js"></script>
+  <script src="js/soiling-lost-energy.js"></script>
+</body>
+</html>

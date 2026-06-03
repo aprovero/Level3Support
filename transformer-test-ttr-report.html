@@ -8,317 +8,139 @@
   <link rel="stylesheet" href="css/components.css?v=1" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    .calc-container {
-      max-width: 950px;
+    .workspace-container {
+      max-width: 1200px;
       margin: 20px auto;
-      background: var(--background-light);
-      border-radius: var(--border-radius-lg);
-      box-shadow: var(--shadow-md);
-      padding: 24px;
+      padding: 0 1.5rem;
     }
-    .input-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      margin-bottom: 14px;
+    .tab-bar {
+      display: flex;
+      gap: 6px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      padding: 6px;
+      margin-bottom: 1.5rem;
+      width: fit-content;
     }
-    .dynamic-table-wrapper {
-      margin-bottom: 16px;
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius-md);
-      overflow-x: auto;
-    }
-    .dynamic-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-    }
-    .dynamic-table th {
-      background: var(--background-dark);
-      padding: 8px 12px;
-      text-align: left;
+    .tab-btn {
+      padding: 10px 22px;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.9rem;
       font-weight: 600;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.78rem;
-      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
     }
-    .dynamic-table td {
-      padding: 8px 12px;
-      border-bottom: 1px solid #f1f5f9;
-      vertical-align: middle;
+    .tab-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
-    .dynamic-table tr:last-child td { border-bottom: none; }
-    .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
-      margin-bottom: 0;
-      padding: 6px 10px;
-      height: 34px;
-      font-size: 0.85rem;
-    }
-    .btn-row {
+    .iframe-wrapper {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      min-height: 780px;
       display: flex;
-      justify-content: space-between;
-      
-      margin-top: 20px;
-      flex-wrap: wrap;
-      gap: 12px;
+      flex-direction: column;
     }
-    .btn-group {
-      display: flex;
-      gap: 8px;
-    }
-    .btn-action {
-      width: auto;
-      min-height: unset;
-      padding: 8px 16px;
-      font-size: 0.85rem;
-      margin-top: 0;
-    }
-    .status-badge-inline {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-weight: 700;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      display: inline-block;
-    }
-    .status-pass { background: #dcfce7; color: #15803d; }
-    .status-warn { background: #fef3c7; color: #92400e; }
-    .status-fail { background: #fee2e2; color: #b91c1c; }
-
-    @media print {
-      body { background: white; color: black; }
-      .calc-container { box-shadow: none; padding: 0; margin: 0; max-width: 100%; }
-      .back-link, .btn-row, .btn-add-row, td button, .print-hide { display: none !important; }
-      .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
-        border: none !important;
-        background: transparent !important;
-        pointer-events: none !important;
-        padding: 0 !important;
-      }
-      .dynamic-table th { background: #eee !important; color: black !important; }
-      .form-section { border: 1px solid #000 !important; page-break-inside: avoid; }
+    iframe {
+      width: 100%;
+      flex: 1;
+      border: none;
+      min-height: 780px;
     }
   </style>
 </head>
 <body>
-  <div class="placeholder-container">
-        <a href="index.html#tools" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
+  <div class="workspace-container">
+    <a href="index.html#tools" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
 
-<div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
       <div class="logo">
-        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+        <a href="index.html"><img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;"></a>
       </div>
-
-    
-
-    
-      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ TEST FORM</div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ CONSOLIDATED WORKSPACE</div>
     </div>
 
-    
-        <!-- Header Panel -->
-        <div class="tool-header-section">
-            <div class="tool-title-row">
-                <div>
-                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
-                        Transformer Test & TTR Report
-                    </h1>
-                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
-                        Record turns ratio readings by phase and tap changer positions, calculate exact percentage errors, and evaluate conformance limits.
-                    </p>
-                </div>
-                <div class="tool-meta">
-                    <span class="tile-category" style="background:#dbeafe; color:#1e40af; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">⚡ Electrical Test Forms</span>
-                    <span class="status-badge" style="background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Under Review</span>
-                </div>
-            </div>
+    <!-- Header Panel -->
+    <div class="tool-header-section" style="margin-bottom: 1.5rem;">
+      <div class="tool-title-row">
+        <div>
+          <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif;">
+            Transformer Test & TTR Report
+          </h1>
+          <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+            Verify transformer turns ratios (TTR), winding deviations, insulation values, vector groups, and tap settings.
+          </p>
         </div>
-
-    <!-- Safety Disclaimer Ribbon -->
-    <div class="warning-box print-hide" style="margin-top: 0; margin-bottom: 24px;">
-      <i class="fas fa-exclamation-triangle"></i>
-      <div>
-        <div class="warning-title">TTR Acceptance Limits & Testing Safety</div>
-        Transformer Test & TTR Report (TTR) limits are typically defined by international standards (e.g. IEEE C57.12.90) and must not exceed **±0.5%** of the expected nominal turns ratio. Verify results against transformer nameplate specifications, manufacturer design basis documents, and site testing safety protocols.
+        <div class="tool-meta">
+          <span class="tile-category" style="background:#eff6ff; color:#1d4ed8; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Electrical Calculators & Test Forms</span>
+          <span class="status-badge" style="background:#dcfce7; color:#15803d; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Active</span>
+        </div>
       </div>
     </div>
 
-    <!-- Transformer Metadata -->
-    <div class="form-section">
-      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-file-contract" style="color:var(--primary-color);"></i> 1. Transformer Nameplate Metadata</h3>
-      <div class="input-row">
-        <div class="input-group">
-          <label for="site-name">Project / Site Name</label>
-          <input type="text" id="site-name" placeholder="e.g. Solaria Substation">
-        </div>
-        <div class="input-group">
-          <label for="tx-id">Transformer ID</label>
-          <input type="text" id="tx-id" placeholder="e.g. TX-01 (Main step-up)">
-        </div>
-        <div class="input-group">
-          <label for="tx-mfg">Manufacturer</label>
-          <input type="text" id="tx-mfg" placeholder="e.g. ABB, GE, Eaton">
-        </div>
-        <div class="input-group">
-          <label for="tx-model">Model / Type</label>
-          <input type="text" id="tx-model" placeholder="Model number">
-        </div>
-      </div>
+    <!-- Tab Bar Selector -->
+    <div class="tab-bar">
       
-      <div class="input-row">
-        <div class="input-group">
-          <label for="tx-serial">Serial Number</label>
-          <input type="text" id="tx-serial" placeholder="Serial number">
-        </div>
-        <div class="input-group">
-          <label for="tx-power">Rated Power (MVA)</label>
-          <input type="number" id="tx-power" placeholder="e.g. 35" step="any">
-        </div>
-        <div class="input-group">
-          <label for="v-primary">Primary Winding Voltage (V)</label>
-          <input type="number" id="v-primary" placeholder="e.g. 34500" step="any">
-        </div>
-        <div class="input-group">
-          <label for="v-secondary">Secondary Winding Voltage (V)</label>
-          <input type="number" id="v-secondary" placeholder="e.g. 480" step="any">
-        </div>
-      </div>
-
-      <div class="input-row" style="margin-bottom:0;">
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="vector-group">Vector Group</label>
-          <input type="text" id="vector-group" placeholder="e.g. Dy11, YNd1" style="margin-bottom:0;">
-        </div>
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="nominal-ratio">Calculated Winding Nominal Ratio</label>
-          <input type="text" id="nominal-ratio" readonly placeholder="Auto-calculated" style="background:#f1f5f9; margin-bottom:0; font-weight:700; color:var(--primary-color);">
-        </div>
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="allowed-error">Allowed Ratio Deviation (%) <span class="required">*</span></label>
-          <input type="number" id="allowed-error" value="0.50" step="0.01" style="margin-bottom:0;">
-        </div>
-      </div>
+    <button class="tab-btn active" onclick="switchTab('0', 'embed-ttr-form.html')">
+      Turns Ratio (TTR)
+    </button>
+  
+    <button class="tab-btn " onclick="switchTab('1', 'embed-transformer-test.html?tool=transformer-test')">
+      Full Winding Test
+    </button>
+  
     </div>
 
-    <!-- Test Instruments & Tech -->
-    <div class="form-section" style="margin-top: 20px;">
-      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-microchip" style="color:var(--primary-color);"></i> 2. Calibration & Testing Details</h3>
-      <div class="input-row" style="margin-bottom:0;">
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="inst-model">TTR Test Set Model</label>
-          <input type="text" id="inst-model" placeholder="e.g. Megger TTR300" style="margin-bottom:0;">
-        </div>
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="inst-serial">Test Instrument S/N</label>
-          <input type="text" id="inst-serial" placeholder="Serial number" style="margin-bottom:0;">
-        </div>
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="inst-cal">Instrument Calibration Due</label>
-          <input type="date" id="inst-cal" style="margin-bottom:0;">
-        </div>
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="tech-name">Testing Technician</label>
-          <input type="text" id="tech-name" placeholder="Technician name" style="margin-bottom:0;">
-        </div>
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="test-date">Date & Time</label>
-          <input type="datetime-local" id="test-date" style="margin-bottom:0;">
-        </div>
-      </div>
+    <!-- Live Workspace Panel -->
+    <div class="iframe-wrapper">
+      <iframe id="workspace-iframe" src="embed-ttr-form.html"></iframe>
     </div>
-
-    <!-- Dynamic Ratio log -->
-    <div class="form-section" style="margin-top: 20px;">
-      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-list-check" style="color:var(--primary-color);"></i> 3. Turns Ratio Measurement Records</h3>
-      
-      <div class="dynamic-table-wrapper">
-        <table class="dynamic-table">
-          <thead>
-            <tr>
-              <th style="width: 100px;">Tap Position</th>
-              <th style="width: 120px;">Phase Tested</th>
-              <th>Expected Ratio</th>
-              <th>Measured Ratio</th>
-              <th>Ratio Error (%)</th>
-              <th style="width: 120px;">Evaluation</th>
-              <th>Notes / Remarks</th>
-              <th style="width: 40px;" class="print-hide"></th>
-            </tr>
-          </thead>
-          <tbody id="ttr-tbody">
-            <!-- Dynamic rows -->
-          </tbody>
-        </table>
-      </div>
-
-      <button type="button" class="button-secondary btn-add-row" id="add-row-btn" style="margin-top:0; width:auto; padding: 6px 14px; font-size:0.82rem;"><i class="fas fa-plus"></i> Add Measurement Phase</button>
-    </div>
-
-    <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
-
-    <!-- Diagnostic Results Summary -->
-    <div id="result-panel" class="result-panel" style="display: none; margin-top: 24px;">
-      <div class="result-header">
-        <span>Turns Ratio Commissioning Evaluation</span>
-        <span id="overall-status-badge" class="status-badge-inline status-pass">Pass</span>
-      </div>
-
-      <div class="result-row">
-        <span>Maximum Measured Deviation Error:</span>
-        <span id="res-max-error" style="font-weight: 700;">--%</span>
-      </div>
-      <div class="result-row">
-        <span>Allowed Limit Threshold:</span>
-        <span id="res-limit" style="font-weight: 700;">±0.50%</span>
-      </div>
-      <div class="result-row">
-        <span>Failed Measurement Count:</span>
-        <span id="res-failed-count" style="font-weight: 700;">0 items</span>
-      </div>
-    </div>
-
-    <!-- Action Bar -->
-    <div class="btn-row">
-      <div class="btn-group">
-        <button type="button" id="copy-btn" class="button-secondary btn-action"><i class="fas fa-copy"></i> Copy Summary</button>
-        <button type="button" id="export-csv-btn" class="button-secondary btn-action"><i class="fas fa-file-csv"></i> Export CSV</button>
-        <button type="button" id="export-json-btn" class="button-secondary btn-action"><i class="fas fa-file-code"></i> Export JSON</button>
-      </div>
-      <div class="btn-group">
-        <button type="button" id="print-btn" class="button-secondary btn-action" onclick="window.print()"><i class="fas fa-print"></i> Print Report</button>
-        <button type="button" id="sample-btn" class="button-secondary btn-action"><i class="fas fa-magic"></i> Load Sample</button>
-        <button type="button" id="reset-btn" class="button-secondary btn-action btn-danger-action" style="background:#fee2e2; color:#b91c1c; border-color:#fecaca;"><i class="fas fa-undo"></i> Reset</button>
-      </div>
-    </div>
-
-    <!-- Assumptions -->
-    <div class="assumptions-box" style="margin-top: 24px;">
-      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Sizing & Ratio Rules</div>
-      <ul class="assumptions-list">
-        <li><strong>Nominal Ratio</strong> = Primary Voltage / Secondary Voltage (For detailed star-delta connections, phase coefficients apply).</li>
-        <li><strong>Ratio Deviation Error %</strong> = [(Measured - Expected) / Expected] &times; 100.</li>
-        <li>Absolute Deviation: |Error %| &le; Allowed Error % evaluated for PASS/FAIL.</li>
-        <li>Missing calibration dates will generate system warning flags on official printable test logs.</li>
-      </ul>
-    </div>
-
-        
   </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-text">
-            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
-        </div>
-        <div class="footer-logo">
-            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
-            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
-        </div>
-    </footer>
-
+  <footer class="footer">
+    <div class="footer-text">
+      <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+    </div>
+    <div class="footer-logo">
+      <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+      <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;">
+    </div>
+  </footer>
 
   <script src="js/common.js"></script>
-  <script src="js/ttr-form.js"></script>
+  <script>
+    function switchTab(index, src) {
+      // Toggle active classes on tab buttons
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach((btn, idx) => {
+        if (idx == index) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+
+      // Update iframe source path
+      document.getElementById('workspace-iframe').src = src;
+    }
+
+    // Direct tab targeting via query parameter (e.g. ?tab=1)
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
+      if (tabParam) {
+        const idx = parseInt(tabParam, 10);
+        const buttons = document.querySelectorAll('.tab-btn');
+        if (idx >= 0 && idx < buttons.length) {
+          buttons[idx].click();
+        }
+      }
+    });
+  </script>
 </body>
 </html>

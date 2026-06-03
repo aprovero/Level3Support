@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cleaning ROI Calculator — Level3Support</title>
+  <link rel="stylesheet" href="css/core.css?v=1" />
+  <link rel="stylesheet" href="css/components.css?v=1" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .rec-clean { background: #dcfce7; color: #15803d; }
+    .rec-monitor { background: #fef3c7; color: #b45309; }
+    .rec-wait { background: #fee2e2; color: #b91c1c; }
+    .rec-review { background: #e2e8f0; color: #475569; }
+  </style>
+
+  <style>
+    .back-link, .btn-back, .header, .footer, footer, .main-footer { display: none !important; }
+    body { padding: 10px !important; background: #ffffff !important; }
+    .placeholder-container, .calc-container, .form-section { max-width: 100% !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
+  </style>
+  
+</head>
+<body>
+  <div class="placeholder-container">
+        <a href="index.html#tools" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
+
+<div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+
+    
+
+    
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">☀️ SOILING & PERFORMANCE</div>
+    </div>
+
+    
+
+    
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                        Cleaning ROI Calculator
+                    </h1>
+                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+                        Evaluate the economic justification of module cleaning campaigns by estimating recovered revenues, cleaning expenses, net financial benefits, and investment payback schedules.
+                    </p>
+                </div>
+                <div class="tool-meta">
+                    <span class="tile-category" style="background:#fffbeb; color:#b45309; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">🍂 Soiling & PV Performance</span>
+                    <span class="status-badge" style="background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Under Review</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Calculator Inputs</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="project-name">Site / Project Name</label>
+          <input type="text" id="project-name" placeholder="e.g. Solaria Phase I" style="height: 42px;">
+        </div>
+        <div class="input-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0;">
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Plant Capacity <span class="required">*</span></label>
+            <input type="number" id="plant-capacity" placeholder="e.g. 50" step="any" style="height: 42px;">
+          </div>
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Unit</label>
+            <select id="capacity-unit" style="height: 42px;">
+              <option value="MW">MW</option>
+              <option value="kW">kW</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="affected-capacity-pct">Affected Capacity (%) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="affected-capacity-pct" placeholder="e.g. 100" value="100" step="any">
+            <div class="input-unit">%</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="soiling-loss-pct">Estimated Soiling Loss (%) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="soiling-loss-pct" placeholder="e.g. 4.5" step="any">
+            <div class="input-unit">%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0; grid-column: 1 / 2;">
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Expected Daily Gen <span class="required">*</span></label>
+            <input type="number" id="expected-daily-gen" placeholder="e.g. 250" step="any" style="height: 42px;">
+          </div>
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Unit</label>
+            <select id="gen-unit" style="height: 42px;">
+              <option value="MWh/day">MWh/day</option>
+              <option value="kWh/day">kWh/day</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0; grid-column: 2 / 3;">
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Energy Price <span class="required">*</span></label>
+            <input type="number" id="energy-price" placeholder="e.g. 0.08" step="any" style="height: 42px;">
+          </div>
+          <div class="input-group" style="margin-bottom: 0;">
+            <label style="margin-top: 0;">Currency</label>
+            <select id="currency" style="height: 42px;">
+              <option value="USD">USD ($)</option>
+              <option value="MXN">MXN ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="BRL">BRL (R$)</option>
+              <option value="CLP">CLP ($)</option>
+              <option value="COP">COP ($)</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="cleaning-cost">Cleaning Campaign Cost <span class="required">*</span></label>
+          <input type="number" id="cleaning-cost" placeholder="e.g. 8500" step="any" style="height: 42px;">
+        </div>
+        <div class="input-group">
+          <label for="expected-recovery-pct">Expected Recovery (%) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="expected-recovery-pct" value="95" step="any">
+            <div class="input-unit">%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="analysis-period-days">Evaluation Period (Days) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="analysis-period-days" value="30" step="1">
+            <div class="input-unit">Days</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="rain-reset">Expected Rain / Reset Event</label>
+          <select id="rain-reset" style="height: 42px;">
+            <option value="no">No Rain Expected</option>
+            <option value="yes">Rain Expected Within Period</option>
+            <option value="unknown">Unknown / Seasonal Unpredictable</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="tool-notes">O&M Campaign Notes</label>
+        <input type="text" id="tool-notes" placeholder="e.g. Pricing includes crew mobilization and local water sourcing fees." style="height: 42px;">
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Calculate ROI</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel neutral" style="display: none; margin-top: 20px;">
+      <div class="result-header" style="display: flex; justify-content: space-between;  margin-bottom: 12px;">
+        <span style="font-weight: 700; font-size: 1.1rem; font-family:'Outfit';">ROI Business Summary</span>
+        <span id="roi-recommendation-badge" class="status-badge-inline rec-clean">Clean Now</span>
+      </div>
+
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span>Affected Daily Generation:</span>
+        <span id="res-affected-gen" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span>Daily Soiling Lost Energy:</span>
+        <span id="res-daily-lost-energy" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span>Daily Recoverable Energy:</span>
+        <span id="res-recoverable-energy" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px; margin-top: 8px;">
+        <span>Cleaning Campaign Cost:</span>
+        <span id="res-cleaning-cost" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span>Recovered Revenue (${evaluationPeriodText = '30'} Days):</span>
+        <span id="res-recovered-revenue" style="font-weight: 700; color: var(--success-color);">--</span>
+      </div>
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px; border-top: 1px solid var(--border-color); padding-top: 8px; margin-top: 8px;">
+        <span style="font-size: 1.1rem; font-weight: 700;">Net Campaign Benefit:</span>
+        <span id="res-net-benefit" style="font-weight: 700; font-size: 1.2rem;">--</span>
+      </div>
+      <div class="result-row" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+        <span>Simple Investment Payback Period:</span>
+        <span id="res-payback-days" style="font-weight: 600; color: var(--primary-color);">--</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 20px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Business Summary</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px; border: 1px solid var(--border-color); border-radius: var(--border-radius-md); padding: 16px; background: var(--background-dark);">
+      <div class="assumptions-title" style="font-weight: 700; margin-bottom: 8px; display: flex;  gap: 6px;"><i class="fas fa-info-circle" style="color: var(--primary-color);"></i> Engineering Assumptions & Limitations</div>
+      <ul class="assumptions-list" style="margin-left: 20px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+        <li style="margin-bottom: 6px;">Evaluations are financial estimates based on linear generation extrapolation. They do not model actual dynamic weather forecasts, active grid curtailments, or inverter clipping.</li>
+        <li style="margin-bottom: 6px;">Payback schedules assume static energy values and linear recuperation efficiency post-cleaning.</li>
+        <li style="margin-bottom: 6px;">Final cleanings must account for site access logistics, crew mobilization boundaries, water cleanliness levels, and structural module load safety codes.</li>
+      </ul>
+    </div>
+
+        
+  </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+
+
+  <script src="js/common.js"></script>
+  <script src="js/cleaning-roi.js"></script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PV Weather Correction Calculator — Level3Support</title>
+  <link rel="stylesheet" href="css/core.css?v=1" />
+  <link rel="stylesheet" href="css/components.css?v=1" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .status-watch { background: #fef3c7; color: #b45309; }
+    .status-investigate { background: #fee2e2; color: #b91c1c; }
+  </style>
+
+  <style>
+    .back-link, .btn-back, .header, .footer, footer, .main-footer { display: none !important; }
+    body { padding: 10px !important; background: #ffffff !important; }
+    .placeholder-container, .calc-container, .form-section { max-width: 100% !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
+  </style>
+  
+</head>
+<body>
+  <div class="placeholder-container">
+        <a href="index.html#tools" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
+
+<div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+
+    
+
+    
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">☀️ PV FIELD TOOL</div>
+    </div>
+
+    
+
+    
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                        Weather Correction Calculator for PV Testing
+                    </h1>
+                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+                        Translate open-air DC power measurements of photovoltaic modules to Standard Test Conditions (STC) by correcting for thermal derating and irradiance offsets.
+                    </p>
+                </div>
+                <div class="tool-meta">
+                    <span class="tile-category" style="background:#fee2e2; color:#991b1b; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">🔋 Calculators</span>
+                    <span class="status-badge" style="background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Under Review</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Standard Sizing & Power Specs</h3>
+      
+      <div class="input-row">
+        <div class="input-group">
+          <label for="nameplate-power">Nameplate DC Power (P<sub>STC</sub>) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="nameplate-power" placeholder="e.g. 540" step="any">
+            <div class="input-unit">
+              <select id="power-unit" style="border: none; background: transparent; font-weight: 600; color: var(--text-secondary);">
+                <option value="W">Watts</option>
+                <option value="kW">kW</option>
+                <option value="MW">MW</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-note">Sizing of module or array under STC.</div>
+        </div>
+
+        <div class="input-group">
+          <label for="measured-power">Measured DC Power (P<sub>Meas</sub>) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="measured-power" placeholder="e.g. 430" step="any">
+            <div class="input-unit temp-power-unit">Watts</div>
+          </div>
+          <div class="field-note">Actual recorded power in the field.</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Real-Time Weather Conditions</h3>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="measured-irradiance">Measured Irradiance (G<sub>Meas</sub>) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="measured-irradiance" placeholder="e.g. 850" step="any">
+            <div class="input-unit">W/m²</div>
+          </div>
+          <div class="field-note">Measured Plane-of-Array irradiance in field.</div>
+        </div>
+
+        <div class="input-group">
+          <label for="ref-irradiance">Reference Irradiance (G<sub>Ref</sub>)</label>
+          <div class="input-with-unit">
+            <input type="number" id="ref-irradiance" value="1000" step="any">
+            <div class="input-unit">W/m²</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="module-temp">Module Temperature (T<sub>Mod</sub>) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="module-temp" placeholder="e.g. 48.5" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+          <div class="field-note">Recorded cell / backside module temperature.</div>
+        </div>
+
+        <div class="input-group">
+          <label for="stc-temp">STC Temperature (T<sub>Ref</sub>)</label>
+          <div class="input-with-unit">
+            <input type="number" id="stc-temp" value="25" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label for="temp-coeff">Temperature Coefficient (&gamma;) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-coeff" value="-0.38" step="any">
+            <div class="input-unit">%/°C</div>
+          </div>
+          <div class="field-note">Pmax thermal coefficient (usually negative, e.g. -0.38).</div>
+        </div>
+        <div class="input-group"></div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Calculate Correction</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel" style="display: none;">
+      <div class="result-header">
+        <span>STC Evaluation Results</span>
+        <span id="corr-status-badge" class="status-badge-inline status-normal">Normal</span>
+      </div>
+      
+      <div class="result-row">
+        <span>Irradiance-Adjusted Expected Power:</span>
+        <span id="res-irrad-expected" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Temperature Derating Factor:</span>
+        <span id="res-temp-derate" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="border-top: 1px dashed #bbf7d0; margin-top: 8px; padding-top: 8px;">
+        <span style="font-size: 1.1rem; font-weight: 600;">STC-Corrected Expected Power:</span>
+        <span id="res-expected-power" class="result-value">--</span>
+      </div>
+      <div class="result-row">
+        <span>Measured vs Expected Ratio:</span>
+        <span id="res-ratio-pct" style="font-weight: 700;">--</span>
+      </div>
+      <div class="result-row">
+        <span>Performance Deviation:</span>
+        <span id="res-deviation-pct" style="font-weight: 700;">--</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Results</button>
+        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box">
+      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Engineering Assumptions</div>
+      <ul class="assumptions-list">
+        <li>Correction formula: <strong>P<sub>Expected</sub> = P<sub>STC</sub> &times; (G<sub>Meas</sub> / G<sub>Ref</sub>) &times; [1 + (&gamma; / 100) &times; (T<sub>Mod</sub> - T<sub>Ref</sub>)]</strong>.</li>
+        <li>Temperature coefficient (&gamma;) is converted to a decimal inside the code: <strong>&gamma; / 100</strong>.</li>
+        <li>Pass/Normal status represents: <strong>Measured Power &ge; 90%</strong> of Weather-Corrected Expected Power.</li>
+        <li>Watch status represents: <strong>85% &le; Performance &lt; 90%</strong>. Investigate represents: <strong>Performance &lt; 85%</strong>.</li>
+      </ul>
+    </div>
+
+        
+  </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+
+
+  <script src="js/common.js"></script>
+  <script src="js/weather-correction.js"></script>
+</body>
+</html>

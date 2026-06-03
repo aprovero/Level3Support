@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inverter Capability Curve Check — Level3Support</title>
+  <link rel="stylesheet" href="css/core.css?v=1" />
+  <link rel="stylesheet" href="css/components.css?v=1" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .status-warning { background: #fef3c7; color: #b45309; }
+    .status-critical { background: #fee2e2; color: #b91c1c; }
+  </style>
+
+  <style>
+    .back-link, .btn-back, .header, .footer, footer, .main-footer { display: none !important; }
+    body { padding: 10px !important; background: #ffffff !important; }
+    .placeholder-container, .calc-container, .form-section { max-width: 100% !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
+  </style>
+  
+</head>
+<body>
+  <div class="placeholder-container">
+        <a href="index.html#tools" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
+
+<div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+
+    
+
+    
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ GRID & CONTROLS</div>
+    </div>
+
+    
+
+    
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                        Inverter Capability Curve Check
+                    </h1>
+                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+                        Check whether a requested active/reactive power operating point is within inverter apparent power limits, and calculate necessary active/reactive power reductions.
+                    </p>
+                </div>
+                <div class="tool-meta">
+                    <span class="tile-category" style="background:#ecfdf5; color:#047857; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">🌐 Grid & Controls</span>
+                    <span class="status-badge" style="background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Under Review</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+
+    <!-- Calculator Inputs -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Inverter Ratings & Setpoints</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="rating-apparent">Inverter Apparent Power Rating <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="rating-apparent" placeholder="e.g. 3450" step="any" value="3450">
+            <select id="rating-apparent-unit" style="width: 80px; border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+              <option value="kVA">kVA</option>
+              <option value="MVA">MVA</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="setpoint-p">Active Power Setpoint (P) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="setpoint-p" placeholder="e.g. 3200" step="any">
+            <div class="input-unit">kW</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="setpoint-q">Reactive Power Setpoint (Q) <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="setpoint-q" placeholder="e.g. 1500" step="any">
+            <div class="input-unit">kvar</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="inverters-online">Number of Inverters Online</label>
+          <input type="number" id="inverters-online" placeholder="e.g. 1" value="1" min="1">
+        </div>
+      </div>
+
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">External Environmental limits</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="temp-derating">Thermal Derating Factor (0 to 1)</label>
+          <input type="number" id="temp-derating" placeholder="e.g. 1.0" step="any" min="0" max="1" value="1.0">
+        </div>
+        <div class="input-group">
+          <label for="voltage-factor">AC Voltage Deviation Factor</label>
+          <input type="number" id="voltage-factor" placeholder="e.g. 1.0" step="any" value="1.0">
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="notes">Notes</label>
+        <textarea id="notes" placeholder="Enter notes..."></textarea>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <div class="btn-row">
+        <button id="reset-btn" class="button-secondary"><i class="fas fa-undo"></i> Reset</button>
+        <button id="calculate-btn"><i class="fas fa-calculator"></i> Run Curve Check</button>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel neutral" style="display: none; margin-top: 24px;">
+      <div class="result-header" style="display: flex; justify-content: space-between;  border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+        <span style="font-weight: bold; font-size: 1.1rem; color: var(--text-color);">Capability Analysis</span>
+        <span id="diagnostic-status" class="status-badge-inline status-normal">WITHIN LIMITS</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Required Apparent Power (S_req):</span>
+        <span id="res-s-req" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Adjusted S Rating (derate-corrected):</span>
+        <span id="res-s-rating-adj" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Inverter Capacity Utilization:</span>
+        <span id="res-utilization" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between; border-top: 1px dashed var(--border-color); padding-top: 8px; margin-top: 8px;">
+        <span style="font-weight: bold;">Within Capability Boundary:</span>
+        <span id="res-within" style="font-weight: bold;">--</span>
+      </div>
+
+      <!-- Out-of-bounds adjustments -->
+      <div id="adj-section" style="display: none; background: #fee2e2; border: 1px solid #fecaca; padding: 12px; border-radius: 6px; margin-top: 15px;">
+        <div style="font-weight: bold; color: #991b1b; margin-bottom: 8px;"><i class="fas fa-exclamation-circle"></i> Operating Point Out of Capability Bounds!</div>
+        <div style="font-size: 0.85rem; color: #7f1d1d; margin-bottom: 6px;">
+          To maintain requested Q setpoint, Active Power (P) must be reduced to: <strong id="res-adj-p">--</strong>
+        </div>
+        <div style="font-size: 0.85rem; color: #7f1d1d;">
+          To maintain requested P setpoint, Reactive Power (Q) must be reduced to: <strong id="res-adj-q">--</strong>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Summary</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px; background: #f1f5f9; border-radius: var(--border-radius-md); padding: 16px; border: 1px solid var(--border-color);">
+      <div class="assumptions-title" style="font-weight: bold; margin-bottom: 8px;"><i class="fas fa-info-circle"></i> Engineering Assumptions</div>
+      <ul class="assumptions-list" style="margin-left: 20px; font-size: 0.85rem; color: var(--text-secondary);">
+        <li>Formula: <strong>S_required = &radic;(P² + Q²)</strong>.</li>
+        <li>Utilization % = <strong>S_required / (S_rating &times; Thermal Derate &times; Voltage Factor &times; Inverters Online) &times; 100</strong>.</li>
+        <li>If operating point exceeds capability, the maximum active power limit for a fixed Q is computed as <strong>P_max = &radic;(S_rating² - Q²)</strong>, and the maximum Q for a fixed P is <strong>Q_max = &radic;(S_rating² - P²)</strong>.</li>
+      </ul>
+    </div>
+
+        
+  </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+
+
+  <script src="js/common.js"></script>
+  <script src="js/inverter-capability-curve-check.js"></script>
+</body>
+</html>

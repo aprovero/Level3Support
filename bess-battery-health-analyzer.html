@@ -8,324 +8,143 @@
   <link rel="stylesheet" href="css/components.css?v=1" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    .calc-container {
-      max-width: 900px;
+    .workspace-container {
+      max-width: 1200px;
       margin: 20px auto;
-      background: var(--background-light);
-      border-radius: var(--border-radius-lg);
-      box-shadow: var(--shadow-md);
-      padding: 24px;
+      padding: 0 1.5rem;
     }
-    .input-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      margin-bottom: 14px;
+    .tab-bar {
+      display: flex;
+      gap: 6px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      padding: 6px;
+      margin-bottom: 1.5rem;
+      width: fit-content;
     }
-    .dynamic-table-wrapper {
-      margin-bottom: 16px;
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius-md);
-      overflow-x: auto;
-    }
-    .dynamic-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-    }
-    .dynamic-table th {
-      background: var(--background-dark);
-      padding: 8px 12px;
-      text-align: left;
+    .tab-btn {
+      padding: 10px 22px;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.9rem;
       font-weight: 600;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.78rem;
-      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
     }
-    .dynamic-table td {
-      padding: 8px 12px;
-      border-bottom: 1px solid #f1f5f9;
-      vertical-align: middle;
+    .tab-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
-    .dynamic-table tr:last-child td { border-bottom: none; }
-    .dynamic-table input, .dynamic-table select, .dynamic-table textarea {
-      margin-bottom: 0;
-      padding: 6px 10px;
-      height: 34px;
-      font-size: 0.85rem;
-    }
-    .btn-row {
-      display: flex;
-      justify-content: space-between;
-      
-      margin-top: 20px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .btn-group {
-      display: flex;
-      gap: 8px;
-    }
-    .btn-action {
-      width: auto;
-      min-height: unset;
-      padding: 8px 16px;
-      font-size: 0.85rem;
-      margin-top: 0;
-    }
-    .status-badge-inline {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-weight: 700;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      display: inline-block;
-    }
-    .status-pass { background: #dcfce7; color: #15803d; }
-    .status-warn { background: #fef3c7; color: #92400e; }
-    .status-fail { background: #fee2e2; color: #b91c1c; }
-
-    /* Summary Stats Layout */
-    .stat-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    .stat-card {
-      background: var(--background-dark);
+    .iframe-wrapper {
+      background: #ffffff;
       border: 1px solid var(--border-color);
-      border-radius: var(--border-radius-md);
-      padding: 12px;
-      text-align: center;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      min-height: 780px;
+      display: flex;
+      flex-direction: column;
     }
-    .stat-value {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--primary-color);
-    }
-    .stat-label {
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
-
-    @media (max-width: 600px) {
-      .stat-row {
-        grid-template-columns: 1fr 1fr;
-      }
+    iframe {
+      width: 100%;
+      flex: 1;
+      border: none;
+      min-height: 780px;
     }
   </style>
 </head>
 <body>
-  <div class="placeholder-container">
-        <a href="index.html#tools" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
+  <div class="workspace-container">
+    <a href="index.html#tools" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
 
-<div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
       <div class="logo">
-        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+        <a href="index.html"><img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;"></a>
       </div>
-
-    
-
-    
-      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ BESS FIELD TOOLS</div>
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ CONSOLIDATED WORKSPACE</div>
     </div>
 
-    
-
-    
-        <!-- Header Panel -->
-        <div class="tool-header-section">
-            <div class="tool-title-row">
-                <div>
-                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
-                        BESS Battery Health Analyzer
-                    </h1>
-                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
-                        Analyze cell or module voltage spread across battery racks and identify abnormal voltage deviations that can block charging or trigger cell protection events.
-                    </p>
-                </div>
-                <div class="tool-meta">
-                    <span class="tile-category" style="background:#fee2e2; color:#991b1b; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">🔋 BESS Field Tools</span>
-                    <span class="status-badge" style="background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Under Review</span>
-                </div>
-            </div>
+    <!-- Header Panel -->
+    <div class="tool-header-section" style="margin-bottom: 1.5rem;">
+      <div class="tool-title-row">
+        <div>
+          <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif;">
+            BESS Battery Health Analyzer
+          </h1>
+          <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+            Evaluate battery health metrics, including module voltage imbalance, rack state-of-charge spreads, and temperature variations.
+          </p>
         </div>
-
-        <!-- Safety Disclaimer Ribbon -->
-    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
-      <i class="fas fa-exclamation-triangle"></i>
-      <div>
-        <div class="warning-title">BESS Cell Balance & Safety Disclaimer</div>
-        Battery cell voltage interpretation depends on BESS chemistry (e.g. LFP, NMC), state-of-charge (SOC), charging/discharging balancing state, and OEM battery limits. Follow OEM manuals and specifications before performing manual balancing, cell replacements, or taking racks out of service.
+        <div class="tool-meta">
+          <span class="tile-category" style="background:#eff6ff; color:#1d4ed8; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">BESS Commissioning & Diagnostics</span>
+          <span class="status-badge" style="background:#dcfce7; color:#15803d; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Active</span>
+        </div>
       </div>
     </div>
 
-
-    <!-- Scope Section -->
-    <div class="form-section">
-      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-file-contract" style="color:var(--primary-color);"></i> 1. Site & Component Identifiers</h3>
-      <div class="input-row">
-        <div class="input-group">
-          <label for="site-name">Project / Site Name</label>
-          <input type="text" id="site-name" placeholder="e.g. Desert Sunrise BESS">
-        </div>
-        <div class="input-group">
-          <label for="container-id">Container / Block ID</label>
-          <input type="text" id="container-id" placeholder="e.g. ESS-01">
-        </div>
-        <div class="input-group">
-          <label for="rack-id">Rack / String / Cluster ID</label>
-          <input type="text" id="rack-id" placeholder="e.g. RACK-A3">
-        </div>
-        <div class="input-group">
-          <label for="test-date">Timestamp</label>
-          <input type="datetime-local" id="test-date">
-        </div>
-      </div>
+    <!-- Tab Bar Selector -->
+    <div class="tab-bar">
       
-      <div class="input-row" style="margin-bottom:0;">
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="measurement-level">Measurement Level</label>
-          <select id="measurement-level" style="width: 100%; height: 42px;">
-            <option value="Cell">Individual Cell Voltage</option>
-            <option value="Module">Module Voltage</option>
-            <option value="Rack">Rack Voltage</option>
-            <option value="Cluster">Cluster Voltage</option>
-          </select>
-        </div>
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="warn-threshold">Warning Threshold (mV)</label>
-          <input type="number" id="warn-threshold" value="30" step="any" style="height:42px; margin-bottom:0;">
-        </div>
-        <div class="input-group" style="margin-bottom:0;">
-          <label for="crit-threshold">Critical Threshold (mV)</label>
-          <input type="number" id="crit-threshold" value="50" step="any" style="height:42px; margin-bottom:0;">
-        </div>
-      </div>
+    <button class="tab-btn active" onclick="switchTab('0', 'embed-bess-cell-imbalance.html')">
+      Cell / Module Voltage Spread
+    </button>
+  
+    <button class="tab-btn " onclick="switchTab('1', 'embed-battery-soc-imbalance-analyzer.html')">
+      SOC Spread
+    </button>
+  
+    <button class="tab-btn " onclick="switchTab('2', 'embed-battery-temperature-spread.html')">
+      Temperature Spread
+    </button>
+  
     </div>
 
-    <!-- Bulk Data Input -->
-    <div class="form-section" style="margin-top: 20px;">
-      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-file-import" style="color:var(--primary-color);"></i> 2. Bulk Pasteur / CSV Import</h3>
-      <div class="input-group">
-        <label for="bulk-voltages">Paste Voltages <span style="font-size:0.75rem; color:var(--text-light); font-weight:normal;">(Values can be separated by commas, spaces, tabs, or newlines)</span></label>
-        <textarea id="bulk-voltages" placeholder="e.g. 3.295, 3.310, 3.321, 3.298..."></textarea>
-      </div>
-      <button type="button" class="button-secondary" id="import-btn" style="margin-top: 0; width: auto; padding: 6px 14px; font-size: 0.85rem;"><i class="fas fa-arrow-down-short-wide"></i> Import & Build Table</button>
+    <!-- Live Workspace Panel -->
+    <div class="iframe-wrapper">
+      <iframe id="workspace-iframe" src="embed-bess-cell-imbalance.html"></iframe>
     </div>
-
-    <!-- Measurement Table -->
-    <div class="form-section" style="margin-top: 20px;">
-      <h3 style="margin-top: 0; margin-bottom: 14px; font-family: 'Outfit'; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;"><i class="fas fa-list-check" style="color:var(--primary-color);"></i> 3. Voltage Diagnostics Table</h3>
-      
-      <div class="dynamic-table-wrapper">
-        <table class="dynamic-table">
-          <thead>
-            <tr>
-              <th style="width: 150px;">Cell / Item ID</th>
-              <th>Voltage (V)</th>
-              <th>Temperature (°C) <span style="font-size:0.7rem; font-weight:normal;">(Optional)</span></th>
-              <th>SOC (%) <span style="font-size:0.7rem; font-weight:normal;">(Optional)</span></th>
-              <th>Alarm Present</th>
-              <th>Deviation from Avg</th>
-              <th>Notes / Remarks</th>
-              <th style="width: 40px;"></th>
-            </tr>
-          </thead>
-          <tbody id="cell-tbody">
-            <!-- Dynamic rows -->
-          </tbody>
-        </table>
-      </div>
-
-      <button type="button" class="button-secondary" id="add-row-btn" style="margin-top:0; width:auto; padding: 6px 14px; font-size:0.82rem;"><i class="fas fa-plus"></i> Add Diagnostics Row</button>
-    </div>
-
-    <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
-
-    <!-- Diagnostic Summary -->
-    <div id="result-panel" class="result-panel" style="display: none; margin-top: 24px;">
-      <div class="result-header">
-        <span>BESS Battery Rack Diagnostic Evaluation</span>
-        <span id="overall-status-badge" class="status-badge-inline status-pass">Normal</span>
-      </div>
-
-      <div style="padding: 16px 0 0 0;">
-        <div class="stat-row">
-          <div class="stat-card">
-            <div class="stat-value" id="res-avg">-- V</div>
-            <div class="stat-label">Average Voltage</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="res-spread-mv">-- mV</div>
-            <div class="stat-label">Voltage Spread</div>
-          </div>
-          <div class="stat-card" style="border-left: 3px solid var(--success-color);">
-            <div class="stat-value" id="res-max" style="color: var(--success-color);">-- V</div>
-            <div class="stat-label" id="res-max-label">Highest Cell</div>
-          </div>
-          <div class="stat-card" style="border-left: 3px solid var(--error-color);">
-            <div class="stat-value" id="res-min" style="color: var(--error-color);">-- V</div>
-            <div class="stat-label" id="res-min-label">Lowest Cell</div>
-          </div>
-        </div>
-
-        <div class="result-row">
-          <span>Total Logged Cells/Modules:</span>
-          <span id="res-total-count" style="font-weight: 600;">--</span>
-        </div>
-        <div class="result-row">
-          <span>Flagged Imbalance Cells:</span>
-          <span id="res-flagged-count" style="font-weight: 700;">0 cells</span>
-        </div>
-      </div>
-
-      <div style="display: flex; gap: 8px; margin-top: 16px;">
-        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Summary</button>
-        <button id="export-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-export"></i> Export JSON</button>
-      </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="btn-row">
-      <div class="btn-group"></div>
-      <div class="btn-group">
-        <button type="button" id="sample-btn" class="button-secondary btn-action"><i class="fas fa-magic"></i> Load Sample</button>
-        <button type="button" id="reset-btn" class="button-secondary btn-action btn-danger-action" style="background:#fee2e2; color:#b91c1c; border-color:#fecaca;"><i class="fas fa-undo"></i> Reset</button>
-      </div>
-    </div>
-
-    <!-- Assumptions -->
-    <div class="assumptions-box" style="margin-top: 24px;">
-      <div class="assumptions-title"><i class="fas fa-info-circle"></i> Sizing & Tolerance Reference</div>
-      <ul class="assumptions-list">
-        <li><strong>Average Voltage</strong> = &Sigma;(V<sub>n</sub>) / N</li>
-        <li><strong>Voltage Spread</strong> = V<sub>max</sub> &minus; V<sub>min</sub> (expressed in Volts and Millivolts).</li>
-        <li>Pass/Fail rules: A cell is flagged as <strong>WATCH</strong> if its deviation or total spread exceeds the warning threshold. A cell is flagged as <strong>INVESTIGATE</strong> if its deviation or total spread exceeds the critical threshold.</li>
-        <li>Common values: LFP cells typically balance within <strong>10&ndash;20 mV</strong> at float charge. Imbalance of <strong>&gt;50 mV</strong> is often flagged as an active alarm in modern BMS architectures.</li>
-      </ul>
-    </div>
-
-        
   </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-text">
-            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
-        </div>
-        <div class="footer-logo">
-            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
-            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
-        </div>
-    </footer>
-
+  <footer class="footer">
+    <div class="footer-text">
+      <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+    </div>
+    <div class="footer-logo">
+      <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+      <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;">
+    </div>
+  </footer>
 
   <script src="js/common.js"></script>
-  <script src="js/bess-cell-imbalance.js"></script>
+  <script>
+    function switchTab(index, src) {
+      // Toggle active classes on tab buttons
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach((btn, idx) => {
+        if (idx == index) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+
+      // Update iframe source path
+      document.getElementById('workspace-iframe').src = src;
+    }
+
+    // Direct tab targeting via query parameter (e.g. ?tab=1)
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
+      if (tabParam) {
+        const idx = parseInt(tabParam, 10);
+        const buttons = document.querySelectorAll('.tab-btn');
+        if (idx >= 0 && idx < buttons.length) {
+          buttons[idx].click();
+        }
+      }
+    });
+  </script>
 </body>
 </html>

@@ -5,158 +5,208 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found - Level3Support</title>
     <link rel="icon" type="image/x-icon" href="images/L3S_ICON.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: #333333;
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --background: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            
-            text-align: center;
+            padding: 20px;
         }
 
-        .coe-logo {
-            margin-top: 40px;
-        }
-
-        .coe-logo img {
-            height: 50px;
-        }
-
-        .content {
-            display: flex;
-            flex-direction: column;
-            
-            position: relative;
+        .error-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 540px;
             width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .main-section {
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand-header {
+            margin-bottom: 24px;
+        }
+
+        .brand-logo {
+            height: 48px;
+            width: auto;
+        }
+
+        .illustration-container {
+            position: relative;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .error-illustration {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            mix-blend-mode: multiply;
+            animation: hoverEffect 4s ease-in-out infinite;
+        }
+
+        @keyframes hoverEffect {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .error-message {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 32px;
+            padding: 0 10px;
+        }
+
+        .actions-container {
             display: flex;
             flex-direction: column;
-            
-            margin-bottom: 20px;
-        }
-
-        .character-container {
-            position: absolute;
-            left: calc(50% - 315px);
-            top: calc(30% - 50px);
-            transform: translateY(-50%);
-        }
-
-        .hmm-character {
-            width: 200px;
-            height: auto;
-        }
-
-        .error-code {
-            font-size: 8rem;
-            font-weight: bold;
-            color: #666666;
-            margin-bottom: 10px;
-            line-height: 1;
-        }
-
-        .error-title {
-            font-size: 2rem;
-            color: #333333;
-            margin-bottom: 0;
-            font-weight: normal;
-        }
-
-        .error-description {
-            font-size: 1rem;
-            color: #666666;
-            line-height: 1.6;
+            gap: 12px;
+            align-items: center;
             margin-bottom: 40px;
-            max-width: 400px;
         }
 
-        .back-button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #f5f5f5;
-            color: #333333;
-            text-decoration: none;
-            border: 1px solid #cccccc;
-            border-radius: 4px;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 10px;
             font-size: 1rem;
-            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            width: 100%;
+            max-width: 240px;
         }
 
-        .back-button:hover {
-            background-color: #e5e5e5;
-            border-color: #999999;
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
 
-        @media (max-width: 1200px) {
-            .character-container {
-                left: calc(50% - 265px);
-            }
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
         }
 
-        @media (max-width: 900px) {
-            .character-container {
-                left: calc(50% - 215px);
-            }
-            
-            .hmm-character {
-                width: 130px;
-                height: auto;
-            }
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
-        @media (max-width: 768px) {
-            .character-container {
-                position: static;
-                transform: none;
-                margin-bottom: 20px;
-            }
+        .btn-secondary {
+            background-color: #f1f5f9;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
 
-            .hmm-character {
-                width: 130px;
-                height: auto;
-            }
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+            color: var(--text-main);
+            transform: translateY(-2px);
+        }
 
-            .coe-logo img {
-                height: 40px;
-            }
+        .footer-logo {
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
 
-            .error-code {
-                font-size: 6rem;
-            }
-            
-            .error-title {
-                font-size: 1.5rem;
-            }
+        .footer-logo span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
 
-            .error-description {
-                padding: 0 20px;
-            }
+        .partner-logo {
+            height: 24px;
+            width: auto;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+
+        .partner-logo:hover {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <div class="content">
-        <div class="character-container">
-            <img src="images/hmm-character.webp" alt="Hmm?" class="hmm-character">
+    <div class="error-card">
+        <div class="brand-header">
+            <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support Logo" class="brand-logo">
         </div>
-        <div class="main-section">
-            <div class="error-code">404</div>
-            <h1 class="error-title">Page Not Found</h1>
+        
+        <div class="illustration-container">
+            <img src="images/NEW 404.webp" alt="404 Page Not Found" class="error-illustration">
         </div>
-        <p class="error-description">
-            The page you're looking for seems to have wandered off. 
-            Let's get you back to where you need to be.
+        
+        <p class="error-message">
+            The page you're looking for has wandered off, or is currently being assembled by our robot. Let's get you back to work.
         </p>
-        <div class="coe-logo">
-            <img src="images/APROVERO_LOGO.png" alt="Level3Support">
+        
+        <div class="actions-container">
+            <a href="index.html" class="btn btn-primary">
+                <i class="fas fa-th-large"></i> Go to Dashboard
+            </a>
+            <button onclick="window.history.back()" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Go Back
+            </button>
+        </div>
+        
+        <div class="footer-logo">
+            <span>Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" class="partner-logo">
         </div>
     </div>
 </body>

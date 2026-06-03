@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battery Temperature Spread Analyzer — Level3Support</title>
+  <link rel="stylesheet" href="css/core.css?v=1" />
+  <link rel="stylesheet" href="css/components.css?v=1" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .calc-container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: var(--background-light);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+    }
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .input-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .input-with-unit {
+      display: flex;
+      
+    }
+    .input-with-unit input, .input-with-unit select {
+      margin-bottom: 0;
+      height: 42px;
+    }
+    .input-with-unit input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input-unit {
+      background: var(--background-dark);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      padding: 0 12px;
+      height: 42px;
+      display: flex;
+      
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      border-top-right-radius: var(--border-radius-sm);
+      border-bottom-right-radius: var(--border-radius-sm);
+      white-space: nowrap;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .temp-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 0.85rem;
+    }
+    .temp-table th, .temp-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      text-align: left;
+    }
+    .temp-table th {
+      background: var(--background-dark);
+      font-family: 'Outfit';
+      font-weight: bold;
+    }
+    .temp-table tr:hover {
+      background: #f8fafc;
+    }
+    .status-badge-inline {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .status-normal { background: #dcfce7; color: #15803d; }
+    .status-warning { background: #fef3c7; color: #b45309; }
+    .status-critical { background: #fee2e2; color: #b91c1c; }
+  </style>
+
+  <style>
+    .back-link, .btn-back, .header, .footer, footer, .main-footer { display: none !important; }
+    body { padding: 10px !important; background: #ffffff !important; }
+    .placeholder-container, .calc-container, .form-section { max-width: 100% !important; margin: 0 !important; box-shadow: none !important; border: none !important; }
+  </style>
+  
+</head>
+<body>
+  <div class="placeholder-container">
+        <a href="index.html#tools" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
+
+<div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+      <div class="logo">
+        <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;" />
+      </div>
+
+    
+
+    
+      <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">🔋 BESS FIELD TOOL</div>
+    </div>
+
+    
+
+    
+        <!-- Header Panel -->
+        <div class="tool-header-section">
+            <div class="tool-title-row">
+                <div>
+                    <h1 style="text-align:left; margin:0; font-size:1.8rem; font-family:'Outfit',sans-serif; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                        Battery Temperature Spread Analyzer
+                    </h1>
+                    <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:1rem;">
+                        Analyze battery temperature variation across racks, modules, or clusters to identify HVAC airflow issues, clogged vents, or faulty rack fans.
+                    </p>
+                </div>
+                <div class="tool-meta">
+                    <span class="tile-category" style="background:#fee2e2; color:#991b1b; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">🔋 BESS Field Tools</span>
+                    <span class="status-badge" style="background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; text-transform:uppercase;">Under Review</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Disclaimer Ribbon -->
+    <div class="warning-box" style="margin-top: 0; margin-bottom: 24px;">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div>
+        <div class="warning-title">Safety Disclaimer</div>
+        This ToolHub assists field engineers but does not replace approved project documents, manufacturer manuals, local electrical codes, or site-specific HSE procedures.
+      </div>
+    </div>
+
+
+    <!-- General Parameters -->
+    <div class="form-section" style="padding: 20px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--border-radius-md);">
+      <h3 style="margin-top: 0; margin-bottom: 16px; font-family: 'Outfit';">Log Parameters & HVAC Status</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="container-id">Container / Block ID <span class="required">*</span></label>
+          <input type="text" id="container-id" placeholder="e.g. BESS-C01" value="BESS-C01">
+        </div>
+        <div class="input-group">
+          <label for="ambient-temp">Ambient Temperature</label>
+          <div class="input-with-unit">
+            <input type="number" id="ambient-temp" placeholder="e.g. 28.5" step="any" value="28.5">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="hvac-status">HVAC Operating Status</label>
+          <select id="hvac-status">
+            <option value="Cooling" selected>Cooling</option>
+            <option value="Heating">Heating</option>
+            <option value="Ventilation">Ventilation</option>
+            <option value="Off">Off</option>
+            <option value="Alarm">Alarm / Defect</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="warn-threshold">Warning Spread Threshold</label>
+          <div class="input-with-unit">
+            <input type="number" id="warn-threshold" placeholder="e.g. 5.0" step="any" value="5.0">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Rack temperature inputs -->
+      <h3 style="margin-top: 10px; margin-bottom: 16px; font-family: 'Outfit'; border-top: 1px solid var(--border-color); padding-top: 16px;">Add Rack / Module Temp Entry</h3>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="rack-id">Rack / Module ID <span class="required">*</span></label>
+          <input type="text" id="rack-id" placeholder="e.g. RACK-01" value="RACK-01">
+        </div>
+        <div class="input-group">
+          <label for="temp-avg">Average Temperature <span class="required">*</span></label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-avg" placeholder="e.g. 32.5" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="temp-max">Maximum Temperature</label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-max" placeholder="e.g. 35.1" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="temp-min">Minimum Temperature</label>
+          <div class="input-with-unit">
+            <input type="number" id="temp-min" placeholder="e.g. 29.8" step="any">
+            <div class="input-unit">°C</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="validation-error" style="color: var(--error-color); font-weight: 600; font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+
+      <button id="add-btn"><i class="fas fa-plus"></i> Save Temp Entry</button>
+    </div>
+
+    <!-- Active Temps Table -->
+    <h3 style="margin-top: 24px; font-family: 'Outfit';">Logged Temperature Data</h3>
+    <div style="overflow-x: auto;">
+      <table class="temp-table" id="temp-table">
+        <thead>
+          <tr>
+            <th>Rack / Module ID</th>
+            <th>Avg Temp</th>
+            <th>Max Temp</th>
+            <th>Min Temp</th>
+            <th>Spread</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="temp-tbody">
+          <!-- Dynamically populated rows -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" class="result-panel neutral" style="display: none; margin-top: 24px;">
+      <div class="result-header" style="display: flex; justify-content: space-between;  border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+        <span style="font-weight: bold; font-size: 1.1rem; color: var(--text-color);">Thermal Analysis Summary</span>
+        <span id="diagnostic-status" class="status-badge-inline status-normal">NORMAL</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Overall Maximum Temp:</span>
+        <span id="res-overall-max" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Overall Minimum Temp:</span>
+        <span id="res-overall-min" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between;">
+        <span>Overall Temp Spread:</span>
+        <span id="res-overall-spread" style="font-weight: 600;">--</span>
+      </div>
+      <div class="result-row" style="margin-bottom: 8px; display: flex; justify-content: space-between; border-top: 1px dashed var(--border-color); padding-top: 8px; margin-top: 8px;">
+        <span style="font-weight: bold;">Suggested Follow-up Action:</span>
+        <span id="res-suggested-action" style="font-weight: bold; color: var(--primary-color);">--</span>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="copy-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-copy"></i> Copy Summary</button>
+        <button id="export-csv-btn" class="button-secondary" style="margin-top: 0; padding: 8px; font-size: 0.85rem; min-height: auto; flex: 1;"><i class="fas fa-file-csv"></i> Export CSV</button>
+      </div>
+    </div>
+
+    <!-- Assumptions Box -->
+    <div class="assumptions-box" style="margin-top: 24px; background: #f1f5f9; border-radius: var(--border-radius-md); padding: 16px; border: 1px solid var(--border-color);">
+      <div class="assumptions-title" style="font-weight: bold; margin-bottom: 8px;"><i class="fas fa-info-circle"></i> Thermal Safety Assumptions</div>
+      <ul class="assumptions-list" style="margin-left: 20px; font-size: 0.85rem; color: var(--text-secondary);">
+        <li>Overall Temperature Spread = <strong>Overall Max Temp - Overall Min Temp</strong>.</li>
+        <li>Elevated Spread (&ge; 5.0°C) is flagged if the spread exceeds the warning threshold, signaling poor HVAC airflow or localized heat build-up.</li>
+        <li>This tool is a field screening aid, not a thermal safety determination. Always consult active OEM BMS manual limits.</li>
+      </ul>
+    </div>
+
+        
+  </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-text">
+            <div class="footer-copyright">© 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED.</div>
+        </div>
+        <div class="footer-logo">
+            <span style="font-style: italic; opacity: 0.85; font-size: 0.85rem; color: var(--text-light);">Powered by</span>
+            <img src="images/APROVERO_LOGO.png" alt="aprovero" style="height: 32px; width: auto; opacity: 0.85; transition: all 0.2s ease; cursor: pointer;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.85';">
+        </div>
+    </footer>
+
+
+  <script src="js/common.js"></script>
+  <script src="js/battery-temperature-spread.js"></script>
+</body>
+</html>
