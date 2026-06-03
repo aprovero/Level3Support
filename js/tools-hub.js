@@ -1658,6 +1658,32 @@ function renderHomeView() {
  */
 let activeLibraryCategory = 'all';
 
+const CONSOLIDATED_URLS = [
+    'insulation-resistance-test-form.html',
+    'transformer-test-ttr-report.html',
+    'pv-string-voltage-sizing.html',
+    'cable-sizing-ampacity-voltage-drop.html',
+    'register-bitmask-number-decoder.html',
+    'inverter-power-limitation-analyzer.html',
+    'pv-soiling-analysis-cleaning-decision.html',
+    'pv-performance-verification.html',
+    'reactive-power-inverter-capability.html',
+    'bess-battery-health-analyzer.html'
+];
+
+const PARENT_CHILD_MAP = {
+    'insulation-resistance-test-form.html': ['pv-megger-tester.html', 'insulation-resistance-test-form.html'],
+    'transformer-test-ttr-report.html': ['ttr-form.html', 'transformer-test-ttr-report.html'],
+    'pv-string-voltage-sizing.html': ['pv-string-sizer.html', 'dc-voltage-sanity.html'],
+    'cable-sizing-ampacity-voltage-drop.html': ['bess-cable-sizer.html', 'cable-ampacity.html', 'voltage-drop.html'],
+    'register-bitmask-number-decoder.html': ['modbus-decoder.html', 'number-base-converter.html'],
+    'inverter-power-limitation-analyzer.html': ['clipping-curtailment-check.html', 'inverter-derating-analyzer.html'],
+    'pv-soiling-analysis-cleaning-decision.html': ['soiling-loss-estimator.html', 'clean-vs-soiled-strings.html', 'soiling-lost-energy.html', 'cleaning-roi.html', 'soiling-customer-report.html'],
+    'pv-performance-verification.html': ['pv-performance-ratio.html', 'pv-weather-correction.html'],
+    'reactive-power-inverter-capability.html': ['power-triangle.html', 'inverter-capability-curve-check.html'],
+    'bess-battery-health-analyzer.html': ['bess-cell-imbalance.html', 'battery-soc-imbalance-analyzer.html', 'battery-temperature-spread.html']
+};
+
 function renderLibraryChips() {
     const container = document.getElementById('category-chips-container');
     if (!container) return;
@@ -1665,8 +1691,20 @@ function renderLibraryChips() {
     // Dynamically build list of categories from active tools in the database
     const activeTools = allTools.filter(t => !["Legacy", "Archived", "Hidden", "Disabled"].includes(t.status));
     
-    // Extract unique categories
-    const rawCategories = [...new Set(activeTools.map(t => t.category))].filter(Boolean);
+    // Extract unique categories (active tools plus any categories of children they consolidate)
+    const rawCategoriesSet = new Set();
+    activeTools.forEach(t => {
+        if (t.category) rawCategoriesSet.add(t.category);
+        if (PARENT_CHILD_MAP[t.url]) {
+            const childUrls = PARENT_CHILD_MAP[t.url];
+            allTools.forEach(ct => {
+                if (childUrls.includes(ct.url) && ct.category) {
+                    rawCategoriesSet.add(ct.category);
+                }
+            });
+        }
+    });
+    const rawCategories = [...rawCategoriesSet];
     
     const categories = [
         { label: "All Tools", value: "all" },
@@ -1709,28 +1747,59 @@ function filterLibrary() {
         // Exclude legacy tools entirely from the active Tool Library unless specifically showing Legacy category
         if (["Legacy", "Archived", "Hidden", "Disabled"].includes(tool.status) && activeLibraryCategory !== "legacy-archive") return false;
 
-        // 1. Chip Category check
-        const cleanCat = tool.category.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-        let matchesCategory = activeLibraryCategory === 'all' || cleanCat === activeLibraryCategory;
-        
-        // Solar PV chip matches both PV Field Tools and Soiling & PV Performance
-        if (activeLibraryCategory === 'pv-field-tools') {
-            matchesCategory = (cleanCat === 'pv-field-tools' || cleanCat === 'soiling-pv-performance');
+        // Resolve consolidated children if this is a parent workspace
+        const children = [];
+        if (PARENT_CHILD_MAP[tool.url]) {
+            const childUrls = PARENT_CHILD_MAP[tool.url];
+            allTools.forEach(t => {
+                if (childUrls.includes(t.url)) {
+                    children.push(t);
+                }
+            });
         }
 
-        // 2. Search check
-        const matchesSearch = searchMatches(tool, searchVal);
+        // 1. Chip Category check (checks parent category or inherited child categories)
+        const cleanCat = tool.category.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        let matchesCategory = activeLibraryCategory === 'all' || cleanCat === activeLibraryCategory;
+        if (!matchesCategory && children.length > 0) {
+            matchesCategory = children.some(c => c.category.toLowerCase().replace(/[^a-z0-9]+/g, '-') === activeLibraryCategory);
+        }
 
-        // 3. Advanced Discipline filter (Checks tool metadata or tag arrays)
-        const matchesDiscipline = selectDiscipline === 'all' || 
-                                  (tool.tags && tool.tags.some(tag => tag.toLowerCase() === selectDiscipline.toLowerCase())) ||
-                                  (tool.category.toLowerCase().includes(selectDiscipline.toLowerCase()));
+        // 2. Search check (checks parent matches, "consolidated workspace" matches, or children matches)
+        const isConsolidated = CONSOLIDATED_URLS.includes(tool.url);
+        const searchLower = searchVal.toLowerCase();
+        let matchesSearch = searchMatches(tool, searchVal);
+        if (!matchesSearch) {
+            if (isConsolidated && (searchLower.includes('consolidated') || searchLower.includes('workspace'))) {
+                matchesSearch = true;
+            } else if (children.length > 0) {
+                matchesSearch = children.some(c => searchMatches(c, searchVal));
+            }
+        }
 
-        // 4. Advanced Tool Type filter
-        const matchesType = selectType === 'all' || 
-                            (tool.toolType && tool.toolType.toLowerCase() === selectType.toLowerCase()) ||
-                            (tool.description.toLowerCase().includes(selectType.toLowerCase())) ||
-                            (tool.tags && tool.tags.some(tag => tag.toLowerCase() === selectType.toLowerCase()));
+        // 3. Advanced Discipline filter (Checks tool tags, category, or children tags/category)
+        let matchesDiscipline = selectDiscipline === 'all' || 
+                                (tool.tags && tool.tags.some(tag => tag.toLowerCase() === selectDiscipline.toLowerCase())) ||
+                                (tool.category.toLowerCase().includes(selectDiscipline.toLowerCase()));
+        if (!matchesDiscipline && children.length > 0) {
+            matchesDiscipline = children.some(c => 
+                (c.tags && c.tags.some(tag => tag.toLowerCase() === selectDiscipline.toLowerCase())) ||
+                (c.category.toLowerCase().includes(selectDiscipline.toLowerCase()))
+            );
+        }
+
+        // 4. Advanced Tool Type filter (Checks toolType, description, tags, or children properties)
+        let matchesType = selectType === 'all' || 
+                          (tool.toolType && tool.toolType.toLowerCase() === selectType.toLowerCase()) ||
+                          (tool.description.toLowerCase().includes(selectType.toLowerCase())) ||
+                          (tool.tags && tool.tags.some(tag => tag.toLowerCase() === selectType.toLowerCase()));
+        if (!matchesType && children.length > 0) {
+            matchesType = children.some(c => 
+                (c.toolType && c.toolType.toLowerCase() === selectType.toLowerCase()) ||
+                (c.description.toLowerCase().includes(selectType.toLowerCase())) ||
+                (c.tags && c.tags.some(tag => tag.toLowerCase() === selectType.toLowerCase()))
+            );
+        }
 
         // 5. Development Status filter
         let matchesStatus = true;
