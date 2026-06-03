@@ -959,6 +959,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageFile = window.location.pathname.split('/').pop() || 'index.html';
     if (pageFile === 'index.html' || pageFile === '404.html' || pageFile === 'offline.html') return;
 
+    // Inside iframe: hide footers and other non-embeddable page sections
+    if (window.self !== window.top) {
+        const footers = document.querySelectorAll('.footer, footer, .main-footer');
+        footers.forEach(f => f.style.setProperty('display', 'none', 'important'));
+    }
+
+    // Outside iframe (Parent page with tabs): skip resources card injection
+    if (document.querySelector('#workspace-iframe')) {
+        console.log('Parent workspace detected, skipping resources card injection.');
+        return;
+    }
+
     const headerSection = document.querySelector('.tool-header-section');
 
     if (headerSection) {
@@ -977,10 +989,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Build the active tool page slug (with queries if present e.g. electrical test forms)
     let pageSlug = pageFile;
+    // Map embed files back to their original resources configuration
+    if (pageSlug.startsWith('embed-')) {
+        pageSlug = pageSlug.replace(/^embed-/, '');
+    }
     const urlParams = new URLSearchParams(window.location.search);
     const toolParam = urlParams.get('tool');
     if (toolParam) {
-        pageSlug = `${pageFile}?tool=${toolParam}`;
+        pageSlug = `${pageSlug}?tool=${toolParam}`;
     }
     _injectToolResourcesCard(pageSlug);
 });

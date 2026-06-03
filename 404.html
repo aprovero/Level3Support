@@ -11,10 +11,9 @@
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
-            --background: #f8fafc;
+            --background: #ffffff;
             --text-main: #0f172a;
             --text-muted: #475569;
-            --card-bg: #ffffff;
             --border: #e2e8f0;
         }
 
@@ -26,50 +25,42 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background-color: var(--background);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header Navbar */
+        .app-header {
+            padding: 24px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .error-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 40px 30px;
-            max-width: 540px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .brand-header {
-            margin-bottom: 24px;
+            justify-content: space-between;
         }
 
         .brand-logo {
-            height: 48px;
+            height: 40px;
             width: auto;
         }
 
-        .illustration-container {
-            position: relative;
-            margin-bottom: 30px;
+        /* Main Section: split layout on desktop */
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            gap: 60px;
+        }
+
+        .illustration-section {
+            flex: 1.2;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -77,9 +68,9 @@
 
         .error-illustration {
             max-width: 100%;
+            max-height: 480px;
             height: auto;
             border-radius: 12px;
-            mix-blend-mode: multiply;
             animation: hoverEffect 4s ease-in-out infinite;
         }
 
@@ -92,20 +83,36 @@
             }
         }
 
+        .content-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .error-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
         .error-message {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-muted);
             line-height: 1.6;
             margin-bottom: 32px;
-            padding: 0 10px;
+            max-width: 480px;
         }
 
         .actions-container {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: center;
-            margin-bottom: 40px;
+            gap: 16px;
+            width: 100%;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -113,28 +120,27 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 12px 28px;
-            border-radius: 10px;
+            padding: 14px 28px;
+            border-radius: 8px;
             font-size: 1rem;
             font-weight: 500;
             text-decoration: none;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            width: 100%;
-            max-width: 240px;
+            white-space: nowrap;
         }
 
         .btn-primary {
             background-color: var(--primary);
             color: #ffffff;
             border: none;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
         }
 
         .btn-primary:hover {
             background-color: var(--primary-hover);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
         }
 
         .btn-primary:active {
@@ -142,72 +148,118 @@
         }
 
         .btn-secondary {
-            background-color: #f1f5f9;
+            background-color: #f8fafc;
             color: var(--text-muted);
             border: 1px solid var(--border);
         }
 
         .btn-secondary:hover {
-            background-color: #e2e8f0;
+            background-color: #f1f5f9;
             color: var(--text-main);
             transform: translateY(-2px);
+            border-color: #cbd5e1;
         }
 
-        .footer-logo {
+        /* Footer */
+        .app-footer {
+            padding: 24px 40px;
             border-top: 1px solid var(--border);
-            padding-top: 24px;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .powered-by {
+            display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .footer-logo span {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
         .partner-logo {
-            height: 24px;
+            height: 20px;
             width: auto;
-            opacity: 0.8;
-            transition: opacity 0.2s ease;
         }
 
-        .partner-logo:hover {
-            opacity: 1;
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .main-container {
+                flex-direction: column;
+                gap: 40px;
+                text-align: center;
+                padding: 40px 24px;
+            }
+
+            .content-section {
+                align-items: center;
+                text-align: center;
+            }
+
+            .error-title {
+                font-size: 2rem;
+            }
+
+            .error-illustration {
+                max-height: 360px;
+            }
+
+            .actions-container {
+                justify-content: center;
+            }
+
+            .app-header {
+                justify-content: center;
+                padding: 20px;
+            }
+
+            .app-footer {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="error-card">
-        <div class="brand-header">
+    <!-- Top Header -->
+    <header class="app-header">
+        <a href="index.html">
             <img src="images/L3S_HEADER_LOGO.png" alt="Level3Support Logo" class="brand-logo">
-        </div>
-        
-        <div class="illustration-container">
+        </a>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="main-container">
+        <div class="illustration-section">
             <img src="images/NEW 404.webp" alt="404 Page Not Found" class="error-illustration">
         </div>
         
-        <p class="error-message">
-            The page you're looking for has wandered off, or is currently being assembled by our robot. Let's get you back to work.
-        </p>
-        
-        <div class="actions-container">
-            <a href="index.html" class="btn btn-primary">
-                <i class="fas fa-th-large"></i> Go to Dashboard
-            </a>
-            <button onclick="window.history.back()" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Go Back
-            </button>
+        <div class="content-section">
+            <h1 class="error-title">Oops! Page under repair</h1>
+            <p class="error-message">
+                The page you are looking for has wandered off, or is currently being assembled by our robot. Let's get you back to work.
+            </p>
+            
+            <div class="actions-container">
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-th-large"></i> Go to Dashboard
+                </a>
+                <button onclick="window.history.back()" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Go Back
+                </button>
+            </div>
         </div>
-        
-        <div class="footer-logo">
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div>&copy; 2026 Level3Support. All rights reserved.</div>
+        <div class="powered-by">
             <span>Powered by</span>
             <img src="images/APROVERO_LOGO.png" alt="aprovero" class="partner-logo">
         </div>
-    </div>
+    </footer>
 </body>
 </html>
