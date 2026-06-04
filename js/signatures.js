@@ -1,5 +1,5 @@
 /**
- * Level3Support - Signature Capture Utility (v5.5.5)
+ * Level3Support - Signature Capture Utility (v5.5.6)
  * Dynamically generated canvas signature pads and signoff modals.
  */
 (function() {

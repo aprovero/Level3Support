@@ -10,7 +10,7 @@ let allTools = [];
 let favoriteTools = [];
 let recentTools = [];
 
-// Global Views Registration (v5.5.5)
+// Global Views Registration (v5.5.6)
 const VIEWS = ["home", "tools", "workflows", "reference", "reports", "legacy", "resources", "drafts"];
 
 // LocalStorage Keys
@@ -2298,6 +2298,8 @@ function filterHubResources() {
         container.appendChild(categorySection);
     });
 
+    if (container.children.length === 0) {
+        container.innerHTML = `
             <div style="text-align:center; padding:3rem; color:#94a3b8;">
                 <i class="fas fa-search" style="font-size:2.5rem; margin-bottom:1rem; display:block;"></i>
                 <h3 style="font-family:'Outfit',sans-serif; font-weight:700; color:#475569; margin:0 0 0.5rem 0;">No Resources Found</h3>
@@ -2492,7 +2494,7 @@ async function exportRecordPackage(id) {
         if (!record) return;
 
         const packageData = {
-            schemaVersion: '5.5.5',
+            schemaVersion: '5.5.6',
             exportedAt: new Date().toISOString(),
             record: record
         };
@@ -2525,8 +2527,8 @@ function handlePackageImportFile(event) {
     reader.onload = async (e) => {
         try {
             const data = JSON.parse(e.target.result);
-            if (data.schemaVersion !== '5.5.5' || !data.record || !data.record.id) {
-                alert('Invalid record package schema. Make sure the package was exported from a v5.5.5 compatible tool.');
+            if (!['5.5.5', '5.5.6'].includes(data.schemaVersion) || !data.record || !data.record.id) {
+                alert('Invalid record package schema. Make sure the package was exported from a v5.5.5 or v5.5.6 compatible tool.');
                 return;
             }
 
