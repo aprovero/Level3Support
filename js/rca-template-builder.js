@@ -298,7 +298,7 @@ function resetForm() {
 }
 
 /**
- * ── Auto-Save & Resume Draft Integration (v5.5.5) ──
+ * ── Auto-Save & Resume Draft Integration (v5.5.6) ──
  */
 let currentDraftId = null;
 let saveTimeout = null;

@@ -1,5 +1,5 @@
 /**
- * Level3Support - Client-Side Image Compression & Upload Utility (v5.5.5)
+ * Level3Support - Client-Side Image Compression & Upload Utility (v5.5.6)
  * Option 1 Canvas Compression down to 50-100KB for offline PWA storage.
  */
 (function() {

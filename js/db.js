@@ -1,5 +1,5 @@
 /**
- * Level3Support - Local IndexedDB persistence layer (v5.5.5)
+ * Level3Support - Local IndexedDB persistence layer (v5.5.6)
  * Simple, zero-dependency wrapper for drafts and compressed evidence storage.
  */
 (function() {
