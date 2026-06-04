@@ -74,16 +74,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function performSearch(query) {
         if (!registryData.length) return;
-        // Inline admin access and password check
+        // Admin access trigger
         const normalized = query.toLowerCase().trim();
-        if (normalized.includes('administrator')) {
-            // Expect format: 'administrator <password>'
+        if (normalized === 'administrator' || normalized.startsWith('administrator ')) {
             const parts = normalized.split(/\s+/);
-            const pwd = parts[parts.length - 1];
-            if (pwd === 'admin123') {
-                window.location.href = 'admin-panel.html';
+            if (parts.length === 1) {
+                // Just 'administrator' typed — show the card
+                renderAdminOption();
             } else {
-                alert('Incorrect password.');
+                // 'administrator <password>' typed — check password
+                const pwd = parts[1];
+                if (pwd === 'admin123') {
+                    window.location.href = 'admin-panel.html';
+                } else {
+                    renderAdminOption(true); // show card with error state
+                }
             }
             return;
         }
@@ -190,29 +195,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
         // Render admin access option
-    function renderAdminOption() {
+    function renderAdminOption(showError) {
         l3NavResultsContainer.innerHTML = '';
         l3NavEmptyState.style.display = 'none';
         l3NavResultsTitle.style.display = 'block';
         const card = document.createElement('div');
         card.className = 'l3-nav-card';
+        const errorHtml = showError
+            ? `<p style="color:#ef4444; font-size:0.8rem; margin-top:4px;"><i class="fas fa-exclamation-circle"></i> Incorrect password.</p>`
+            : '';
         card.innerHTML = `
             <div class="l3-nav-card-header">
                 <h4 class="l3-nav-card-title"><i class="fas fa-lock" style="margin-right:4px;"></i>Administrator Access</h4>
                 <span class="l3-nav-card-category">Secure</span>
             </div>
-            <p class="l3-nav-card-desc">Enter password to access the admin panel.</p>
-            <button class="l3-nav-card-btn" id="admin-access-btn">Enter Password</button>
+            <p class="l3-nav-card-desc">Type <strong>administrator &lt;password&gt;</strong> to log in.</p>
+            ${errorHtml}
         `;
         l3NavResultsContainer.appendChild(card);
-        document.getElementById('admin-access-btn').addEventListener('click', () => {
-            const pwd = prompt('Enter admin password:');
-            if (pwd === 'admin123') {
-                window.location.href = 'admin-panel.html';
-            } else {
-                alert('Incorrect password.');
-            }
-        });
     }
     // Utility: Debounce function
     function debounce(func, wait) {
