@@ -249,8 +249,7 @@ const WORKFLOW_PACKS = [
     }
 ];
 
-// Active State View Navigation Management
-const VIEWS = ["home", "tools", "workflows", "reference", "reports", "legacy", "resources"];
+// Active State View Navigation Management (Registered at the top of file)
 
 // LocalStorage key for the Supabase tools cache
 const STORAGE_TOOLS_CACHE_KEY = 'level3support_tools_cache';
