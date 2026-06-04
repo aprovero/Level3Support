@@ -100,7 +100,7 @@ const LOCATION_MAP = {
  */
 // CORS configuration
 app.use(cors({
-    origin: ['https://aprovero.github.io', 'http://127.0.0.1:5500', 'https://coelatam.onrender.com'], // Added localhost for testing
+    origin: ['https://aprovero.github.io', 'http://127.0.0.1:5500', 'https://coelatam.onrender.com', 'https://level3.onrender.com'], // Added localhost for testing
     methods: ['POST', 'GET'],
     allowedHeaders: ['Content-Type'],
     credentials: true
