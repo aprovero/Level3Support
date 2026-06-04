@@ -10,6 +10,9 @@ let allTools = [];
 let favoriteTools = [];
 let recentTools = [];
 
+// Global Views Registration (v5.5.5)
+const VIEWS = ["home", "tools", "workflows", "reference", "reports", "legacy", "resources", "drafts"];
+
 // LocalStorage Keys
 const STORAGE_FAVORITES_KEY = 'level3support_favorite_tools';
 const STORAGE_RECENT_KEY = 'level3support_recent_tools';
@@ -317,6 +320,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         runToolHub();
     }
+
+    // Update drafts badge on startup & register local db update hook
+    if (window.L3DB) {
+        updateDraftsBadge();
+    }
+    window.addEventListener('l3-db-updated', () => {
+        updateDraftsBadge();
+        if (window.location.hash === '#drafts') {
+            renderDraftsList();
+        }
+    });
 });
 
 
@@ -1291,6 +1305,10 @@ function initializeRouter() {
         
         const targetSection = document.getElementById(`view-${hash}`);
         if (targetSection) targetSection.classList.add('active');
+
+        if (hash === 'drafts') {
+            renderDraftsList();
+        }
         
         // Update active class on navigation elements (Sidebar and Mobile bottom)
         const allNavItems = document.querySelectorAll('.nav-item, .bottom-nav-item');
@@ -2281,13 +2299,432 @@ function filterHubResources() {
         container.appendChild(categorySection);
     });
 
-    if (container.children.length === 0) {
-        container.innerHTML = `
             <div style="text-align:center; padding:3rem; color:#94a3b8;">
                 <i class="fas fa-search" style="font-size:2.5rem; margin-bottom:1rem; display:block;"></i>
                 <h3 style="font-family:'Outfit',sans-serif; font-weight:700; color:#475569; margin:0 0 0.5rem 0;">No Resources Found</h3>
                 <p style="font-size:0.88rem; margin:0;">Try adjusting your filters or search query.</p>
             </div>
         `;
+    }
+}
+
+/**
+ * ── Drafts & Records Management System ──
+ */
+let activeDraftsStatus = 'in-progress';
+
+function filterDraftsStatus(status, chipElement) {
+    activeDraftsStatus = status;
+    const container = document.getElementById('drafts-status-chips');
+    if (container) {
+        container.querySelectorAll('.category-chip').forEach(chip => {
+            chip.classList.remove('active');
+        });
+    }
+    if (chipElement) chipElement.classList.add('active');
+    renderDraftsList();
+}
+
+async function updateDraftsBadge() {
+    if (!window.L3DB) return;
+    try {
+        const records = await L3DB.getAllRecords();
+        const activeCount = records.filter(r => r.status === 'draft' || r.status === 'in-progress').length;
+        const badge = document.getElementById('drafts-badge-desktop');
+        if (badge) {
+            badge.textContent = activeCount;
+            badge.style.display = activeCount > 0 ? 'inline-block' : 'none';
+        }
+    } catch (err) {
+        console.error('Failed to update drafts badge:', err);
+    }
+}
+
+async function renderDraftsList() {
+    const grid = document.getElementById('drafts-grid');
+    const emptyState = document.getElementById('drafts-empty-state');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+    
+    if (!window.L3DB) {
+        grid.innerHTML = '<p style="color:red; padding:1rem;">Database error: L3DB not loaded.</p>';
+        return;
+    }
+
+    try {
+        const records = await L3DB.getAllRecords();
+        const searchQuery = (document.getElementById('drafts-search-input')?.value || '').toLowerCase().trim();
+        const disciplineFilter = document.getElementById('drafts-discipline-filter')?.value || 'all';
+
+        // Filter records
+        const filtered = records.filter(rec => {
+            if (activeDraftsStatus !== 'all' && rec.status !== activeDraftsStatus) {
+                return false;
+            }
+            if (disciplineFilter !== 'all' && rec.discipline !== disciplineFilter) {
+                return false;
+            }
+            if (searchQuery) {
+                const matchesTitle = (rec.title || '').toLowerCase().includes(searchQuery);
+                const matchesSite = (rec.siteName || '').toLowerCase().includes(searchQuery);
+                const matchesAsset = (rec.assetId || '').toLowerCase().includes(searchQuery);
+                const matchesToolName = (rec.toolName || '').toLowerCase().includes(searchQuery);
+                if (!matchesTitle && !matchesSite && !matchesAsset && !matchesToolName) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            emptyState.style.display = 'block';
+            grid.style.display = 'none';
+            return;
+        }
+
+        emptyState.style.display = 'none';
+        grid.style.display = 'grid';
+
+        filtered.forEach(rec => {
+            const card = document.createElement('div');
+            card.className = 'tool-tile';
+            card.style.cssText = 'cursor: default; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; height: auto;';
+            
+            const updatedDate = new Date(rec.updatedAt).toLocaleString(undefined, {
+                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+
+            const contextLabel = rec.contextType === 'workflow' ? 'Workflow' : 'Standalone Record';
+
+            let iconClass = 'fas fa-file-alt';
+            if (rec.discipline === 'PV') iconClass = 'fas fa-solar-panel';
+            else if (rec.discipline === 'BESS') iconClass = 'fas fa-battery-three-quarters';
+            else if (rec.discipline === 'Electrical') iconClass = 'fas fa-bolt';
+            else if (rec.discipline === 'SCADA') iconClass = 'fas fa-network-wired';
+            else if (rec.discipline === 'HSE') iconClass = 'fas fa-hard-hat';
+
+            card.innerHTML = `
+                <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+                        <span class="status-badge status-${rec.status}" style="font-size:0.75rem; text-transform:uppercase;">${rec.status}</span>
+                        <span style="font-size:0.75rem; color:#64748b; font-weight:600;">${contextLabel}</span>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center; margin-bottom:0.75rem;">
+                        <div style="width:36px; height:36px; border-radius:8px; background:#f1f5f9; display:flex; align-items:center; justify-content:center; color:#475569;">
+                            <i class="${iconClass}"></i>
+                        </div>
+                        <div>
+                            <h4 style="margin:0; font-family:'Outfit',sans-serif; font-size:1.05rem; color:#0f172a;">${rec.title || rec.toolName || 'Untitled Record'}</h4>
+                            <p style="margin:2px 0 0 0; font-size:0.8rem; color:#64748b;">${rec.toolName || ''}</p>
+                        </div>
+                    </div>
+                    <div style="font-size:0.82rem; color:#475569; margin-bottom:0.75rem;">
+                        ${rec.siteName ? `<div><strong>Site:</strong> ${rec.siteName}</div>` : ''}
+                        ${rec.equipmentTag || rec.assetId ? `<div><strong>Asset ID:</strong> ${rec.equipmentTag || rec.assetId}</div>` : ''}
+                        <div style="margin-top:4px; font-size:0.75rem; color:#94a3b8;">Updated: ${updatedDate}</div>
+                    </div>
+                </div>
+                <div style="margin-top:1rem; border-top:1px solid #f1f5f9; padding-top:0.75rem; display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="filter-toggle-btn" style="background:#2563eb; color:white; border:none; padding:6px 12px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;" onclick="continueRecord('${rec.id}', '${rec.toolRoute || rec.url}')">Continue</button>
+                    <button class="filter-toggle-btn" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; padding:6px 12px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;" onclick="exportRecordPackage('${rec.id}')">Export</button>
+                    ${rec.status !== 'archived' ? 
+                        `<button class="filter-toggle-btn" style="background:#fef2f2; color:#ef4444; border:none; padding:6px 12px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer; margin-left:auto;" onclick="archiveRecord('${rec.id}')">Archive</button>` :
+                        `<button class="filter-toggle-btn" style="background:#f0fdf4; color:#22c55e; border:none; padding:6px 12px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer; margin-left:auto;" onclick="unarchiveRecord('${rec.id}')">Unarchive</button>`
+                    }
+                    <button class="filter-toggle-btn" style="background:#fef2f2; color:#b91c1c; border:none; padding:6px 8px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;" title="Delete Permanently" onclick="deleteRecord('${rec.id}')"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    } catch (err) {
+        console.error('Failed to render drafts list:', err);
+    }
+}
+
+function continueRecord(id, route) {
+    if (!route) return;
+    const separator = route.includes('?') ? '&' : '?';
+    window.location.href = `${route}${separator}draftId=${id}`;
+}
+
+async function archiveRecord(id) {
+    if (!window.L3DB) return;
+    try {
+        const record = await L3DB.getRecord(id);
+        if (record) {
+            record.status = 'archived';
+            await L3DB.saveRecord(record);
+        }
+    } catch (err) {
+        console.error('Failed to archive record:', err);
+    }
+}
+
+async function unarchiveRecord(id) {
+    if (!window.L3DB) return;
+    try {
+        const record = await L3DB.getRecord(id);
+        if (record) {
+            record.status = 'in-progress';
+            await L3DB.saveRecord(record);
+        }
+    } catch (err) {
+        console.error('Failed to unarchive record:', err);
+    }
+}
+
+async function deleteRecord(id) {
+    if (!confirm('Are you sure you want to permanently delete this record? This action cannot be undone.')) {
+        return;
+    }
+    if (!window.L3DB) return;
+    try {
+        await L3DB.deleteRecord(id);
+    } catch (err) {
+        console.error('Failed to delete record:', err);
+    }
+}
+
+async function exportRecordPackage(id) {
+    if (!window.L3DB) return;
+    try {
+        const record = await L3DB.getRecord(id);
+        if (!record) return;
+
+        const packageData = {
+            schemaVersion: '5.5.5',
+            exportedAt: new Date().toISOString(),
+            record: record
+        };
+
+        const blob = new Blob([JSON.stringify(packageData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const safeTitle = (record.title || record.toolName || 'record').replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        a.href = url;
+        a.download = `Level3Support_${safeTitle}_${record.id.substring(0,8)}.l3spkg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch (err) {
+        console.error('Failed to export record package:', err);
+    }
+}
+
+function triggerPackageImport() {
+    const input = document.getElementById('import-package-file');
+    if (input) input.click();
+}
+
+function handlePackageImportFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (data.schemaVersion !== '5.5.5' || !data.record || !data.record.id) {
+                alert('Invalid record package schema. Make sure the package was exported from a v5.5.5 compatible tool.');
+                return;
+            }
+
+            const record = data.record;
+            const existing = await L3DB.getRecord(record.id);
+
+            showImportSummaryModal(data, existing, async (action) => {
+                if (action === 'cancel') return;
+
+                if (action === 'duplicate') {
+                    record.id = crypto.randomUUID();
+                    record.title = `Copy of ${record.title || record.toolName || 'Untitled'}`;
+                    record.status = 'imported';
+                } else if (action === 'replace') {
+                    record.status = 'imported';
+                } else if (action === 'import') {
+                    record.status = 'imported';
+                }
+
+                await L3DB.saveRecord(record);
+                alert('Record package imported successfully.');
+                const importedChip = Array.from(document.getElementById('drafts-status-chips').children).find(c => c.getAttribute('data-status') === 'imported');
+                filterDraftsStatus('imported', importedChip);
+            });
+
+        } catch (err) {
+            console.error('Import parsing error:', err);
+            alert('Failed to import package: ' + err.message);
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
+function showImportSummaryModal(packageData, existing, onResolve) {
+    const record = packageData.record;
+    const photosCount = record.formData?.photos?.length || 0;
+    const signaturesCount = record.formData?.signatures?.length || 0;
+    const totalEvidence = photosCount + signaturesCount;
+
+    let modal = document.getElementById('l3s-import-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'l3s-import-modal';
+        modal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.6); display: flex; align-items: center;
+            justify-content: center; z-index: 10000; font-family: 'Inter', sans-serif;
+        `;
+        document.body.appendChild(modal);
+    }
+
+    const formatTime = (isoString) => {
+        if (!isoString) return 'N/A';
+        return new Date(isoString).toLocaleString(undefined, {
+            month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+    };
+
+    let contentHtml = '';
+    
+    if (!existing) {
+        // Normal summary view
+        contentHtml = `
+            <div style="background: #ffffff; width: 90%; max-width: 480px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); padding: 24px; box-sizing: border-box;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+                    <h3 style="margin:0; font-family:'Outfit',sans-serif; font-size:1.3rem; color:#0f172a; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-file-import" style="color:#2563eb;"></i> Import Record Package
+                    </h3>
+                    <button id="l3s-import-close" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:#64748b;"><i class="fas fa-times"></i></button>
+                </div>
+                
+                <div style="font-size:0.9rem; color:#475569; display:flex; flex-direction:column; gap:10px; margin-bottom:24px;">
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px;">
+                        <span style="font-size:0.75rem; font-weight:700; color:#6b21a8; background:#f3e8ff; padding:2px 6px; border-radius:4px; text-transform:uppercase;">${record.discipline || 'General'}</span>
+                        <h4 style="margin:8px 0 4px 0; font-family:'Outfit',sans-serif; font-size:1.1rem; color:#0f172a;">${record.title || record.toolName || 'Untitled Record'}</h4>
+                        <p style="margin:0; font-size:0.8rem; color:#64748b;">Tool: ${record.toolName || 'Unknown'}</p>
+                    </div>
+                    
+                    <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0; font-weight:600; color:#64748b; width:120px;">Site / Project</td><td style="padding:6px 0; color:#0f172a;">${record.siteName || 'N/A'}</td></tr>
+                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0; font-weight:600; color:#64748b;">Asset / Tag ID</td><td style="padding:6px 0; color:#0f172a;">${record.equipmentTag || record.assetId || 'N/A'}</td></tr>
+                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0; font-weight:600; color:#64748b;">Last Updated</td><td style="padding:6px 0; color:#0f172a;">${formatTime(record.updatedAt)}</td></tr>
+                        <tr style="border-bottom:1px solid #f1f5f9;"><td style="padding:6px 0; font-weight:600; color:#64748b;">Status on Export</td><td style="padding:6px 0; color:#0f172a; text-transform:capitalize;">${record.status || 'draft'}</td></tr>
+                        <tr><td style="padding:6px 0; font-weight:600; color:#64748b;">Evidence Count</td><td style="padding:6px 0; color:#0f172a;">${totalEvidence} items (${photosCount} photos, ${signaturesCount} signatures)</td></tr>
+                    </table>
+                </div>
+
+                <div style="display:flex; gap:12px; justify-content:flex-end;">
+                    <button id="l3s-import-cancel" style="background:#f1f5f9; color:#475569; border:none; padding:10px 18px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.85rem;">Cancel</button>
+                    <button id="l3s-import-confirm" style="background:#2563eb; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.85rem;">Import Record</button>
+                </div>
+            </div>
+        `;
+    } else {
+        // Conflict view
+        const localPhotos = existing.formData?.photos?.length || 0;
+        const localSignatures = existing.formData?.signatures?.length || 0;
+        const localEvidence = localPhotos + localSignatures;
+
+        contentHtml = `
+            <div style="background: #ffffff; width: 95%; max-width: 600px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); padding: 24px; box-sizing: border-box;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+                    <h3 style="margin:0; font-family:'Outfit',sans-serif; font-size:1.3rem; color:#b91c1c; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-exclamation-triangle"></i> Import Conflict Detected
+                    </h3>
+                    <button id="l3s-import-close" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:#64748b;"><i class="fas fa-times"></i></button>
+                </div>
+                
+                <p style="margin:0 0 16px 0; font-size:0.85rem; color:#64748b;">A record with the same unique identifier already exists on this device. Please review the versions below:</p>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
+                    <!-- Local existing -->
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; font-size:0.82rem; display:flex; flex-direction:column; gap:6px;">
+                        <h4 style="margin:0 0 4px 0; color:#475569; font-weight:700; border-bottom:1px solid #cbd5e1; padding-bottom:4px;">EXISTING LOCAL RECORD</h4>
+                        <div><strong>Title:</strong> ${existing.title || existing.toolName || 'Untitled'}</div>
+                        <div><strong>Site:</strong> ${existing.siteName || 'N/A'}</div>
+                        <div><strong>Asset ID:</strong> ${existing.equipmentTag || existing.assetId || 'N/A'}</div>
+                        <div><strong>Updated:</strong> <span style="color:#b91c1c;">${formatTime(existing.updatedAt)}</span></div>
+                        <div><strong>Status:</strong> ${existing.status || 'draft'}</div>
+                        <div><strong>Evidence:</strong> ${localEvidence} items</div>
+                    </div>
+                    
+                    <!-- Importing version -->
+                    <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:12px; font-size:0.82rem; display:flex; flex-direction:column; gap:6px;">
+                        <h4 style="margin:0 0 4px 0; color:#1e40af; font-weight:700; border-bottom:1px solid #93c5fd; padding-bottom:4px;">IMPORTING RECORD</h4>
+                        <div><strong>Title:</strong> ${record.title || record.toolName || 'Untitled'}</div>
+                        <div><strong>Site:</strong> ${record.siteName || 'N/A'}</div>
+                        <div><strong>Asset ID:</strong> ${record.equipmentTag || record.assetId || 'N/A'}</div>
+                        <div><strong>Updated:</strong> <span style="color:#2563eb;">${formatTime(record.updatedAt)}</span></div>
+                        <div><strong>Status:</strong> ${record.status || 'draft'}</div>
+                        <div><strong>Evidence:</strong> ${totalEvidence} items</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                        <button id="l3s-import-replace" style="background:#ea580c; color:white; border:none; padding:10px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.8rem;">
+                            <i class="fas fa-exchange-alt"></i> Replace Local Version
+                        </button>
+                        <button id="l3s-import-duplicate" style="background:#16a34a; color:white; border:none; padding:10px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.8rem;">
+                            <i class="fas fa-copy"></i> Import as Duplicate Copy
+                        </button>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                        <button id="l3s-import-keep-local" style="background:#64748b; color:white; border:none; padding:10px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.8rem;">
+                            Keep Local (Skip Import)
+                        </button>
+                        <button id="l3s-import-cancel" style="background:#e2e8f0; color:#475569; border:none; padding:10px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.8rem;">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    modal.innerHTML = contentHtml;
+    modal.style.display = 'flex';
+
+    // Hook listeners
+    const closeBtn = document.getElementById('l3s-import-close');
+    const cancelBtn = document.getElementById('l3s-import-cancel');
+    
+    const cleanup = () => {
+        modal.style.display = 'none';
+    };
+
+    closeBtn.addEventListener('click', () => {
+        cleanup();
+        onResolve('cancel');
+    });
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            cleanup();
+            onResolve('cancel');
+        });
+    }
+
+    if (!existing) {
+        document.getElementById('l3s-import-confirm').addEventListener('click', () => {
+            cleanup();
+            onResolve('import');
+        });
+    } else {
+        document.getElementById('l3s-import-replace').addEventListener('click', () => {
+            cleanup();
+            onResolve('replace');
+        });
+        document.getElementById('l3s-import-duplicate').addEventListener('click', () => {
+            cleanup();
+            onResolve('duplicate');
+        });
+        document.getElementById('l3s-import-keep-local').addEventListener('click', () => {
+            cleanup();
+            onResolve('cancel');
+        });
     }
 }

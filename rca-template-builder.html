@@ -388,21 +388,22 @@
           <button type="button" class="button-secondary btn-add-row" onclick="addCapaRow()" style="margin-top:0; width:auto; padding: 6px 12px; font-size:0.8rem;"><i class="fas fa-plus"></i> Add CAPA Item</button>
         </div>
 
-        <div class="form-section">
-          <h3 class="form-section-title"><i class="fas fa-camera" style="color:var(--primary-color);"></i> 10. Evidence / Photo References</h3>
-          <div class="input-row">
-            <div class="input-group">
-              <label for="evidence-desc">Description</label>
-              <input type="text" id="evidence-desc" placeholder="e.g. Photo of clogged HVAC intake mesh filter">
-            </div>
-            <div class="input-group">
-              <label for="evidence-attach">Attachment Placeholder / Reference Link</label>
-              <input type="text" id="evidence-attach" placeholder="e.g. Attachment 01: photo_filter_intake.jpg">
-            </div>
+        <div class="form-section" id="photo-evidence-section">
+          <h3 class="form-section-title"><i class="fas fa-camera" style="color:var(--primary-color);"></i> 10. Photo Evidence Capture</h3>
+          
+          <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 16px;">
+            <button type="button" class="button-secondary btn-action" onclick="triggerPhotoUpload()"><i class="fas fa-camera"></i> Capture / Upload Photo</button>
+            <input type="file" id="photo-evidence-file" style="display:none;" accept="image/*" onchange="handlePhotoUpload(event)">
+            <p style="font-size:0.75rem; color:#64748b; margin:8px 0 0 0;">Images are automatically compressed to ~50KB for lightweight database caching.</p>
+          </div>
+
+          <!-- Thumbnails grid -->
+          <div id="photos-thumbnail-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:12px; margin-top:12px;">
+            <!-- Photos injected dynamically -->
           </div>
         </div>
 
-        <div class="form-section">
+        <div class="form-section" id="open-actions-section">
           <h3 class="form-section-title"><i class="fas fa-lock-open" style="color:var(--primary-color);"></i> 11. Open Actions</h3>
           <div class="dynamic-table-wrapper">
             <table class="dynamic-table">
@@ -424,10 +425,20 @@
         </div>
 
         <div class="form-section">
-          <h3 class="form-section-title"><i class="fas fa-lock" style="color:var(--primary-color);"></i> Internal Notes</h3>
-          <div class="input-group" style="margin-bottom:0;">
+          <h3 class="form-section-title"><i class="fas fa-lock" style="color:var(--primary-color);"></i> Internal Notes & Sign-offs</h3>
+          <div class="input-group" style="margin-bottom:1rem;">
             <label for="internal-notes">Internal Engineering Notes (Excluded from public summary)</label>
             <textarea id="internal-notes" placeholder="e.g. Contact thermal camera vendor to verify calibrated accuracy on BESS terminals next month..." style="min-height: 80px; margin-bottom: 0;"></textarea>
+          </div>
+          
+          <div id="signatures-section" style="border-top:1px solid #cbd5e1; padding-top:1.25rem; margin-top:1rem;">
+            <label style="font-size:0.9rem; font-weight:700; color:#0f172a; display:block; margin-bottom:8px;">Digital Sign-offs</label>
+            <button type="button" class="button-secondary btn-action" onclick="triggerSignatureCapture()" style="margin-bottom:12px; width:auto; min-height:unset; padding:6px 12px;"><i class="fas fa-signature"></i> Add Digital Signature</button>
+            
+            <!-- Signatures display grid -->
+            <div id="signatures-display-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:12px; margin-top:8px;">
+              <!-- Captured signatures will render here -->
+            </div>
           </div>
         </div>
       </div>
@@ -439,7 +450,7 @@
           <button type="button" id="export-json-btn" class="button-secondary btn-action"><i class="fas fa-file-code"></i> Export JSON</button>
         </div>
         <div class="btn-group">
-          <button type="button" id="print-report-btn" class="button-secondary btn-action" onclick="window.print()"><i class="fas fa-print"></i> Print RCA Report</button>
+          <button type="button" id="print-report-btn" class="button-secondary btn-action" onclick="triggerPdfExport()"><i class="fas fa-print"></i> Print RCA Report</button>
           <button type="button" id="reset-btn" class="button-secondary btn-action btn-danger-action" onclick="resetForm()"><i class="fas fa-undo"></i> Reset Builder</button>
         </div>
       </div>
@@ -466,6 +477,9 @@
         </div>
     </footer>
 
+  <script src="js/db.js"></script>
+  <script src="js/signatures.js"></script>
+  <script src="js/evidence-uploader.js"></script>
   <script src="js/common.js"></script>
   <script src="js/rca-template-builder.js"></script>
 </body>

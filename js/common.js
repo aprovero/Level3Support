@@ -1273,3 +1273,169 @@ function _relocateEngineeringModule() {
         }
     }, 50);
 }
+
+// Preserve original window.print
+const originalPrint = window.print;
+
+window.triggerPdfExport = function() {
+    // 1. Check what elements exist on the page
+    const hasPhotos = !!(document.getElementById('photo-evidence-section') || document.getElementById('photos-thumbnail-grid'));
+    const hasSigs = !!(document.getElementById('signatures-section') || document.getElementById('signatures-display-grid'));
+    const hasRefs = !!(document.querySelector('.assumptions-box') || document.querySelector('.assumptions-list'));
+    const hasOpen = !!(document.getElementById('open-actions-section') || document.getElementById('open-tbody'));
+
+    // If none of these exist, just trigger native print directly (or show modal with default print)
+    if (!hasPhotos && !hasSigs && !hasRefs && !hasOpen) {
+        originalPrint();
+        return;
+    }
+
+    // 2. Build print options modal
+    let modal = document.getElementById('l3s-print-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'l3s-print-modal';
+        modal.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.6); display: flex; align-items: center;
+            justify-content: center; z-index: 10000; font-family: 'Inter', sans-serif;
+        `;
+        document.body.appendChild(modal);
+    }
+
+    // Determine draft status from URL or page context
+    const urlParams = new URLSearchParams(window.location.search);
+    const draftId = urlParams.get('draftId') || (window.currentDraftId) || null;
+    const isDraft = !!draftId;
+
+    modal.innerHTML = `
+        <div style="background: #ffffff; width: 90%; max-width: 440px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); padding: 24px; box-sizing: border-box;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+                <h3 style="margin:0; font-family:'Outfit',sans-serif; font-size:1.25rem; color:#0f172a; display:flex; align-items:center; gap:6px;">
+                    <i class="fas fa-file-pdf" style="color:#ef4444;"></i> PDF / Print Options
+                </h3>
+                <button id="l3s-print-close" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:#64748b;"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px; font-size:0.9rem; color:#475569;">
+                ${hasPhotos ? `
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                    <input type="checkbox" id="l3s-print-opt-photos" checked style="width:16px; height:16px;"> Include Photo Evidence
+                </label>` : ''}
+                ${hasSigs ? `
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                    <input type="checkbox" id="l3s-print-opt-sigs" checked style="width:16px; height:16px;"> Include Digital Signatures
+                </label>` : ''}
+                ${hasRefs ? `
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                    <input type="checkbox" id="l3s-print-opt-refs" checked style="width:16px; height:16px;"> Include Methodology & References
+                </label>` : ''}
+                ${hasOpen ? `
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                    <input type="checkbox" id="l3s-print-opt-open" checked style="width:16px; height:16px;"> Include Open Actions Section
+                </label>` : ''}
+            </div>
+
+            ${isDraft ? `
+                <div style="background:#fffbeb; border:1px solid #fef3c7; border-left:4px solid #d97706; padding:10px 12px; border-radius:6px; font-size:0.78rem; color:#b45309; margin-bottom:20px; line-height:1.4;">
+                    <i class="fas fa-info-circle"></i> <strong>Draft Watermark Active:</strong> This record is in-progress. The printed layout will include a non-final draft banner with the draft ID and generation date.
+                </div>
+            ` : ''}
+
+            <div style="display:flex; gap:12px; justify-content:flex-end;">
+                <button id="l3s-print-cancel" style="background:#f1f5f9; color:#475569; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.85rem;">Cancel</button>
+                <button id="l3s-print-proceed" style="background:#2563eb; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.85rem;">Proceed to Print</button>
+            </div>
+        </div>
+    `;
+
+    modal.style.display = 'flex';
+
+    const closeModal = () => {
+        modal.style.display = 'none';
+    };
+
+    document.getElementById('l3s-print-close').addEventListener('click', closeModal);
+    document.getElementById('l3s-print-cancel').addEventListener('click', closeModal);
+
+    document.getElementById('l3s-print-proceed').addEventListener('click', () => {
+        const showPhotos = hasPhotos ? document.getElementById('l3s-print-opt-photos').checked : true;
+        const showSigs = hasSigs ? document.getElementById('l3s-print-opt-sigs').checked : true;
+        const showRefs = hasRefs ? document.getElementById('l3s-print-opt-refs').checked : true;
+        const showOpen = hasOpen ? document.getElementById('l3s-print-opt-open').checked : true;
+
+        closeModal();
+
+        // Inject print options style definitions dynamically
+        const printStyles = document.createElement('style');
+        printStyles.id = 'l3s-print-style-rules';
+        printStyles.innerHTML = `
+            @media print {
+                /* Show all tabs/subsections sequentially */
+                .tab-content, .tab-pane { display: block !important; opacity: 1 !important; visibility: visible !important; margin-bottom: 2rem; }
+                .tab-container, .tab-bar, .back-link, .btn-back, .btn-row, .btn-add-row, td button, .btn-remove, #print-btn, #print-report-btn, #print-form-btn, #reset-btn { display: none !important; }
+                
+                body { background: white !important; color: black !important; }
+                .placeholder-container, .workspace-container { padding: 0 !important; margin: 0 !important; box-shadow: none !important; max-width: 100% !important; }
+                input, select, textarea {
+                    border: none !important;
+                    background: transparent !important;
+                    color: black !important;
+                    padding: 0 !important;
+                    box-sizing: border-box !important;
+                    pointer-events: none !important;
+                    resize: none !important;
+                }
+                
+                /* Toggles */
+                ${!showPhotos ? '#photo-evidence-section, #photos-thumbnail-grid { display: none !important; }' : ''}
+                ${!showSigs ? '#signatures-section, #signatures-display-grid { display: none !important; }' : ''}
+                ${!showRefs ? '.assumptions-box { display: none !important; }' : ''}
+                ${!showOpen ? '#open-actions-section, #open-tbody { display: none !important; }' : ''}
+
+                .draft-watermark-print {
+                    display: block !important;
+                    border: 2px solid #ef4444;
+                    background: #fef2f2;
+                    color: #b91c1c;
+                    padding: 10px 14px;
+                    border-radius: 6px;
+                    text-align: center;
+                    font-weight: 700;
+                    font-size: 0.85rem;
+                    margin-bottom: 20px;
+                    line-height: 1.4;
+                }
+            }
+            .draft-watermark-print { display: none; }
+        `;
+        document.head.appendChild(printStyles);
+
+        let watermarkBanner = null;
+        if (isDraft) {
+            watermarkBanner = document.createElement('div');
+            watermarkBanner.className = 'draft-watermark-print';
+            watermarkBanner.innerHTML = `
+                <div>⚠️ DRAFT - NOT FINAL</div>
+                <div style="font-size: 0.7rem; font-weight: normal; margin-top: 2px; color: #7f1d1d;">
+                    Draft ID: ${draftId} | Generated: ${new Date().toLocaleString()}
+                </div>
+            `;
+            const container = document.querySelector('.placeholder-container') || document.querySelector('.workspace-container') || document.body;
+            if (container) {
+                container.insertBefore(watermarkBanner, container.firstChild);
+            }
+        }
+
+        setTimeout(() => {
+            originalPrint();
+            if (printStyles) printStyles.remove();
+            if (watermarkBanner) watermarkBanner.remove();
+        }, 150);
+    });
+};
+
+// Global redirect for any standard print triggers
+window.print = function() {
+    window.triggerPdfExport();
+};

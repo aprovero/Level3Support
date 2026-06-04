@@ -35,6 +35,10 @@
                 <a href="#workflows" class="nav-item" data-view="workflows">
                     <i class="fas fa-route"></i> <span>Workflows</span>
                 </a>
+                <a href="#drafts" class="nav-item" data-view="drafts">
+                    <i class="fas fa-file-signature"></i> <span>Drafts</span>
+                    <span id="drafts-badge-desktop" class="badge-count" style="background:#ef4444; color:white; border-radius:10px; padding:2px 6px; font-size:0.75rem; margin-left:auto; display:none; font-weight:700;">0</span>
+                </a>
                 <a href="#reference" class="nav-item" data-view="reference">
                     <i class="fas fa-book-open"></i> <span>Reference</span>
                 </a>
@@ -49,7 +53,7 @@
                 </a>
             </nav>
             <div class="sidebar-footer">
-                <div class="version-tag">v5.0.0</div>
+                <div class="version-tag">v5.5.5</div>
                 <div class="sidebar-powered">
                     <span>Powered by</span>
                     <img src="images/APROVERO_LOGO.png" alt="aprovero" class="sidebar-partner-logo">
@@ -424,11 +428,77 @@
                         <!-- Dynamically generated categories and reference cards -->
                     </div>
                 </section>
+
+                <!-- 8. DRAFTS VIEW -->
+                <section id="view-drafts" class="view-section">
+                    <div class="view-header">
+                        <div class="view-header-left">
+                            <h1 class="view-title">Saved Records & Drafts</h1>
+                            <p class="view-subtitle">Continue reports, tests, inspections, action records and saved analyses stored on this device.</p>
+                        </div>
+                        <div class="view-header-right">
+                            <button id="import-package-btn" class="filter-toggle-btn" style="background:#2563eb; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer;" onclick="triggerPackageImport()">
+                                <i class="fas fa-file-import"></i> <span>Import Package</span>
+                            </button>
+                            <input type="file" id="import-package-file" style="display:none;" accept=".l3spkg,.json,.zip" onchange="handlePackageImportFile(event)">
+                        </div>
+                    </div>
+
+                    <!-- Filter panel -->
+                    <div class="library-filter-panel" style="margin-bottom: 2rem;">
+                        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; padding: 0.5rem 1rem;">
+                            <!-- Tabs / Status Filter -->
+                            <div class="category-chips-scroller" style="flex: 1 1 100%;">
+                                <div class="chips-container" id="drafts-status-chips">
+                                    <div class="category-chip active" data-status="in-progress" onclick="filterDraftsStatus('in-progress', this)">In Progress</div>
+                                    <div class="category-chip" data-status="completed" onclick="filterDraftsStatus('completed', this)">Completed</div>
+                                    <div class="category-chip" data-status="exported" onclick="filterDraftsStatus('exported', this)">Exported</div>
+                                    <div class="category-chip" data-status="imported" onclick="filterDraftsStatus('imported', this)">Imported</div>
+                                    <div class="category-chip" data-status="archived" onclick="filterDraftsStatus('archived', this)">Archived</div>
+                                    <div class="category-chip" data-status="all" onclick="filterDraftsStatus('all', this)">All</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Search -->
+                            <div style="flex: 1 1 200px; position:relative;">
+                                <i class="fas fa-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:0.9rem;"></i>
+                                <input type="text" id="drafts-search-input" class="global-search-input" style="width:100%; padding-left:36px; height:36px; border:1px solid #cbd5e1; border-radius:6px;" placeholder="Search records by title, site, ID..." oninput="renderDraftsList()">
+                            </div>
+
+                            <!-- Discipline filter -->
+                            <div style="flex: 0 1 180px;">
+                                <select id="drafts-discipline-filter" style="width:100%; height:36px; padding:6px; border:1px solid #cbd5e1; border-radius:6px; background:#ffffff;" onchange="renderDraftsList()">
+                                    <option value="all">All Disciplines</option>
+                                    <option value="PV">PV / Solar</option>
+                                    <option value="BESS">BESS / Battery</option>
+                                    <option value="Electrical">Electrical</option>
+                                    <option value="Grid">Grid & PPC</option>
+                                    <option value="SCADA">SCADA</option>
+                                    <option value="HSE">HSE / Safety</option>
+                                    <option value="Reports">Reports</option>
+                                    <option value="OEM">OEM</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drafts Cards Grid -->
+                    <div id="drafts-grid" class="tools-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:1.5rem;">
+                        <!-- Injected dynamically -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="drafts-empty-state" class="empty-state" style="display: none; text-align:center; padding:4rem 2rem;">
+                        <div class="empty-icon" style="font-size:3rem; color:#94a3b8; margin-bottom:1rem;"><i class="fas fa-file-signature"></i></div>
+                        <h3 class="empty-title" style="font-size:1.2rem; color:#475569; margin-bottom:0.5rem;">No records in progress</h3>
+                        <p class="empty-text" style="color:#64748b; font-size:0.9rem; max-width:480px; margin:0 auto;">Start a formal report, test, inspection or workflow, or explicitly save a calculator/analyzer result to continue it later from this page.</p>
+                    </div>
+                </section>
             </main>
 
             <!-- Muted Global Footer -->
             <footer class="global-footer">
-                <div class="mobile-footer-text">&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED. v5.0.0</div>
+                <div class="mobile-footer-text">&copy; 2026 LEVEL3SUPPORT. ALL RIGHTS RESERVED. v5.5.5</div>
                 <div class="mobile-footer-powered">Powered by aprovero</div>
             </footer>
         </div>
@@ -454,6 +524,10 @@
             <a href="#reports" class="bottom-nav-item" data-view="reports">
                 <i class="fas fa-file-invoice"></i>
                 <span>Reports</span>
+            </a>
+            <a href="#drafts" class="bottom-nav-item" data-view="drafts">
+                <i class="fas fa-file-signature"></i>
+                <span>Drafts</span>
             </a>
         </nav>
     </div>
@@ -1818,6 +1892,7 @@
     </div>
 
     <!-- Load refactored OS-Style javascript router & behavior -->
+    <script src="js/db.js"></script>
     <script src="js/l3-navigator.js"></script>
     <script src="js/tool-resources.js?v=35"></script>
     <script src="js/tools-hub.js?v=35"></script>
