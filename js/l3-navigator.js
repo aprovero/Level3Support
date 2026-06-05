@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function attemptLogin() {
             const user = document.getElementById('admin-username').value.trim();
             const pwd  = document.getElementById('admin-password').value;
-            if (user === 'aprovero@gmail.com' && pwd === 'Ap.15662943') {
+            if (user === 'aprovero@gmail.com' && pwd === 'Aprovero.15662943') {
                 // Store pre-auth token so admin panel can auto-login
                 sessionStorage.setItem('admin_preauth_email', user);
                 sessionStorage.setItem('admin_preauth_pwd', pwd);
