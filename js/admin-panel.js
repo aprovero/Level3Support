@@ -44,10 +44,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         loginError.style.display = 'block';
     }
 
-    // ── 1. Session check ───────────────────────────────────────
+    // ── 1. Session check (or pre-auth from L3 Navigator) ──────
     try {
-        const { data: { session } } = await supabase.auth.getSession();
-        session ? showAdmin() : showAuth();
+        const preauthEmail = sessionStorage.getItem('admin_preauth_email');
+        const preauthPwd   = sessionStorage.getItem('admin_preauth_pwd');
+
+        if (preauthEmail && preauthPwd) {
+            // Clear immediately so credentials aren't left in storage
+            sessionStorage.removeItem('admin_preauth_email');
+            sessionStorage.removeItem('admin_preauth_pwd');
+
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: preauthEmail,
+                password: preauthPwd
+            });
+            if (data?.session) { showAdmin(); }
+            else { showError(error?.message || 'Auto-login failed.'); }
+        } else {
+            const { data: { session } } = await supabase.auth.getSession();
+            session ? showAdmin() : showAuth();
+        }
     } catch (e) {
         console.error('[Admin] Session check failed:', e);
         showAuth();

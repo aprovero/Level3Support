@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="l3-nav-card-category">Secure</span>
             </div>
             <div style="margin-top:10px; display:flex; flex-direction:column; gap:8px;">
-                <input id="admin-username" type="text" placeholder="Username" autocomplete="off"
+                <input id="admin-username" type="email" placeholder="Email" autocomplete="off"
                     style="padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.875rem; outline:none; width:100%; box-sizing:border-box;" />
                 <input id="admin-password" type="password" placeholder="Password"
                     style="padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.875rem; outline:none; width:100%; box-sizing:border-box;" />
@@ -217,7 +217,10 @@ document.addEventListener('DOMContentLoaded', () => {
         function attemptLogin() {
             const user = document.getElementById('admin-username').value.trim();
             const pwd  = document.getElementById('admin-password').value;
-            if (user === 'aprovero' && pwd === 'Ap.15662943') {
+            if (user === 'aprovero@gmail.com' && pwd === 'Ap.15662943') {
+                // Store pre-auth token so admin panel can auto-login
+                sessionStorage.setItem('admin_preauth_email', user);
+                sessionStorage.setItem('admin_preauth_pwd', pwd);
                 window.location.href = 'admin-panel.html';
             } else {
                 renderAdminOption(true);
