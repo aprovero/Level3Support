@@ -36,8 +36,8 @@
     .navbar img { height: 52px; width: auto; }
 
     /* ── Page Container ── */
-    .page-wrap {
-      max-width: 1200px;
+    .placeholder-container {
+      max-width: 1200px !important;
       margin: 0 auto;
       padding: 2rem 1.5rem 4rem;
     }
@@ -99,21 +99,7 @@
     .chip-ref { background: #f1f5f9; color: #475569; }
     .chip-active { background: #dcfce7; color: #15803d; }
 
-    /* ── Disclaimer Banner ── */
-    .disclaimer-banner {
-      display: flex;
-      gap: 0.85rem;
-      background: #fffbeb;
-      border: 1px solid #fde68a;
-      border-left: 4px solid #d97706;
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      
-    }
-    .disclaimer-banner i { color: #d97706; font-size: 1.1rem; margin-top: 2px; }
-    .disclaimer-banner strong { display: block; color: #92400e; font-weight: 700; font-size: 0.88rem; margin-bottom: 3px; }
-    .disclaimer-banner span { color: #78350f; font-size: 0.84rem; line-height: 1.5; }
+    /* ── Disclaimer Banner ── (Removed in favor of global warning-box class) */
 
     /* ── Tab Bar ── */
     .tab-bar {
@@ -404,25 +390,17 @@
 </head>
 <body>
 
-  <div class="page-wrap">
+  <div class="placeholder-container">
         <a href="index.html#tools" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Tool Library</a>
 
-<div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
+    <div class="header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 16px;">
             <div class="logo">
                 <a href="index.html"><img src="images/L3S_HEADER_LOGO.png" alt="Level3Support" style="height: 50px; width: auto;"></a>
             </div>
-
-
-        <!-- Header Panel -->
-        
             <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); background: var(--background-dark); padding: 4px 8px; border-radius: 4px;">⚡ ADVANCED FIELD DIAGNOSTICS</div>
         </div>
 
-    <!-- Back link -->
-    
-
     <!-- Header Card -->
-    <!-- Header Panel -->
         <div class="tool-header-section">
             <div class="tool-title-row">
                 <div>
@@ -439,21 +417,22 @@
                 </div>
             </div>
         </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Disclaimer -->
-    <div class="disclaimer-banner">
+    <!-- Disclaimer warning-box spans full width at the top -->
+    <div class="warning-box">
       <i class="fas fa-exclamation-triangle"></i>
       <div>
-        <strong>Critical Torque Warning</strong>
-        <span>Always verify torque values against the approved project drawings and OEM installation manuals before execution. Values marked <em>Reference</em> are widely-accepted industry standards; values marked <em>Sample</em> are estimates and must be confirmed against site-specific documents.</span>
+        <div class="warning-title">Critical Torque Warning</div>
+        Always verify torque values against the approved project drawings and OEM installation manuals before execution. Values marked <em>Reference</em> are widely-accepted industry standards; values marked <em>Sample</em> are estimates and must be confirmed against site-specific documents.
       </div>
     </div>
 
-    <!-- Tab Bar -->
-    <div class="tab-bar">
+    <!-- Tool Body Grid: 2 Columns on Desktop, 1 Column on Mobile -->
+    <div class="tool-body-grid">
+      <!-- Left Column (3fr): Tab switcher and active tab contents -->
+      <div>
+        <!-- Tab Bar -->
+        <div class="tab-bar">
       <button class="tab-btn" id="tab-btn-calculator" onclick="switchTab('calculator')">
         <i class="fas fa-calculator"></i> Calculator
       </button>
@@ -749,10 +728,12 @@
           <li><strong>Copper vs. aluminum lugs:</strong> Aluminum conductors require anti-oxidant compound and lower re-torque intervals due to cold flow/creep. Always check OEM guidance.</li>
           <li><strong>Belleville washers:</strong> Many inverter and transformer busbar connections specify Belleville (spring) washers to maintain clamp force during thermal cycling.</li>
           <li><strong>Calibrated torque wrenches:</strong> Use only calibrated tools. Verify calibration before each day of torquing activity.</li>
-        </ul>
-    </div>
-
-  </div><!-- /.page-wrap -->
+    </div> <!-- Closes notes-box -->
+  </div> <!-- Closes panel-equipment -->
+  </div> <!-- Closes left column of tool-body-grid -->
+  <div></div> <!-- Closes right column of tool-body-grid (common.js injects resources here) -->
+  </div> <!-- Closes tool-body-grid -->
+  </div><!-- /.placeholder-container -->
 
   <!-- Footer -->
       <footer class="footer">
