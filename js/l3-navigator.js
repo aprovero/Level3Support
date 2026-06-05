@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function attemptLogin() {
             const user = document.getElementById('admin-username').value.trim();
             const pwd  = document.getElementById('admin-password').value;
-            if (user === 'admin' && pwd === 'admin123') {
+            if (user === 'aprovero' && pwd === 'Ap.15662943') {
                 window.location.href = 'admin-panel.html';
             } else {
                 renderAdminOption(true);
