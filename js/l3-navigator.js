@@ -76,20 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!registryData.length) return;
         // Admin access trigger
         const normalized = query.toLowerCase().trim();
-        if (normalized === 'administrator' || normalized.startsWith('administrator ')) {
-            const parts = normalized.split(/\s+/);
-            if (parts.length === 1) {
-                // Just 'administrator' typed — show the card
-                renderAdminOption();
-            } else {
-                // 'administrator <password>' typed — check password
-                const pwd = parts[1];
-                if (pwd === 'admin123') {
-                    window.location.href = 'admin-panel.html';
-                } else {
-                    renderAdminOption(true); // show card with error state
-                }
-            }
+        if (normalized === 'administrator') {
+            renderAdminOption();
             return;
         }
         const normalizedQuery = normalized;
@@ -194,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-        // Render admin access option
+    // Render admin access option with inline login form
     function renderAdminOption(showError) {
         l3NavResultsContainer.innerHTML = '';
         l3NavEmptyState.style.display = 'none';
@@ -202,17 +190,46 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = document.createElement('div');
         card.className = 'l3-nav-card';
         const errorHtml = showError
-            ? `<p style="color:#ef4444; font-size:0.8rem; margin-top:4px;"><i class="fas fa-exclamation-circle"></i> Incorrect password.</p>`
+            ? `<p style="color:#ef4444; font-size:0.8rem; margin:6px 0 0;"><i class="fas fa-exclamation-circle"></i> Invalid username or password.</p>`
             : '';
         card.innerHTML = `
             <div class="l3-nav-card-header">
-                <h4 class="l3-nav-card-title"><i class="fas fa-lock" style="margin-right:4px;"></i>Administrator Access</h4>
+                <h4 class="l3-nav-card-title"><i class="fas fa-lock" style="margin-right:6px;"></i>Administrator Access</h4>
                 <span class="l3-nav-card-category">Secure</span>
             </div>
-            <p class="l3-nav-card-desc">Type <strong>administrator &lt;password&gt;</strong> to log in.</p>
+            <div style="margin-top:10px; display:flex; flex-direction:column; gap:8px;">
+                <input id="admin-username" type="text" placeholder="Username" autocomplete="off"
+                    style="padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.875rem; outline:none; width:100%; box-sizing:border-box;" />
+                <input id="admin-password" type="password" placeholder="Password"
+                    style="padding:8px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.875rem; outline:none; width:100%; box-sizing:border-box;" />
+                <button class="l3-nav-card-btn" id="admin-login-btn" style="margin-top:2px;">
+                    <i class="fas fa-sign-in-alt" style="margin-right:6px;"></i>Login
+                </button>
+            </div>
             ${errorHtml}
         `;
         l3NavResultsContainer.appendChild(card);
+
+        // Focus username field
+        setTimeout(() => document.getElementById('admin-username').focus(), 50);
+
+        // Login handler
+        function attemptLogin() {
+            const user = document.getElementById('admin-username').value.trim();
+            const pwd  = document.getElementById('admin-password').value;
+            if (user === 'admin' && pwd === 'admin123') {
+                window.location.href = 'admin-panel.html';
+            } else {
+                renderAdminOption(true);
+            }
+        }
+
+        document.getElementById('admin-login-btn').addEventListener('click', attemptLogin);
+
+        // Allow pressing Enter in password field to submit
+        document.getElementById('admin-password').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') attemptLogin();
+        });
     }
     // Utility: Debounce function
     function debounce(func, wait) {
