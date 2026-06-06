@@ -163,22 +163,37 @@ document.addEventListener('DOMContentLoaded', () => {
   // Update progress calculation
   function updateProgressBar() {
     let checkedCount = 0;
+    let failedCount = 0;
     const total = checklistItems.length;
     
     Object.keys(checklistState).forEach(id => {
-      if (checklistState[id].status !== null) {
+      const status = checklistState[id].status;
+      if (status !== null) {
         checkedCount++;
+        if (status === 'FAIL') {
+          failedCount++;
+        }
       }
     });
 
     const pct = Math.round((checkedCount / total) * 100);
     progressText.textContent = `${pct}% (${checkedCount} / ${total} Checked)`;
     progressFill.style.width = `${pct}%`;
+
+    // Dynamic Progress Bar Color - green only when 100% completed and zero failures, red if any failures exist
+    if (pct === 100 && failedCount === 0) {
+      progressFill.style.backgroundColor = '#22c55e';
+    } else if (failedCount > 0) {
+      progressFill.style.backgroundColor = '#dc2626'; // warning red
+    } else {
+      progressFill.style.backgroundColor = 'var(--primary-color)';
+    }
   }
 
   // Initialize Checklist
   buildChecklistUI();
-  seedSampleWalkdown();
+  // seedSampleWalkdown(); // Start with a clean slate by default
+  updateProgressBar();
 
   // Reset Checklist Action
   inspectResetBtn.addEventListener('click', () => {
