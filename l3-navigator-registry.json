@@ -400,7 +400,7 @@
                       "id":  19,
                       "name":  "DC Voltage Sanity Check Tool",
                       "category":  "PV Field Tools",
-                      "url":  "pv-string-voltage-sizing.html",
+                      "url":  "pv-string-voltage-sizing.html?tab=1",
                       "description":  "Check if measured string voltage matches expected module count and temperature-corrected Voc or Vmp values.",
                       "keywords":  [
                                        "PV",
@@ -592,7 +592,7 @@
                       "id":  29,
                       "name":  "Cable Ampacity / Max Current Calculator",
                       "category":  "Calculators",
-                      "url":  "cable-sizing-ampacity-voltage-drop.html",
+                      "url":  "cable-sizing-ampacity-voltage-drop.html?tab=1",
                       "description":  "Estimate corrected cable ampacity based on insulation ratings, ambient temp, and bundling factors.",
                       "keywords":  [
                                        "Electrical",
@@ -611,7 +611,7 @@
                       "id":  30,
                       "name":  "Voltage Drop Calculator",
                       "category":  "Calculators",
-                      "url":  "cable-sizing-ampacity-voltage-drop.html",
+                      "url":  "cable-sizing-ampacity-voltage-drop.html?tab=2",
                       "description":  "Calculate voltage drop and power loss for DC, single-phase AC, and three-phase AC circuits.",
                       "keywords":  [
                                        "Electrical",
@@ -669,7 +669,7 @@
                       "id":  33,
                       "name":  "Weather Correction Calculator for PV Testing",
                       "category":  "Calculators",
-                      "url":  "pv-performance-verification.html",
+                      "url":  "pv-performance-verification.html?tab=1",
                       "description":  "Translate open-air PV power measurements to Standard Test Conditions (STC) using real-time irradiance and temp.",
                       "keywords":  [
                                        "PV",
@@ -937,7 +937,7 @@
                       "id":  48,
                       "name":  "Inverter Derating Cause Analyzer",
                       "category":  "Advanced Field Diagnostics",
-                      "url":  "inverter-power-limitation-analyzer.html",
+                      "url":  "inverter-power-limitation-analyzer.html?tab=1",
                       "description":  "Identify whether an inverter is limiting power due to temperature, grid voltage, frequency, reactive power, or protection.",
                       "keywords":  [
                                        "PV",
@@ -979,7 +979,7 @@
                       "id":  50,
                       "name":  "Inverter Capability Curve Check",
                       "category":  "Grid \u0026 Controls",
-                      "url":  "reactive-power-inverter-capability.html",
+                      "url":  "reactive-power-inverter-capability.html?tab=1",
                       "description":  "Check whether a requested active/reactive power operating point is within inverter apparent power limits.",
                       "keywords":  [
                                        "PV",
@@ -1020,7 +1020,7 @@
                       "id":  52,
                       "name":  "Battery SOC Imbalance Analyzer",
                       "category":  "BESS Field Tools",
-                      "url":  "bess-battery-health-analyzer.html",
+                      "url":  "bess-battery-health-analyzer.html?tab=1",
                       "description":  "Analyze SOC spread and balancing status across battery racks, strings, containers, or clusters.",
                       "keywords":  [
                                        "BESS",
@@ -1040,7 +1040,7 @@
                       "id":  53,
                       "name":  "Battery Temperature Spread Analyzer",
                       "category":  "BESS Field Tools",
-                      "url":  "bess-battery-health-analyzer.html",
+                      "url":  "bess-battery-health-analyzer.html?tab=2",
                       "description":  "Analyze battery temperature variation across racks, modules, or clusters to detect HVAC or fan issues.",
                       "keywords":  [
                                        "BESS",
@@ -1060,7 +1060,7 @@
                       "id":  54,
                       "name":  "Number Base Converter",
                       "category":  "SCADA \u0026 Diagnostics",
-                      "url":  "register-bitmask-number-decoder.html",
+                      "url":  "register-bitmask-number-decoder.html?tab=1",
                       "description":  "Convert values between binary, decimal, hex, and octal with bit-width, byte-order swaps, and manual register bit viewer.",
                       "keywords":  [
                                        "SCADA",
@@ -1102,7 +1102,7 @@
                       "id":  56,
                       "name":  "Clean vs. Soiled String Comparison Tool",
                       "category":  "Soiling \u0026 PV Performance",
-                      "url":  "pv-soiling-analysis-cleaning-decision.html",
+                      "url":  "pv-soiling-analysis-cleaning-decision.html?tab=1",
                       "description":  "Compare electrical output between clean and soiled strings to quantify performance impact.",
                       "keywords":  [
                                        "PV",
@@ -1122,7 +1122,7 @@
                       "id":  57,
                       "name":  "Cleaning ROI Calculator",
                       "category":  "Soiling \u0026 PV Performance",
-                      "url":  "pv-soiling-analysis-cleaning-decision.html",
+                      "url":  "pv-soiling-analysis-cleaning-decision.html?tab=3",
                       "description":  "Calculate the return on investment for PV array cleaning based on performance gain vs. cleaning costs.",
                       "keywords":  [
                                        "PV",
@@ -1142,7 +1142,7 @@
                       "id":  58,
                       "name":  "Lost Energy from Soiling Calculator",
                       "category":  "Soiling \u0026 PV Performance",
-                      "url":  "pv-soiling-analysis-cleaning-decision.html",
+                      "url":  "pv-soiling-analysis-cleaning-decision.html?tab=2",
                       "description":  "Quantify total lost energy (kWh) attributed to soiling over a specific time period.",
                       "keywords":  [
                                        "PV",
@@ -1162,7 +1162,7 @@
                       "id":  59,
                       "name":  "Soiling Customer Report Generator",
                       "category":  "Soiling \u0026 PV Performance",
-                      "url":  "pv-soiling-analysis-cleaning-decision.html",
+                      "url":  "pv-soiling-analysis-cleaning-decision.html?tab=4",
                       "description":  "Generate a customer-facing report detailing soiling impacts and recommended cleaning actions.",
                       "keywords":  [
                                        "PV",
